@@ -1,0 +1,88 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<"nav"> {
+  classes?: string;
+  ariaLabel?: 'primary' | 'secondary';
+}
+
+const {
+  classes,
+  ariaLabel = 'primary',
+  ...rest
+} = Astro.props;
+
+// Enter your navigation links here
+const navLinks = [
+  { 
+    name: 'Home', 
+    path: '/', 
+    icon: 'skull' 
+  },
+  { 
+    name: 'Layouts', 
+    path: '/layouts', 
+    icon: 'symbols-solid' 
+  },
+  { 
+    name: 'Buttons', 
+    path: '/buttons'  
+  },
+  { 
+    name: 'Props', 
+    path: '/props' 
+  },
+  { 
+    name: 'Blog', 
+    path: '/blog/', 
+    icon: 'skull' 
+  },
+  { 
+    name: 'Colors', 
+    path: '/colors'
+  },
+  // { 
+  //   name: 'Backgrounds', 
+  //   path: '/backgrounds'
+  // },
+  // { 
+  //   name: 'TP Backgrounds', 
+  //   path: '/tp-backgrounds'
+  // },
+  // { 
+  //   name: 'Forms', 
+  //   path: '/forms'
+  // },
+  // { 
+  //   name: 'Tool tips', 
+  //   path: '/tool-tips'
+  // }
+];
+---
+
+<style>
+  /* .nav { margin-left: auto } */
+  .nav-list { gap: var(--space-sm) }
+  .nav-link { gap: 1ch; color: currentColor }
+  [data-icon] { size: var(--space-xs) }
+</style>
+
+<!-- YES: aria-label="primary" | NO: aria-label="primary navigation" Because of Landmarks, screen readers will announce this as "primary navigation navigation" -->
+<nav class="nav" aria-label={ariaLabel} class:list={[classes]} {...rest}>
+  <ul role="list" class="nav-list flex">
+    {
+      navLinks.map(({ name, path, icon }) => (
+        <li class="list-item">
+          <a href={path} 
+            class="nav-link flex items-center"
+            aria-current={Astro.url.pathname === path ? 'page' : undefined} 
+          >
+            { icon && <Icon name={icon} aria-hidden='true'/> }
+            <span class="label">{name}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

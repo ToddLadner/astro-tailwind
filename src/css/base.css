@@ -1,0 +1,121 @@
+/*  TOC
+──────────────────────────────────
+  [1] Adaptive typography
+  [2] Shadows
+  [3] Custom Font
+  [4] HTML
+  [5] Body
+  [6] Font Sizes
+  [7] Typography
+  [8] Focus
+─────────────────────────────── */
+
+:root {
+  /* [1] Adaptive typography */
+  --base-weight: 400;
+  --base-grade: 0; 
+
+  /* [2] Shadows */
+  /* color-scheme: light */
+  --shadow-color: 220 3% 15%;
+  --shadow-strength: 1%;
+  --inner-shadow-highlight: inset 0 -0.5px 0 0 #fff, inset 0 0.5px 0 0 #0001;
+  /* color-scheme: dark */
+  @media (prefers-color-scheme: dark) {
+    --shadow-color: 220 40% 2%;
+    --shadow-strength: 25%;
+    --inner-shadow-highlight: inset 0 -0.5px 0 0 #fff1, inset 0 0.5px 0 0 #0007;
+  }
+}
+
+/* [3] Custom Font */
+/* Regular */
+@font-face {
+  font-family: 'Roboto';
+  src: local('Roboto'), url('/fonts/static/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+/* Variable */
+@font-face {
+  font-family: 'Roboto Flex';
+  src: 
+    local('Roboto Flex'), 
+    url('/fonts/RobotoFlex.ttf') format('truetype-variations') tech(color-COLRv1),
+    url('/fonts/RobotoFlex.ttf') format('truetype-variations'); /* Fallback for Safari and others */
+  font-weight: 100 1000;
+  font-stretch: 25% 150%;
+  font-display: swap;
+}
+
+/* [4] HTML */
+html {
+  /* ↓ Theme */
+  color: var(--color-text-2);
+  background-color: var(--color-surface-1);
+  /* ↓ Branded accents */
+  scrollbar-color: var(--color-brand) transparent;
+  accent-color: var(--color-brand);
+  caret-color: var(--color-brand);
+}
+
+/* [5] Body */
+body {
+  font-size: var(--font-size-sm);
+  line-height: var(--lineheight-md);
+  font-family: var(--font-sans);  /* ← Fallback font */
+}
+
+@supports (font-variation-settings: normal) {
+  body {
+    font-family: var(--font-sans); /* ← Variable font */
+    
+    font-variation-settings: 
+      "wght" var(--base-weight, 0),
+      "GRAD" var(--base-grade);
+    
+    /* When the preference is for high contrast */
+    @media (prefers-contrast: more) { --base-weight: 700; }
+    
+    /* When the preference is for low contrast */
+    @media (prefers-contrast: less) { --base-weight: 200; }
+    
+    /* When the preference is for dark mode */
+    @media (prefers-color-scheme: dark) { --base-grade: -25; }
+  }
+}
+
+/* [6] Font Sizes */
+h1 { font-size: var(--text-size, var(--text-2xl)) }
+h2 { font-size: var(--text-size, var(--text-xl)) }
+h3 { font-size: var(--text-size, var(--text-lg)) }
+h4 { font-size: var(--text-size, var(--text-md)) }
+h5 { font-size: var(--text-size, var(--text-sm)) }
+h6 { font-size: var(--text-size, var(--text-xs)) }
+
+/* [7] Typography */
+:where(h1, h2, h3, h4) {
+  font-variation-settings: "wght" var(--weight, 600);
+  line-height: var(--lineheight-xs);
+  max-inline-size: var(--measure-md);
+}
+
+h1, h2, h3, h4, h5, h6, dt, label { color: var(--color-text-1) }
+h1, h2, h3, h4 { text-wrap: balance; }
+h1, p, button { text-box: trim-both cap alphabetic }
+p:only-child { margin-block: 0; }
+
+i, em { font-variation-settings: "ital" 1 }
+strong, b { font-variation-settings: "wght" var(--weight, 800) }
+
+/* [8] Focus */
+@media (prefers-reduced-motion: no-preference) {
+  :focus-visible { transition: 
+    outline-offset 75ms ease-out, 
+    box-shadow 75ms ease;  
+  }
+  :not(:active):focus-visible { 
+    transition-duration: .25s
+  }
+}
+:not(:active):focus-visible { outline-offset: .5rem }

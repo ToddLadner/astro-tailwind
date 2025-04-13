@@ -1,0 +1,625 @@
+/* TOC
+─────────────────────────────────
+  Utopia Type & Space
+  @link https://utopia.fyi/type/calculator?c=320,16,1.2,1240,20,1.25,5,2,&s=0.75%7C0.5%7C0.25,1.5%7C2%7C3%7C4%7C6,s-l&g=s,l,xl,12
+
+  [01] Tailwind Layers & Imports
+  [02] Custom Theme
+  [03] Breakpoints
+  [04] Font Families
+  [05] Text Sizes
+  [06] Line height
+  [07] Letter Spacing
+  [08] Fluid Space
+  [09] Fluid Space | One-up pairs
+  [10] Fluid Space | Custom pairs
+  [11] Border radius
+  [12] Border radius conditional
+  [13] Blob shapes
+  [14] Aspect Ratio
+  [15] Hues
+  [16] Grays
+  [17] Brand
+  [18] Red
+  [19] Pink
+  [20] Purple
+  [21] Violet
+  [22] Indigo
+  [23] Blue
+  [24] Cyan
+  [25] Teal
+  [26] Green
+  [27] Lime
+  [28] Yellow
+  [29] Orange
+  [30] Gray | Neutral
+  [31] Slate | Cool Gray
+  [32] Stone | Warm Gray
+  [33] Shadows
+  [34] Inset Shadows
+
+  Custom Utilities
+  [35] Dynamic Padding
+  [36] The Stack
+  [37] Ram Grid
+  [38] 12 column Grid
+  [39] Pile Grid
+  [40] Overflow Scroll
+  [41] Overflow Hint
+  [42] Type Styles
+─────────────────────────────────
+*/
+
+/* [01] Tailwind Layers & Imports */
+@layer reset, theme, base, components, utilities;
+
+@import './reset.css'                 layer(reset);
+@import 'tailwindcss/theme.css'       layer(theme);
+@import './base.css'                  layer(base);
+@import 'tailwindcss/utilities.css'   layer(utilities);
+
+/* [02] Custom Theme */
+@theme {
+
+  /* Reset Tailwind */
+  --*: initial;  
+
+  --color-text-1: light-dark(var(--color-gray-8), var(--color-gray-2));
+  --color-text-2: light-dark(var(--color-gray-7), var(--color-gray-4));
+
+  --color-surface-0: light-dark(white, var(--color-gray-13));
+  --color-surface-1: light-dark(var(--color-gray-0), var(--color-gray-12));
+  --color-surface-2: light-dark(var(--color-gray-1), var(--color-gray-11));
+  --color-surface-3: light-dark(var(--color-gray-2), var(--color-gray-10));
+  --color-surface-4: light-dark(var(--color-gray-3), var(--color-gray-9));
+
+  --color-text-1: light-dark(var(--color-gray-8), var(--color-gray-2));
+  --color-text-2: light-dark(var(--color-gray-7), var(--color-gray-4));
+  
+  --color-danger: light-dark(var(--color-red-5), var(--color-red-3));
+  --color-warning: light-dark(var(--color-orange-5), var(--color-orange-3));
+  --color-success: light-dark(var(--color-green-5), var(--color-green-3));
+  --color-info: light-dark(var(--color-purple-5), var(--color-purple-3));
+  
+  /* [03] Breakpoints */
+  --breakpoint-xxs: 15rem;
+  --breakpoint-xs: 22.5rem;
+  --breakpoint-sm: 30rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 90rem;
+  --breakpoint-xxl: 120rem;
+
+  /* [04] Font Families */
+  --font-sans: 'Roboto Flex', Roboto, system-ui, -apple-system, Segoe UI, Ubuntu, Cantarell, Noto Sans, sans-serif;
+  --font-serif: ui-serif, serif;
+  --font-mono: Dank Mono, Operator Mono, Inconsolata, Fira Mono, ui-monospace, SF Mono, Monaco, Droid Sans Mono, Source Code Pro, monospace;
+
+  /* [05] Text Sizes */
+  --text-xs: clamp(0.6944rem, 0.6577rem + 0.1836vi, 0.8rem);      /* 11.1111px → 12.8px */
+  --text-sm: clamp(0.8333rem, 0.7754rem + 0.2899vi, 1rem);        /* 13.3333px → 16px */
+  --text-md: clamp(1rem, 0.913rem + 0.4348vi, 1.25rem);           /* 16px → 20px */
+  --text-lg: clamp(1.2rem, 1.0739rem + 0.6304vi, 1.5625rem);      /* 19.2px → 25px */
+  --text-xl: clamp(1.44rem, 1.2615rem + 0.8924vi, 1.9531rem);     /* 23.04px → 31.25px */
+  --text-2xl: clamp(1.728rem, 1.4799rem + 1.2407vi, 2.4414rem);   /* 27.648px → 39.0625px */
+  --text-3xl: clamp(2.0736rem, 1.7334rem + 1.7011vi, 3.0518rem);  /* 33.1776px → 48.8281px */
+  --text-4xl: clamp(2.4883rem, 2.027rem + 2.3067vi, 3.8147rem);   /* 39.8131px → 61.0352px */
+
+  /* [06] Line height */
+  --leading-3xs: 0.95;
+  --leading-2xs: 1.1;
+  --leading-xs: 1.25;
+  --leading-sm: 1.375em;
+  --leading-md: 1.5em;
+  --leading-lg: 1.75;
+  --leading-xl: 2;
+
+  /* [07] Letter Spacing */
+  --tracking-xs: -0.05em;
+  --tracking-sm: 0.025em;
+  --tracking-md: 0.05em;
+  --tracking-lg: 0.075em;
+  --tracking-xl: 0.15em;
+  --tracking-2xl: 0.5em;
+  --tracking-3xl: 0.75em;
+  --tracking-4xl: 1em;
+
+  /* [08] Fluid Space */
+  --spacing-3xs: clamp(0.25rem, 0.2283rem + 0.1087vi, 0.3125rem);
+  --spacing-2xs: clamp(0.5rem, 0.4565rem + 0.2174vi, 0.625rem);
+  --spacing-xs: clamp(0.75rem, 0.6848rem + 0.3261vi, 0.9375rem);
+  --spacing-sm: clamp(1rem, 0.913rem + 0.4348vi, 1.25rem);
+  --spacing-md: clamp(1.5rem, 1.3696rem + 0.6522vi, 1.875rem);
+  --spacing-lg: clamp(2rem, 1.8261rem + 0.8696vi, 2.5rem);
+  --spacing-xl: clamp(3rem, 2.7391rem + 1.3043vi, 3.75rem);
+  --spacing-2xl: clamp(4rem, 3.6522rem + 1.7391vi, 5rem);
+  --spacing-3xl: clamp(6rem, 5.4783rem + 2.6087vi, 7.5rem);
+
+  /* [09] Fluid Space | One-up pairs */
+  --spacing-3xs-2xs: clamp(0.25rem, 0.1196rem + 0.6522vi, 0.625rem);
+  --spacing-2xs-xs: clamp(0.5rem, 0.3478rem + 0.7609vi, 0.9375rem);
+  --spacing-xs-sm: clamp(0.75rem, 0.5761rem + 0.8696vi, 1.25rem);
+  --spacing-sm-md: clamp(1rem, 0.6957rem + 1.5217vi, 1.875rem);
+  --spacing-md-lg: clamp(1.5rem, 1.1522rem + 1.7391vi, 2.5rem);
+  --spacing-lg-xl: clamp(2rem, 1.3913rem + 3.0435vi, 3.75rem);
+  --spacing-xl-2xl: clamp(3rem, 2.3043rem + 3.4783vi, 5rem);
+  --spacing-2xl-3xl: clamp(4rem, 2.7826rem + 6.087vi, 7.5rem);
+
+  /* [10] Fluid Space | Custom pairs */
+  --spacing-sm-lg: clamp(1rem, 0.4783rem + 2.6087vi, 2.5rem);
+  --spacing-sm-xl: clamp(1rem, 0.0435rem + 4.7826vw, 3.75rem);
+  --spacing-sm-2xl: clamp(1rem, -0.3913rem + 6.9565vw, 5rem);
+
+  /* [11] Border radius */
+  --radius-0: 0;
+  --radius-sm: 2px;
+  --radius-md: 5px;
+  --radius-lg: 1rem;
+  --radius-xl: 2rem;
+  --radius-2xl: 4rem;
+  --radius-3xl: 8rem;
+  --radius-ellipse: 1e3px;
+  
+  /* [12] Border radius conditional */
+  --radius-conditional-sm: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-sm));
+  --radius-conditional-md: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-md));
+  --radius-conditional-lg: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-lg));
+  --radius-conditional-xl: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-xl));
+  --radius-conditional-2xl: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-2xl));
+  --radius-conditional-3xl: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-3xl));
+
+  /* [13] Blob shapes */
+  --radius-blob-1: 30% 70% 70% 30% / 53% 30% 70% 47%;
+  --radius-blob-2: 53% 47% 34% 66% / 63% 46% 54% 37%;
+  --radius-blob-3: 37% 63% 56% 44% / 49% 56% 44% 51%;
+  --radius-blob-4: 63% 37% 37% 63% / 43% 37% 63% 57%;
+  --radius-blob-5: 49% 51% 48% 52% / 57% 44% 56% 43%;
+  
+  /* [14] Aspect Ratio */
+  --aspect-square: 1;
+  --aspect-landscape: 4/3;
+  --aspect-portrait: 3/4;
+  --aspect-widescreen: 16/9;
+  --aspect-ultrawide: 18/5;
+  --aspect-golden: 1.618/1;
+
+  /* [15] Hues */
+  --hue-brand: 175;
+  --hue-red: 25;
+  --hue-pink: 350;
+  --hue-purple: 310;
+  --hue-violet: 290;
+  --hue-indigo: 270;
+  --hue-blue: 240;
+  --hue-cyan: 210;
+  --hue-teal: 185;
+  --hue-green: 145;
+  --hue-lime: 125;
+  --hue-yellow: 100;
+  --hue-orange: 75; 
+
+  /* [16] Grays */
+  /* Gray Neutral */
+  --gray-hue: 0;
+  --gray-chroma: 0;
+  
+  /* Gray Neutral */
+  --gray-warm-hue: 50;
+  --gray-warm-chroma: 0.01;
+  
+  /* Gray Neutral */
+  --gray-cool-hue: 270; /* 270 */
+  --gray-cool-chroma: 0.02; /* 0.03 */
+
+  /* [17] Brand */
+  --color-brand-0: oklch(99% 0.03 var(--hue-brand)); 
+  --color-brand-1: oklch(95% 0.06 var(--hue-brand)); 
+  --color-brand-2: oklch(88% 0.12 var(--hue-brand)); 
+  --color-brand-3: oklch(80% 0.14 var(--hue-brand)); 
+  --color-brand-4: oklch(74% 0.16 var(--hue-brand)); 
+  --color-brand-5: oklch(68% 0.19 var(--hue-brand)); 
+  --color-brand-6: oklch(63% 0.2 var(--hue-brand)); 
+  --color-brand-7: oklch(58% 0.21 var(--hue-brand));
+  --color-brand-8: oklch(53% 0.2 var(--hue-brand));
+  --color-brand-9: oklch(49% 0.19 var(--hue-brand));
+  --color-brand-10: oklch(42% 0.17 var(--hue-brand));
+  --color-brand-11: oklch(35% 0.15 var(--hue-brand));
+  --color-brand-12: oklch(27% 0.12 var(--hue-brand));
+  --color-brand-13: oklch(20% 0.09 var(--hue-brand));
+  --color-brand-14: oklch(14% 0.07 var(--hue-brand));
+  --color-brand-15: oklch(11% 0.05 var(--hue-brand));
+  --color-brand-bright: oklch(65% 0.3 var(--hue-brand));
+  
+  /* [18] Red */
+  --color-red-0: oklch(99% 0.03 var(--hue-red));
+  --color-red-1: oklch(95% 0.06 var(--hue-red));
+  --color-red-2: oklch(88% 0.12 var(--hue-red));
+  --color-red-3: oklch(80% 0.14 var(--hue-red));
+  --color-red-4: oklch(74% 0.16 var(--hue-red));
+  --color-red-5: oklch(68% 0.19 var(--hue-red));
+  --color-red-6: oklch(63% 0.2 var(--hue-red));
+  --color-red-7: oklch(58% 0.21 var(--hue-red));
+  --color-red-8: oklch(53% 0.2 var(--hue-red));
+  --color-red-9: oklch(49% 0.19 var(--hue-red));
+  --color-red-10: oklch(42% 0.17 var(--hue-red));
+  --color-red-11: oklch(35% 0.15 var(--hue-red));
+  --color-red-12: oklch(27% 0.12 var(--hue-red));
+  --color-red-13: oklch(20% 0.09 var(--hue-red));
+  --color-red-14: oklch(14% 0.07 var(--hue-red));
+  --color-red-15: oklch(11% 0.05 var(--hue-red));
+  --color-red-bright: oklch(65% 0.3 var(--hue-red));
+  
+  /* [19] Pink */
+  --color-pink-0: oklch(99% 0.03 var(--hue-pink));
+  --color-pink-1: oklch(95% 0.06 var(--hue-pink));
+  --color-pink-2: oklch(88% 0.12 var(--hue-pink));
+  --color-pink-3: oklch(80% 0.14 var(--hue-pink));
+  --color-pink-4: oklch(74% 0.16 var(--hue-pink));
+  --color-pink-5: oklch(68% 0.19 var(--hue-pink));
+  --color-pink-6: oklch(63% 0.2 var(--hue-pink));
+  --color-pink-7: oklch(58% 0.21 var(--hue-pink));
+  --color-pink-8: oklch(53% 0.2 var(--hue-pink));
+  --color-pink-9: oklch(49% 0.19 var(--hue-pink));
+  --color-pink-10: oklch(42% 0.17 var(--hue-pink));
+  --color-pink-11: oklch(35% 0.15 var(--hue-pink));
+  --color-pink-12: oklch(27% 0.12 var(--hue-pink));
+  --color-pink-13: oklch(20% 0.09 var(--hue-pink));
+  --color-pink-14: oklch(14% 0.07 var(--hue-pink));
+  --color-pink-15: oklch(11% 0.05 var(--hue-pink));
+  --color-pink-bright: oklch(65% 0.3 var(--hue-pink));
+  
+  /* [20] Purple */
+  --color-purple-0: oklch(99% 0.03 var(--hue-purple));
+  --color-purple-1: oklch(95% 0.06 var(--hue-purple));
+  --color-purple-2: oklch(88% 0.12 var(--hue-purple));
+  --color-purple-3: oklch(80% 0.14 var(--hue-purple));
+  --color-purple-4: oklch(74% 0.16 var(--hue-purple));
+  --color-purple-5: oklch(68% 0.19 var(--hue-purple));
+  --color-purple-6: oklch(63% 0.2 var(--hue-purple));
+  --color-purple-7: oklch(58% 0.21 var(--hue-purple));
+  --color-purple-8: oklch(53% 0.2 var(--hue-purple));
+  --color-purple-9: oklch(49% 0.19 var(--hue-purple));
+  --color-purple-10: oklch(42% 0.17 var(--hue-purple));
+  --color-purple-11: oklch(35% 0.15 var(--hue-purple));
+  --color-purple-12: oklch(27% 0.12 var(--hue-purple));
+  --color-purple-13: oklch(20% 0.09 var(--hue-purple));
+  --color-purple-14: oklch(14% 0.07 var(--hue-purple));
+  --color-purple-15: oklch(11% 0.05 var(--hue-purple));
+  --color-purple-bright: oklch(65% 0.3 var(--hue-purple));
+  
+  /* [21] Violet */
+  --color-violet-0: oklch(99% 0.03 var(--hue-violet));
+  --color-violet-1: oklch(95% 0.06 var(--hue-violet));
+  --color-violet-2: oklch(88% 0.12 var(--hue-violet));
+  --color-violet-3: oklch(80% 0.14 var(--hue-violet));
+  --color-violet-4: oklch(74% 0.16 var(--hue-violet));
+  --color-violet-5: oklch(68% 0.19 var(--hue-violet));
+  --color-violet-6: oklch(63% 0.2 var(--hue-violet));
+  --color-violet-7: oklch(58% 0.21 var(--hue-violet));
+  --color-violet-8: oklch(53% 0.2 var(--hue-violet));
+  --color-violet-9: oklch(49% 0.19 var(--hue-violet));
+  --color-violet-10: oklch(42% 0.17 var(--hue-violet));
+  --color-violet-11: oklch(35% 0.15 var(--hue-violet));
+  --color-violet-12: oklch(27% 0.12 var(--hue-violet));
+  --color-violet-13: oklch(20% 0.09 var(--hue-violet));
+  --color-violet-14: oklch(14% 0.07 var(--hue-violet));
+  --color-violet-15: oklch(11% 0.05 var(--hue-violet));
+  --color-violet-bright: oklch(65% 0.3 var(--hue-violet));
+  
+  /* [22] Indigo */
+  --color-indigo-0: oklch(99% 0.03 var(--hue-indigo));
+  --color-indigo-1: oklch(95% 0.06 var(--hue-indigo));
+  --color-indigo-2: oklch(88% 0.12 var(--hue-indigo));
+  --color-indigo-3: oklch(80% 0.14 var(--hue-indigo));
+  --color-indigo-4: oklch(74% 0.16 var(--hue-indigo));
+  --color-indigo-5: oklch(68% 0.19 var(--hue-indigo));
+  --color-indigo-6: oklch(63% 0.2 var(--hue-indigo));
+  --color-indigo-7: oklch(58% 0.21 var(--hue-indigo));
+  --color-indigo-8: oklch(53% 0.2 var(--hue-indigo));
+  --color-indigo-9: oklch(49% 0.19 var(--hue-indigo));
+  --color-indigo-10: oklch(42% 0.17 var(--hue-indigo));
+  --color-indigo-11: oklch(35% 0.15 var(--hue-indigo));
+  --color-indigo-12: oklch(27% 0.12 var(--hue-indigo));
+  --color-indigo-13: oklch(20% 0.09 var(--hue-indigo));
+  --color-indigo-14: oklch(14% 0.07 var(--hue-indigo));
+  --color-indigo-15: oklch(11% 0.05 var(--hue-indigo));
+  --color-indigo-bright: oklch(65% 0.3 var(--hue-indigo));
+  
+  /* [23] Blue */
+  --color-blue-0: oklch(99% 0.03 var(--hue-blue));
+  --color-blue-1: oklch(95% 0.06 var(--hue-blue));
+  --color-blue-2: oklch(88% 0.12 var(--hue-blue));
+  --color-blue-3: oklch(80% 0.14 var(--hue-blue));
+  --color-blue-4: oklch(74% 0.16 var(--hue-blue));
+  --color-blue-5: oklch(68% 0.19 var(--hue-blue));
+  --color-blue-6: oklch(63% 0.2 var(--hue-blue));
+  --color-blue-7: oklch(58% 0.21 var(--hue-blue));
+  --color-blue-8: oklch(53% 0.2 var(--hue-blue));
+  --color-blue-9: oklch(49% 0.19 var(--hue-blue));
+  --color-blue-10: oklch(42% 0.17 var(--hue-blue));
+  --color-blue-11: oklch(35% 0.15 var(--hue-blue));
+  --color-blue-12: oklch(27% 0.12 var(--hue-blue));
+  --color-blue-13: oklch(20% 0.09 var(--hue-blue));
+  --color-blue-14: oklch(14% 0.07 var(--hue-blue));
+  --color-blue-15: oklch(11% 0.05 var(--hue-blue));
+  --color-blue-bright: oklch(65% 0.3 var(--hue-blue));
+  
+  /* [24] Cyan */
+  --color-cyan-0: oklch(99% 0.03 var(--hue-cyan));
+  --color-cyan-1: oklch(95% 0.06 var(--hue-cyan));
+  --color-cyan-2: oklch(88% 0.12 var(--hue-cyan));
+  --color-cyan-3: oklch(80% 0.14 var(--hue-cyan));
+  --color-cyan-4: oklch(74% 0.16 var(--hue-cyan));
+  --color-cyan-5: oklch(68% 0.19 var(--hue-cyan));
+  --color-cyan-6: oklch(63% 0.2 var(--hue-cyan));
+  --color-cyan-7: oklch(58% 0.21 var(--hue-cyan));
+  --color-cyan-8: oklch(53% 0.2 var(--hue-cyan));
+  --color-cyan-9: oklch(49% 0.19 var(--hue-cyan));
+  --color-cyan-10: oklch(42% 0.17 var(--hue-cyan));
+  --color-cyan-11: oklch(35% 0.15 var(--hue-cyan));
+  --color-cyan-12: oklch(27% 0.12 var(--hue-cyan));
+  --color-cyan-13: oklch(20% 0.09 var(--hue-cyan));
+  --color-cyan-14: oklch(14% 0.07 var(--hue-cyan));
+  --color-cyan-15: oklch(11% 0.05 var(--hue-cyan));
+  --color-cyan-bright: oklch(65% 0.3 var(--hue-cyan));
+  
+  /* [25] Teal */
+  --color-teal-0: oklch(99% 0.03 var(--hue-teal));
+  --color-teal-1: oklch(95% 0.06 var(--hue-teal)); 
+  --color-teal-2: oklch(78.2% 0.12 var(--hue-teal)); 
+  --color-teal-3: oklch(80% 0.14 var(--hue-teal)); 
+  --color-teal-4: oklch(74% 0.16 var(--hue-teal));
+  --color-teal-5: oklch(68% 0.19 var(--hue-teal));
+  --color-teal-6: oklch(63% 0.2 var(--hue-teal));
+  --color-teal-7: oklch(58% 0.21 var(--hue-teal)); 
+  --color-teal-8: oklch(53% 0.2 var(--hue-teal));
+  --color-teal-9: oklch(49% 0.19 var(--hue-teal));
+  --color-teal-10: oklch(42% 0.17 var(--hue-teal));
+  --color-teal-11: oklch(35% 0.15 var(--hue-teal));
+  --color-teal-12: oklch(27% 0.12 var(--hue-teal));
+  --color-teal-13: oklch(20% 0.09 var(--hue-teal));
+  --color-teal-14: oklch(14% 0.07 var(--hue-teal));
+  --color-teal-15: oklch(11% 0.05 var(--hue-teal));
+  --color-teal-bright: oklch(65% 0.3 var(--hue-teal));
+  
+  /* [26] Green */
+  --color-green-0: oklch(99% 0.03 var(--hue-green));
+  --color-green-1: oklch(95% 0.06 var(--hue-green));
+  --color-green-2: oklch(88% 0.12 var(--hue-green));
+  --color-green-3: oklch(80% 0.14 var(--hue-green));
+  --color-green-4: oklch(74% 0.16 var(--hue-green));
+  --color-green-5: oklch(68% 0.19 var(--hue-green));
+  --color-green-6: oklch(63% 0.2 var(--hue-green));
+  --color-green-7: oklch(58% 0.21 var(--hue-green));
+  --color-green-8: oklch(53% 0.2 var(--hue-green));
+  --color-green-9: oklch(49% 0.19 var(--hue-green));
+  --color-green-10: oklch(42% 0.17 var(--hue-green));
+  --color-green-11: oklch(35% 0.15 var(--hue-green));
+  --color-green-12: oklch(27% 0.12 var(--hue-green));
+  --color-green-13: oklch(20% 0.09 var(--hue-green));
+  --color-green-14: oklch(14% 0.07 var(--hue-green));
+  --color-green-15: oklch(11% 0.05 var(--hue-green));
+  --color-green-bright: oklch(65% 0.3 var(--hue-green));
+  
+  /* [27] Lime */
+  --color-lime-0: oklch(99% 0.03 var(--hue-lime));
+  --color-lime-1: oklch(95% 0.06 var(--hue-lime));
+  --color-lime-2: oklch(88% 0.12 var(--hue-lime));
+  --color-lime-3: oklch(80% 0.14 var(--hue-lime));
+  --color-lime-4: oklch(74% 0.16 var(--hue-lime));
+  --color-lime-5: oklch(68% 0.19 var(--hue-lime));
+  --color-lime-6: oklch(63% 0.2 var(--hue-lime));
+  --color-lime-7: oklch(58% 0.21 var(--hue-lime));
+  --color-lime-8: oklch(53% 0.2 var(--hue-lime));
+  --color-lime-9: oklch(49% 0.19 var(--hue-lime));
+  --color-lime-10: oklch(42% 0.17 var(--hue-lime));
+  --color-lime-11: oklch(35% 0.15 var(--hue-lime));
+  --color-lime-12: oklch(27% 0.12 var(--hue-lime));
+  --color-lime-13: oklch(20% 0.09 var(--hue-lime));
+  --color-lime-14: oklch(14% 0.07 var(--hue-lime));
+  --color-lime-15: oklch(11% 0.05 var(--hue-lime));
+  --color-lime-bright: oklch(65% 0.3 var(--hue-lime));
+  
+  /* [28] Yellow */
+  --color-yellow-0: oklch(99% 0.03 var(--hue-yellow));
+  --color-yellow-1: oklch(95% 0.06 var(--hue-yellow));
+  --color-yellow-2: oklch(88% 0.12 var(--hue-yellow));
+  --color-yellow-3: oklch(80% 0.14 var(--hue-yellow));
+  --color-yellow-4: oklch(74% 0.16 var(--hue-yellow));
+  --color-yellow-5: oklch(68% 0.19 var(--hue-yellow));
+  --color-yellow-6: oklch(63% 0.2 var(--hue-yellow));
+  --color-yellow-7: oklch(58% 0.21 var(--hue-yellow));
+  --color-yellow-8: oklch(53% 0.2 var(--hue-yellow));
+  --color-yellow-9: oklch(49% 0.19 var(--hue-yellow));
+  --color-yellow-10: oklch(42% 0.17 var(--hue-yellow));
+  --color-yellow-11: oklch(35% 0.15 var(--hue-yellow));
+  --color-yellow-12: oklch(27% 0.12 var(--hue-yellow));
+  --color-yellow-13: oklch(20% 0.09 var(--hue-yellow));
+  --color-yellow-14: oklch(14% 0.07 var(--hue-yellow));
+  --color-yellow-15: oklch(11% 0.05 var(--hue-yellow));
+  --color-yellow-bright: oklch(85% 0.3 var(--hue-yellow));
+  
+  /* [29] Orange */
+  --color-orange-0: oklch(99% 0.03 var(--hue-orange));
+  --color-orange-1: oklch(95% 0.06 var(--hue-orange));
+  --color-orange-2: oklch(88% 0.12 var(--hue-orange));
+  --color-orange-3: oklch(80% 0.14 var(--hue-orange));
+  --color-orange-4: oklch(74% 0.16 var(--hue-orange));
+  --color-orange-5: oklch(68% 0.19 var(--hue-orange));
+  --color-orange-6: oklch(63% 0.2 var(--hue-orange));
+  --color-orange-7: oklch(58% 0.21 var(--hue-orange));
+  --color-orange-8: oklch(53% 0.2 var(--hue-orange));
+  --color-orange-9: oklch(49% 0.19 var(--hue-orange));
+  --color-orange-10: oklch(42% 0.17 var(--hue-orange));
+  --color-orange-11: oklch(35% 0.15 var(--hue-orange));
+  --color-orange-12: oklch(27% 0.12 var(--hue-orange));
+  --color-orange-13: oklch(20% 0.09 var(--hue-orange));
+  --color-orange-14: oklch(14% 0.07 var(--hue-orange));
+  --color-orange-15: oklch(11% 0.05 var(--hue-orange));
+  --color-orange-bright: oklch(65% 0.3 var(--hue-orange));
+  
+  /* [30] Gray */
+  --color-gray-0: oklch(99% var(--gray-chroma) var(--gray-hue));
+  --color-gray-1: oklch(95% var(--gray-chroma) var(--gray-hue));
+  --color-gray-2: oklch(88% var(--gray-chroma) var(--gray-hue));
+  --color-gray-3: oklch(80% var(--gray-chroma) var(--gray-hue));
+  --color-gray-4: oklch(74% var(--gray-chroma) var(--gray-hue));
+  --color-gray-5: oklch(68% var(--gray-chroma) var(--gray-hue));
+  --color-gray-6: oklch(63% var(--gray-chroma) var(--gray-hue));
+  --color-gray-7: oklch(58% var(--gray-chroma) var(--gray-hue));
+  --color-gray-8: oklch(53% var(--gray-chroma) var(--gray-hue));
+  --color-gray-9: oklch(49% var(--gray-chroma) var(--gray-hue));
+  --color-gray-10: oklch(43% var(--gray-chroma) var(--gray-hue));
+  --color-gray-11: oklch(37% var(--gray-chroma) var(--gray-hue));
+  --color-gray-12: oklch(31% var(--gray-chroma) var(--gray-hue));
+  --color-gray-13: oklch(25% var(--gray-chroma) var(--gray-hue));
+  --color-gray-14: oklch(18% var(--gray-chroma) var(--gray-hue));
+  --color-gray-15: oklch(10% var(--gray-chroma) var(--gray-hue));
+  
+  /* [31] Gray Cool */
+  --color-slate-0: oklch(99% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-1: oklch(95% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-2: oklch(88% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-3: oklch(80% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-4: oklch(74% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-5: oklch(68% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-6: oklch(63% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-7: oklch(58% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-8: oklch(53% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-9: oklch(49% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-10: oklch(43% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-11: oklch(37% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-12: oklch(31% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-13: oklch(25% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-14: oklch(18% var(--gray-cool-chroma) var(--gray-cool-hue));
+  --color-slate-15: oklch(10% var(--gray-cool-chroma) var(--gray-cool-hue));
+  
+  /* [32] Gray Warm */
+  --color-stone-0: oklch(99% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-1: oklch(95% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-2: oklch(88% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-3: oklch(80% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-4: oklch(74% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-5: oklch(68% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-6: oklch(63% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-7: oklch(58% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-8: oklch(53% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-9: oklch(49% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-10: oklch(43% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-11: oklch(37% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-12: oklch(31% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-13: oklch(25% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-14: oklch(18% var(--gray-warm-chroma) var(--gray-warm-hue));
+  --color-stone-15: oklch(10% var(--gray-warm-chroma) var(--gray-warm-hue));
+
+  /* [33] Shadows */
+  --shadow-xs: 0 1px 2px -1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+  
+  --shadow-sm: 
+    0 3px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+    0 7px 14px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%));
+  
+  --shadow-md: 
+    0 -1px 3px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+    0 1px 2px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+    0 2px 5px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+    0 4px 12px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+    0 12px 15px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%));
+  
+  --shadow-lg: 
+    0 -2px 5px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+    0 1px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+    0 2px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+    0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+    0 9px 9px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+    0 16px 16px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%));
+  
+  --shadow-xl: 
+    0 -1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+    0 2px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+    0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+    0 10px 10px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+    0 20px 20px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+    0 40px 40px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%));
+  
+  --shadow-2xl: 
+    0 -1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+    0 3px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+    0 7px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+    0 12px 10px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+    0 22px 18px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+    0 41px 33px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%)),
+    0 100px 80px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%));
+  
+  /* [34] Inset Shadows */
+  --inset-shadow-xs: inset 0 0 0 1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+  --inset-shadow-sm: inset 0 1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)), var(--inner-shadow-highlight);
+  --inset-shadow-md: inset 0 1px 4px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)), var(--inner-shadow-highlight);
+  --inset-shadow-lg: inset 0 2px 8px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)), var(--inner-shadow-highlight);
+  --inset-shadow-xl: inset 0 2px 14px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)), var(--inner-shadow-highlight);
+  /* ... */
+}
+
+/*  Custom Utilities */
+
+/* [35] Dynamic Padding */
+@utility p-inline-max { padding-inline: max(var(--spacing-sm-lg), calc(50vw - var(--content-size, 90em) / 2)) }
+
+/* [36] The Stack */
+@utility stack {
+  > * { margin-block: 0; }
+  > * + * { margin-block-start: var(--space, 1em); }
+}
+
+@utility stack-* {
+  > * + * { --space: --value(--spacing-*); }
+}
+
+/* Grid Layouts */
+
+/* [37] Ram Grid */
+@utility grid-ram {
+	display: grid; 
+	grid-template-columns: repeat(var(--grid-col, auto-fit), minmax(var(--col-min, 2rem), var(--col-max, 1fr))) 
+}
+
+/* [38] 12 column Grid */
+@utility grid-col { 
+  grid-template-columns: repeat(var(--grid-col, 12), 1fr); 
+  gap: var(--col-gap, 0) var(--row-gap, var(--space-sm-lg));
+}
+
+/* [39] Pile Grid */
+@utility pile-grid {
+  place-content: var(--place-content, center);
+  > * { grid-area: 1/1; }
+}
+
+/* [40] Overflow Scroll */
+@utility scroll-x-overflow {
+  display: flex;
+  block-size: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+
+  > * { flex: 0 0 auto; }
+
+  > img {
+    block-size: 100%;
+    flex-basis: auto;
+    width: auto;
+  }
+
+  > * + * { margin-inline-start: var(--overflow-space, var(--space-md)); }
+}
+
+/* [41] Overflow Hint */
+@utility overflow-x-hint { 
+  -webkit-mask-image: linear-gradient(to right, #0000, #000, #000, #0000); 
+  mask-image: linear-gradient(to right, #0000, #000, #000, #0000); 
+}
+
+/* [42] Type Styles */
+@utility font-bold { font-variation-settings: "wght" 800; }
+@utility font-italic { font-variation-settings: "ital" 1 }

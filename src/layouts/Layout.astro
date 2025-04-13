@@ -1,14 +1,30 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Head from '@layouts/Head.astro';
+import TheHeader from '@layouts/TheHeader.astro';
+import TheNavigation from '@layouts/TheNavigation.astro';
+import TheFooter from '@layouts/TheFooter.astro';
+
+interface Props extends HTMLAttributes<"html"> {
+	title: string;
+	description: string;
+}
+
+const { 
+	title = "My Astro Blog",
+	description = "My musings about the Astro framework",
+	...rest 
+} = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
+	<Head {title} {description} />
+	<body id="app">
+		<TheHeader />
+		<TheNavigation />
 		<slot />
+		<TheFooter />
 	</body>
 </html>
 
