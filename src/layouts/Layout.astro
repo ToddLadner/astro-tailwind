@@ -3,7 +3,6 @@ import type { HTMLAttributes } from 'astro/types';
 import Head from '@layouts/Head.astro';
 import TheHeader from '@layouts/TheHeader.astro';
 import TheNavigation from '@layouts/TheNavigation.astro';
-import TheFooter from '@layouts/TheFooter.astro';
 
 interface Props extends HTMLAttributes<"html"> {
 	title: string;
@@ -20,19 +19,17 @@ const {
 <!doctype html>
 <html lang="en">
 	<Head {title} {description} />
-	<body id="app">
-		<TheHeader />
-		<TheNavigation />
+	<body id="app" class="grid">
+		<div class="sidebar">
+			<TheHeader />
+			<TheNavigation />
+		</div>
+		
 		<slot />
-		<TheFooter />
 	</body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+	.grid { grid-template-columns: auto 1fr; }
+	.sidebar { padding: var(--spacing-sm) var(--spacing-lg); }
 </style>

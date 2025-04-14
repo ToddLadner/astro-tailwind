@@ -17,8 +17,7 @@ const {
 const navLinks = [
   { 
     name: 'Home', 
-    path: '/', 
-    icon: 'skull' 
+    path: '/'
   },
   { 
     name: 'Layouts', 
@@ -35,8 +34,7 @@ const navLinks = [
   },
   { 
     name: 'Blog', 
-    path: '/blog/', 
-    icon: 'skull' 
+    path: '/blog/'
   },
   { 
     name: 'Colors', 
@@ -62,15 +60,23 @@ const navLinks = [
 ---
 
 <style>
-  /* .nav { margin-left: auto } */
-  .nav-list { gap: var(--space-sm) }
-  .nav-link { gap: 1ch; color: currentColor }
+  nav {
+
+  }
+
+  .nav-list { gap: var(--space-sm); }
+
+  .nav-link { 
+    gap: 1ch; 
+    color: currentColor; 
+  }
+
   [data-icon] { size: var(--space-xs) }
 </style>
 
 <!-- YES: aria-label="primary" | NO: aria-label="primary navigation" Because of Landmarks, screen readers will announce this as "primary navigation navigation" -->
 <nav class="nav" aria-label={ariaLabel} class:list={[classes]} {...rest}>
-  <ul role="list" class="nav-list flex">
+  <ul role="list" class="nav-list ">
     {
       navLinks.map(({ name, path, icon }) => (
         <li class="list-item">
