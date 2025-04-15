@@ -3,29 +3,27 @@ import Logo from '@images/skull.svg'
 ---
 
 <header>
-  <div class="masthead">
-    <a href="/" class="inline-flex items-center gap-sm" aria-label="Home">
-      <Logo />
-      <span>DesignWerk</span>
-    </a>
-  </div>
+  <a href="/" class="flex items-center gap-3xs" aria-label="Home">
+    <Logo class="logo"/>
+    <span>DesignWerk</span>
+  </a>
 </header>
 
 <style>
-  header {
+  header { container-type: inherit }
 
-
-
-    
-  }
-  .masthead {
-
-
-  }
   a {
-    /* background-color: aqua; */
-    display: block;
-
+    text-decoration: none;
+    font-size: var(--text-md);
+    color: var(--color-text-1);
   }
-  .action-bar { display: flex; }
+  
+  .logo {
+    width: var(--spacing-sm);
+    height: auto;
+    aspect-ratio: var(--aspect-square);
+    flex: none;
+    
+    path { fill: currentColor }
+  }
 </style>
