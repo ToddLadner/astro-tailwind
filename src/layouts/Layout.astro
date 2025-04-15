@@ -16,11 +16,15 @@ const {
 } = Astro.props;
 ---
 
+<style>
+	.grid { grid-template-columns: auto 1fr; }
+</style>
+
 <!doctype html>
 <html lang="en">
 	<Head {title} {description}/>
 	<body id="app" class="grid">
-		<div class="sidebar stack stack-xs">
+		<div class="py-md px-lg stack stack-xs">
 			<TheHeader />
 			<search>Search</search>
 			<TheNavigation />
@@ -29,8 +33,3 @@ const {
 		<slot />
 	</body>
 </html>
-
-<style>
-	.grid { grid-template-columns: auto 1fr; }
-	.sidebar { padding: var(--spacing-md) var(--spacing-lg); }
-</style>
