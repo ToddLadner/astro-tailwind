@@ -1,12 +1,17 @@
 ---
 import Logo from '@images/skull.svg'
+import TheNavigation from '@layouts/TheNavigation.astro';
 ---
 
-<header>
+<header class="py-md px-lg stack stack-xs">
   <a href="/" class="flex items-center gap-3xs" aria-label="Home">
     <Logo class="logo"/>
     <span>DesignWerk</span>
   </a>
+  
+  <search>Search</search>
+
+  <TheNavigation />
 </header>
 
 <style>
