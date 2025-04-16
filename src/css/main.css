@@ -73,7 +73,7 @@
   --color-surface-3: light-dark(var(--color-gray-2), var(--color-gray-10));
   --color-surface-4: light-dark(var(--color-gray-3), var(--color-gray-9));
 
-  --color-text-1: light-dark(var(--color-gray-8), var(--color-gray-2));
+  --color-text-1: light-dark(var(--color-gray-12), var(--color-gray-0));
   --color-text-2: light-dark(var(--color-gray-7), var(--color-gray-4));
   
   --color-danger: light-dark(var(--color-red-5), var(--color-red-3));
