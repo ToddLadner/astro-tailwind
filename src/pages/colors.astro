@@ -10,7 +10,8 @@ const {
 ---
 <style>
   .swatches {
-    gap: var(--spacing-3xs);
+    gap: var(--spacing-2xs);
+    margin: 0;
   }
   .swatches li { 
     padding: var(--spacing-2xs); 
@@ -21,14 +22,28 @@ const {
     text-align: center;
   }
 
+  span { 
+    opacity:0;
+    transition: opacity 200ms ease; 
+  }
+  .swatches li:hover span { opacity:1 }
+
+  .color { 
+    display: flex;
+    align-items: center;
+
+    &:not(:first-child) { margin-top: var(--spacing-xs) }
+  }
   .swatches li:nth-child(-n+7) { color: var(--color-gray-12) }
   .swatches li:nth-child(n+7) { color: var(--color-gray-0) }
   .swatches li:last-child { color: var(--color-gray-0) }
 
   h2 { 
-    font-size: var(--text-lg);
+    font-size: var(--text-md);
     flex: none; 
-    width: var(--spacing-3xl);
+    align-items: center;
+    width: var(--spacing-2xl);
+    margin-top: 0;
   }
   .brand li {
     &:nth-child(0) { background-color: var(--color-brand-0) } 
@@ -341,7 +356,7 @@ const {
       <h2>Brand</h2>
       <ul role="list" class="brand swatches flex">
         {colors.map((i) => (
-          <li class={`bg-brand-${i}`}>{i}</li>
+          <li class={`bg-brand-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -350,7 +365,7 @@ const {
       <h2>Red</h2>
       <ul role="list" class="red swatches flex">
         {colors.map((i) => (
-          <li class={`bg-red-${i}`}>{i}</li>
+          <li class={`bg-red-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -359,7 +374,7 @@ const {
       <h2>Pink</h2>
       <ul role="list" class="pink swatches flex">
         {colors.map((i) => (
-          <li class={`bg-pink-${i}`}>{i}</li>
+          <li class={`bg-pink-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -368,7 +383,7 @@ const {
       <h2>Purple</h2>
       <ul role="list" class="purple swatches flex">
         {colors.map((i) => (
-          <li class={`bg-purple-${i}`}>{i}</li>
+          <li class={`bg-purple-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -377,7 +392,7 @@ const {
       <h2>Violet</h2>
       <ul role="list" class="violet swatches flex">
         {colors.map((i) => (
-          <li class={`bg-violet-${i}`}>{i}</li>
+          <li class={`bg-violet-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -386,7 +401,7 @@ const {
       <h2>Indigo</h2>
       <ul role="list" class="indigo swatches flex">
         {colors.map((i) => (
-          <li class={`bg-indigo-${i}`}>{i}</li>
+          <li class={`bg-indigo-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -395,7 +410,7 @@ const {
       <h2>Blue</h2>
       <ul role="list" class="blue swatches flex">
         {colors.map((i) => (
-          <li class={`bg-blue-${i}`}>{i}</li>
+          <li class={`bg-blue-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -404,7 +419,7 @@ const {
       <h2>Cyan</h2>
       <ul role="list" class="cyan swatches flex">
         {colors.map((i) => (
-          <li class={`bg-cyan-${i}`}>{i}</li>
+          <li class={`bg-cyan-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -413,7 +428,7 @@ const {
       <h2>Teal</h2>
       <ul role="list" class="teal swatches flex">
         {colors.map((i) => (
-          <li class={`bg-teal-${i}`}>{i}</li>
+          <li class={`bg-teal-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -422,7 +437,7 @@ const {
       <h2>Green</h2>
       <ul role="list" class="green swatches flex">
         {colors.map((i) => (
-          <li class={`bg-green-${i}`}>{i}</li>
+          <li class={`bg-green-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -431,7 +446,7 @@ const {
       <h2>Lime</h2>
       <ul role="list" class="lime swatches flex">
         {colors.map((i) => (
-          <li class={`bg-lime-${i}`}>{i}</li>
+          <li class={`bg-lime-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -440,7 +455,7 @@ const {
       <h2>Yellow</h2>
       <ul role="list" class="yellow swatches flex">
         {colors.map((i) => (
-          <li class={`bg-yellow-${i}`}>{i}</li>
+          <li class={`bg-yellow-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -449,7 +464,7 @@ const {
       <h2>Orange</h2>
       <ul role="list" class="orange swatches flex">
         {colors.map((i) => (
-          <li class={`bg-orange-${i}`}>{i}</li>
+          <li class={`bg-orange-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -458,7 +473,7 @@ const {
       <h2>Gray</h2>
       <ul role="list" class="gray swatches flex">
         {grays.map((i) => (
-          <li class={`bg-gray-${i}`}>{i}</li>
+          <li class={`bg-gray-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -467,7 +482,7 @@ const {
       <h2>Slate</h2>
       <ul role="list" class="slate swatches flex">
         {grays.map((i) => (
-          <li class={`bg-slate-${i}`}>{i}</li>
+          <li class={`bg-slate-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>
@@ -476,7 +491,7 @@ const {
       <h2>Stone</h2>
       <ul role="list" class="stone swatches flex">
         {grays.map((i) => (
-          <li class={`bg-stone-${i}`}>{i}</li>
+          <li class={`bg-stone-${i}`}><span>{i}</span></li>
         ))}
       </ul>
     </div>

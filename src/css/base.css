@@ -110,8 +110,8 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 
 /* [8] Focus */
 @media (prefers-reduced-motion: no-preference) {
-  :focus-visible { transition: 
-    outline-offset 75ms ease-out, 
+  :focus-visible { 
+    transition: outline-offset 75ms ease-out, 
     box-shadow 75ms ease;  
   }
   :not(:active):focus-visible { 
