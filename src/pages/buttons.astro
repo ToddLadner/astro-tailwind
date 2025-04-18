@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Button from '@components/Button.astro';
+
 const { 
 	title = "My Astro Blog",
 	description = "My musings about the Astro framework",
@@ -10,7 +11,21 @@ const {
 
 <Layout {title} {description}>
 	<main class='p-inline-max bg-surface-2'>
-    <Button class="button">Button</Button>
-    <Button class="button outlined">Button</Button>
+
+    <Button class="button icon" varient='icon' icon='symbols-solid'>Default</Button>
+    <Button class="button outlined">Outlined</Button>
+    <Button class="button tonal">Tonal</Button>
+    <Button class="button filled">Filled</Button>
+    <Button class="button elevated">Elevated</Button>
+    <a href="#" class="button filled">Link</a>
+
+    <hr>
+
+    <Button class="button" disabled>Default</Button>
+    <Button class="button outlined" disabled>Outlined</Button>
+    <Button class="button tonal" disabled>Tonal</Button>
+    <Button class="button filled" disabled>Filled</Button>
+    <Button class="button elevated" disabled>Elevated</Button>
+
   </main>
 </Layout>

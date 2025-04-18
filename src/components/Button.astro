@@ -25,280 +25,288 @@ const {
   ...rest 
   } = Astro.props;
 ---
-<style>
- @layer components{
-  :where(.button) {
-    --bg-color: transparent;
-    --border-color: transparent;
-    --border-radius: var(--button-border-radius);
-    --font-size: initial;
-    --min-height: 2.375rem;
-    --text-color: var(--primary);
+<style is:global>
+  @layer components {
+    /* General Button Styles */
+    .button, [type=button] {
+      /* Props */
+      --bg-color: transparent;
+      --border-color: transparent;
+      --border-radius: var(--radius-md);
+      --font-size: initial;
+      --min-height: 2.375rem;
+      --text-color: var(--color-brand-7);
+      
+      --button-ripple-duration: 0.5s;
+      --button-ripple-size: 100%;
 
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    align-items: center;
-    background: var(--bg-color) var(--ripple, none);
-    border-radius: var(--border-radius);
-    border: var(--border-size-1) solid var(--border-color);
-    color: var(--text-color);
-    display: inline-flex;
-    font-size: var(--font-size);
-    font-weight: 700;
-    gap: var(--size-2);
-    justify-content: center;
-    min-block-size: var(--min-height);
-    padding-block: 0.5ex;
-    padding-inline: 1.5ex;
-    text-align: center;
-    text-decoration: none;
+      align-items: center;
+      background: var(--bg-color) var(--ripple, none);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      display: inline-flex;
+      font-size: var(--font-size);
+      font-weight: 600;
+      gap: var(--spacing-xs);
+      justify-content: center;
+      min-block-size: var(--min-height);
+      padding-block: 0.5ex;
+      padding-inline: 1.5ex;
+      text-align: center;
+      text-decoration: none;
+      user-select: none;
 
-    user-select: none;
+      /* Disabled Button Style */
+      &[disabled] {
+        cursor: not-allowed;
+        opacity: 0.64;
+      }
 
-    &:where([disabled]) {
-      cursor: not-allowed;
-      opacity: 0.64;
-    }
+      /* Color & Ripple Effect | Motion OK  */
+      @media (prefers-reduced-motion: no-preference) {
+        transition:
+          background-color 0.2s var(--ease-out-3),
+          box-shadow 0.2s var(--ease-out-3),
+          border-color 0.2s var(--ease-out-3),
+          color 0.2s var(--ease-out-3),
+          outline-offset 0.05s var(--ease-1);
+          background-position: center;
 
-    @media (prefers-reduced-motion: no-preference) {
-      transition:
-        background-color 0.2s var(--ease-out-3),
-        box-shadow 0.2s var(--ease-out-3),
-        border-color 0.2s var(--ease-out-3),
-        color 0.2s var(--ease-out-3),
-        outline-offset 0.05s var(--ease-1);
+        /* Hover and Active Effects */
+        &:not([disabled]) {
+          &:not(:active):hover {
+            --ripple: radial-gradient(circle, transparent 1%, var(--bg-color) 1%) center/15000%;
+            transition: background var(--button-ripple-duration);
+          }
 
-      /* Ripple effect */
-      background-position: center;
-
-      &:where(:not([disabled])) {
-        &:where(:not(:active):hover) {
-          --ripple: radial-gradient(circle, transparent 1%, var(--bg-color) 1%)
-            center/15000%;
-
-          transition: background var(--button-ripple-duration);
-        }
-
-        &:where(:hover:active) {
-          background-size: var(--button-ripple-size);
-          transition: background 0s;
+          &:hover:active {
+            background-size: var(--button-ripple-size);
+            transition: background 0s;
+          }
         }
       }
-    }
 
-    /* Element states */
-    &:where(:not([disabled])) {
-      &:where(:not(:active):hover) {
+      /* Hover & Pressed background‑color change */
+      &:not([disabled]) {
+        &:not(:active):hover {
+          --bg-color: light-dark(
+            oklch(from var(--color-brand-4) l 0.01 h / 20%),
+            oklch(from var(--color-brand-4) l 0.01 h / 40%)
+          );
+        }
+
+        &:hover:active {
+          --bg-color: light-dark(
+            oklch(from var(--color-brand-4) l 0.06 h / 30%),
+            oklch(from var(--color-brand-4) l 0.06 h / 40%)
+          );
+        }
+      }
+
+      /* Disabled Text Color */
+      &:[disabled] {
+        --text-color: color-mix(
+          in oklch,
+          var(--color-text-2) 50%,
+          var(--color-surface-1)
+        );
+      }
+
+      /* Icon-only Button */
+      &:is(:has(svg), &.icon-only) {
+        gap: 1ex;
+        svg {
+          max-block-size: 0.7lh;
+          color: currentColor;
+        }
+      }
+
+      /* Button Size Variations */
+      &.small {
+        --min-height: 1.875rem;
+        padding-block: 0;
+        padding-inline: 1ex;
+      }
+
+      &.large {
+        --min-height: 2.875rem;
+        padding-inline: 4ex;
+      }
+
+      /* Button Variants */
+      &.outlined {
+        --bg-color: var(--color-surface-2);
+        --border-color: var(--color-brand-8);
+        --text-color: var(--color-brand-8);
+
+        /* Hover & Pressed background‑color change */
+        &:not([disabled]) {
+          &:not(:active):hover {
+            --bg-color: var(--color-brand-8);
+            --border-color: var(--color-brand-8);
+            --text-color: var(--color-text-1);
+          }
+
+          &:active {
+            --bg-color: var(--color-brand-9);
+            --border-color: var(--color-brand-9);
+            --text-color: var(--color-text-1);
+          }
+        }
+
+        /* Disabled Outlined Button */
+        &[disabled] {
+          --bg-color: var(--color-surface-1);
+          --border-color: color-mix(
+            in oklch,
+            var(--color-text-2) 20%,
+            var(--color-surface-1)
+          );
+          --text-color: color-mix(
+            in oklch,
+            var(--color-text-2) 40%,
+            var(--color-surface-1)
+          );
+        }
+      }
+
+      &.tonal {
+        --bg-color: var(--color-brand-6);
+        --text-color: var(--color-brand-13);
+
+        &:not([disabled]) {
+          &:not(:active):hover {
+            --bg-color: var(--color-brand-9);
+            --border-color: var(--color-brand-9);
+          }
+
+          &:active {
+            --bg-color: var(--color-brand-7);
+            --border-color: var(--color-brand-7);
+          }
+        }
+
+        /* Disabled Tonal Button */
+        &[disabled] {
+          --bg-color: color-mix(
+            in oklch,
+            var(--color-text-1) 8%,
+            var(--color-surface-3)
+          );
+          --text-color: color-mix(
+            in oklch,
+            var(--color-text-1) 70%,
+            var(--color-surface-3)
+          );
+        }
+      }
+
+      &.filled {
+        --bg-color: var(--color-brand-8);
+        --text-color: var(--color-gray-1);
+
+        &:not([disabled]) {
+          &:not(:active):hover {
+            --bg-color: var(--color-brand-10);
+            --border-color: var(--color-brand-10);
+          }
+
+          &:active {
+            --bg-color: var(--color-brand-9);
+            --border-color: var(--color-brand-9);
+          }
+        }
+
+        /* Disabled Filled Button */
+        &[disabled] {
+          --bg-color: color-mix(
+            in oklch,
+            var(--color-text-2) 20%,
+            var(--color-surface-2)
+          );
+          --text-color: color-mix(
+            in oklch,
+            var(--color-text-4) 70%,
+            var(--color-surface-2)
+          );
+        }
+      }
+
+      &.elevated {
         --bg-color: light-dark(
-          oklch(from var(--primary) l 0.01 h / 20%),
-          oklch(from var(--primary) l 0.01 h / 40%)
+          color-mix(in oklch, var(--color-gray-1) 97%, var(--color-brand-15)),
+          color-mix(in oklch, var(--color-gray-13) 97%, var(--color-brand-1))
         );
-      }
-
-      &:where(:hover:active) {
-        --bg-color: light-dark(
-          oklch(from var(--primary) l 0.06 h / 30%),
-          oklch(from var(--primary) l 0.06 h / 40%)
+        --ripple-color: light-dark(
+          color-mix(in oklch, var(--color-gray-1) 80%, var(--color-brand-15)),
+          color-mix(in oklch, var(--color-gray-13) 80%, var(--color-brand-1))
         );
-      }
-    }
+        --text-color: var(--color-brand-9);
 
-    /* Disabled */
-    &:where([disabled]) {
-      --text-color: color-mix(
-        in oklch,
-        var(--text-color-2) 50%,
-        var(--surface-default)
-      );
-    }
+        box-shadow:
+          0px 3px 1px -2px oklch(0 0 0 / 20%),
+          0px 2px 2px 0px oklch(0 0 0 / 14%),
+          0px 1px 5px 0px oklch(0 0 0 / 12%);
 
-    /* Icon */
-    &:where(:has(svg), &.icon-only) {
-      gap: 1ex;
-
-      svg {
-        max-block-size: 0.7lh;
-        color: currentColor;
-      }
-    }
-
-    /* Sizes */
-    &.small {
-      --min-height: 1.875rem;
-      padding-block: 0;
-      padding-inline: 1ex;
-    }
-
-    &.large {
-      --min-height: 2.875rem;
-      padding-inline: 4ex;
-    }
-
-    /* Variants */
-    &.outlined {
-      --bg-color: var(--surface-default);
-      --border-color: var(--color-8);
-      --text-color: var(--color-8);
-
-      &:where(:not([disabled])) {
-        &:where(:not(:active):hover) {
-          --bg-color: var(--color-10);
-          --border-color: var(--color-10);
-          --text-color: var(--color-1);
-        }
-
-        &:where(:active) {
-          --bg-color: var(--color-9);
-          --border-color: var(--color-9);
-          --text-color: var(--color-1);
-        }
-      }
-
-      &:where([disabled]) {
-        --bg-color: var(--surface-default);
-        --border-color: color-mix(
-          in oklch,
-          var(--text-color-2) 20%,
-          var(--surface-default)
-        );
-        --text-color: color-mix(
-          in oklch,
-          var(--text-color-2) 40%,
-          var(--surface-default)
-        );
-      }
-    }
-    &.tonal {
-      --bg-color: var(--color-6);
-      --text-color: var(--color-16);
-
-      &:where(:not([disabled])) {
-        &:where(:not(:active):hover) {
-          --bg-color: var(--color-9);
-          --border-color: var(--color-9);
-        }
-
-        &:where(:active) {
-          --bg-color: var(--color-7);
-          --border-color: var(--color-7);
-        }
-      }
-
-      &:where([disabled]) {
-        --bg-color: color-mix(
-          in oklch,
-          var(--text-color-2) 8%,
-          var(--surface-default)
-        );
-        --text-color: color-mix(
-          in oklch,
-          var(--text-color-2) 70%,
-          var(--surface-default)
-        );
-      }
-    }
-    &.filled {
-      --bg-color: var(--color-8);
-      --text-color: var(--color-1);
-
-      &:where(:not([disabled])) {
-        &:where(:not(:active):hover) {
-          --bg-color: var(--color-10);
-          --border-color: var(--color-10);
-        }
-
-        &:where(:active) {
-          --bg-color: var(--color-9);
-          --border-color: var(--color-9);
-        }
-      }
-
-      &:where([disabled]) {
-        --bg-color: color-mix(
-          in oklch,
-          var(--text-color-2) 20%,
-          var(--surface-default)
-        );
-        --text-color: color-mix(
-          in oklch,
-          var(--text-color-2) 70%,
-          var(--surface-default)
-        );
-      }
-    }
-    &.elevated {
-      --bg-color: light-dark(
-        color-mix(in oklch, var(--gray-2) 97%, var(--color-16)),
-        color-mix(in oklch, var(--gray-13) 97%, var(--color-1))
-      );
-      --ripple-color: light-dark(
-        color-mix(in oklch, var(--gray-2) 80%, var(--color-8)),
-        color-mix(in oklch, var(--gray-13) 80%, var(--color-8))
-      );
-      --text-color: var(--color-8);
-
-      box-shadow:
-        0px 3px 1px -2px oklch(0 0 0 / 20%),
-        0px 2px 2px 0px oklch(0 0 0 / 14%),
-        0px 1px 5px 0px oklch(0 0 0 / 12%);
-
-      &:where(:not([disabled])) {
-        &:where(:not(:active):hover) {
-          --ripple: radial-gradient(
+        /* Hover & Pressed background‑color change  */
+        &:not([disabled]) {
+          &:not(:active):hover {
+            --ripple: radial-gradient(
               circle,
               transparent 1%,
               var(--ripple-color) 1%
             )
             center/15000%;
+            --bg-color: light-dark(
+              color-mix(in oklch, var(--color-gray-2) 93%, var(--color-brand-8)),
+              color-mix(in oklch, var(--color-gray-13) 93%, var(--color-brand-8))
+            );
+          }
 
-          --bg-color: light-dark(
-            color-mix(in oklch, var(--gray-2) 93%, var(--color-8)),
-            color-mix(in oklch, var(--gray-13) 93%, var(--color-8))
-          );
+          &:hover:active {
+            --bg-color: light-dark(
+              color-mix(in oklch, var(--color-gray-2) 91%, var(--color-brand-8)),
+              color-mix(in oklch, var(--color-gray-13) 91%, var(--color-brand-8))
+            );
+          }
         }
 
-        &:where(:hover:active) {
-          --bg-color: light-dark(
-            color-mix(in oklch, var(--gray-2) 91%, var(--color-8)),
-            color-mix(in oklch, var(--gray-13) 91%, var(--color-8))
+        /* Disabled Elevated Button */
+        &[disabled] {
+          --bg-color: color-mix(
+            in oklch,
+            var(--text-color-2) 8%,
+            var(--surface-elevated)
+          );
+          --text-color: color-mix(
+            in oklch,
+            var(--text-color-2) 70%,
+            var(--surface-elevated)
           );
         }
-      }
-
-      &:where([disabled]) {
-        --bg-color: color-mix(
-          in oklch,
-          var(--text-color-2) 8%,
-          var(--surface-elevated)
-        );
-        --text-color: color-mix(
-          in oklch,
-          var(--text-color-2) 70%,
-          var(--surface-elevated)
-        );
       }
     }
-  }
 
-  /* file input */
-  :where(input[type="file"]) {
-    align-self: flex-start;
-    border-radius: var(--radius-2);
-    border: var(--border-size-1) solid var(--surface-filled);
-    box-shadow: var(--inner-shadow-4);
-    color: var(--text-color-2-contrast);
-    cursor: initial;
-    max-inline-size: 100%;
-    padding: 0;
-  }
+    /* File Input Styles */
+    input[type="file"] {
+      align-self: flex-start;
+      border-radius: var(--radius-2);
+      border: var(--border-size-1) solid var(--surface-filled);
+      box-shadow: var(--inner-shadow-4);
+      color: var(--text-color-2-contrast);
+      cursor: initial;
+      max-inline-size: 100%;
+      padding: 0;
+    }
 
-  :where(input[type="file"])::-webkit-file-upload-button,
-  :where(input[type="file"])::file-selector-button {
-    cursor: pointer;
-    margin-inline-end: var(--size-relative-6);
+    /* File Input Button Styling */
+    input[type="file"]::-webkit-file-upload-button,
+    input[type="file"]::file-selector-button {
+      cursor: pointer;
+      margin-inline-end: var(--size-relative-6);
+    }
   }
-}
-
 </style>
 <button {type} class:list={[size && `font-${size}`, theme, shape, varient, classes]} {...rest}>
   { icon && <Icon name={icon} /> }
