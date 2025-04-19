@@ -10,22 +10,200 @@ const {
 ---
 
 <Layout {title} {description}>
-	<main class='p-inline-max bg-surface-2'>
-
-    <Button class="button icon" varient='icon' icon='symbols-solid'>Default</Button>
-    <Button class="button outlined">Outlined</Button>
-    <Button class="button tonal">Tonal</Button>
-    <Button class="button filled">Filled</Button>
-    <Button class="button elevated">Elevated</Button>
+	<main class='p-inline-max pt-lg bg-surface-2'>
+    <Button text='Default' />
+    
+    <Button 
+      theme='outlined' 
+      text='Outlined'
+    />
+    
+    <Button 
+      theme='tonal' 
+      text='Tonal'
+    />
+    
+    <Button 
+      theme='filled' 
+      text='Filled'
+    />
+    
+    <Button 
+      theme='elevated' 
+      text='Elevated'
+    />
+    
     <a href="#" class="button filled">Link</a>
 
     <hr>
 
-    <Button class="button" disabled>Default</Button>
-    <Button class="button outlined" disabled>Outlined</Button>
-    <Button class="button tonal" disabled>Tonal</Button>
-    <Button class="button filled" disabled>Filled</Button>
-    <Button class="button elevated" disabled>Elevated</Button>
+    <h3>Icon Buttons</h3>
+    
+    <Button 
+      varient='icon' 
+      icon='symbols-solid'
+      text='Default'
+    />
 
+    <Button 
+      theme='outlined' 
+      varient='icon' 
+      icon='symbols-solid'
+      text='outlined'
+    />
+
+    <Button
+      theme='tonal'
+      varient='icon'
+      icon='symbols-solid'
+      text='tonal'
+    />
+    
+    <Button 
+      theme="filled" 
+      varient='icon' 
+      icon='symbols-solid' 
+      text='filled'
+    />
+    
+    <Button 
+      theme="elevated" 
+      varient='icon' 
+      icon='symbols-solid' 
+      text='elevated'
+    />
+    
+    <h3>With icons</h3>
+    
+    <Button 
+      icon='symbols-solid'
+      text='Default'
+    />
+
+    <Button 
+      theme='outlined' 
+      icon='symbols-solid'
+      text='outlined'
+    />
+
+    <Button
+      theme='tonal'
+      icon='symbols-solid'
+      text='tonal'
+    />
+    
+    <Button 
+      theme="filled" 
+      icon='symbols-solid' 
+      text='filled'
+    />
+    
+    <Button 
+      theme="elevated" 
+      icon='symbols-solid' 
+      text='elevated'
+      dir='rtl'
+    />
+
+    <hr>
+    
+    <h3>Disabled Buttons</h3>
+    
+    <Button 
+      text='Default' 
+      disabled
+    />
+    <Button 
+      theme='outlined' 
+      text='Outlined' 
+      disabled 
+    />
+    <Button 
+      theme='tonal' 
+      text='Tonal' 
+      disabled 
+    />
+    <Button 
+      theme='filled' 
+      text='Filled' 
+      disabled 
+    />
+    <Button 
+      theme='elevated' 
+      text='Elevated'
+      disabled 
+    />
+
+    <br />
+
+    <Button 
+      varient='icon'
+      icon='symbols-solid' 
+      text='Default' 
+      disabled
+    />
+    <Button
+      varient='icon'
+      icon='symbols-solid' 
+      theme='outlined' 
+      text='Outlined' 
+      disabled 
+    />
+    <Button 
+      varient='icon'
+      icon='symbols-solid'
+      theme='tonal' 
+      text='Tonal' 
+      disabled 
+    />
+    <Button
+      varient='icon'
+      icon='symbols-solid' 
+      theme='filled' 
+      text='Filled' 
+      disabled 
+    />
+    <Button
+      varient='icon'
+      icon='symbols-solid'  
+      theme='elevated' 
+      text='Elevated'
+      disabled 
+    />
+
+    <h3>Shapes</h3>
+    
+    <Button 
+      theme='outlined' 
+      text='Outlined'
+      shape='pill'
+    />
+    
+    <Button 
+      theme='tonal' 
+      text='Tonal'
+      shape='square'
+    />
+    
+    <Button 
+      theme='filled'
+      shape='circle' 
+      text='Ci'
+    />
+
+    <h2>Sizes</h2>
+    <Button 
+      theme='outlined' 
+      text='Outlined'
+      size='sm'
+    />
+    
+    <Button 
+      theme='tonal' 
+      text='Tonal'
+      size='lg'
+    />
+    
+    
   </main>
 </Layout>

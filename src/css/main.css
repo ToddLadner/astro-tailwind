@@ -75,6 +75,8 @@
 
   --color-text-1: light-dark(var(--color-gray-12), var(--color-gray-0));
   --color-text-2: light-dark(var(--color-gray-7), var(--color-gray-4));
+  --color-text-1-reverse: light-dark(var(--color-gray-0), var(--color-gray-12));
+  --color-text-2-reverse: light-dark(var(--color-gray-4), var(--color-gray-7));
   
   --color-danger: light-dark(var(--color-red-5), var(--color-red-3));
   --color-warning: light-dark(var(--color-orange-5), var(--color-orange-3));

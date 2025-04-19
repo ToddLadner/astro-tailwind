@@ -1,0 +1,202 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { HTMLAttributes } from 'astro/types';
+interface Props extends HTMLAttributes<"details"> {
+  open?: boolean;
+  classes?: string;
+}
+const { 
+  open = false, 
+  classes, 
+  ...rest 
+} = Astro.props;
+---
+
+<style>
+@layer components {
+  :where(details) {
+    --accordion-transition-time: 0.2s;
+    --bg-color: transparent;
+    --padding-inline: var(--spacing-sm);
+    --shadow: none;
+    
+    max-width: var(--measure-lg);
+    background-color: var(--bg-color);
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius, 4px);
+    display: block;
+    padding-inline: var(--padding-inline);
+    transition: all var(--accordion-transition-time) ease-out;
+    border: 1px solid red;
+
+
+    /* Accordion animation */
+    /* https://nerdy.dev/open-and-close-transitions-for-the-details-element */
+    @media (prefers-reduced-motion: no-preference) {
+      interpolate-size: allow-keywords;
+    }
+
+    &::details-content {
+      block-size: 0;
+      opacity: 0;
+      overflow-y: clip;
+      transition:
+        content-visibility var(--accordion-transition-time) allow-discrete,
+        opacity var(--accordion-transition-time),
+        block-size var(--accordion-transition-time);
+    }
+
+    &[open]::details-content {
+      block-size: auto;
+      opacity: 1;
+    }
+    /***/
+
+    & > summary {
+      background-color: inherit;
+      cursor: pointer;
+      font-weight: 700;
+      padding-block: var(--spacing-sm);
+      user-select: none;
+    }
+
+    /* Custom arrow */
+    summary {
+      align-items: center;
+      background-color: inherit;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      list-style: none;
+      padding-block: var(--spacing-sm);
+      user-select: none;
+
+      &::marker,
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      svg {
+        transition: rotate 0.2s ease-out;
+      }
+    }
+
+    &[open] > summary svg {
+      rotate: 180deg;
+    }
+
+    & > .content {
+      margin-block-start: 0;
+      padding-block: var(--size-2) var(--spacing-sm);
+    }
+
+    & > .actions {
+      display: flex;
+      gap: var(--size-1);
+      justify-content: end;
+      margin-block-start: var(--spacing-sm);
+      padding-block-end: var(--size-1);
+      padding-inline: var(--spacing-sm) var(--size-1);
+    }
+
+    /* Variants */
+    &.card,
+    &.text {
+      --bg-color: transparent;
+      --padding-inline: var(--size-1);
+    }
+
+    &.elevated {
+      --bg-color: var(--surface-elevated);
+      --padding-inline: 0;
+      --shadow: var(--shadow-2);
+    }
+
+    &.outlined {
+      --bg-color: var(--surface-default);
+      --padding-inline: 0;
+      border: 1px solid var(--border-color);
+    }
+
+    &.tonal {
+      --bg-color: var(--surface-tonal);
+      --padding-inline: 0;
+    }
+
+    &:where(.elevated, .outlined, .tonal) > * {
+      padding-inline: var(--spacing-sm);
+    }
+  }
+
+  /* Accordion group  */
+  :where(.card:has(details)) {
+    --gutter-color: var(--border-color);
+
+    display: block;
+
+    & > .content {
+      margin-block: 0;
+      padding: 0;
+    }
+
+    &.card,
+    &.text {
+      &:not(.tonal, .outlined, .elevated) {
+        summary {
+          padding-inline: 0;
+        }
+      }
+    }
+
+    details {
+      --padding-inline: 0;
+
+      border: 0;
+      box-shadow: none;
+
+      & > * {
+        padding-inline: var(--spacing-sm);
+      }
+
+      /* Border between accordion items */
+      & + & {
+        summary {
+          border-radius: 0;
+          border-block-start: 1px solid var(--gutter-color);
+        }
+      }
+
+      /* First item */
+      &:first-of-type {
+        border-start-start-radius: var(--border-radius, 0.25rem);
+        border-start-end-radius: var(--border-radius, 0.25rem);
+        summary {
+          border-start-start-radius: var(--border-radius, 0.25rem);
+          border-start-end-radius: var(--border-radius, 0.25rem);
+        }
+      }
+
+      /* Last item */
+      &:last-of-type {
+        border-end-start-radius: var(--border-radius, 0.25rem);
+        border-end-end-radius: var(--border-radius, 0.25rem);
+        summary {
+          border-end-start-radius: var(--border-radius, 0.25rem);
+          border-end-end-radius: var(--border-radius, 0.25rem);
+        }
+      }
+    }
+  }
+}
+</style>
+
+<details class="max-w-[75ch]">
+  <summary id="summary1" aria-controls="content1">
+    Custom arrow
+    <Icon name="chevron-down-solid" class="icon" />
+  </summary>
+  <div id="content1" class="content" role="region" aria-labelledby="summary1">
+    <!--  -->
+    loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?
+  </div>
+</details>

@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Details from '@components/Details.astro';
+
+const { 
+	title = "My Astro Blog",
+	description = "My musings about the Astro framework",
+	...rest 
+} = Astro.props;
+---
+
+<Layout {title} {description}>
+  <main>
+    <h1>Details</h1>
+    <Details></Details>
+  </main>
+
+</Layout>

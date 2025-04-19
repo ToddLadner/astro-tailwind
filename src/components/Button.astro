@@ -3,9 +3,9 @@ import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<"button"> {
-  type?: "button" | "submit" | "reset" ;
-  theme?: "primary" | "secondary" | "plain" | "hug";
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  type?: "button" | "submit" | "reset";
+  theme?: "outlined" | "tonal" | "filled" | "elevated";
+  size?: "sm" | "lg";
   shape?: "square" | "circle" | "pill";
   varient?: "icon";
   text?: string;
@@ -25,17 +25,18 @@ const {
   ...rest 
   } = Astro.props;
 ---
+
 <style is:global>
   @layer components {
     /* General Button Styles */
-    .button, [type=button] {
+    :is(.button, [type=button], [type=submit], [type=reset]) {
       /* Props */
       --bg-color: transparent;
       --border-color: transparent;
       --border-radius: var(--radius-md);
       --font-size: initial;
       --min-height: 2.375rem;
-      --text-color: var(--color-brand-7);
+      --text-color: light-dark(var(--color-purple-7), var(--color-purple-3));
       
       --button-ripple-duration: 0.5s;
       --button-ripple-size: 100%;
@@ -57,7 +58,7 @@ const {
       text-decoration: none;
       user-select: none;
 
-      /* Disabled Button Style */
+      /* Default Disabled Button Styles */
       &[disabled] {
         cursor: not-allowed;
         opacity: 0.64;
@@ -91,30 +92,30 @@ const {
       &:not([disabled]) {
         &:not(:active):hover {
           --bg-color: light-dark(
-            oklch(from var(--color-brand-4) l 0.01 h / 20%),
-            oklch(from var(--color-brand-4) l 0.01 h / 40%)
+            oklch(from var(--color-purple-4) l 0.01 h / 20%),
+            oklch(from var(--color-purple-4) l 0.01 h / 10%)
           );
         }
 
         &:hover:active {
           --bg-color: light-dark(
-            oklch(from var(--color-brand-4) l 0.06 h / 30%),
-            oklch(from var(--color-brand-4) l 0.06 h / 40%)
+            oklch(from var(--color-purple-4) l 0.06 h / 30%),
+            oklch(from var(--color-purple-4) l 0.06 h / 40%)
           );
         }
       }
 
       /* Disabled Text Color */
-      &:[disabled] {
+      &[disabled] {
         --text-color: color-mix(
           in oklch,
-          var(--color-text-2) 50%,
+          var(--color-text-2) 90%,
           var(--color-surface-1)
         );
       }
 
       /* Icon-only Button */
-      &:is(:has(svg), &.icon-only) {
+      &:is(:has(svg), &.icon) {
         gap: 1ex;
         svg {
           max-block-size: 0.7lh;
@@ -123,67 +124,79 @@ const {
       }
 
       /* Button Size Variations */
-      &.small {
+      &.sm {
         --min-height: 1.875rem;
         padding-block: 0;
         padding-inline: 1ex;
       }
 
-      &.large {
+      &.lg {
         --min-height: 2.875rem;
         padding-inline: 4ex;
+      }
+
+      /* Button Shape Variations */
+      &.square {
+        --border-radius: var(--radius-2);
+      }
+      &:is(.circle, .pill) {
+        --border-radius: var(--radius-ellipse);
+      }
+      &.circle {
+        aspect-ratio: var(--aspect-square);
+        padding: 0;
       }
 
       /* Button Variants */
       &.outlined {
         --bg-color: var(--color-surface-2);
-        --border-color: var(--color-brand-8);
-        --text-color: var(--color-brand-8);
+        --border-color: light-dark(var(--color-purple-9), var(--color-purple-4));
+        --text-color: light-dark(var(--color-purple-9), var(--color-purple-4));
 
         /* Hover & Pressed background‑color change */
         &:not([disabled]) {
           &:not(:active):hover {
-            --bg-color: var(--color-brand-8);
-            --border-color: var(--color-brand-8);
-            --text-color: var(--color-text-1);
+            --bg-color: var(--color-purple-4);
+            --border-color: var(--color-purple-4);
+            --text-color: var(--color-gray-0);
           }
 
           &:active {
-            --bg-color: var(--color-brand-9);
-            --border-color: var(--color-brand-9);
-            --text-color: var(--color-text-1);
+            --bg-color: var(--color-purple-9);
+            --border-color: var(--color-purple-9);
+            --text-color: var(--color-gray-0);
           }
         }
 
         /* Disabled Outlined Button */
         &[disabled] {
-          --bg-color: var(--color-surface-1);
+          --bg-color: transparent;
           --border-color: color-mix(
             in oklch,
-            var(--color-text-2) 20%,
-            var(--color-surface-1)
+            var(--color-text-1) 50%,
+            var(--color-purple-1)
           );
           --text-color: color-mix(
             in oklch,
-            var(--color-text-2) 40%,
+            var(--color-text-1) 70%,
             var(--color-surface-1)
           );
         }
       }
 
       &.tonal {
-        --bg-color: var(--color-brand-6);
-        --text-color: var(--color-brand-13);
+        --bg-color: var(--color-purple-3);
+        --text-color: var(--color-purple-13);
 
         &:not([disabled]) {
           &:not(:active):hover {
-            --bg-color: var(--color-brand-9);
-            --border-color: var(--color-brand-9);
+            --bg-color: var(--color-purple-4);
+            --border-color: var(--color-purple-4);
           }
 
           &:active {
-            --bg-color: var(--color-brand-7);
-            --border-color: var(--color-brand-7);
+            --bg-color: var(--color-purple-5);
+            --border-color: var(--color-purple-5);
           }
         }
 
@@ -203,18 +216,18 @@ const {
       }
 
       &.filled {
-        --bg-color: var(--color-brand-8);
+        --bg-color: var(--color-purple-8);
         --text-color: var(--color-gray-1);
 
         &:not([disabled]) {
           &:not(:active):hover {
-            --bg-color: var(--color-brand-10);
-            --border-color: var(--color-brand-10);
+            --bg-color: var(--color-purple-10);
+            --border-color: var(--color-purple-10);
           }
 
           &:active {
-            --bg-color: var(--color-brand-9);
-            --border-color: var(--color-brand-9);
+            --bg-color: var(--color-purple-9);
+            --border-color: var(--color-purple-9);
           }
         }
 
@@ -235,14 +248,14 @@ const {
 
       &.elevated {
         --bg-color: light-dark(
-          color-mix(in oklch, var(--color-gray-1) 97%, var(--color-brand-15)),
-          color-mix(in oklch, var(--color-gray-13) 97%, var(--color-brand-1))
+          color-mix(in oklch, var(--color-gray-1) 97%, var(--color-purple-15)),
+          color-mix(in oklch, var(--color-gray-11) 97%, var(--color-purple-1))
         );
         --ripple-color: light-dark(
-          color-mix(in oklch, var(--color-gray-1) 80%, var(--color-brand-15)),
-          color-mix(in oklch, var(--color-gray-13) 80%, var(--color-brand-1))
+          color-mix(in oklch, var(--color-gray-1) 80%, var(--color-purple-15)),
+          color-mix(in oklch, var(--color-gray-13) 80%, var(--color-purple-1))
         );
-        --text-color: var(--color-brand-9);
+        --text-color: light-dark(var(--color-purple-9), var(--color-purple-3));
 
         box-shadow:
           0px 3px 1px -2px oklch(0 0 0 / 20%),
@@ -259,15 +272,15 @@ const {
             )
             center/15000%;
             --bg-color: light-dark(
-              color-mix(in oklch, var(--color-gray-2) 93%, var(--color-brand-8)),
-              color-mix(in oklch, var(--color-gray-13) 93%, var(--color-brand-8))
+              color-mix(in oklch, var(--color-gray-2) 93%, var(--color-purple-8)),
+              color-mix(in oklch, var(--color-gray-13) 93%, var(--color-purple-8))
             );
           }
 
           &:hover:active {
             --bg-color: light-dark(
-              color-mix(in oklch, var(--color-gray-2) 91%, var(--color-brand-8)),
-              color-mix(in oklch, var(--color-gray-13) 91%, var(--color-brand-8))
+              color-mix(in oklch, var(--color-gray-2) 91%, var(--color-purple-8)),
+              color-mix(in oklch, var(--color-gray-13) 91%, var(--color-purple-8))
             );
           }
         }
@@ -308,7 +321,8 @@ const {
     }
   }
 </style>
-<button {type} class:list={[size && `font-${size}`, theme, shape, varient, classes]} {...rest}>
+
+<button {type} class:list={[size, theme, shape, varient, classes]} {...rest}>
   { icon && <Icon name={icon} /> }
   <span class:list={[varient === 'icon' && 'sr-only']}>
     <slot/>
