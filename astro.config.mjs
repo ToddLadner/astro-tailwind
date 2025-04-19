@@ -15,7 +15,6 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), alpinejs(), icon()],
   experimental: {
     preserveScriptOrder: true,
-    responsiveImages: true,
-    svg: true,
+    responsiveImages: true
   },
 });
