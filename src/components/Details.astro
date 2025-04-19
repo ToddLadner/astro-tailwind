@@ -14,7 +14,7 @@ const {
 
 <style>
 @layer components {
-  :where(details) {
+  details {
     --accordion-transition-time: 0.2s;
     --bg-color: transparent;
     --padding-inline: var(--spacing-sm);
@@ -123,13 +123,13 @@ const {
       --padding-inline: 0;
     }
 
-    &:where(.elevated, .outlined, .tonal) > * {
+    &:is(.elevated, .outlined, .tonal) > * {
       padding-inline: var(--spacing-sm);
     }
   }
 
   /* Accordion group  */
-  :where(.card:has(details)) {
+  :is(.card:has(details)) {
     --gutter-color: var(--border-color);
 
     display: block;
