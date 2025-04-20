@@ -62,7 +62,7 @@ html {
 /* [5] Body */
 body {
   font-size: var(--font-size-sm);
-  line-height: var(--lineheight-md);
+  line-height: var(--leading-md);
   font-family: var(--font-sans);  /* ← Fallback font */
 }
 
@@ -96,7 +96,7 @@ h6 { font-size: var(--text-size, var(--text-xs)) }
 /* [7] Typography */
 :where(h1, h2, h3, h4) {
   font-variation-settings: "wght" var(--weight, 600);
-  line-height: var(--lineheight-xs);
+  line-height: var(--leading-xs);
   max-inline-size: var(--measure-md);
 }
 

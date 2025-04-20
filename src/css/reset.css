@@ -73,7 +73,7 @@ body {
 h1, h2, h3, h4, p, figure, blockquote, dl, dd { margin-block-end: 0 }
 
 /* [10] Shorter line heights on interactive elements */
-h1, h2, h3, h4, button, input, label { line-height: var(--lineheight-2xs) }
+h1, h2, h3, h4, button, input, label { line-height: var(--leading-2xs) }
 
 /* [11] Avoid text overflows */
 h1, h2, h3, h4, p { overflow-wrap: break-word }

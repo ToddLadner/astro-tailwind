@@ -25,13 +25,11 @@ const {
     box-shadow: var(--shadow);
     border-radius: var(--border-radius, 4px);
     display: block;
-    padding-inline: var(--padding-inline);
     transition: all var(--accordion-transition-time) ease-out;
     border: 1px solid red;
 
 
     /* Accordion animation */
-    /* https://nerdy.dev/open-and-close-transitions-for-the-details-element */
     @media (prefers-reduced-motion: no-preference) {
       interpolate-size: allow-keywords;
     }
@@ -68,7 +66,7 @@ const {
       display: flex;
       justify-content: space-between;
       list-style: none;
-      padding-block: var(--spacing-sm);
+      
       user-select: none;
 
       &::marker,
@@ -87,7 +85,7 @@ const {
 
     & > .content {
       margin-block-start: 0;
-      padding-block: var(--size-2) var(--spacing-sm);
+      padding-block: var(--spacing-xs) var(--spacing-sm);
     }
 
     & > .actions {
@@ -195,8 +193,9 @@ const {
     Custom arrow
     <Icon name="chevron-down-solid" class="icon" />
   </summary>
-  <div id="content1" class="content" role="region" aria-labelledby="summary1">
+  <div id="content1" class="content stack stack-md" role="region" aria-labelledby="summary1">
     <!--  -->
-    loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?
+    <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+    <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
   </div>
 </details>
