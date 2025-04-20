@@ -1,0 +1,211 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<"details"> {
+  title: string;
+  open?: boolean;
+  name?: string;
+  id?: string;
+  classes?: string;
+}
+
+const {
+  title,
+  open = false,
+  name,
+  id: idProp,
+  classes = '',
+  ...rest
+} = Astro.props;
+
+// generate a short, unique-ish ID if none provided
+const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<style>
+  @layer components {
+    /* General Detail Styles */
+    details {
+      /* Props */
+      --accordion-transition-time: 0.2s;
+      --bg-color: transparent;
+      --padding-inline: var(--spacing-sm);
+      --shadow: none;
+
+      background-color: var(--bg-color);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-md);
+      display: block;
+      transition: all var(--accordion-transition-time) ease-out;
+
+      /* Content Closed */
+      &::details-content {
+        block-size: 0;
+        opacity: 0;
+        overflow-y: clip;
+        transition:
+          content-visibility var(--accordion-transition-time) allow-discrete,
+          opacity var(--accordion-transition-time),
+          block-size var(--accordion-transition-time);
+      }
+      
+      /* Content Open */
+      &[open]::details-content {
+        block-size: auto;
+        opacity: 1;
+      }
+      
+      /* Summary */
+      & > summary {
+        background-color: inherit;
+        cursor: pointer;
+        padding-block: var(--spacing-sm);
+        user-select: none;
+        background-color: inherit;
+
+      }
+
+      /* Custom Arrow */
+      summary {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+
+        &::marker,
+        &::-webkit-details-marker {
+          display: none;
+        }
+
+        svg {
+          transition: rotate 0.2s ease-out;
+        }
+      }
+
+      &[open] > summary svg {
+        rotate: 180deg;
+      }
+      
+      /* Content */
+      & > .content {
+        margin-block-start: 0;
+        padding-block: var(--spacing-2xs) var(--spacing-sm);
+      }
+
+      /* Variants */
+      &.card,
+      &.text {
+        --bg-color: transparent;
+        --padding-inline: var(--size-1);
+      }
+
+      &.elevated {
+        --bg-color: var(--surface-elevated);
+        --padding-inline: 0;
+        --shadow: var(--shadow-2);
+      }
+
+      &.outlined {
+        --bg-color: var(--surface-default);
+        --padding-inline: 0;
+        border: 1px solid var(--border-color);
+      }
+
+      &.tonal {
+        --bg-color: var(--surface-tonal);
+        --padding-inline: 0;
+      }
+
+      &:is(.elevated, .outlined, .tonal) > * {
+        padding-inline: var(--spacing-sm);
+      }
+    }
+
+    /* Accordion group  */
+    :is(.card:has(details)) {
+      --gutter-color: var(--border-color);
+
+      display: block;
+
+      & > .content {
+        margin-block: 0;
+        padding: 0;
+      }
+
+      &.card,
+      &.text {
+        &:not(.tonal, .outlined, .elevated) {
+          summary {
+            padding-inline: 0;
+          }
+        }
+      }
+
+      details {
+        --padding-inline: 0;
+
+        border: 0;
+        box-shadow: none;
+
+        & > * {
+          padding-inline: var(--spacing-sm);
+        }
+
+        /* Border between accordion items */
+        & + & {
+          summary {
+            border-radius: 0;
+            border-block-start: 1px solid var(--gutter-color);
+          }
+        }
+
+        /* First item */
+        &:first-of-type {
+          border-start-start-radius: var(--border-radius, 0.25rem);
+          border-start-end-radius: var(--border-radius, 0.25rem);
+          summary {
+            border-start-start-radius: var(--border-radius, 0.25rem);
+            border-start-end-radius: var(--border-radius, 0.25rem);
+          }
+        }
+
+        /* Last item */
+        &:last-of-type {
+          border-end-start-radius: var(--border-radius, 0.25rem);
+          border-end-end-radius: var(--border-radius, 0.25rem);
+          summary {
+            border-end-start-radius: var(--border-radius, 0.25rem);
+            border-end-end-radius: var(--border-radius, 0.25rem);
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<details 
+  class="max-w-[75ch]" 
+  class:list={[classes]}
+  open={open}
+  name={name} 
+  {...rest}
+>
+  <summary 
+    id={id}
+    aria-controls={`${id}-content`}
+    aria-expanded={open}
+    class="font-bold"
+  >
+    {title} 
+    <Icon name="chevron-down-solid" class="icon" />
+  </summary>
+  <div 
+    id={`${id}-content`} 
+    class="content stack stack-md"
+    aria-labelledby={id}
+    role="region" 
+  >
+    <slot />
+  </div>
+</details>

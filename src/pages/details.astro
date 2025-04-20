@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Details from '@components/Details.astro';
+import Detail from '../components/Detail.astro';
+import Button from '../components/Button.astro';
 
 const { 
 	title = "My Astro Blog",
@@ -12,7 +13,24 @@ const {
 <Layout {title} {description}>
   <main>
     <h1>Details</h1>
-    <Details></Details>
+    <Detail 
+      title="Custom arrow with Actions" 
+      name="accordion"
+      open
+    >
+      <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+      <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+      
+      <div class="flex justify-end gap-xs">
+        <Button theme='outlined'>Button</Button>
+        <Button theme='outlined'>Button</Button>
+      </div>
+    </Detail>
+    
+    <Detail title="Custom arrow" name="accordion">
+      <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+      <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+    </Detail>
   </main>
 
 </Layout>
