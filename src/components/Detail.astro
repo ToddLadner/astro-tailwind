@@ -63,7 +63,7 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
         padding-block: var(--spacing-sm);
         user-select: none;
         background-color: inherit;
-
+        color: 
       }
 
       /* Custom Arrow */
@@ -82,12 +82,12 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
           transition: rotate 0.2s ease-out;
         }
       }
-
+      /* Rotate Arrow */
       &[open] > summary svg {
         rotate: 180deg;
       }
       
-      /* Content */
+      /* Content Container */
       & > .content {
         margin-block-start: 0;
         padding-block: var(--spacing-2xs) var(--spacing-sm);
@@ -103,17 +103,17 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
       &.elevated {
         --bg-color: var(--surface-elevated);
         --padding-inline: 0;
-        --shadow: var(--shadow-2);
+        --shadow: var(--shadow-sm);
       }
 
       &.outlined {
-        --bg-color: var(--surface-default);
+        --bg-color: var(--color-surface-1);
         --padding-inline: 0;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--color-surface-3);
       }
 
       &.tonal {
-        --bg-color: var(--surface-tonal);
+        --bg-color: var(--color-surface-2);
         --padding-inline: 0;
       }
 
@@ -122,65 +122,7 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
       }
     }
 
-    /* Accordion group  */
-    :is(.card:has(details)) {
-      --gutter-color: var(--border-color);
 
-      display: block;
-
-      & > .content {
-        margin-block: 0;
-        padding: 0;
-      }
-
-      &.card,
-      &.text {
-        &:not(.tonal, .outlined, .elevated) {
-          summary {
-            padding-inline: 0;
-          }
-        }
-      }
-
-      details {
-        --padding-inline: 0;
-
-        border: 0;
-        box-shadow: none;
-
-        & > * {
-          padding-inline: var(--spacing-sm);
-        }
-
-        /* Border between accordion items */
-        & + & {
-          summary {
-            border-radius: 0;
-            border-block-start: 1px solid var(--gutter-color);
-          }
-        }
-
-        /* First item */
-        &:first-of-type {
-          border-start-start-radius: var(--border-radius, 0.25rem);
-          border-start-end-radius: var(--border-radius, 0.25rem);
-          summary {
-            border-start-start-radius: var(--border-radius, 0.25rem);
-            border-start-end-radius: var(--border-radius, 0.25rem);
-          }
-        }
-
-        /* Last item */
-        &:last-of-type {
-          border-end-start-radius: var(--border-radius, 0.25rem);
-          border-end-end-radius: var(--border-radius, 0.25rem);
-          summary {
-            border-end-start-radius: var(--border-radius, 0.25rem);
-            border-end-end-radius: var(--border-radius, 0.25rem);
-          }
-        }
-      }
-    }
   }
 </style>
 
