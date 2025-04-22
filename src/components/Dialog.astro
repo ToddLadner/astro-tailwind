@@ -85,6 +85,46 @@ const {
   }
 }
 
+/** */
+
+[popover] {
+  &, &::backdrop {
+    transition:
+      display 0.5s allow-discrete,
+      overlay 0.5s allow-discrete,
+      opacity 0.5s,
+      transform 0.5s;
+
+    /* Exit Stage To */
+    opacity: 0;
+  }
+
+  /* On Stage */
+  &:popover-open {
+    opacity: 1;
+
+    &::backdrop {
+      opacity: 0.5;
+    }
+  }
+
+  /* Enter Stage From */
+  @starting-style {
+    &:popover-open,
+    &:popover-open::backdrop {
+      opacity: 0;
+    }
+
+    &:popover-open {
+      transform: translateY(10px);
+    }
+  }
+
+  &::backdrop {
+    background-color: black;
+  }
+}
+
 
 /** */
 
@@ -96,8 +136,8 @@ const {
         opacity .5s ease-in, 
         scale .5s ease-in,
         display .5s ease-in;
-      /* key to transitioning out */
-      transition-behavior: allow-discrete;
+        /* key to transitioning out */
+        transition-behavior: allow-discrete;
     }
 
     /* stage enter */
