@@ -318,18 +318,20 @@ const {
       cursor: pointer;
       margin-inline-end: var(--size-relative-6);
     }
-  }
 
-  .spring {
-    transition: 
-      transform 1s var(--ease-spring-5),
-      box-shadow 1s var(--ease-spring-5),
-      outline-offset 145ms var(--ease-4);
-      
-      &:active {
-      transform: scale(.9);
+    .spring {
+      transition: 
+        transform 1s var(--ease-spring-5),
+        box-shadow 1s var(--ease-spring-5),
+        outline-offset 145ms var(--ease-4);
+        
+        &:active {
+        transform: scale(.9);
+      }
     }
   }
+
+
 </style>
 
 <button {type} class:list={[size, theme, shape, varient, classes]} {...rest}>

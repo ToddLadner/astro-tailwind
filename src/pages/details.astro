@@ -1,7 +1,7 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Detail from '../components/Detail.astro';
-import Button from '../components/Button.astro';
+import Layout from '@layouts/Layout.astro';
+import Detail from '@components/Detail.astro';
+import Button from '@components/Button.astro';
 
 const { 
 	title = "My Astro Blog",
@@ -11,10 +11,12 @@ const {
 ---
 
 <Layout {title} {description}>
-  <main class="p-inline-max pt-lg bg-surface-2">
+  <main class="p-inline-max pt-lg bg-surface-2 stack">
     <p>Components</p>
     <h1>Accordion</h1>
+    
     <p>Leverages the HTML details and summary elements. Uses the native HTML arrow, check out how to add your own custom arrow.</p>
+    
     <Detail 
       title="Custom arrow with Actions" 
       name="accordion"
@@ -38,34 +40,32 @@ const {
     </Detail>
 
     <Detail 
-      title="Outlined" 
+      title="Outlined"
+      theme="outlined" 
       name="accordion"
-      classes="outlined"
       open
     >
       <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
       <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
     </Detail>
   
-  <Detail 
-    title="Custom arrow"  
-    name="accordion"
-    classes="elevated"
-  >
-    <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-    <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-  </Detail>
+    <Detail 
+      title="Custom arrow"
+      theme="elevated"  
+      name="accordion"
+    >
+      <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+      <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+    </Detail>
 
-  <Detail 
-    title="Custom arrow"  
-    name="accordion"
-    classes="tonal"
-  >
-    <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-    <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-  </Detail>
-
-  
+    <Detail 
+      title="Custom arrow"
+      theme="tonal"
+      name="accordion"
+    >
+      <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+      <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+    </Detail>
   </main>
 
 </Layout>

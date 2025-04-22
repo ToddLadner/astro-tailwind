@@ -4,6 +4,7 @@ import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<"details"> {
   title: string;
+  theme?: "outlined" | "tonal" | "filled" | "elevated";
   open?: boolean;
   name?: string;
   id?: string;
@@ -12,6 +13,7 @@ interface Props extends HTMLAttributes<"details"> {
 
 const {
   title,
+  theme,
   open = false,
   name,
   id: idProp,
@@ -32,7 +34,7 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
       --bg-color: transparent;
       --padding-inline: var(--spacing-sm);
       --shadow: none;
-
+      
       background-color: var(--bg-color);
       box-shadow: var(--shadow);
       border-radius: var(--radius-md);
@@ -94,41 +96,39 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
       }
 
       /* Variants */
-      &.card,
       &.text {
         --bg-color: transparent;
         --padding-inline: var(--size-1);
       }
 
       &.elevated {
-        --bg-color: var(--surface-elevated);
+        --bg-color: var(--color-surface-1);
         --padding-inline: 0;
-        --shadow: var(--shadow-sm);
+        --shadow: var(--shadow-md);
       }
 
       &.outlined {
-        --bg-color: var(--color-surface-1);
+        --bg-color: var(--color-surface-2);
         --padding-inline: 0;
         border: 1px solid var(--color-surface-3);
       }
 
       &.tonal {
-        --bg-color: var(--color-surface-2);
+        --bg-color: var(--color-brand-0);
         --padding-inline: 0;
       }
 
+      /* Inline padding for styles */
       &:is(.elevated, .outlined, .tonal) > * {
         padding-inline: var(--spacing-sm);
       }
     }
-
-
   }
 </style>
 
 <details 
-  class="max-w-[75ch]" 
-  class:list={[classes]}
+ 
+  class:list={[theme, classes]}
   open={open}
   name={name} 
   {...rest}

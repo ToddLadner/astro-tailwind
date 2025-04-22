@@ -1,0 +1,158 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<"dialog"> {
+  title: string;
+  theme?: "outlined" | "tonal" | "filled" | "elevated";
+  open?: boolean;
+  role?: "alertdialog" | "dialog";
+  id?: string;
+  classes?: string;
+}
+
+const {
+  title,
+  theme,
+  open = false,
+  role,
+  id,
+  classes = '',
+  ...rest
+} = Astro.props;
+---
+
+<style>
+@layer components {
+  dialog {
+    margin-block-start: 15%; /* vertical alignment */
+    padding-block: 0;
+    pointer-events: none;
+
+    &::backdrop {
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+
+      @media (prefers-reduced-motion: reduce) {
+        backdrop-filter: none;
+      }
+    }
+
+    &:not([open]) {
+      display: none;
+    }
+
+    &[open] {
+      pointer-events: all;
+    }
+
+    .actions {
+      justify-content: end;
+      padding-inline: var(--size-3) var(--size-1);
+    }
+
+    /* Animation */
+    /* There's no close animation, intentionally */
+    opacity: 0;
+
+    &[open] {
+      opacity: 1;
+      transition:
+        display 0.2s allow-discrete,
+        margin-block-start 0.3s var(--ease-1),
+        overlay 0.2s allow-discrete,
+        opacity 0.2s var(--ease-out-1);
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      margin-block-start: 17%;
+      &[open] {
+        margin-block-start: 15%;
+
+        @starting-style {
+          margin-block-start: 17%;
+        }
+      }
+    }
+  }
+
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+}
+
+
+/** */
+
+/* use an anonymous layer to demote the effect */
+@layer {
+  * {
+    @media (prefers-reduced-motion: no-preference) {
+      transition: 
+        opacity .5s ease-in, 
+        scale .5s ease-in,
+        display .5s ease-in;
+      /* key to transitioning out */
+      transition-behavior: allow-discrete;
+    }
+
+    /* stage enter */
+    /* key to transitioning in */
+    @starting-style { 
+      opacity: 0; 
+      scale: 1.1; 
+    }
+
+    /* stage exit */
+    /* use your own technique here */
+    &[hidden], 
+    dialog:not(:modal), 
+    &[popover]:not(:popover-open) { 
+      opacity: 0;
+      scale: .9;
+
+      /* hidden sets display: none, but loses easily */
+      display: none !important; 
+      
+      /* faster leaving the stage then entering */
+      transition-duration: .4s;
+      transition-timing-function: var(--ease-out-5);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+</style>
+
+<dialog
+  id={id}
+  class:list={[]}
+  role="alertdialog"
+  aria-labelledby="dialog-heading"
+  aria-describedby="dialog-content"
+  aria-modal="true"
+>
+  <div class="card">
+    <hgroup>
+      <h2 id="dialog-heading">Dialog heading</h2>
+    </hgroup>
+    <div id="dialog-content" class="content">
+      <slot/>
+    </div>
+    <div class="actions">
+      <button class="button">Cancel</button>
+      <button class="button">Save</button>
+    </div>
+  </div>
+</dialog>
