@@ -40,6 +40,7 @@ const {
       --button-ripple-duration: 0.5s;
       --button-ripple-size: 100%;
 
+      /* General Button Styles */
       align-items: center;
       background: var(--bg-color) var(--ripple, none);
       border-radius: var(--border-radius);
@@ -318,8 +319,9 @@ const {
       cursor: pointer;
       margin-inline-end: var(--size-relative-6);
     }
+  }
 
-    .spring {
+  .spring {
       transition: 
         transform 1s var(--ease-spring-5),
         box-shadow 1s var(--ease-spring-5),
@@ -329,9 +331,6 @@ const {
         transform: scale(.9);
       }
     }
-  }
-
-
 </style>
 
 <button {type} class:list={[size, theme, shape, varient, classes]} {...rest}>

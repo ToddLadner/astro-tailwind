@@ -1,0 +1,38 @@
+/* Base styles (off‐stage) */
+dialog,
+[popover] {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: 
+    opacity 0.3s ease,           /* dialog fade */
+    transform 0.3s ease;         /* dialog slide */
+}
+
+dialog::backdrop,
+[popover]::backdrop {
+  opacity: 0;
+  transition: opacity 0.2s ease; /* backdrop fade quicker */
+}
+
+/* On‐stage */
+dialog[open],
+:popover-open {
+  opacity: 1;
+  transform: translateY(0);
+  /* give dialog a tiny delay so backdrop has already started fading */
+  transition-delay: 0.1s, 0.1s;  
+  /* (first value applies to opacity, second to transform) */
+}
+
+dialog[open]::backdrop,
+:popover-open::backdrop {
+  opacity: 1;
+  /* no delay on backdrop so it fades immediately */
+  transition-delay: 0s;
+}
+
+/* Optional: tweak backdrop background */
+dialog::backdrop,
+[popover]::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}

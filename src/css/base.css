@@ -119,3 +119,44 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
   }
 }
 :not(:active):focus-visible { outline-offset: .5rem }
+
+/* Starting Style  */
+[popover], dialog {
+  opacity: 0;
+  transform: translateY(1rem);
+
+  transition: 
+    display 1s allow-discrete, 
+    overlay 1s allow-discrete,
+    transform 1s, 
+    opacity 1s;
+}
+
+/* On Stage */
+:popover-open::backdrop,
+[open]::backdrop {
+  opacity: 1;
+}
+
+:popover-open,
+[open] {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s, 0.1s;  
+}
+
+/* Off Stage */
+@starting-style {
+  :popover-open,
+  :popover-open::backdrop,
+  [open],
+  [open]::backdrop {
+    opacity: 0;
+  }
+}
+
+::backdrop {
+  background-color: #0005;
+}
+
+
