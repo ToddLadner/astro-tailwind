@@ -148,6 +148,7 @@
   --spacing-2xl-3xl: clamp(4rem, 2.7826rem + 6.087vi, 7.5rem);
 
   /* [10] Fluid Space | Custom pairs */
+  --spacing-sm-md: clamp(1rem, 0.6957rem + 1.5217vw, 1.875rem);
   --spacing-sm-lg: clamp(1rem, 0.4783rem + 2.6087vi, 2.5rem);
   --spacing-sm-xl: clamp(1rem, 0.0435rem + 4.7826vw, 3.75rem);
   --spacing-sm-2xl: clamp(1rem, -0.3913rem + 6.9565vw, 5rem);

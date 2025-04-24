@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import Card from '@components/Card.astro';
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<"dialog"> {
@@ -26,8 +27,10 @@ const {
 @layer components {
   dialog {
     margin-block-start: 15%; /* vertical alignment */
-    padding-block: 0;
+    padding-block: var(--spacing-sm-md);
+    padding-inline: var(--spacing-sm-md);
     pointer-events: none;
+    max-inline-size: 75ch;
 
     &:not([open]) { display: none }
 
@@ -40,26 +43,28 @@ const {
     overflow: hidden;
   }
 }
+
+
 </style>
 
 <dialog
   id={id}
-  class:list={[]}
+  class='stack stack-lg'
+  class:list={[classes]}
   role="alertdialog"
   aria-labelledby="dialog-heading"
   aria-describedby="dialog-content"
   aria-modal="true"
 >
-  <div class="card">
     <hgroup>
-      <h2 id="dialog-heading">Dialog heading</h2>
+      <h2 id="dialog-heading" class="text-lg mt-[0]">Dialog heading</h2>
     </hgroup>
-    <div id="dialog-content" class="content">
+    <div id="dialog-content" class="content stack stack-md">
       <slot/>
     </div>
     <div class="actions">
       <button class="button">Cancel</button>
       <button class="button">Save</button>
     </div>
-  </div>
+ 
 </dialog>

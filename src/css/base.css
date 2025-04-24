@@ -61,7 +61,7 @@ html {
 
 /* [5] Body */
 body {
-  font-size: var(--font-size-sm);
+  font-size: var(--text-md);
   line-height: var(--leading-md);
   font-family: var(--font-sans);  /* ← Fallback font */
 }
@@ -93,6 +93,7 @@ h4 { font-size: var(--text-size, var(--text-md)) }
 h5 { font-size: var(--text-size, var(--text-sm)) }
 h6 { font-size: var(--text-size, var(--text-xs)) }
 
+
 /* [7] Typography */
 :where(h1, h2, h3, h4) {
   font-variation-settings: "wght" var(--weight, 600);
@@ -121,15 +122,19 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 :not(:active):focus-visible { outline-offset: .5rem }
 
 /* Starting Style  */
-[popover], dialog {
-  opacity: 0;
-  transform: translateY(1rem);
 
+[popover], dialog {
+  transform: translateY(1rem);
+}
+
+[popover], dialog, ::backdrop {
+  opacity: 0;
+  
   transition: 
     display 1s allow-discrete, 
     overlay 1s allow-discrete,
-    transform 1s, 
-    opacity 1s;
+    transform 2s, 
+    opacity 2s;
 }
 
 /* On Stage */
@@ -142,7 +147,7 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 [open] {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.1s, 0.1s;  
+  transition-delay: 1s, 1s;  
 }
 
 /* Off Stage */
