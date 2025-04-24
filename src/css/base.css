@@ -61,7 +61,7 @@ html {
 
 /* [5] Body */
 body {
-  font-size: var(--text-md);
+  font-size: var(--text-sm);
   line-height: var(--leading-md);
   font-family: var(--font-sans);  /* ← Fallback font */
 }
