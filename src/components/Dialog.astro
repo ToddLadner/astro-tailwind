@@ -1,22 +1,23 @@
 ---
 import { Icon } from 'astro-icon/components';
 import Card from '@components/Card.astro';
+import Button from '@components/Button.astro';
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<"dialog"> {
-  title: string;
+  heading: string;
+  focusTrap?: boolean;
   theme?: "outlined" | "tonal" | "filled" | "elevated";
-  open?: boolean;
   role?: "alertdialog" | "dialog";
   id?: string;
   classes?: string;
 }
 
 const {
-  title,
+  heading,
   theme,
-  open = false,
-  role,
+  focusTrap = true,
+  role = 'dialog',
   id,
   classes = '',
   ...rest
@@ -24,47 +25,98 @@ const {
 ---
 
 <style>
-@layer components {
-  dialog {
-    margin-block-start: 15%; /* vertical alignment */
-    padding-block: var(--spacing-sm-md);
-    padding-inline: var(--spacing-sm-md);
-    pointer-events: none;
-    max-inline-size: 75ch;
+  @layer components {
+    dialog {
+      --bg-color: var(--color-surface-1);
+      --border-color: transparent;
+      --border-width: 0;
+      --shadow: var(--shadow-lg);
 
-    &:not([open]) { display: none }
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      max-height: 75dvh;
+      border-radius: var(--radius-md);
+      pointer-events: none;
+      padding: 0;
+      inset: 0;
+      box-shadow: var(--shadow);
+      
+      &:not([open]) { display: none }
 
-    &[open] {
-      pointer-events: all;
+      &[open] { pointer-events: all }
+      
+      :is(header, .content, .actions) { 
+        padding-inline: var(--spacing-sm) 
+      }
+      :is(header, .actions) { 
+        padding-block: var(--spacing-sm); 
+        background-color: var(--color-surface-2); 
+      }
+      .content {
+        overflow-y: auto;
+        padding-block: var(--spacing-md);
+      }
     }
+
+    html:has(dialog[open]) { overflow: hidden }
   }
-
-  html:has(dialog[open]) {
-    overflow: hidden;
-  }
-}
-
-
 </style>
 
 <dialog
   id={id}
-  class='stack stack-lg'
-  class:list={[classes]}
-  role="alertdialog"
+  class:list={[focusTrap && 'focus-trap', classes]}
+  role={role}
   aria-labelledby="dialog-heading"
   aria-describedby="dialog-content"
   aria-modal="true"
 >
-    <hgroup>
-      <h2 id="dialog-heading" class="text-lg mt-[0]">Dialog heading</h2>
-    </hgroup>
-    <div id="dialog-content" class="content stack stack-md">
-      <slot/>
-    </div>
-    <div class="actions">
-      <button class="button">Cancel</button>
-      <button class="button">Save</button>
-    </div>
- 
+  <header class="flex items-center justify-between">
+    <hgroup class="flex items-center gap-xs">
+      <Icon name="symbols-solid" class="icon" />
+      <h2 id="dialog-heading" class="text-lg mt-[0]">{heading}</h2>
+    </hgroup>  
+    <Button
+      onclick="this.closest('dialog').close('close')"
+      theme='filled' 
+      variant='icon' 
+      icon='xmark-large-solid' 
+      aria-label='close dialog'
+    />
+  </header>
+  
+  <div id="dialog-content" class="content stack stack-md">
+    <slot/>
+  </div>
+  
+  <footer class="actions flex justify-end gap-xs">
+    <Button 
+      onclick="this.closest('dialog').close('close')" 
+      class="button"
+    >
+      Cancel
+    </Button>
+    <Button class="button">Save</Button>
+  </footer>
 </dialog>
+
+<script>
+  import { createFocusTrap } from 'focus-trap';
+  // find every dialog marked for focus-trap
+  const dialogs = document.querySelectorAll('dialog.focus-trap');
+  dialogs.forEach(dialog => {
+    const trap = createFocusTrap(dialog, {
+      clickOutsideDeactivates: true,
+      escapeDeactivates:    true,
+    });
+    // watch for open/close attribute changes
+    new MutationObserver(records => {
+      for (const r of records) {
+        if (r.attributeName === 'open') {
+          dialog.hasAttribute('open') 
+            ? trap.activate() 
+            : trap.deactivate();
+        }
+      }
+    }).observe(dialog, { attributes: true });
+  });
+</script>

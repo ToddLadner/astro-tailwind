@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<"button"> {
   theme?: "outlined" | "tonal" | "filled" | "elevated";
   size?: "sm" | "lg";
   shape?: "square" | "circle" | "pill";
-  varient?: "icon";
+  variant?: "icon";
   text?: string;
   icon?: string;
   classes?: string;
@@ -17,7 +17,7 @@ const {
   type = "button", 
   size,
   theme,
-  varient, 
+  variant, 
   shape,
   text, 
   icon,
@@ -114,8 +114,8 @@ const {
         );
       }
 
-      /* Icon-only Button */
-      &:is(:has(svg), &.icon) {
+      /* Button with Icon & Text */
+      &:not(.icon-button) {
         gap: 1ex;
         svg {
           max-block-size: 0.7lh;
@@ -135,16 +135,14 @@ const {
         padding-inline: 4ex;
       }
 
-      /* Button Shape Variations */
-      &.square {
-        --border-radius: var(--radius-2);
-      }
-      &:is(.circle, .pill) {
-        --border-radius: var(--radius-ellipse);
-      }
-      &.circle {
-        aspect-ratio: var(--aspect-square);
+      /* Icon Button | Remove padding for better Icon placement */
+      &.icon-button { 
         padding: 0;
+        aspect-ratio: var(--aspect-square);
+        
+        svg {
+          max-block-size: 1lh;
+        }
       }
 
       /* Button Variants */
@@ -333,10 +331,18 @@ const {
     }
 </style>
 
-<button {type} class:list={[size, theme, shape, varient, classes]} {...rest}>
-  { icon && <Icon name={icon} /> }
-  <span class:list={[varient === 'icon' && 'sr-only']}>
-    <slot/>
-    {text}
-  </span>
+<button 
+  {type} 
+  class:list={[
+    size, 
+    theme, 
+    shape, 
+    variant === 'icon' && 'icon-button',
+    classes
+    ]} 
+  {...rest}
+>
+  { (variant === 'icon' || !!icon) && <Icon name={icon} /> }
+  <slot/>
+  {text}
 </button>

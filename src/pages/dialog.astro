@@ -1,6 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro';
 import Dialog from '@components/Dialog.astro';
+import Button from '@components/Button.astro';
 
 const { 
 	title = "My Astro Blog",
@@ -13,30 +14,39 @@ const {
   <main class="p-inline-max pt-lg bg-surface-2 stack">
     <p>Components</p>
     <h1>Dialog</h1>
-    
+  
     <p>A minimally styled window overlaid on the main content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
+    
     <h2>Modal vs Dialog</h2>
     <p>The term "modal" and "dialog" are often used interchangeably, but there's an important difference. A modal window describes parts of a UI that blocks user interaction. A dialog doesn't have to be blocking.</p>
 
-    <button id="open-dialog-button">Open dialog</button>
-  </main>
-  <Dialog>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
+    <Button onclick="myDialog.showModal()">Open dialog</Button>
+    <Button onclick="myOtherDialog.show()">Open dialog1</Button>
+  
+    <p><a href="https://modalzmodalzmodalz.com/">Not everyone likes modality</a> — as a UI concept, they are very disruptive. Use the pattern sparsely, only when disrupting is very much necessary. If you want to ask the user “Are you sure you want to delete all that?”, go ahead and make it disruptive. If you want to promote your newsletter sign-up or advertising, the disruption is unlikely to be appreciated.</p>
 
-  </Dialog>
+    <p>In terms of implementation, you will need to make everything except your modal element inert. The <dialog> element (used with showModal()) does this for and would be the best to use.</p>
+  </main>
 </Layout>
 
-<script>
-  const dialog = document.querySelector("dialog")
-  const showButton = document.getElementById("open-dialog-button")
-  const closeButton = document.querySelector("dialog button")
+<Dialog 
+  id="myDialog" 
+  heading="My Dialog via showModal()" 
+  focusTrap="true"
+  popover
+>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
+</Dialog>
 
-  showButton.addEventListener("click", () => {
-    dialog.showModal()
-  })
+<Dialog id="myOtherDialog" heading="My Dialog via show()" popover="auto">
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
+</Dialog>
 
-  closeButton.addEventListener("click", () => {
-    dialog.close()
-  })
-</script>

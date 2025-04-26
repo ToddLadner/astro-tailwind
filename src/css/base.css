@@ -105,6 +105,7 @@ h1, h2, h3, h4, h5, h6, dt, label { color: var(--color-text-1) }
 h1, h2, h3, h4 { text-wrap: balance; }
 h1, p, button { text-box: trim-both cap alphabetic }
 p:only-child { margin-block: 0; }
+p { max-width: var(--measure-md); }
 
 i, em { font-variation-settings: "ital" 1 }
 strong, b { font-variation-settings: "wght" var(--weight, 800) }
@@ -121,20 +122,28 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 }
 :not(:active):focus-visible { outline-offset: .5rem }
 
-/* Starting Style  */
+/* [9] Enter / Exit Transition for top-layer */
+[popover], dialog, ::backdrop {
+  --duration: 1s;
+  --delay: .25s;
+  --timing-function: var(--ease-spring-2);
 
-[popover], dialog {
-  transform: translateY(1rem);
+  /* Interpolate sizes keywords */
+  transition: 
+    display var(--duration) var(--timing-function), 
+    overlay var(--duration) var(--timing-function),
+    transform var(--duration) var(--timing-function), 
+    opacity var(--duration) var(--timing-function);
+    transition-behavior: allow-discrete; /* Note: be sure to write this after the shorthand */
 }
 
-[popover], dialog, ::backdrop {
+/* Ending | Off Stage  */
+[popover], dialog {
+  transform:  scale(.9);
+}
+
+[popover], dialog, ::backdrop { 
   opacity: 0;
-  
-  transition: 
-    display 1s allow-discrete, 
-    overlay 1s allow-discrete,
-    transform 2s, 
-    opacity 2s;
 }
 
 /* On Stage */
@@ -147,21 +156,31 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 [open] {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 1s, 1s;  
 }
 
-/* Off Stage */
+/* Starting | Off Stage */
 @starting-style {
   :popover-open,
+  [open]{
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  
   :popover-open::backdrop,
-  [open],
   [open]::backdrop {
     opacity: 0;
   }
 }
 
+/* Backdrop */
 ::backdrop {
-  background-color: #0005;
+  --glass-lightness: 100%;
+
+  background: hsl(0 0% var(--glass-lightness) / 50%);
+  backdrop-filter: blur(6px);
+
+  @media (prefers-color-scheme: dark) {
+    --glass-lightness: 0;
+  }
 }
-
-

@@ -17,6 +17,7 @@
     "alpinejs": "^3.14.9",
     "astro": "^5.7.4",
     "astro-icon": "^1.1.5",
+    "focus-trap": "^7.6.4",
     "tailwindcss": "^4.1.3"
   }
 }
