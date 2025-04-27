@@ -5,7 +5,7 @@ import Button from '@components/Button.astro';
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<"dialog"> {
-  id?: string;
+  id: string;
   role?: "alertdialog" | "dialog";
   showHeader?: boolean;
   heading: string;
@@ -93,7 +93,7 @@ const {
     </hgroup>
     <!-- Close Button -->
     <Button
-      onclick="this.closest('dialog').close('close')"
+      onclick="this.closest('dialog').close()"
       theme='filled' 
       variant='icon' 
       icon='xmark-large-solid' 
@@ -116,22 +116,22 @@ const {
   import { createFocusTrap } from 'focus-trap';
 
   document.querySelectorAll('dialog').forEach(dialog => {
-    // 1️⃣ Configure focus-trap to deactivate on outside click or Esc, then close the dialog
+    // [1] Configure focus-trap to deactivate on outside click or Esc, then close the dialog
     const trap = createFocusTrap(dialog, {
       clickOutsideDeactivates: true,
       escapeDeactivates:       true,
-      onDeactivate:            () => dialog.close(),  // light-dismiss via focus-trap  [oai_citation:3‡npm](https://www.npmjs.com/package/focus-trap?utm_source=chatgpt.com)
+      onDeactivate:            () => dialog.close(),  // light-dismiss via focus-trap 
     });
 
-    // 2️⃣ Backdrop click handler for native light-dismiss
+    // [2] Backdrop click handler for native light-dismiss
     dialog.addEventListener('click', event => {
-      if (event.target === dialog) dialog.close();     // close on backdrop click 
+      if (event.target === dialog) dialog.close();    // close on backdrop click 
     });
 
-    // 3️⃣ Cancel event for Esc key (native dialog API)
-    dialog.addEventListener('cancel', () => dialog.close());  // Esc-to-close  [oai_citation:4‡MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/cancel_event?utm_source=chatgpt.com)
+    // [3] Cancel event for Esc key (native dialog API)
+    dialog.addEventListener('cancel', () => dialog.close());    // Esc-to-close
 
-    // 4️⃣ Observe 'open' attribute to activate/deactivate focus trap
+    // [4] Observe 'open' attribute to activate/deactivate focus trap
     new MutationObserver(records => {
       for (const record of records) {
         if (record.attributeName === 'open') {
@@ -140,6 +140,6 @@ const {
             : trap.deactivate();
         }
       }
-    }).observe(dialog, { attributes: true });            // watch only attributes  [oai_citation:5‡MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver?utm_source=chatgpt.com)
+    }).observe(dialog, { attributes: true });   // watch only attributes
   });
 </script>
