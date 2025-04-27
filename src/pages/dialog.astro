@@ -30,12 +30,12 @@ const {
 </Layout>
 
 <Dialog 
-  id="myDialog" 
+  id="myDialog"
+  icon="symbols-solid"
+  overline="Content above the heading"
   heading="My Dialog via showModal()" 
-  focusTrap="true"
-  popover
 >
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Archi tecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est volupt atibus!.</p>
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
@@ -43,10 +43,45 @@ const {
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
+
+  <div 
+    slot="dialog-footer" 
+    class="contents"
+  >
+    <Button 
+      onclick="myDialog.close()" 
+      class="button"
+    >
+      Cancel
+    </Button>
+    <Button class="button">Save</Button>
+  </div>
 </Dialog>
 
-<Dialog id="myOtherDialog" heading="My Dialog via show()" popover="auto">
+<Dialog 
+  id="myOtherDialog" 
+  heading="My Dialog via show()"
+  showHeader={false}
+>
+  <p>myOtherDialog via show()</p>
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. Architecto quae molestiae reprehenderit, nobis facere odit eos, eligendi cum saepe, qui est voluptatibus!.</p>
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, aperiam quod. </p>
+  
+  <div 
+    slot="dialog-footer" 
+    class="contents"
+  >
+  <Button class="button">
+    Clear
+  </Button>
+    <Button 
+      onclick="myOtherDialog.close()" 
+      classes="ml-auto">
+      Cancel
+    </Button>
+    <Button class="button">
+      Save
+    </Button>
+  </div>
 </Dialog>
 

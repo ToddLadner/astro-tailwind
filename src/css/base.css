@@ -105,7 +105,7 @@ h1, h2, h3, h4, h5, h6, dt, label { color: var(--color-text-1) }
 h1, h2, h3, h4 { text-wrap: balance; }
 h1, p, button { text-box: trim-both cap alphabetic }
 p:only-child { margin-block: 0; }
-p { max-width: var(--measure-md); }
+p { max-width: var(--measure-lg); }
 
 i, em { font-variation-settings: "ital" 1 }
 strong, b { font-variation-settings: "wght" var(--weight, 800) }

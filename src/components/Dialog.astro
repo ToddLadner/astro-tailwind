@@ -5,20 +5,24 @@ import Button from '@components/Button.astro';
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<"dialog"> {
-  heading: string;
-  focusTrap?: boolean;
-  theme?: "outlined" | "tonal" | "filled" | "elevated";
-  role?: "alertdialog" | "dialog";
   id?: string;
+  role?: "alertdialog" | "dialog";
+  showHeader?: boolean;
+  heading: string;
+  overline?: string;
+  icon?: string;
+  theme?: "outlined" | "tonal" | "filled" | "elevated";
   classes?: string;
 }
 
 const {
-  heading,
-  theme,
-  focusTrap = true,
-  role = 'dialog',
   id,
+  role = 'dialog',
+  showHeader = true,
+  heading,
+  overline,
+  icon,
+  theme,
   classes = '',
   ...rest
 } = Astro.props;
@@ -40,15 +44,18 @@ const {
       padding: 0;
       inset: 0;
       box-shadow: var(--shadow);
+      width: min(100%, var(--measure-lg));
+      overflow: hidden;
+      max-width: none;
       
       &:not([open]) { display: none }
 
       &[open] { pointer-events: all }
       
-      :is(header, .content, .actions) { 
+      :is(header, .content, footer) { 
         padding-inline: var(--spacing-sm) 
       }
-      :is(header, .actions) { 
+      :is(header, footer) { 
         padding-block: var(--spacing-sm); 
         background-color: var(--color-surface-2); 
       }
@@ -64,59 +71,75 @@ const {
 
 <dialog
   id={id}
-  class:list={[focusTrap && 'focus-trap', classes]}
   role={role}
-  aria-labelledby="dialog-heading"
-  aria-describedby="dialog-content"
+  class:list={[classes]}
   aria-modal="true"
+  aria-describedby="dialog-content"
+  {...(showHeader
+    ? { 'aria-labelledby': 'dialog-heading' }
+    : { 'aria-label': heading })
+  }
+  {...rest}
 >
-  <header class="flex items-center justify-between">
-    <hgroup class="flex items-center gap-xs">
-      <Icon name="symbols-solid" class="icon" />
-      <h2 id="dialog-heading" class="text-lg mt-[0]">{heading}</h2>
-    </hgroup>  
+  <!-- Header | If showHeader is true -->
+  {showHeader && (
+    <header class="flex items-center gap-xs">
+    <!-- Icon -->
+    {icon && <Icon name={icon} class="icon" />}
+    <!-- Heading -->
+    <hgroup class="flex flex-col stack stack-3xs">
+      {overline && <p class="text-xs">{overline}</p>}  
+      <h2 id="dialog-heading" class="text-lg">{heading}</h2>
+    </hgroup>
+    <!-- Close Button -->
     <Button
       onclick="this.closest('dialog').close('close')"
       theme='filled' 
       variant='icon' 
       icon='xmark-large-solid' 
       aria-label='close dialog'
+      classes="ml-[auto]"
     />
-  </header>
-  
-  <div id="dialog-content" class="content stack stack-md">
+    </header>
+  )}
+  <!-- Content -->
+  <article id="dialog-content" class="content stack stack-md">
     <slot/>
-  </div>
-  
+  </article>
+  <!-- Footer -->
   <footer class="actions flex justify-end gap-xs">
-    <Button 
-      onclick="this.closest('dialog').close('close')" 
-      class="button"
-    >
-      Cancel
-    </Button>
-    <Button class="button">Save</Button>
+    <slot name="dialog-footer" />
   </footer>
 </dialog>
 
 <script>
   import { createFocusTrap } from 'focus-trap';
-  // find every dialog marked for focus-trap
-  const dialogs = document.querySelectorAll('dialog.focus-trap');
-  dialogs.forEach(dialog => {
+
+  document.querySelectorAll('dialog').forEach(dialog => {
+    // 1️⃣ Configure focus-trap to deactivate on outside click or Esc, then close the dialog
     const trap = createFocusTrap(dialog, {
       clickOutsideDeactivates: true,
-      escapeDeactivates:    true,
+      escapeDeactivates:       true,
+      onDeactivate:            () => dialog.close(),  // light-dismiss via focus-trap  [oai_citation:3‡npm](https://www.npmjs.com/package/focus-trap?utm_source=chatgpt.com)
     });
-    // watch for open/close attribute changes
+
+    // 2️⃣ Backdrop click handler for native light-dismiss
+    dialog.addEventListener('click', event => {
+      if (event.target === dialog) dialog.close();     // close on backdrop click 
+    });
+
+    // 3️⃣ Cancel event for Esc key (native dialog API)
+    dialog.addEventListener('cancel', () => dialog.close());  // Esc-to-close  [oai_citation:4‡MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/cancel_event?utm_source=chatgpt.com)
+
+    // 4️⃣ Observe 'open' attribute to activate/deactivate focus trap
     new MutationObserver(records => {
-      for (const r of records) {
-        if (r.attributeName === 'open') {
+      for (const record of records) {
+        if (record.attributeName === 'open') {
           dialog.hasAttribute('open') 
             ? trap.activate() 
             : trap.deactivate();
         }
       }
-    }).observe(dialog, { attributes: true });
+    }).observe(dialog, { attributes: true });            // watch only attributes  [oai_citation:5‡MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver?utm_source=chatgpt.com)
   });
 </script>
