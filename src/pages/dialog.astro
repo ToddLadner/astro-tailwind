@@ -26,6 +26,16 @@ const {
     <p><a href="https://modalzmodalzmodalz.com/">Not everyone likes modality</a> — as a UI concept, they are very disruptive. Use the pattern sparsely, only when disrupting is very much necessary. If you want to ask the user “Are you sure you want to delete all that?”, go ahead and make it disruptive. If you want to promote your newsletter sign-up or advertising, the disruption is unlikely to be appreciated.</p>
 
     <p>In terms of implementation, you will need to make everything except your modal element inert. The <dialog> element (used with showModal()) does this for and would be the best to use.</p>
+    <h2>Focus Trapping</h2>
+    <p>The ability of the dialog element to be opened in a modal state and thus trap focus inside of it is a superpower of this element. It is unique to the dialog element, popovers cannot do this (on their own).</p>
+    <p>Focus trapping, while it sounds kinda bad, is actually an accessibility feature. After all, that’s what a modal is: it forces you to deal with some interaction before anything else can be done. It’s actually also a WCAG requirement to not trap focus when you shouldn’t, but in the case of a modal, you should be trapping focus — as well as providing a standard way to close the dialog and escape the trap.</p>
+  
+    <h2>Moving Focus</h2>
+    When a dialog is opened (either modal or non-modal), focus is moved to the first focusable element within it. When it is closed, focus is moved back to the element that opened it.
+    
+    With a popover, focus remains on the element that opened it even after the popup is opened. However, after the popup is open, the next tab will put focus into the popup’s content if there is any in there, regardless of where it is in the DOM, tab through the focusable elements of the popup, then onto other focusable elements outside the popup after the original element that opened it.
+    
+    This is all tricky work that you get for free by using the <dialog> element or popups and frankly a huge reason to use them 👍.
   </main>
 </Layout>
 

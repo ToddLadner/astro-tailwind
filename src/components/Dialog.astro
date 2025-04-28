@@ -84,22 +84,22 @@ const {
   <!-- Header | If showHeader is true -->
   {showHeader && (
     <header class="flex items-center gap-xs">
-    <!-- Icon -->
-    {icon && <Icon name={icon} class="icon" />}
-    <!-- Heading -->
-    <hgroup class="flex flex-col stack stack-3xs">
-      {overline && <p class="text-xs">{overline}</p>}  
-      <h2 id="dialog-heading" class="text-lg">{heading}</h2>
-    </hgroup>
-    <!-- Close Button -->
-    <Button
-      onclick="this.closest('dialog').close()"
-      theme='filled' 
-      variant='icon' 
-      icon='xmark-large-solid' 
-      aria-label='close dialog'
-      classes="ml-[auto]"
-    />
+      <!-- Icon -->
+      {icon && <Icon name={icon} class="icon" />}
+      <!-- Heading -->
+      <hgroup class="flex flex-col stack stack-3xs">
+        {overline && <p class="text-xs">{overline}</p>}  
+        <h2 id="dialog-heading" class="text-lg">{heading}</h2>
+      </hgroup>
+      <!-- Close Button -->
+      <Button
+        onclick="this.closest('dialog').close()"
+        theme='filled' 
+        variant='icon' 
+        icon='xmark-large-solid' 
+        aria-label='close dialog'
+        classes="ml-[auto]"
+      />
     </header>
   )}
   <!-- Content -->

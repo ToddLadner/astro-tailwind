@@ -47,6 +47,7 @@
   [40] Overflow Scroll
   [41] Overflow Hint
   [42] Type Styles
+  [43] Shapes
 ─────────────────────────────────
 */
 
@@ -743,7 +744,8 @@
 @utility font-bold { font-variation-settings: "wght" 800; }
 @utility font-italic { font-variation-settings: "ital" 1 }
 
-/* [] Shapes */
+/* [43] Shapes */
+/* Square */
 @utility square {
   border-radius: var(--radius-0);
 }
