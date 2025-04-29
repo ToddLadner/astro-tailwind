@@ -1,38 +1,62 @@
-/* Base styles (off‐stage) */
-dialog,
-[popover] {
-  opacity: 0;
-  transform: translateY(-10px);
+/* [9] Enter / Exit Transition for top-layer */
+[popover], dialog, ::backdrop {
+  --duration: 1s;
+  --delay: .25s;
+  --timing-function: var(--ease-spring-2);
+
+  /* Interpolate sizes keywords */
   transition: 
-    opacity 0.3s ease,           /* dialog fade */
-    transform 0.3s ease;         /* dialog slide */
+    display var(--duration) var(--timing-function), 
+    overlay var(--duration) var(--timing-function),
+    transform var(--duration) var(--timing-function), 
+    opacity var(--duration) var(--timing-function);
+    transition-behavior: allow-discrete; /* Note: be sure to write this after the shorthand */
 }
 
-dialog::backdrop,
-[popover]::backdrop {
+/* Ending | Off Stage  */
+[popover], dialog {
+  transform:  scale(.9);
+}
+
+[popover], dialog, ::backdrop { 
   opacity: 0;
-  transition: opacity 0.2s ease; /* backdrop fade quicker */
 }
 
-/* On‐stage */
-dialog[open],
-:popover-open {
+/* On Stage */
+:popover-open::backdrop,
+[open]::backdrop {
+  opacity: 1;
+}
+
+:popover-open,
+[open] {
   opacity: 1;
   transform: translateY(0);
-  /* give dialog a tiny delay so backdrop has already started fading */
-  transition-delay: 0.1s, 0.1s;  
-  /* (first value applies to opacity, second to transform) */
 }
 
-dialog[open]::backdrop,
-:popover-open::backdrop {
-  opacity: 1;
-  /* no delay on backdrop so it fades immediately */
-  transition-delay: 0s;
+/* Starting | Off Stage */
+@starting-style {
+  :popover-open,
+  [open]{
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  
+  :popover-open::backdrop,
+  [open]::backdrop {
+    opacity: 0;
+  }
 }
 
-/* Optional: tweak backdrop background */
-dialog::backdrop,
-[popover]::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+/* Backdrop */
+::backdrop {
+  --glass-lightness: 100%;
+
+  background: hsl(0 0% var(--glass-lightness) / 50%);
+  backdrop-filter: blur(6px);
+
+  @media (prefers-color-scheme: dark) {
+    --glass-lightness: 0;
+  }
 }

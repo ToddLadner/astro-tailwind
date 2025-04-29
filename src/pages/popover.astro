@@ -2,6 +2,7 @@
 import Layout from '@layouts/Layout.astro';
 import Dialog from '@components/Dialog.astro';
 import Button from '@components/Button.astro';
+import Dropdown from '@components/Dropdown.astro';
 
 const { 
 	title = "My Astro Blog",
@@ -18,9 +19,36 @@ const {
     <p>A minimally styled window overlaid on the main content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
     
     
-    <Button popovertarget="my-tooltip">?</Button>
-    <p id="my-tooltip" popover>tip</p>
-    
+    <Button 
+      id="my-dd" 
+      popovertarget="my-menu"
+      popovertargetaction="toggle"
+      aria-haspopup="menu"
+      aria-controls="my-menu"
+      aria-expanded="false"
+      aria-label="Help menu"
+    >
+    ?
+    </Button>
+
+    <Dropdown id="my-menu" labelledBy="my-dd">
+      <ul role="list">
+        <li><button role="menuitem" tabindex="-1">Profile</button></li>
+        <li><button role="menuitem" tabindex="-1">Settings</button></li>
+        <li><button role="menuitem" tabindex="-1">Log out</button></li>
+      </ul>
+    </Dropdown>
   </main>
 </Layout>
 
+<script is:inline type="module">
+  // [1] The popover container
+  document.querySelectorAll('[popovertarget]').forEach(btn => {
+    btn.addEventListener('toggle', e => {
+      btn.setAttribute(
+        'aria-expanded',
+        e.newState === 'open' ? 'true' : 'false'
+      );
+    });
+  });
+</script>

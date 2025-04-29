@@ -1,0 +1,71 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<"dialog"> {
+  id: string;
+  labelledBy?: string;
+  icon?: string;
+  theme?: "outlined" | "tonal" | "filled" | "elevated";
+  classes?: string;
+}
+
+const {
+  id,
+  labelledBy,
+  theme,
+  classes = '',
+  ...rest
+} = Astro.props;
+---
+
+<style is:inline>
+  /* Popover styling — feel free to merge with your [popover] rules */
+  dialog[popover] {
+    padding: var(--spacing-sm);
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border-2);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-elevation-4);
+  }
+
+  ul[role="list"] {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  [role="menuitem"] {
+    background: none;
+    border: none;
+    padding: var(--spacing-2xs) var(--spacing-xs);
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  [role="menuitem"]:focus {
+    outline: 2px solid var(--color-focus);
+    background: var(--color-surface-hover);
+  }
+
+  /* Simple separator example */
+  [role="menuitem"] + [role="menuitem"] {
+    margin-top: 0.25rem;
+  }
+</style>
+
+<!-- [2] The popover container -->
+<dialog
+  popover
+  id={id}
+  role="menu"
+  aria-labelledby={labelledBy}
+  class:list={[theme, classes]}
+  tabindex="-1"
+>
+  <slot />
+</dialog>
+
+

@@ -123,32 +123,32 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 :not(:active):focus-visible { outline-offset: .5rem }
 
 /* [9] Enter / Exit Transition for top-layer */
-[popover], dialog, ::backdrop {
+/* dialog, ::backdrop {
   --duration: 1s;
   --delay: .25s;
-  --timing-function: var(--ease-spring-2);
+  --timing-function: var(--ease-spring-2); */
 
   /* Interpolate sizes keywords */
-  transition: 
+  /* transition: 
     display var(--duration) var(--timing-function), 
     overlay var(--duration) var(--timing-function),
     transform var(--duration) var(--timing-function), 
     opacity var(--duration) var(--timing-function);
-    transition-behavior: allow-discrete; /* Note: be sure to write this after the shorthand */
-}
+    transition-behavior: allow-discrete; 
+} */
+/* Note: be sure to write this after the shorthand */
 
 /* Ending | Off Stage  */
-[popover], dialog {
+/* dialog {
   transform:  scale(.9);
 }
 
-[popover], dialog, ::backdrop { 
+dialog, ::backdrop { 
   opacity: 0;
-}
+} */
 
 /* On Stage */
-:popover-open::backdrop,
-[open]::backdrop {
+/* [open]::backdrop {
   opacity: 1;
 }
 
@@ -156,25 +156,24 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 [open] {
   opacity: 1;
   transform: translateY(0);
-}
+} */
 
 /* Starting | Off Stage */
-@starting-style {
-  :popover-open,
+/* @starting-style {
   [open]{
     opacity: 0;
     transform: translateY(100%);
   }
 
   
-  :popover-open::backdrop,
+
   [open]::backdrop {
     opacity: 0;
   }
-}
+} */
 
 /* Backdrop */
-::backdrop {
+/* ::backdrop {
   --glass-lightness: 100%;
 
   background: hsl(0 0% var(--glass-lightness) / 50%);
@@ -183,4 +182,4 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
   @media (prefers-color-scheme: dark) {
     --glass-lightness: 0;
   }
-}
+} */
