@@ -21,10 +21,7 @@ const {
 
 <style>
   /* Popover styling — feel free to merge with your [popover] rules */
-  .wrapper {
-    position: relative;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-  }
+
   dialog[popover] {
     padding: var(--spacing-sm);
     background: var(--color-surface-1);
@@ -83,7 +80,7 @@ dialog[popover]{
 </style>
 
 <!-- [2] The popover container -->
- <div class="wrapper">
+
 <dialog
   popover
   id={id}
@@ -94,5 +91,5 @@ dialog[popover]{
   tabindex="-1"
 >
   <slot />
-</dialog></div> 
+</dialog> 
 
