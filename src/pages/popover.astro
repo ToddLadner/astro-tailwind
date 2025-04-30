@@ -11,6 +11,23 @@ const {
 } = Astro.props;
 ---
 
+<style is:global>
+  #my-dropdown { 
+    anchor-name: --my-anchor; 
+  }
+  #my-menu {
+  position: absolute;
+  position-anchor: --my-anchor;
+
+  position-area: bottom center;
+
+  /* optional offset if you want a little gap */
+  transform: translateY(4px);
+}
+
+[role="menuitem"] { width: 100%; justify-content: unset; }
+</style>
+
 <Layout {title} {description}>
   <main class="p-inline-max pt-lg bg-surface-2 stack">
     <p>Components</p>
@@ -20,9 +37,8 @@ const {
     
     
     <Button 
-      id="my-dd" 
+      id="my-dropdown" 
       popovertarget="my-menu"
-      popovertargetaction="toggle"
       aria-haspopup="menu"
       aria-controls="my-menu"
       aria-expanded="false"
@@ -31,17 +47,19 @@ const {
     ?
     </Button>
 
-    <Dropdown id="my-menu" labelledBy="my-dd">
-      <ul role="list">
-        <li><button role="menuitem" tabindex="-1">Profile</button></li>
-        <li><button role="menuitem" tabindex="-1">Settings</button></li>
-        <li><button role="menuitem" tabindex="-1">Log out</button></li>
+    <Dropdown id="my-menu" labelledBy="my-dropdown">
+      <ul role="list" class="my-[0]">
+        <li><Button role="menuitem">Profile</Button></li>
+        <li><Button role="menuitem">Settings</Button></li>
+        <li><Button role="menuitem">Log out</Button></li>
+        <hr>
+        <li><Button role="menuitem">Log out</Button></li>
       </ul>
     </Dropdown>
   </main>
 </Layout>
 
-<script is:inline type="module">
+<!-- <script>
   // [1] The popover container
   document.querySelectorAll('[popovertarget]').forEach(btn => {
     btn.addEventListener('toggle', e => {
@@ -51,4 +69,4 @@ const {
       );
     });
   });
-</script>
+</script> -->
