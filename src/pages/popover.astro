@@ -1,8 +1,9 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import Dialog from '@components/Dialog.astro';
 import Button from '@components/Button.astro';
 import Dropdown from '@components/Dropdown.astro';
+
+
 
 const { 
 	title = "My Astro Blog",
@@ -52,21 +53,4 @@ const {
   </main>
 </Layout>
 
-<script is:inline>
-  // Listen for *any* popover toggling:
-  document.addEventListener('toggle', (e) => {
-    const pop = /** @type {HTMLElement} */ (e.target);
-    if (!pop.hasAttribute('popover') || !pop.id) return;
 
-    // Find the matching control by its popovertarget:
-    const btn = document.querySelector(
-      `[popovertarget="${pop.id}"]`
-    );
-    if (btn) {
-      btn.setAttribute(
-        'aria-expanded',
-        e.newState === 'open' ? 'true' : 'false'
-      );
-    }
-  });
-</script>

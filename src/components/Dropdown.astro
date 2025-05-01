@@ -101,5 +101,16 @@ const {
   <div class="popover-inner">
     <slot />
   </div>
-  </dialog> 
+  </dialog>
+
+  <script is:inline>
+    // find all buttons that open popovers
+    document.querySelectorAll('button[popovertarget]').forEach(button => {
+      button.addEventListener('click', () => {
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        // flip true ↔ false
+        button.setAttribute('aria-expanded', String(!isExpanded));
+      });
+    });
+  </script>
 
