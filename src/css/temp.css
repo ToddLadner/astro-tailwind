@@ -10,7 +10,7 @@
     overlay var(--duration) var(--timing-function),
     transform var(--duration) var(--timing-function), 
     opacity var(--duration) var(--timing-function);
-    transition-behavior: allow-discrete; /* Note: be sure to write this after the shorthand */
+  transition-behavior: allow-discrete; /* [!] Be sure to write this after the transition */
 }
 
 /* Ending | Off Stage  */

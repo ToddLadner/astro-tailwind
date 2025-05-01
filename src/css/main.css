@@ -157,7 +157,7 @@
   /* [11] Border radius */
   --radius-0: 0;
   --radius-sm: 2px;
-  --radius-md: 5px;
+  --radius-md: .5rem;
   --radius-lg: 1rem;
   --radius-xl: 2rem;
   --radius-2xl: 4rem;

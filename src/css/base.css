@@ -122,6 +122,11 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 }
 :not(:active):focus-visible { outline-offset: .5rem }
 
+/* [9] Elements */
+hr {
+  border-top: 1px solid var(--color-surface-3);
+}
+
 /* [9] Enter / Exit Transition for top-layer */
 /* dialog, ::backdrop {
   --duration: 1s;
