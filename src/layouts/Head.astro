@@ -4,15 +4,24 @@ import "@styles/main.css";
 ---
 
 <head>
+   <!-- [1] Popover polyfill: adds popovertarget/togglePopover, toggle event, etc. -->
+   <script type="module">
+    import 'https://unpkg.com/@oddbird/popover-polyfill/dist/popover.iife.min.js';
+  </script>
+
+  <!-- [2] CSS Anchor Positioning polyfill -->
+  <script type="module">
+    if (!('anchorName' in document.documentElement.style)) {
+      import('https://unpkg.com/@oddbird/css-anchor-positioning');
+    }
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <!-- <link rel="sitemap" href="/sitemap-index.xml" /> -->
   <meta name="generator" content={Astro.generator} />
   <meta name="description" content={description} />
-  
-  <!-- Scripts -->
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@oddbird/popover-polyfill/dist/popover.js"></script>
   
   <title>{title}</title>
 </head>

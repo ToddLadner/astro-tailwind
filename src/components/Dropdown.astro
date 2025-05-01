@@ -103,3 +103,14 @@ const {
   </div>
   </dialog> 
 
+  <script>
+    document.querySelectorAll('button[popovertarget]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+      });
+      btn.addEventListener('toggle', e => {
+        btn.setAttribute('aria-expanded', e.newState === 'open');
+      });
+    });
+  </script>
