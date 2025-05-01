@@ -11,16 +11,11 @@ const {
 } = Astro.props;
 ---
 
-<style is:global>
-  #my-dropdown { 
-    anchor-name: --my-anchor; 
-  }
+<style>
+  #my-dropdown { anchor-name: --my-anchor; }
   #my-menu {
-  position: absolute;
   position-anchor: --my-anchor;
-
   position-area: bottom center;
-
 }
 
 [role="menuitem"] { width: 100%; justify-content: unset; }
@@ -57,14 +52,21 @@ const {
   </main>
 </Layout>
 
-<!-- <script>
-  // [1] The popover container
-  document.querySelectorAll('[popovertarget]').forEach(btn => {
-    btn.addEventListener('toggle', e => {
+<script is:inline>
+  // Listen for *any* popover toggling:
+  document.addEventListener('toggle', (e) => {
+    const pop = /** @type {HTMLElement} */ (e.target);
+    if (!pop.hasAttribute('popover') || !pop.id) return;
+
+    // Find the matching control by its popovertarget:
+    const btn = document.querySelector(
+      `[popovertarget="${pop.id}"]`
+    );
+    if (btn) {
       btn.setAttribute(
         'aria-expanded',
         e.newState === 'open' ? 'true' : 'false'
       );
-    });
+    }
   });
-</script> -->
+</script>
