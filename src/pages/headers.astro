@@ -1,141 +1,22 @@
 ---
 import Layout from '@layouts/Layout.astro'; 
-
+import Button from '@components/Button.astro';
 const { 
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest 
+  title = "My Astro Blog",
+  description = "My musings about the Astro framework",
+  ...rest 
 } = Astro.props;
 ---
 
 <style>
-  .wrapper {
-  max-width: 1140px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
 
 a {
   text-decoration: none;
-  color: #222;
-}
-
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  font-family: "Roboto", sans-serif;
-}
-
-.sr-only {
-  position: absolute;
-  clip: rect(1px, 1px, 1px, 1px);
-  padding: 0;
-  border: 0;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-}
-
-.button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  color: #fff;
-  background-color: #2fa0f6;
-  min-width: 120px;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.button svg {
   display: inline-block;
-  vertical-align: middle;
-  width: 24px;
-  height: 24px;
-  fill: #fff;
 }
 
-.button span {
-  display: none;
-}
 
-@media (min-width: 600px) {
-  .button span {
-    display: initial;
-  }
-}
-
-.button--icon {
-  min-width: initial;
-  padding: 0.5rem;
-}
-  /* 
-** The Header Media Queries **
-** Tweak as per your needs **
-*/
-.brand {
-  font-weight: bold;
-  font-size: 20px; }
-
-.site-header {
-  position: relative;
-  background-color: #def7ff; }
-
-.site-header__wrapper {
-  padding-top: 1rem;
-  padding-bottom: 1rem; }
-  @media (min-width: 600px) {
-    .site-header__wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 0;
-      padding-bottom: 0; } }
-@media (min-width: 600px) {
-  .nav__wrapper {
-    display: flex; } }
-
-@media (max-width: 599px) {
-  .nav__wrapper {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    left: 0;
-    z-index: -1;
-    background-color: #d9f0f7;
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-100%);
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
-    .nav__wrapper.active {
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(0); } }
-
-.nav__item a {
-  display: block;
-  padding: 1.5rem 1rem; }
-
-.nav__toggle {
-  display: none; }
-  @media (max-width: 599px) {
-    .nav__toggle {
-      display: block;
-      position: absolute;
-      right: 1rem;
-      top: 1rem; } }
+/* * { border: 1px solid red; } */
 </style>
 
 <Layout {title} {description}>
@@ -143,24 +24,211 @@ body {
     <p>Components</p>
     <h1>Headers</h1>
 
-    <header class="site-header">
-      <div class="wrapper site-header__wrapper">
-        <a href="#" class="brand">Brand</a>
-        <nav class="nav">
-          <button class="nav__toggle" aria-expanded="false" type="button">
-            menu
-          </button>
-          <ul role="list" class="nav__wrapper">
-            <li class="nav__item"><a href="#">Home</a></li>
-            <li class="nav__item"><a href="#">About</a></li>
-            <li class="nav__item"><a href="#">Services</a></li>
-            <li class="nav__item"><a href="#">Hire us</a></li>
-            <li class="nav__item"><a href="#">Contact</a></li>
-          </ul>
-        </nav>
+    <header class="flex items-center justify-between px-lg py-sm bg-brand-0">
+      <a href="#" class="font-bold text-xl">LOGO</a>
+      <nav class="nav">
+        <button class="hidden" aria-expanded="false" type="button">
+          menu
+        </button>
+        <ul role="list" class="flex gap-3xs m-[0] font-bold">
+          <li><a href="#" class="py-2xs px-sm">Home</a></li>
+          <li><a href="#" class="py-2xs px-sm">About</a></li>
+          <li><a href="#" class="py-2xs px-sm">Services</a></li>
+          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
+          <li>
+            <Button
+              variant='icon'
+              icon='magnifying-glass-solid' 
+              aria-label="search button"
+              style="color: black"
+            />
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <header class="flex gap-md items-center px-lg py-sm bg-brand-0">
+      <a href="#" class="font-bold text-xl">LOGO</a>
+      <nav class="nav">
+        <button class="hidden" aria-expanded="false" type="button">
+          menu
+        </button>
+        <ul role="list" class="flex gap-3xs m-[0] font-bold">
+          <li><a href="#" class="py-2xs px-sm">Home</a></li>
+          <li><a href="#" class="py-2xs px-sm">About</a></li>
+          <li><a href="#" class="py-2xs px-sm">Services</a></li>
+          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
+        </ul>
+      </nav>
+      <search class="ml-auto">
+        <form action="./search/" >
+          <label for="search" class="sr-only">Accessible name</label>
+          <input type="search" id="search" name="q" />
+          <Button
+            variant='icon'
+            type='submit'
+            icon='magnifying-glass-solid' 
+            aria-label="search button"
+            style="color: black"
+          />
+        </form>
+      </search>  
+    </header>
+
+    <header class="flex gap-md items-center px-lg py-sm bg-brand-0">
+      <a href="#" class="font-bold text-xl">LOGO</a>
+
+      <nav class="mx-auto">
+        <button class="hidden" aria-expanded="false" type="button">
+          menu
+        </button>
+        <ul role="list" class="flex gap-3xs m-[0] font-bold">
+          <li><a href="#" class="py-2xs px-sm">Home</a></li>
+          <li><a href="#" class="py-2xs px-sm">About</a></li>
+          <li><a href="#" class="py-2xs px-sm">Services</a></li>
+          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="flex gap-3xs">
+        <Button
+          variant='icon'
+          icon='magnifying-glass-solid' 
+          aria-label="search button"
+          style="color: black"
+        />
+        <Button
+          variant='icon'
+          icon='user-bounty-hunter-regular' 
+          aria-label="user button"
+          style="color: black"
+        />
+        <Button
+          variant='icon'
+          icon='cart-shopping-regular' 
+          aria-label="cart button"
+          style="color: black"/>
+
       </div>
     </header>
 
+    <header class="grid-pile items-center px-lg py-sm bg-brand-0">
+      <nav class="">
+        <button class="hidden" aria-expanded="false" type="button">
+          menu
+        </button>
+        <ul role="list" class="flex gap-3xs m-[0] font-bold items-center">
+          <li><a href="#" class="py-2xs px-sm">About</a></li>
+          <li><a href="#" class="py-2xs px-sm">Portfolio</a></li>
 
+          <li class="justify-self-center mx-lg">
+            <a href="#" class="font-bold text-xl">LOGO</a>
+          </li>
+          
+          <li><a href="#" class="py-2xs px-sm">Services</a></li>
+          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
+          <li> 
+            <Button
+              variant='icon'
+              icon='magnifying-glass-solid' 
+              aria-label="search button"
+              style="color: black"
+            />
+          </li>
+        </ul>
+      </nav>
+
+     
+
+      
+    </header>
+
+    <header class="flex items-center justify-between px-lg py-sm bg-brand-0">
+      <nav class="nav">
+        <Button
+        variant='icon'
+        icon='bars-regular' 
+        aria-label="search button"
+        style="color: black"
+      />
+        <ul role="list" class="flex gap-3xs m-[0] font-bold hidden">
+          <li><a href="#" class="py-2xs px-sm">Home</a></li>
+          <li><a href="#" class="py-2xs px-sm">About</a></li>
+          <li><a href="#" class="py-2xs px-sm">Services</a></li>
+          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <a href="#" class="font-bold text-xl">LOGO</a>
+
+      <Button
+        variant='icon'
+        icon='magnifying-glass-solid' 
+        aria-label="search button"
+        style="color: black"
+      />
+
+    </header>
+
+    <header class=" px-lg py-sm bg-brand-0">
+      <div class="flex items-center justify-between">
+        <search >
+          <form action="./search/" >
+            <label for="search" class="sr-only">Accessible name</label>
+            <input type="search" id="search" name="q" />
+            <Button
+              variant='icon'
+              type='submit'
+              icon='magnifying-glass-solid' 
+              aria-label="search button"
+              style="color: black"
+            />
+          </form>
+        </search>
+
+        <a href="#" class="font-bold text-xl mx-auto">LOGO</a>
+
+        <div class="flex gap-3xs">
+          <Button
+            variant='icon'
+            icon='user-bounty-hunter-regular' 
+            aria-label="search button"
+            style="color: black"
+          />
+          <Button
+            variant='icon'
+            icon='user-bounty-hunter-regular' 
+            aria-label="user button"
+            style="color: black"
+          />
+          <Button
+            variant='icon'
+            icon='cart-shopping-regular' 
+            aria-label="cart button"
+            style="color: black"/>
+        </div>
+      </div>
+      
+      <div class="flex items-center bg-surface-2">
+        <nav class="nav mr-auto">
+          <Button
+          classes="hidden"
+          variant='icon'
+          icon='bars-regular' 
+          aria-label="search button"
+          style="color: black"
+        />
+          <ul role="list" class="flex gap-3xs m-[0] font-bold">
+            <li><a href="#" class="py-2xs px-sm text-brand-0">Home</a></li>
+            <li><a href="#" class="py-2xs px-sm text-brand-0">About</a></li>
+            <li><a href="#" class="py-2xs px-sm text-brand-0">Services</a></li>
+            <li><a href="#" class="py-2xs px-sm text-brand-0">Contact</a></li>
+          </ul>
+        </nav>
+        
+        <a href="">test</a>
+        <a href="">test</a>
+      </div>
+    </header>
   </main>
 </Layout>
