@@ -27,4 +27,32 @@ const {
 		<TheHeader />
 		<slot />
 	</body>
+	
+	<script is:inline>
+    document.querySelectorAll('button[popovertarget]').forEach(btn => {
+      const menuId    = btn.getAttribute('popovertarget');
+      const anchorVar = `--anchor-${menuId}`;
+  
+      // 1. tell the trigger where to anchor itself
+      btn.style.setProperty('anchor-name', anchorVar);
+  
+      // 2. tell the popover where to position against
+      const pop = document.getElementById(menuId);
+      if (pop) {
+        pop.style.setProperty('position-anchor', anchorVar);
+        pop.style.setProperty('position-area', 'bottom center');
+      }
+  
+      // 3. toggle aria-expanded on click (native)
+      btn.addEventListener('click', () => {
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+  
+      // 4. keep in sync if the polyfill fires a toggle event
+      btn.addEventListener('toggle', e => {
+        btn.setAttribute('aria-expanded', e.newState === 'open');
+      });
+    });
+  </script>
 </html>

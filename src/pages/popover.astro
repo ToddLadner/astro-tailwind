@@ -12,11 +12,19 @@ const {
 ---
 
 <style>
+  
   #my-dropdown { anchor-name: --my-anchor; }
   #my-menu {
-  position-anchor: --my-anchor;
-  position-area: bottom center;
-}
+    position-anchor: --my-anchor;
+    position-area: bottom center;
+  }
+
+  #my-otherdropdown { anchor-name: --my-otheranchor; }
+  #my-othermenu {
+    position-anchor: --my-anchor;
+    position-area: bottom center;
+  } 
+
 
 [role="menuitem"] { width: 100%; justify-content: unset; }
 </style>
@@ -32,12 +40,12 @@ const {
     <Button 
       id="my-dropdown" 
       popovertarget="my-menu"
-      aria-haspopup="menu"
       aria-controls="my-menu"
+      aria-haspopup="menu"
       aria-expanded="false"
       aria-label="Help menu"
     >
-    ?
+    Button with long text
     </Button>
 
     <Dropdown id="my-menu" labelledBy="my-dropdown">
@@ -49,6 +57,30 @@ const {
         <li><Button role="menuitem">Log out</Button></li>
       </ul>
     </Dropdown>
+
+    <Button 
+    id="new-dropdown" 
+    popovertarget="dd-menu"
+    aria-controls="dd-menu"
+    aria-haspopup="menu"
+    aria-expanded="false"
+    aria-label="Help menu"
+  >
+    ?
+  </Button>
+
+  <Dropdown id="dd-menu" labelledBy="new-dropdown">
+    <ul role="list" class="my-[0]">
+      <li><Button role="menuitem">Profile</Button></li>
+      <li><Button role="menuitem">Settings</Button></li>
+      <li><Button role="menuitem">Log out</Button></li>
+      <hr>
+      <li><Button role="menuitem">Log out</Button></li>
+    </ul>
+  </Dropdown>
+
+
+    
   </main>
 </Layout>
 

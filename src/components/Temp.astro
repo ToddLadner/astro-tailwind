@@ -1,0 +1,49 @@
+<!-- Dropdown -->
+   <!-- Basic you need to wire up your own Anchors -->
+  <!-- <script is:inline>
+    document.querySelectorAll('button[popovertarget]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+      });
+      btn.addEventListener('toggle', e => {
+        btn.setAttribute('aria-expanded', e.newState === 'open');
+      });
+    });
+  </script> -->
+
+
+
+  <!-- Wires up the anchors to the ID & adds position-try-fallback -->
+<!-- <script is:inline>
+  document.querySelectorAll('button[popovertarget]').forEach(btn => {
+    const menuId = btn.getAttribute('popovertarget');
+    const anchorVar = `--anchor-${menuId}`;
+
+    // 1) Anchor name on the trigger
+    btn.style.setProperty('anchor-name', anchorVar);
+
+    // 2) Positioning on the popover itself
+    const pop = document.getElementById(menuId);
+    if (pop) {
+      pop.style.setProperty('position-anchor', anchorVar);
+      pop.style.setProperty('position-area', 'bottom center');
+      pop.style.setProperty(
+        'position-try-fallbacks',
+        // try placing above center first, then above left/right
+        'top center, top left, top right'
+      );
+    }
+
+    // 3) Toggle aria-expanded on click
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+    });
+
+    // 4) Sync aria-expanded if polyfill fires a “toggle” event
+    btn.addEventListener('toggle', e => {
+      btn.setAttribute('aria-expanded', e.newState === 'open');
+    });
+  });
+</script> -->
