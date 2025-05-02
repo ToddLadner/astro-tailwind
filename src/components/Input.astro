@@ -62,10 +62,12 @@ const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
   label:has(input:user-valid) {
     color: var(--color-green-7);
     border: 1px solid var(--color-green-4);
+    line-height: inherit;
   }
   label:has(input:user-invalid) {
     color: var(--color-red-7);
     border: 1px solid var(--color-red-7);
+    line-height: inherit;
   }
   /* * { border: 1px solid red; } */
 </style>
