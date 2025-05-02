@@ -13,6 +13,7 @@ const {
 a {
   text-decoration: none;
   display: inline-block;
+  color: var(--color-text-1);
 }
 
 
@@ -24,7 +25,7 @@ a {
     <p>Components</p>
     <h1>Headers</h1>
 
-    <header class="flex items-center justify-between px-lg py-sm bg-brand-0">
+    <header class="flex items-center justify-between px-lg py-sm bg-surface-0">
       <a href="#" class="font-bold text-xl">LOGO</a>
       <nav class="nav">
         <button class="hidden" aria-expanded="false" type="button">
@@ -47,7 +48,7 @@ a {
       </nav>
     </header>
 
-    <header class="flex gap-md items-center px-lg py-sm bg-brand-0">
+    <header class="flex gap-md items-center px-lg py-sm bg-surface-0">
       <a href="#" class="font-bold text-xl">LOGO</a>
       <nav class="nav">
         <button class="hidden" aria-expanded="false" type="button">
@@ -75,7 +76,7 @@ a {
       </search>  
     </header>
 
-    <header class="flex gap-md items-center px-lg py-sm bg-brand-0">
+    <header class="flex gap-md items-center px-lg py-sm bg-surface-0">
       <a href="#" class="font-bold text-xl">LOGO</a>
 
       <nav class="mx-auto">
@@ -112,7 +113,7 @@ a {
       </div>
     </header>
 
-    <header class="grid-pile items-center px-lg py-sm bg-brand-0">
+    <header class="grid-pile items-center justify-items-center  px-lg py-sm bg-surface-0">
       <nav class="">
         <button class="hidden" aria-expanded="false" type="button">
           menu
@@ -143,7 +144,7 @@ a {
       
     </header>
 
-    <header class="flex items-center justify-between px-lg py-sm bg-brand-0">
+    <header class="flex items-center justify-between px-lg py-sm bg-surface-0">
       <nav class="nav">
         <Button
         variant='icon'
@@ -170,8 +171,8 @@ a {
 
     </header>
 
-    <header class=" px-lg py-sm bg-brand-0">
-      <div class="flex items-center justify-between">
+    <header class="  bg-surface-0">
+      <div class="flex items-center justify-between px-lg py-sm">
         <search >
           <form action="./search/" >
             <label for="search" class="sr-only">Accessible name</label>
@@ -209,7 +210,7 @@ a {
         </div>
       </div>
       
-      <div class="flex items-center bg-surface-2">
+      <div class="flex items-center px-lg py-sm bg-surface-4">
         <nav class="nav mr-auto">
           <Button
           classes="hidden"
@@ -226,8 +227,10 @@ a {
           </ul>
         </nav>
         
-        <a href="">test</a>
-        <a href="">test</a>
+        <div class="flex gap-sm"> 
+          <a href="">test</a>
+          <a href="">test</a>
+        </div>
       </div>
     </header>
   </main>

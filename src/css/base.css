@@ -54,7 +54,7 @@ html {
   color: var(--color-text-2);
   background-color: var(--color-surface-1);
   /* ↓ Branded accents */
-  scrollbar-color: var(--color-brand) transparent;
+  scrollbar-color: var(--color-brand) Canvas;
   accent-color: var(--color-brand);
   caret-color: var(--color-brand);
 }
@@ -83,6 +83,20 @@ body {
     /* When the preference is for dark mode */
     @media (prefers-color-scheme: dark) { --base-grade: -25; }
   }
+}
+
+/* [5] Branded accents */
+:root { accent-color: var(--brand); }
+:focus-visible { outline-color: var(--brand); }
+::selection { background-color: var(--brand); }
+::marker { color: var(--brand); }
+:is(
+  ::-webkit-calendar-picker-indicator,
+  ::-webkit-clear-button,
+  ::-webkit-inner-spin-button, 
+  ::-webkit-outer-spin-button
+) {
+  color: var(--brand);
 }
 
 /* [6] Font Sizes */
@@ -128,64 +142,8 @@ hr {
   margin-block:var(--spacing-3xs);
 }
 
-/* [9] Enter / Exit Transition for top-layer */
-/* dialog, ::backdrop {
-  --duration: 1s;
-  --delay: .25s;
-  --timing-function: var(--ease-spring-2); */
-
-  /* Interpolate sizes keywords */
-  /* transition: 
-    display var(--duration) var(--timing-function), 
-    overlay var(--duration) var(--timing-function),
-    transform var(--duration) var(--timing-function), 
-    opacity var(--duration) var(--timing-function);
-    transition-behavior: allow-discrete; 
-} */
-/* Note: be sure to write this after the shorthand */
-
-/* Ending | Off Stage  */
-/* dialog {
-  transform:  scale(.9);
+a { color: var(--color-brand) }
+a:not(:is(:hover, :focus)) {
+  text-decoration-color: 
+    color-mix(in srgb, currentColor, transparent 75%);
 }
-
-dialog, ::backdrop { 
-  opacity: 0;
-} */
-
-/* On Stage */
-/* [open]::backdrop {
-  opacity: 1;
-}
-
-:popover-open,
-[open] {
-  opacity: 1;
-  transform: translateY(0);
-} */
-
-/* Starting | Off Stage */
-/* @starting-style {
-  [open]{
-    opacity: 0;
-    transform: translateY(100%);
-  }
-
-  
-
-  [open]::backdrop {
-    opacity: 0;
-  }
-} */
-
-/* Backdrop */
-/* ::backdrop {
-  --glass-lightness: 100%;
-
-  background: hsl(0 0% var(--glass-lightness) / 50%);
-  backdrop-filter: blur(6px);
-
-  @media (prefers-color-scheme: dark) {
-    --glass-lightness: 0;
-  }
-} */

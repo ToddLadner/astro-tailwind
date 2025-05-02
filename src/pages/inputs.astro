@@ -1,0 +1,21 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Input from '@components/Input.astro';
+
+
+const { 
+	title = "My Astro Blog",
+	description = "My musings about the Astro framework",
+	...rest 
+} = Astro.props;
+---
+
+<Layout {title} {description}>
+  <main class="p-inline-max pt-lg bg-surface-2 stack">
+    <p>Components</p>
+    <h1>Inputs</h1>
+   
+    <Input type="text" label="Cool Label" placeholder="Text input" />
+    
+  </main>
+</Layout>

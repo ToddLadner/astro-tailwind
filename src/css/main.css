@@ -217,6 +217,7 @@
   --gray-cool-chroma: 0.02; /* 0.03 */
 
   /* [17] Brand */
+  --color-brand: var(--color-brand-6);
   --color-brand-0: oklch(99% 0.03 var(--hue-brand)); 
   --color-brand-1: oklch(95% 0.06 var(--hue-brand)); 
   --color-brand-2: oklch(88% 0.12 var(--hue-brand)); 
@@ -557,11 +558,11 @@
     0 100px 80px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%));
   
   /* [34] Inset Shadows */
-  --inset-shadow-xs: inset 0 0 0 1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
-  --inset-shadow-sm: inset 0 1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)), var(--inner-shadow-highlight);
-  --inset-shadow-md: inset 0 1px 4px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)), var(--inner-shadow-highlight);
-  --inset-shadow-lg: inset 0 2px 8px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)), var(--inner-shadow-highlight);
-  --inset-shadow-xl: inset 0 2px 14px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)), var(--inner-shadow-highlight);
+  --shadow-inset-xs: inset 0 0 0 1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 17%));
+  --shadow-inset-sm: inset 0 1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 17%)), var(--inner-shadow-highlight);
+  --shadow-inset-md: inset 0 1px 4px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 17%)), var(--inner-shadow-highlight);
+  --shadow-inset-lg: inset 0 2px 8px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 17%)), var(--inner-shadow-highlight);
+  --shadow-inset-xl: inset 0 2px 14px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 17%)), var(--inner-shadow-highlight);
   
   /* [**] Easing */
   --ease-1: cubic-bezier(.25, 0, .5, 1);
