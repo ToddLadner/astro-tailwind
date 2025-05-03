@@ -1,6 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro';
 import Input from '@components/Input.astro';
+import Checkable from '@components/Checkable.astro';
 
 
 const { 
@@ -14,20 +15,32 @@ const {
   <main class="p-inline-max pt-lg bg-surface-2 stack">
     <p>Components</p>
     <h1>Inputs</h1>
+    
     <form action="">
    
-    <Input 
-      type="text" 
-      label="Your Name" 
-      placeholder="John Doe"
-      required
-    />
+      <Input 
+        type="text" 
+        label="Your Name" 
+        placeholder="John Doe"
+        required
+      />
 
-    <Input 
-      type="email" 
-      label="Your Email" 
-      required
-    />
+      <Input 
+        type="email" 
+        label="Your Email" 
+        required
+      />
+
+      <Checkable 
+        type="checkbox" 
+        label="I agree to the terms and conditions" 
+        required
+      />
+      <Checkable 
+        type="radio" 
+        label="I agree to the terms and conditions" 
+        required
+      />
 
   </form>
     

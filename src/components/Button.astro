@@ -88,19 +88,20 @@ const {
         }
       }
 
-      /* Hover & Pressed background‑color change */
+      /* Hover State */
       &:not([disabled]) {
         &:not(:active):hover {
           --bg-color: light-dark(
-            oklch(from var(--color-purple-4) l 0.01 h / 20%),
-            oklch(from var(--color-purple-4) l 0.01 h / 10%)
+            oklch(from var(--color-brand) l 0.01 h / 15%),
+            oklch(from var(--color-brand) l 0.01 h / 10%)
           );
         }
-
+        
+        /* Pressed State */
         &:hover:active {
           --bg-color: light-dark(
-            oklch(from var(--color-purple-4) l 0.06 h / 30%),
-            oklch(from var(--color-purple-4) l 0.06 h / 40%)
+            oklch(from var(--color-brand) l 0.06 h / 30%),
+            oklch(from var(--color-brand) l 0.06 h / 40%)
           );
         }
       }
@@ -147,20 +148,26 @@ const {
       /* Button Variants */
       &.outlined {
         --bg-color: var(--color-surface-1);
-        --border-color: light-dark(var(--color-purple-9), var(--color-purple-4));
-        --text-color: light-dark(var(--color-purple-9), var(--color-purple-4));
+        --border-color: var(--color-brand);
+        --text-color: var(--color-brand);
 
-        /* Hover & Pressed background‑color change */
+        /* Hover State */
         &:not([disabled]) {
           &:not(:active):hover {
-            --bg-color: var(--color-purple-4);
-            --border-color: var(--color-purple-4);
+            --bg-color: var(--color-brand);
+            --border-color: var(--color-brand);
             --text-color: var(--color-gray-0);
           }
-
+          /* Pressed State */
           &:active {
-            --bg-color: var(--color-purple-9);
-            --border-color: var(--color-purple-9);
+            --bg-color: light-dark(
+              oklch(from var(--color-brand)  calc(l + .1) c h / 100%),
+              oklch(from var(--color-brand) calc(l - .1) c h / 100%)
+            );
+            --border-color: light-dark(
+              oklch(from var(--color-brand)  calc(l + .1) c h / 100%),
+              oklch(from var(--color-brand) calc(l - .1) c h / 100%)
+            );
             --text-color: var(--color-gray-0);
           }
         }
@@ -182,18 +189,35 @@ const {
       }
 
       &.tonal {
-        --bg-color: var(--color-purple-3);
+        --bg-color: light-dark(
+            oklch(from var(--color-brand) 80% .12 h / 100%),
+            oklch(from var(--color-brand) l c h / 100%)
+          );
         --text-color: var(--color-purple-13);
-
+        
+        /* Hover State */
         &:not([disabled]) {
           &:not(:active):hover {
-            --bg-color: var(--color-purple-4);
-            --border-color: var(--color-purple-4);
+            --bg-color: light-dark(
+              oklch(from var(--color-brand) 85% .12 h / 100%),
+              oklch(from var(--color-brand) 65% c h / 100%)
+            );
+            --border-color:light-dark(
+              oklch(from var(--color-brand) 85% .12 h / 100%),
+              oklch(from var(--color-brand) 65% c h / 100%)
+            );
           }
-
+          
+          /* Pressed State */
           &:active {
-            --bg-color: var(--color-purple-5);
-            --border-color: var(--color-purple-5);
+            --bg-color: light-dark(
+              oklch(from var(--color-brand) 90% .12 h / 100%),
+              oklch(from var(--color-brand) 70% c h / 100%)
+            );
+            --border-color:light-dark(
+              oklch(from var(--color-brand) 90% .12 h / 100%),
+              oklch(from var(--color-brand) 70% c h / 100%)
+            );
           }
         }
 
@@ -245,14 +269,14 @@ const {
 
       &.elevated {
         --bg-color: light-dark(
-          color-mix(in oklch, var(--color-gray-1) 97%, var(--color-purple-15)),
-          color-mix(in oklch, var(--color-gray-11) 97%, var(--color-purple-1))
+          color-mix(in oklab, var(--color-brand) 20%, var(--color-gray-1)),
+          color-mix(in oklab, var(--color-brand) 10%, var(--color-gray-10))
         );
         --ripple-color: light-dark(
           color-mix(in oklch, var(--color-gray-1) 80%, var(--color-purple-15)),
           color-mix(in oklch, var(--color-gray-13) 80%, var(--color-purple-1))
         );
-        --text-color: light-dark(var(--color-purple-9), var(--color-purple-3));
+        --text-color: light-dark(var(--color-purple-9), var(--color-purple-2));
 
         box-shadow:
           0px 3px 1px -2px oklch(0 0 0 / 20%),

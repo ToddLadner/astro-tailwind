@@ -65,6 +65,8 @@
   /* Reset Tailwind */
   --*: initial;  
 
+  --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
+
   --color-text-1: light-dark(var(--color-gray-8), var(--color-gray-2));
   --color-text-2: light-dark(var(--color-gray-7), var(--color-gray-4));
 
@@ -217,7 +219,6 @@
   --gray-cool-chroma: 0.02; /* 0.03 */
 
   /* [17] Brand */
-  --color-brand: var(--color-brand-6);
   --color-brand-0: oklch(99% 0.03 var(--hue-brand)); 
   --color-brand-1: oklch(95% 0.06 var(--hue-brand)); 
   --color-brand-2: oklch(88% 0.12 var(--hue-brand)); 
