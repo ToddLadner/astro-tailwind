@@ -1,0 +1,105 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'input'> {
+  type?: 'color' | 'date' | 'datetime-local' | 'email' | 'file' | 'hidden' | 'month' | 'number' | 'password' | 'range' | 'search' | 'submit' | 'tel' | 'text' | 'time' | 'url' | 'week';
+  uid?: string;
+  label?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  readOnly?: boolean;
+  icon?: string;
+  error?: string;
+  classes?: string;
+}
+
+const {
+  type  = 'text',
+  uid,
+  label,
+  placeholder,
+  icon,
+  error,
+  classes,
+  disabled  = false,
+  readOnly  = false,
+  ...rest
+} = Astro.props;
+
+// generate a short random id if none provided
+const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<style>
+  label {
+    background-color: var(--color-surface-0);
+    max-width: var(--measure-sm);
+    padding: var(--spacing-2xs);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-inset-lg);
+    border: 1px solid var(--color-surface-3);
+
+    &:focus-within {
+      border: 1px solid var(--color-brand-5);
+      box-shadow: 0px 0px 10px 4px rgba(45,255,196,0.15);
+
+      .label {
+        color: var(--color-brand-5);
+      }
+    }
+  }
+
+
+  input {
+    background-color: transparent;
+    &:focus { outline: none; }
+  }
+  input::placeholder {
+    color: var(--color-surface-4);
+  }
+
+  label:has(input:user-valid) {
+    color: var(--color-green-7);
+    border: 1px solid var(--color-green-4);
+    line-height: inherit;
+  }
+  label:has(input:user-invalid) {
+    color: var(--color-red-7);
+    border: 1px solid var(--color-red-7);
+    line-height: inherit;
+  }
+  /* * { border: 1px solid red; } */
+</style>
+
+<label 
+  for={id} 
+  class="grid gap-3xs" 
+  class:list={[classes]} 
+  {...rest}
+>
+  {label && (
+    <span class="flex items-center gap-xs">
+      {icon && <Icon name={icon} />}
+      <span class="text-xs label">{label}</span>
+    </span>
+  )}
+  <textarea
+    id={id}
+    class="w-full text-md"
+    placeholder={placeholder}
+    disabled={disabled}
+    readonly={readOnly}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={error ? `${id}-error` : undefined}
+    {...rest}
+  />
+    <slot />
+  </textarea>
+  {error && (
+    <span id={`${id}-error`} class="mt-xs text-sm text-red-6">
+      {error}
+    </span>
+  )}
+</label>
+

@@ -1,17 +1,55 @@
 ---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'select'> {
+  label: string;
+  uid?: string;
+  options: Option[];
+  classes?: string;
+}
+
+// pull off our custom props, and forward everything else to <select>
+const { 
+  label, 
+  uid, 
+  options,
+  classes, 
+  ...rest 
+  } = Astro.props;
+
+// generate a short random id if none provided
+const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
 ---
-
-<style></style>
-
-<label class="field">
-  <select>
-    <button>
-      <selectedcontent></selectedcontent>
-    </button>
-    <div class="list">
-      <option>Outlined (default)</option>
-      <option>Option Two</option>
-      <option>Option Three</option>
-    </div>
+<label 
+  class="grid gap-3xs"
+  class:list={[classes]} 
+  for={id}
+>
+  <span class="text-xs label">{label}</span>
+  <select id={id} {...rest}>
+    {options.map(opt => (
+      <option value={opt.value}>{opt.label}</option>
+    ))}
   </select>
 </label>
+
+<style>
+  label {
+    background-color: var(--color-surface-0);
+    max-width: var(--measure-sm);
+    padding: var(--spacing-2xs);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-inset-lg);
+    border: 1px solid var(--color-surface-3);
+
+    &:focus-within {
+      border: 1px solid var(--color-brand-5);
+      box-shadow: 0px 0px 10px 4px rgba(45,255,196,0.15);
+
+      .label {
+        color: var(--color-brand-5);
+      }
+    }
+  }
+  /* you can add more default styles here */
+</style>

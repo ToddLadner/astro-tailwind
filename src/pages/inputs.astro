@@ -1,8 +1,9 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import Input from '@components/Input.astro';
 import Checkable from '@components/Checkable.astro';
+import Field from '@components/Field.astro';
 
+const emailError = 'Please enter a valid email address';
 
 const { 
 	title = "My Astro Blog",
@@ -12,36 +13,51 @@ const {
 ---
 
 <Layout {title} {description}>
-  <main class="p-inline-max pt-lg bg-surface-2 stack">
+  <main class="p-inline-max p-lg bg-surface-2 stack">
     <p>Components</p>
     <h1>Inputs</h1>
     
     <form action="">
    
-      <Input 
-        type="text" 
-        label="Your Name" 
-        placeholder="John Doe"
-        required
-      />
-
-      <Input 
-        type="email" 
-        label="Your Email" 
-        required
-      />
-
       <Checkable 
         type="checkbox" 
         label="I agree to the terms and conditions" 
         required
       />
+      
       <Checkable 
         type="radio" 
         label="I agree to the terms and conditions" 
         required
       />
-
+      
+      <Field 
+        as="input" 
+        type="email"
+        id="email"    
+        label="Email"
+        icon="symbols-solid"      
+        placeholder="you@example.com"
+        required  
+      />
+      
+      <Field 
+        as="textarea" 
+        id="message"  
+        label="Message"  
+        rows="4" 
+      />
+      
+      <Field 
+        as="select"   
+        id="country"  
+        label="Country"  
+        options={[
+          { value: '',    label: '–' },
+          { value: '1',   label: 'Option 1' },
+          { value: '2',   label: 'Option 2' },
+        ]} 
+      />
   </form>
     
   </main>
