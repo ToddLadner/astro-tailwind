@@ -2,6 +2,7 @@
 import Layout from '@layouts/Layout.astro';
 import Checkable from '@components/Checkable.astro';
 import Field from '@components/Field.astro';
+import Switch from '@components/Switch.astro'
 
 const emailError = 'Please enter a valid email address';
 
@@ -17,7 +18,7 @@ const {
     <p>Components</p>
     <h1>Inputs</h1>
     
-    <form action="" class="stack">
+    
    
       <Checkable 
         type="checkbox" 
@@ -58,7 +59,38 @@ const {
           { value: '2',   label: 'Option 2' },
         ]} 
       />
-  </form>
+
+<Switch />
+
+      <form id="signup-form" class="stack" novalidate>
+        <Field as="input" id="username" name="username" label="Username" />
+        <Field as="input" id="email"    name="email"    label="Email" type="email" />
+        <button type="submit" class="button">Submit</button>
+      </form>
+
     
   </main>
 </Layout>
+
+<script>
+  import JustValidate from 'just-validate';
+
+  const validation = new JustValidate('#signup-form', {
+    errorFieldCssClass: 'is-invalid-field',
+    errorLabelCssClass: 'is-invalid-label',
+  });
+
+  validation
+    .addField('#username', [
+      { rule: 'required',   errorMessage: 'Username is required' },
+      { rule: 'minLength', value: 3, errorMessage: 'At least 3 characters' },
+    ])
+    .addField('#email', [
+      { rule: 'required', errorMessage: 'Email is required' },
+      { rule: 'email',    errorMessage: 'Enter a valid email' },
+    ])
+    .onSuccess((event) => {
+      console.log('✅ validation passed');
+      // event.preventDefault() if you want to do an AJAX submit
+    });
+</script>
