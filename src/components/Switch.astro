@@ -1,4 +1,20 @@
 ---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<"label"> {
+  size?: "sm" | "lg";
+  text?: string;
+  label?: string;
+  classes?: string;
+}
+
+const { 
+  size,
+  text,
+  label,
+  classes, 
+  ...rest 
+  } = Astro.props;
 ---
 
 <style>
@@ -13,7 +29,7 @@
       --dot-size: var(--spacing-xs);
 
       --track-bg-color: light-dark(var(--color-gray-3), var(--color-gray-8));
-      --track-height: calc(var(--spacing-sm) + .25rem);
+      --track-height: calc(var(--spacing-xs) + .6rem);
       --track-width: var(--spacing-lg);
       --transition-tf: var(--ease-4);
       --transition-time: 0.2s;
@@ -193,7 +209,7 @@
   }
 </style>
 
-<label class="switch">
+<label class="switch" class:list={[ size, classes ]} {...rest}>
   <input type="checkbox" role="switch" />
-  <span class="label">Label</span>
+  <span class="label">{label}</span>
 </label>

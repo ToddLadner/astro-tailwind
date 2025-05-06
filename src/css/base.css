@@ -88,7 +88,7 @@ body {
 /* [5] Branded accents */
 :root { accent-color: var(--color-brand); }
 :focus-visible { outline-color: var(--color-brand); }
-::selection { background-color: var(--color-brand); }
+::selection { background-color: oklch(from var(--color-brand) l c h / 20%); }
 ::marker { color: var(--color-brand); }
 :is(
   ::-webkit-calendar-picker-indicator,

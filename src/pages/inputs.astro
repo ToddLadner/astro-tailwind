@@ -13,32 +13,124 @@ const {
 } = Astro.props;
 ---
 
+<style is:global>
+  .columns-2 > * {  break-inside: avoid-column; }
+</style>
+
 <Layout {title} {description}>
   <main class="p-inline-max p-lg bg-surface-2 stack">
     <p>Components</p>
     <h1>Inputs</h1>
     
-    
-   
-      <Checkable 
-        type="checkbox" 
-        label="I agree to the terms and conditions" 
-        required
-      />
-      
-      <Checkable 
-        type="radio" 
-        label="I agree to the terms and conditions" 
-        required
+    <div class="stack columns-2">    
+      <Field 
+        as="input" 
+        type="Text"
+        id="text"    
+        label="Text"    
+        placeholder="Firstname Lastname"
+        required  
       />
       
       <Field 
         as="input" 
         type="email"
         id="email"    
-        label="Email"
-        icon="symbols-solid"      
+        label="Email"     
         placeholder="you@example.com"
+        required  
+      />
+
+      <Field 
+        as="input" 
+        type="password"
+        id="password"    
+        label="Password"   
+        placeholder="••••••••••••••••••"
+        required  
+      />
+
+      <Field 
+        as="input" 
+        type="search"
+        id="search"    
+        label="Search"   
+        placeholder="Search"
+        required  
+      />
+
+      <Field 
+        as="input" 
+        type="phone"
+        id="phone"    
+        label="phone"   
+        placeholder="Phone"
+        required  
+      />
+
+      <Field 
+        as="input" 
+        type="url"
+        id="url"    
+        label="URL"   
+        placeholder="url"
+        required  
+      />
+
+      <Field 
+        as="input" 
+        type="date"
+        id="date"    
+        label="Date"   
+        placeholder="date"
+        required  
+      />
+
+      <Field 
+        as="input" 
+        type="datetime-local"
+        id="datetime"    
+        label="Datetime"   
+        placeholder="datetime"
+        required  
+      />
+
+
+      <Field 
+        as="input" 
+        type="month"
+        id="month"    
+        label="Month"   
+        placeholder="month"
+        required  
+      />
+
+
+      <Field 
+        as="input" 
+        type="time"
+        id="time"    
+        label="Time"   
+        placeholder="time"
+        required  
+      />
+
+
+      <Field 
+        as="input" 
+        type="week"
+        id="week"    
+        label="Week"   
+        placeholder="week"
+        required  
+      />
+
+      <Field 
+        as="input" 
+        type="color"
+        id="color"    
+        label="Color"   
+        placeholder="color"
         required  
       />
       
@@ -60,15 +152,30 @@ const {
         ]} 
       />
 
-<Switch />
+    <Switch label="Switch label"/>
 
-      <form id="signup-form" class="stack" novalidate>
-        <Field as="input" id="username" name="username" label="Username" />
-        <Field as="input" id="email"    name="email"    label="Email" type="email" />
-        <button type="submit" class="button">Submit</button>
-      </form>
-
+    <Checkable 
+      type="checkbox" 
+      label="I agree to the terms and conditions" 
+      required
+      classes="block"
+    />
     
+    <Checkable 
+      type="radio" 
+      label="I agree to the terms and conditions" 
+      required
+      classes="block"
+    />
+    </div>
+
+    <hr>
+    
+    <form id="signup-form" class="stack" novalidate>
+      <Field as="input" id="username" name="username" label="Username" />
+      <Field as="input" id="email"    name="email"    label="Email" type="email" />
+      <button type="submit" class="button">Submit</button>
+    </form>  
   </main>
 </Layout>
 
