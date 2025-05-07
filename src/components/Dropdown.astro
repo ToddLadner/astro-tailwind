@@ -24,10 +24,13 @@ const {
   [popover] {
     box-shadow: var(--shadow-md);
     border-radius: var(--radius-md);
+    margin-block: 0;
     margin-inline: 0;
     overflow: visible;
     padding: 0;
     min-width: 150px;
+    position: absolute;
+    inset: auto;
   }
 
   /* Popover Style */
@@ -74,7 +77,7 @@ const {
 
 /* On Stage */
 [popover]:popover-open {
-  transform: translateY(0);
+  transform: translateY(1rem) scale(1);
   opacity: 1;
 }
 

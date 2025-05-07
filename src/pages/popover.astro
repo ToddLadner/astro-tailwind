@@ -3,6 +3,8 @@ import Layout from '@layouts/Layout.astro';
 import Dialog from '@components/Dialog.astro';
 import Button from '@components/Button.astro';
 import Dropdown from '@components/Dropdown.astro';
+import Resize from '@components/Resize.astro';
+
 
 const { 
 	title = "My Astro Blog",
@@ -12,21 +14,27 @@ const {
 ---
 
 <style>
-  
+  #new-dropdown { anchor-name: --my-otheranchor; }
+  #dd-menu {
+    position-anchor: --my-otheranchor;
+    position-area: bottom;
+  } 
+
   #my-dropdown { anchor-name: --my-anchor; }
   #my-menu {
     position-anchor: --my-anchor;
-    position-area: bottom center;
+    top: anchor(bottom);
+    left: anchor(right);
+    margin-block-start: .25rem;
+    /* position-area: bottom right;
+    position-try-fallbacks:
+    top, top right, 
+    right, bottom, 
+    bottom right; */
   }
 
-  #my-otherdropdown { anchor-name: --my-otheranchor; }
-  #my-othermenu {
-    position-anchor: --my-anchor;
-    position-area: bottom center;
-  } 
+  [role="menuitem"] { width: 100%; justify-content: unset; }
 
-
-[role="menuitem"] { width: 100%; justify-content: unset; }
 </style>
 
 <Layout {title} {description}>
@@ -38,36 +46,15 @@ const {
     
     
     <Button 
-      id="my-dropdown" 
-      popovertarget="my-menu"
-      aria-controls="my-menu"
+      id="new-dropdown" 
+      popovertarget="dd-menu"
+      aria-controls="dd-menu"
       aria-haspopup="menu"
       aria-expanded="false"
       aria-label="Help menu"
     >
-    Button with long text
+      ?
     </Button>
-
-    <Dropdown id="my-menu" labelledBy="my-dropdown">
-      <ul role="list" class="my-[0]">
-        <li><Button role="menuitem">Profile</Button></li>
-        <li><Button role="menuitem">Settings</Button></li>
-        <li><Button role="menuitem">Log out</Button></li>
-        <hr>
-        <li><Button role="menuitem">Log out</Button></li>
-      </ul>
-    </Dropdown>
-
-    <Button 
-    id="new-dropdown" 
-    popovertarget="dd-menu"
-    aria-controls="dd-menu"
-    aria-haspopup="menu"
-    aria-expanded="false"
-    aria-label="Help menu"
-  >
-    ?
-  </Button>
 
   <Dropdown id="dd-menu" labelledBy="new-dropdown">
     <ul role="list" class="my-[0]">
@@ -79,17 +66,34 @@ const {
     </ul>
   </Dropdown>
 
-  <div class="p-md bg-surface-1">
-    <Button>Button</Button>
+  <div class="p-md bg-blue-3 flex justify-center">
+    <Button 
+        id="my-dropdown" 
+        popovertarget="my-menu"
+        aria-controls="my-menu"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-label="Help menu"
+      >
+        Button with long text
+      </Button>
+      <Dropdown id="my-menu" labelledBy="my-dropdown">
+        <ul role="list" class="my-[0]">
+          <li><Button role="menuitem">Profile</Button></li>
+          <li><Button role="menuitem">Settings</Button></li>
+          <li><Button role="menuitem">Log out</Button></li>
+          <hr>
+          <li><Button role="menuitem">Log out</Button></li>
+        </ul>
+      </Dropdown>
   </div>
-    
   </main>
 </Layout>
 
 <script is:inline>
   // Listen for *any* popover toggling:
   document.addEventListener('toggle', (e) => {
-    const pop = /** @type {HTMLElement} */ (e.target);
+    const pop = (e.target);
     if (!pop.hasAttribute('popover') || !pop.id) return;
 
     // Find the matching control by its popovertarget:
