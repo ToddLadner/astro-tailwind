@@ -1,0 +1,125 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<"dialog"> {
+  id?: string;
+  for?: string;
+  classes?: string;
+}
+
+const { 
+  id, 
+  for: forId, 
+  classes = '', 
+  ...rest 
+} = Astro.props;
+---
+
+<style>
+  [popover] {
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-md);
+    margin-block: 0;
+    margin-inline: 0;
+    overflow: visible;
+    padding: 0;
+    min-width: 150px;
+    position: absolute;
+    inset: auto;
+  }
+
+  .tooltip-inner {
+  position: relative;
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-border-2);
+  padding: var(--spacing-2xs);
+  text-align: center;
+  border-radius: var(--radius-md);
+
+  /* Arrow dimensions */
+  --base: 0.8em;
+  --height: 0.4em;
+  --position: 50%;
+
+  /* Create arrow via clip-path */
+  clip-path: polygon(
+    /* box */
+    0 0, 0 100%, 100% 100%, 100% 0,
+    /* arrow right half */
+    min(100%, var(--position) + var(--base)/2) 0,
+    /* tip */
+    var(--position) calc(-1*var(--height)),
+    /* arrow left half */
+    max(0%, var(--position) - var(--base)/2) 0
+  );
+
+  /* Seamless border for arrow */
+  border-image: conic-gradient(var(--color-surface-1) 0 0) fill 0/
+    0 calc(100% - var(--position) - var(--base)/2) var(--radius-md)
+    calc(var(--position) - var(--base)/2)/
+    var(--height) 0 0 0;
+}
+
+/* Transition */
+[popover] {
+  --duration: 1s;
+  --timing-function: var(--ease-spring-2);
+
+  transition: 
+    display var(--duration) var(--timing-function),
+    transform var(--duration) var(--timing-function),
+    opacity var(--duration) var(--timing-function);
+  transition-behavior: allow-discrete; /* [!] Be sure to write this after the transition */
+}
+
+/* Ending | Off Stage (for exiting) */
+[popover] {
+  transform: translateY(1.25rem) scale(0.95);
+  opacity: 0;
+}
+
+/* On Stage */
+[popover]:popover-open {
+  transform: translateY(1rem) scale(1);
+  opacity: 1;
+}
+
+/* Starting | Off Stage (for entering) */
+@starting-style {
+  [popover]:popover-open {
+    transform: translateY(1.5rem);
+    opacity: 0;
+  }
+}
+</style>
+
+<dialog
+  popover="hint"
+  id={id}
+  data-for={forId}
+  role="tooltip"
+  class:list={[classes]}
+  {...rest}
+  tabindex="-1"
+>
+  <div class="tooltip-inner">
+    <slot />
+  </div>
+</dialog>
+
+<script type="module">
+  document.querySelectorAll('dialog[popover][data-for]').forEach(dialog => {
+    const trigger = document.getElementById(dialog.dataset.for);
+    if (!trigger) return;
+
+    // Show popover on hover
+    trigger.addEventListener('mouseenter', () => {
+      dialog.showPopover(trigger);
+    });
+
+    // Hide popover when no longer hovering
+    trigger.addEventListener('mouseleave', () => {
+      dialog.hidePopover();
+    });
+  });
+</script>

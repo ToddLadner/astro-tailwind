@@ -3,7 +3,7 @@ import Layout from '@layouts/Layout.astro';
 import Dialog from '@components/Dialog.astro';
 import Button from '@components/Button.astro';
 import Dropdown from '@components/Dropdown.astro';
-import Resize from '@components/Resize.astro';
+import Tooltip from '@components/Tooltip.astro';
 
 
 const { 
@@ -17,23 +17,35 @@ const {
   #new-dropdown { anchor-name: --my-otheranchor; }
   #dd-menu {
     position-anchor: --my-otheranchor;
-    position-area: bottom;
+    position-area: bottom center;
   } 
 
   #my-dropdown { anchor-name: --my-anchor; }
   #my-menu {
     position-anchor: --my-anchor;
-    top: anchor(bottom);
-    left: anchor(right);
-    margin-block-start: .25rem;
-    /* 
-    position-area: bottom right;
-    position-try-fallbacks:
-    top, top right, 
-    right, bottom, 
-    bottom right; 
-    */
+    position-area: bottom span-right;
+    margin: .25rem;
+    /* position-try: flip-block, flip-inline; */
+    position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
   }
+  @position-try --bottom-center {
+    position-area: bottom center;
+  }
+  @position-try --bottom-left {
+    position-area: bottom left;
+  }
+  @position-try --top-center { 
+    position-area: top center; 
+  }
+  @position-try --bottom-right { 
+    position-area: bottom right;
+  }
+/* Tooltip */
+#info-btn { anchor-name: --my-tipanchor; }
+  #tooltip-info {
+    position-anchor: --my-tipanchor;
+    position-area: bottom center;
+  } 
 
   [role="menuitem"] { width: 100%; justify-content: unset; }
 
@@ -44,7 +56,13 @@ const {
     <p>Components</p>
     <h1>Popover</h1>
   
-    <p>A minimally styled window overlaid on the main content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
+    <p>A minimally styled window overlaid on the Main Content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
+
+    <span id="info-btn">Hover me</span>
+    <Tooltip id="tooltip-info" for="info-btn">
+      This is an informative tooltip.
+    </Tooltip>
+
     
     
     <Button 
@@ -77,7 +95,7 @@ const {
         aria-expanded="false"
         aria-label="Help menu"
       >
-        Button with long text
+        Button
       </Button>
       <Dropdown id="my-menu" labelledBy="my-dropdown">
         <ul role="list" class="my-[0]">
