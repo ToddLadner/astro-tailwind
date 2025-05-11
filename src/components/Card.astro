@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import heroImage from '@images/space-whale.jpg';
 ---
 
 <style>
@@ -8,7 +10,7 @@
     --border-color: transparent;
     --border-width: 0;
     --shadow: none;
-
+  max-width: 350px;
     background-color: var(--bg-color);
     border-color: var(--border-color);
     border-radius: var(--border-radius, 0.25rem);
@@ -83,9 +85,31 @@
       padding-inline: var(--size-1) var(--size-3);
     }
   }
+  figure { padding:0;margin:0}
 }
 </style>
 
-<article class="card">
-  <slot />
+<article class="card stack">
+  <figure>
+    <Image src={heroImage} alt="descriptive text"/>
+    <figcaption></figcaption>
+  </figure>
+  
+  <hgroup class="stack stack-3xs">
+    <p>Overline</p>
+    <h3>Card Title</h3>
+    <p>Subtitle or description of the card.</p>
+  </hgroup>
+  
+  <div class="content">
+    <slot />
+    <p>This is the main content of the card. It can contain text, images, or any other HTML elements.</p>
+  </div>
+  
+  <footer>
+    <div class="actions">
+      <button>Action 1</button>
+      <button>Action 2</button>
+    </div>
+  </footer>
 </article>

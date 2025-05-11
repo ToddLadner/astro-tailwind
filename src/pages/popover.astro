@@ -4,7 +4,10 @@ import Dialog from '@components/Dialog.astro';
 import Button from '@components/Button.astro';
 import Dropdown from '@components/Dropdown.astro';
 import Tooltip from '@components/Tooltip.astro';
+import Avatar from '@components/Avatar.astro';
 
+import userAvatar from '@images/killer-mike.jpg';
+import altUserAvatar from '@images/elp.jpg';
 
 const { 
 	title = "My Astro Blog",
@@ -44,7 +47,9 @@ const {
 #info-btn { anchor-name: --my-tipanchor; }
   #tooltip-info {
     position-anchor: --my-tipanchor;
-    position-area: bottom center;
+    position-area: bottom;
+    /* position-try: flip-block, flip-inline;  */
+    position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
   } 
 
   [role="menuitem"] { width: 100%; justify-content: unset; }
@@ -53,6 +58,9 @@ const {
 
 <Layout {title} {description}>
   <main class="p-inline-max pt-lg bg-surface-2 stack">
+    
+    <Avatar src={userAvatar} label="User Avatar" size="lg" />
+    
     <p>Components</p>
     <h1>Popover</h1>
   

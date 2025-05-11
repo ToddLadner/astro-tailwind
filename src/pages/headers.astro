@@ -1,6 +1,9 @@
 ---
 import Layout from '@layouts/Layout.astro'; 
 import Button from '@components/Button.astro';
+
+import Card from '@components/Card.astro';
+
 const { 
   title = "My Astro Blog",
   description = "My musings about the Astro framework",
@@ -24,6 +27,8 @@ a {
   <main class="p-inline-max pt-lg bg-surface-2 stack">
     <p>Components</p>
     <h1>Headers</h1>
+
+    <Card></Card>
 
     <header class="flex items-center justify-between px-lg py-sm bg-surface-0">
       <a href="#" class="font-bold text-xl">LOGO</a>

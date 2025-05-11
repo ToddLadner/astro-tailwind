@@ -74,7 +74,7 @@ const {
 
 /* Ending | Off Stage (for exiting) */
 [popover] {
-  transform: translateY(1.25rem) scale(0.95);
+  transform: translateY(1.25rem) scale(0.90);
   opacity: 0;
 }
 
@@ -108,7 +108,7 @@ const {
 </dialog>
 
 <script type="module">
-  document.querySelectorAll('dialog[popover][data-for]').forEach(dialog => {
+  document.querySelectorAll('[popover][role=tooltip]').forEach(dialog => {
     const trigger = document.getElementById(dialog.dataset.for);
     if (!trigger) return;
 

@@ -1,0 +1,72 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { getImage } from 'astro:assets';
+
+interface Props extends HTMLAttributes<"div"> {
+  src: string | ImageMetadata;
+  alt?: string;
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  label?: string;
+}
+
+const { 
+  src, 
+  label = 'Avatar Label', 
+  size,
+  ...rest 
+} = Astro.props;
+
+const image = await getImage({
+  src: src,
+  format: "webp",
+});
+
+const uniqueId = `mask-${Math.random().toString(36).substr(2, 9)}`;
+---
+<style>
+  .avatar {
+    container: avatar / inline-size;
+    width: var(--size, var(--spacing-md));
+    position: relative;
+    display: inline-flex;
+    aspect-ratio: 1;
+    margin-inline: auto;
+    
+    /* Sizes */
+    &.xs { --size: var(--spacing-md); }
+    &.sm { --size: var(--spacing-lg); }
+    &.md { --size: var(--spacing-xl); }
+    &.lg { --size: var(--spacing-2xl); }
+    &.xl { --size: var(--spacing-3xl); }
+  }
+
+  .badge { 
+    background-color: var(--color-green-4);
+    border-radius: var(--radius-ellipse);
+    width: 20cqi;
+    aspect-ratio: var(--aspect-square);
+    position: absolute;
+    inset-block-end: 4cqi;
+    inset-inline-end: 4cqi;
+  }
+</style>
+
+<div class:list={['avatar', size]} aria-label={label} {...rest}>
+  <svg role="none">
+    <mask id={uniqueId}>
+      <circle fill="white" cx="50%" cy="50%" r="50%"></circle>
+      <circle fill="black" cx="86%" cy="86%" r="12%"></circle>
+    </mask>
+    <g mask={`url(#${uniqueId})`}>
+      <image 
+        x="0" y="0" 
+        height="100%" 
+        preserveAspectRatio="xMidYMid slice" 
+        width="100%" 
+        xlink:href={image.src}>
+      </image>
+      <circle fill="none" cx="50%" cy="50%" r="50%" stroke="rgba(0,0,0,0.1)" stroke-width="5"></circle>
+    </g>
+  </svg>
+  <div class="badge"></div>
+</div>
