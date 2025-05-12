@@ -1,5 +1,8 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+import { Image } from 'astro:assets';
+
+import spaceWhale from '@images/space-whale.jpg';
 
 interface Props extends HTMLAttributes<'article'> {
   theme?: 'outlined' | 'tonal' | 'filled';
@@ -21,7 +24,7 @@ const {
       --border-width: 0;
     
       
-      max-width: 350px;
+      
       background-color: var(--bg-color);
       border-color: var(--border-color);
       border-radius: var(--border-radius, 0.25rem);
@@ -42,19 +45,24 @@ const {
       }
     }
     img {
-      border-radius: inherit;
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
     }
   }
 </style>
 
 <article 
   class:list={[
-    'card', 
+    'card',
+    'stack', 
     theme,
     classes
   ]} 
   {...rest}
 >
+  <Image src={spaceWhale} alt="A bird sitting on a nest of eggs." />
+  <div class="stack p-sm">
+    <slot />
+  </div>
   
-  <slot />
 </article>
