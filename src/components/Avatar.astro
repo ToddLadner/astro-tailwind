@@ -7,12 +7,14 @@ interface Props extends HTMLAttributes<"div"> {
   alt?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   label?: string;
+  badge?: 'success' | 'info' | 'warning' | 'danger';
 }
 
 const { 
   src, 
   label = 'Avatar Label', 
   size,
+  badge,
   ...rest 
 } = Astro.props;
 
@@ -41,21 +43,30 @@ const uniqueId = `mask-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   .badge { 
-    background-color: var(--color-green-4);
     border-radius: var(--radius-ellipse);
     width: 20cqi;
     aspect-ratio: var(--aspect-square);
     position: absolute;
     inset-block-end: 4cqi;
     inset-inline-end: 4cqi;
+
+      /* Badge Color */
+      &.success { background-color: var(--color-green-4) }
+      &.info { background-color: var(--color-blue-4) }
+      &.warning { background-color: var(--color-yellow-4) }
+      &.danger { background-color: var(--color-red-4) }
   }
+  
+
 </style>
 
 <div class:list={['avatar', size]} aria-label={label} {...rest}>
   <svg role="none">
     <mask id={uniqueId}>
       <circle fill="white" cx="50%" cy="50%" r="50%"></circle>
-      <circle fill="black" cx="86%" cy="86%" r="12%"></circle>
+      {badge && (
+        <circle fill="black" cx="86%" cy="86%" r="12%" />
+      )}
     </mask>
     <g mask={`url(#${uniqueId})`}>
       <image 
@@ -68,5 +79,5 @@ const uniqueId = `mask-${Math.random().toString(36).substr(2, 9)}`;
       <circle fill="none" cx="50%" cy="50%" r="50%" stroke="rgba(0,0,0,0.1)" stroke-width="5"></circle>
     </g>
   </svg>
-  <div class="badge"></div>
+  {badge && <div class:list={['badge', badge]}></div>}
 </div>

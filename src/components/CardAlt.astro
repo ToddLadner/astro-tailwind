@@ -1,0 +1,47 @@
+---
+// src/components/Card.astro
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  /** background (any CSS color) */
+  bg?: string;
+  /** border width, e.g. '0', '1px', or 'var(--border-width)' */
+  borderWidth?: string;
+  /** box-shadow value */
+  shadow?: string;
+  /** padding around the content */
+  padding?: string;
+  /** any extra classes */
+  classes?: string;
+}
+
+const {
+  bg    = 'transparent',
+  borderWidth = '0',
+  shadow = 'none',
+  padding = '1rem',
+  classes = '',
+  ...rest
+} = Astro.props;
+---
+
+<style define:vars={{ bg, borderWidth, shadow, padding }}>
+  @layer components {
+    .card {
+      background: var(--bg);
+      border: var(--borderWidth) solid var(--borderColor, currentColor);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius, 0.25rem);
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-3);
+      overflow: hidden;
+      padding: var(--padding);
+      max-width: 350px;
+    }
+  }
+</style>
+
+<article class:list={['card', classes]} {...rest}>
+  <slot />
+</article>

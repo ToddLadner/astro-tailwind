@@ -59,7 +59,12 @@ const {
 <Layout {title} {description}>
   <main class="p-inline-max pt-lg bg-surface-2 stack">
     
-    <Avatar src={userAvatar} label="User Avatar" size="lg" />
+    <Avatar 
+      src={userAvatar} 
+      label="User Avatar" 
+      size="lg" 
+      badge="success" 
+    />
     
     <p>Components</p>
     <h1>Popover</h1>
@@ -71,8 +76,6 @@ const {
       This is an informative tooltip.
     </Tooltip>
 
-    
-    
     <Button 
       id="new-dropdown" 
       popovertarget="dd-menu"
@@ -83,16 +86,15 @@ const {
     >
       ?
     </Button>
-
-  <Dropdown id="dd-menu" labelledBy="new-dropdown">
-    <ul role="list" class="my-[0]">
-      <li><Button role="menuitem">Profile</Button></li>
-      <li><Button role="menuitem">Settings</Button></li>
-      <li><Button role="menuitem">Log out</Button></li>
-      <hr>
-      <li><Button role="menuitem">Log out</Button></li>
-    </ul>
-  </Dropdown>
+    <Dropdown id="dd-menu" labelledBy="new-dropdown">
+      <ul role="list" class="my-[0]">
+        <li><Button role="menuitem">Profile</Button></li>
+        <li><Button role="menuitem">Settings</Button></li>
+        <li><Button role="menuitem">Log out</Button></li>
+        <hr>
+        <li><Button role="menuitem">Log out</Button></li>
+      </ul>
+    </Dropdown>
 
   <div class="p-md bg-blue-3 flex justify-center">
     <Button 
