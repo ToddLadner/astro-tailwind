@@ -211,35 +211,18 @@ const {
 	}
 	
 	.pallette {
-			/* Stack space */
-			--space: var(--spacing-xs);
-			display: flex;
-			gap: var(--spacing-xs);
-		}
+		/* Stack space */
+		--space: var(--spacing-xs);
+		display: flex;
+		gap: var(--spacing-xs);
+	}
 	
-		li { 
-				display: flex;
-				flex-direction: column;
-				gap: var(--spacing-xs);
-			}
-	
-		.theme > {
-			*:nth-child(1) .swatch { background-color: var(--brand) } 
-			*:nth-child(2) .swatch { background-color: var(--surface-2) }
-			*:nth-child(3) .swatch { background-color: var(--surface-3) } 
-			*:nth-child(4) .swatch { background-color: var(--surface-4) }
-			*:nth-child(5) .swatch { background-color: var(--surface-3) } 
-			*:nth-child(6) .swatch { background-color: var(--surface-4) }
-		}
-	
-		.grayscale > {
-			*:nth-child(1) .swatch { background-color: var(--surface-1) } 
-			*:nth-child(2) .swatch { background-color: var(--surface-2) }
-			*:nth-child(3) .swatch { background-color: var(--surface-3) } 
-			*:nth-child(4) .swatch { background-color: var(--surface-4) }
-		}
-	
-	
+	li { 
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-xs);
+	}
+
 	.nested-pallette { 
 		max-width: 55%;
 		background-color: var(--color-surface-0); 

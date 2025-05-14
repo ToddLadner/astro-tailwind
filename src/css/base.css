@@ -1,21 +1,23 @@
 /*  TOC
 ──────────────────────────────────
-  [1] Adaptive typography
-  [2] Shadows
-  [3] Custom Font
-  [4] HTML
-  [5] Body
-  [6] Font Sizes
-  [7] Typography
-  [8] Focus
+  [01] Adaptive typography
+  [02] Shadows
+  [03] Custom Font
+  [04] HTML
+  [05] Body
+  [06] Branded accents
+  [07] Font Sizes
+  [08] Typography
+  [09] Focus
+  [10] Elements
 ─────────────────────────────── */
 
 :root {
-  /* [1] Adaptive typography */
+  /* [01] Adaptive typography */
   --base-weight: 400;
   --base-grade: 0; 
 
-  /* [2] Shadows */
+  /* [02] Shadows */
   /* color-scheme: light */
   --shadow-color: 220 3% 15%;
   --shadow-strength: 1%;
@@ -28,7 +30,7 @@
   }
 }
 
-/* [3] Custom Font */
+/* [03] Custom Font */
 /* Regular */
 @font-face {
   font-family: 'Roboto';
@@ -48,18 +50,14 @@
   font-display: swap;
 }
 
-/* [4] HTML */
+/* [04] HTML */
 html {
   /* ↓ Theme */
   color: var(--color-text-2);
   background-color: var(--color-surface-1);
-  /* ↓ Branded accents */
-  scrollbar-color: var(--color-brand) Canvas;
-  accent-color: var(--color-brand);
-  caret-color: var(--color-brand);
 }
 
-/* [5] Body */
+/* [05] Body */
 body {
   font-size: var(--text-sm);
   line-height: var(--leading-md);
@@ -85,8 +83,12 @@ body {
   }
 }
 
-/* [5] Branded accents */
-:root { accent-color: var(--color-brand); }
+/* [06] Branded accents */
+:root { 
+  scrollbar-color: var(--color-brand) Canvas;
+  accent-color: var(--color-brand);
+  caret-color: var(--color-brand);
+ }
 :focus-visible { outline-color: var(--color-brand); }
 ::selection { background-color: oklch(from var(--color-brand) l c h / 20%); }
 ::marker { color: var(--color-brand); }
@@ -99,7 +101,7 @@ body {
   color: var(--color-brand);
 }
 
-/* [6] Font Sizes */
+/* [07] Font Sizes */
 h1 { font-size: var(--text-size, var(--text-2xl)) }
 h2 { font-size: var(--text-size, var(--text-xl)) }
 h3 { font-size: var(--text-size, var(--text-lg)) }
@@ -108,7 +110,7 @@ h5 { font-size: var(--text-size, var(--text-sm)) }
 h6 { font-size: var(--text-size, var(--text-xs)) }
 
 
-/* [7] Typography */
+/* [08] Typography */
 :where(h1, h2, h3, h4) {
   font-variation-settings: "wght" var(--weight, 600);
   line-height: var(--leading-xs);
@@ -124,7 +126,7 @@ p { max-width: var(--measure-lg); }
 i, em { font-variation-settings: "ital" 1 }
 strong, b { font-variation-settings: "wght" var(--weight, 800) }
 
-/* [8] Focus */
+/* [09] Focus */
 @media (prefers-reduced-motion: no-preference) {
   :focus-visible { 
     transition: outline-offset 75ms ease-out, 
@@ -136,7 +138,7 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 }
 :not(:active):focus-visible { outline-offset: .5rem }
 
-/* [9] Elements */
+/* [10] Elements */
 hr {
   border-top: 1px solid var(--color-surface-3);
   margin-block:var(--spacing-3xs);

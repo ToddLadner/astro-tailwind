@@ -12,6 +12,56 @@ const {
 
 <Layout {title} {description}>
   <main class="p-inline-max pt-lg bg-surface-2 stack">
-    test
+    <figure class="table-container"><table>
+      <thead>
+      <tr>
+      <th>Precedence Order (low to high)</th>
+      <th>Origin</th>
+      <th>Importance</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td>1</td>
+      <td>user-agent (browser)</td>
+      <td>normal</td>
+      </tr>
+      <tr>
+      <td>2</td>
+      <td>user</td>
+      <td>normal</td>
+      </tr>
+      <tr>
+      <td>3</td>
+      <td>author (developer)</td>
+      <td>normal</td>
+      </tr>
+      <tr>
+      <td>4</td>
+      <td>CSS keyframe animations</td>
+      <td></td>
+      </tr>
+      <tr>
+      <td>5</td>
+      <td>author (developer)</td>
+      <td><code>!important</code></td>
+      </tr>
+      <tr>
+      <td>6</td>
+      <td>user</td>
+      <td><code>!important</code></td>
+      </tr>
+      <tr>
+      <td>7</td>
+      <td>user-agent (browser)</td>
+      <td><code>!important</code></td>
+      </tr>
+      <tr>
+      <td>8</td>
+      <td>CSS transitions</td>
+      <td></td>
+      </tr>
+      </tbody>
+      </table></figure>
   </main>
 </Layout>

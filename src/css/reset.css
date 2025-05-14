@@ -42,7 +42,6 @@
 /* [4] View Transition */
 @view-transition { navigation: auto; } 
 
-
 /* [5] Box sizing */
 *, *::before, *::after { box-sizing: border-box }
 
