@@ -67,19 +67,16 @@
 
   --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
 
-  --color-text-1: light-dark(var(--color-gray-8), var(--color-gray-2));
-  --color-text-2: light-dark(var(--color-gray-7), var(--color-gray-4));
-
   --color-surface-0: light-dark(white, var(--color-gray-13));
   --color-surface-1: light-dark(var(--color-gray-0), var(--color-gray-12));
   --color-surface-2: light-dark(var(--color-gray-1), var(--color-gray-11));
   --color-surface-3: light-dark(var(--color-gray-2), var(--color-gray-10));
   --color-surface-4: light-dark(var(--color-gray-3), var(--color-gray-9));
 
-  --color-text-1: light-dark(var(--color-gray-12), var(--color-gray-0));
-  --color-text-2: light-dark(var(--color-gray-7), var(--color-gray-4));
-  --color-text-1-reverse: light-dark(var(--color-gray-0), var(--color-gray-12));
-  --color-text-2-reverse: light-dark(var(--color-gray-4), var(--color-gray-7));
+  --color-text-1: light-dark(oklch(0.35 0.0133 248.21), oklch(0.91 0.007 247.9));
+  --color-text-2: light-dark(oklch(0.43 0.0147 248.17), oklch(0.77 0.0145 248.02));
+  --color-text-1-reverse: light-dark(oklch(0.91 0.007 247.9), oklch(0.35 0.0133 248.21));
+  --color-text-2-reverse: light-dark(oklch(0.77 0.0145 248.02), oklch(0.43 0.0147 248.17));
   
   --color-danger: light-dark(var(--color-red-5), var(--color-red-3));
   --color-warning: light-dark(var(--color-orange-5), var(--color-orange-3));
@@ -518,7 +515,7 @@
   --color-stone-13: oklch(25% var(--gray-warm-chroma) var(--gray-warm-hue));
   --color-stone-14: oklch(18% var(--gray-warm-chroma) var(--gray-warm-hue));
   --color-stone-15: oklch(10% var(--gray-warm-chroma) var(--gray-warm-hue));
-
+  
   /* [33] Shadows */
   --shadow-xs: 0 1px 2px -1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
   

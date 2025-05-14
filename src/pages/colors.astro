@@ -34,8 +34,10 @@ const {
 
     &:not(:first-child) { margin-top: var(--spacing-xs) }
   }
-  .swatches li:nth-child(-n+7) { color: var(--color-gray-12) }
-  .swatches li:nth-child(n+7) { color: var(--color-gray-0) }
+
+  .swatches li { color: oklch(from var(--color-brand-0) l c h) }
+  .swatches li:nth-child(-n+7) { color: oklch(from var(--color-brand-13) l c h) }
+  
   .swatches li:last-child { color: var(--color-gray-0) }
 
   h2 { 
@@ -349,7 +351,7 @@ const {
 </style>
 
 <Layout {title} {description}>
-  <main id="main-content" class="p-inline-max bg-surface-2">
+  <main id="main-content" class="p-inline-max bg-surface-2 overflow-auto">
     <h1>Colors</h1>
     
     <div class='color'>
