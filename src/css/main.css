@@ -17,6 +17,7 @@
   [12] Border radius conditional
   [13] Blob shapes
   [14] Aspect Ratio
+  [**] Text Colors
   [15] Hues
   [16] Grays
   [17] Brand
@@ -73,10 +74,10 @@
   --color-surface-3: light-dark(var(--color-gray-2), var(--color-gray-10));
   --color-surface-4: light-dark(var(--color-gray-3), var(--color-gray-9));
 
-  --color-text-1: light-dark(oklch(0.35 0.0133 248.21), oklch(0.91 0.007 247.9));
-  --color-text-2: light-dark(oklch(0.43 0.0147 248.17), oklch(0.77 0.0145 248.02));
-  --color-text-1-reverse: light-dark(oklch(0.91 0.007 247.9), oklch(0.35 0.0133 248.21));
-  --color-text-2-reverse: light-dark(oklch(0.77 0.0145 248.02), oklch(0.43 0.0147 248.17));
+  --color-text-1: light-dark(var(--color-text-1-light), var(--color-text-1-dark));
+  --color-text-2: light-dark(var(--color-text-2-light), var(--color-text-2-dark));
+  --color-text-1-reverse: light-dark(var(--color-text-1-dark), var(--color-text-1-light));
+  --color-text-2-reverse: light-dark(var(--color-text-2-dark), var(--color-text-2-light));
   
   --color-danger: light-dark(var(--color-red-5), var(--color-red-3));
   --color-warning: light-dark(var(--color-orange-5), var(--color-orange-3));
@@ -186,6 +187,13 @@
   --aspect-widescreen: 16/9;
   --aspect-ultrawide: 18/5;
   --aspect-golden: 1.618/1;
+
+  /* [**] Text Colors */
+  --color-text-1-light: oklch(0.35 0.0133 248.21);
+  --color-text-1-dark: oklch(0.91 0.007 247.9);
+
+  --color-text-2-light: oklch(0.43 0.0147 248.17);
+  --color-text-2-dark: oklch(0.77 0.0145 248.02);
 
   /* [15] Hues */
   --hue-brand: 175;
