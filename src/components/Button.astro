@@ -4,10 +4,11 @@ import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<"button"> {
   type?: "button" | "submit" | "reset";
-  theme?: "outlined" | "tonal" | "filled" | "elevated";
+  theme?: "outlined" | "tonal" | "filled" | "custom";
   size?: "sm" | "lg";
+  elevated?: boolean;
   shape?: "square" | "circle" | "pill";
-  variant?: "icon";
+  variant?: "icon-button";
   text?: string;
   icon?: string;
   classes?: string;
@@ -15,8 +16,9 @@ interface Props extends HTMLAttributes<"button"> {
 
 const { 
   type = "button", 
-  size,
   theme,
+  size,
+  elevated,
   variant, 
   shape,
   text, 
@@ -267,7 +269,7 @@ const {
         }
       }
 
-      &.elevated {
+      &.custom {
         --bg-color: light-dark(
           color-mix(in oklab, var(--color-brand) 20%, var(--color-gray-1)),
           color-mix(in oklab, var(--color-brand) 10%, var(--color-gray-10))
@@ -320,6 +322,16 @@ const {
           );
         }
       }
+
+      /* Box Shadow */
+      &.elevated {
+        box-shadow:
+          0px 3px 1px -2px oklch(0 0 0 / 20%),
+          0px 2px 2px 0px oklch(0 0 0 / 14%),
+          0px 1px 5px 0px oklch(0 0 0 / 12%);
+      }
+
+      &.ellipse { aspect-ratio: var(--aspect-square) }
     }
 
     /* File Input Styles */
@@ -359,13 +371,14 @@ const {
   class:list={[
     size, 
     theme, 
-    shape, 
-    variant === 'icon' && 'icon-button',
+    shape === 'circle' && 'ellipse',
+    elevated && 'elevated', 
+    variant,
     classes
     ]} 
   {...rest}
 >
-  { (variant === 'icon' || !!icon) && <Icon name={icon} /> }
+  { icon && <Icon name={icon} /> }
   <slot/>
   {text}
 </button>

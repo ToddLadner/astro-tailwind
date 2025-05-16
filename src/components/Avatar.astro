@@ -63,7 +63,7 @@ const uniqueId = `mask-${Math.random().toString(36).substr(2, 9)}`;
 <div class:list={['avatar', size]} aria-label={label} {...rest}>
   <svg role="none">
     <mask id={uniqueId}>
-      <circle fill="white" cx="50%" cy="50%" r="50%"></circle>
+      <circle fill="white" cx="50%" cy="50%" r="50%" />
       {badge && (
         <circle fill="black" cx="86%" cy="86%" r="12%" />
       )}
@@ -76,7 +76,7 @@ const uniqueId = `mask-${Math.random().toString(36).substr(2, 9)}`;
         width="100%" 
         xlink:href={image.src}>
       </image>
-      <circle fill="none" cx="50%" cy="50%" r="50%" stroke="rgba(0,0,0,0.1)" stroke-width="5"></circle>
+      <circle fill="none" cx="50%" cy="50%" r="50%" stroke="rgba(0,0,0,0.1)" stroke-width="5" />
     </g>
   </svg>
   {badge && <div class:list={['badge', badge]}></div>}

@@ -13,6 +13,19 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
   integrations: [mdx(), sitemap(), alpinejs(), icon()],
+  image: {
+    // allow Astro to fetch & optimize images from GitHub’s avatar CDN
+    domains: ['avatars.githubusercontent.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        port: '',
+        // match any /u/123456… path
+        pathname: '/u/**',
+      }
+    ],
+  },
   experimental: {
     preserveScriptOrder: true,
     responsiveImages: true

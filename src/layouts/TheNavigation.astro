@@ -53,8 +53,8 @@ const navLinks = [
     path: '/cards'
   },
   { 
-    name: 'Blank', 
-    path: '/blank'
+    name: 'Avatars', 
+    path: '/avatars',
   },
 ];
 ---
@@ -72,7 +72,7 @@ const navLinks = [
 
 <!-- YES: aria-label="primary" | NO: aria-label="primary navigation" Because of Landmarks, screen readers will announce this as "primary navigation navigation" -->
 <nav class="nav" aria-label={ariaLabel} class:list={[classes]} {...rest}>
-  <ul role="list" class="nav-list ">
+  <ul role="list" class="nav-list stack stack-3xs">
     {
       navLinks.map(({ name, path, icon }) => (
         <li class="list-item">
