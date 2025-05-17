@@ -1,0 +1,39 @@
+---
+// src/components/DarkModeToggle.astro
+---
+<button
+  id="theme-toggle"
+  aria-label="Toggle theme"
+  class="p-2 rounded focus:outline-none focus:ring"
+>
+  <svg id="icon-sun"  class="w-6 h-6 hidden" viewBox="0 0 20 20" fill="currentColor">
+    <!-- …sun path… -->
+  </svg>
+  <svg id="icon-moon" class="w-6 h-6 hidden" viewBox="0 0 20 20" fill="currentColor">
+    <!-- …moon path… -->
+  </svg>
+</button>
+
+<script is:inline>
+  const root = document.documentElement;
+  const btn  = document.getElementById('theme-toggle');
+  const sun  = document.getElementById('icon-sun');
+  const moon = document.getElementById('icon-moon');
+
+  function setIcons(isDark) {
+    moon.classList.toggle('hidden', !isDark);
+    sun .classList.toggle('hidden',  isDark);
+  }
+
+  // initialize
+  let isDark = root.getAttribute('color-scheme') === 'dark';
+  setIcons(isDark);
+
+  btn.addEventListener('click', () => {
+    isDark = !isDark;
+    const next = isDark ? 'dark' : 'light';
+    root.setAttribute('color-scheme', next);
+    localStorage.theme = next;
+    setIcons(isDark);
+  });
+</script>

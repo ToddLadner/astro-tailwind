@@ -1,4 +1,5 @@
 ---
+import ThemeToggle from '@components/ThemeToggle.astro';
 import Logo from '@images/skull.svg'
 import TheNavigation from '@layouts/TheNavigation.astro';
 ---
@@ -6,12 +7,10 @@ import TheNavigation from '@layouts/TheNavigation.astro';
 <header class="py-md px-lg stack stack-xs">
   <a href="/" class="flex items-center gap-3xs" aria-label="Home">
     <Logo class="logo"/>
-    <span>DesignWerk</span>
   </a>
-  
-  <search>Search</search>
 
   <TheNavigation />
+  <ThemeToggle />
 </header>
 
 <style>
@@ -24,7 +23,7 @@ import TheNavigation from '@layouts/TheNavigation.astro';
   }
   
   .logo {
-    width: var(--spacing-sm);
+    width: auto;
     height: auto;
     aspect-ratio: var(--aspect-square);
     flex: none;

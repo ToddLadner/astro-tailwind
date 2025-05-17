@@ -128,6 +128,14 @@ const {
     }
   }
 </style>
+<style is:global>
+  [color-scheme='light'] ::backdrop {
+    background: hsl(0 0% var(--glass-lightness) / 50%);
+  }
+  [color-scheme='dark'] ::backdrop {
+    --glass-lightness: 0;
+  }
+</style>
 
 <dialog
   id={id}
@@ -156,7 +164,7 @@ const {
       <Button
         onclick="this.closest('dialog').close()"
         theme='filled' 
-        variant='icon' 
+        variant='icon-button'
         icon='xmark-large-solid' 
         aria-label='close dialog'
         classes="ml-[auto]"

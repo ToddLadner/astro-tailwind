@@ -60,6 +60,8 @@
 @import './base.css'                  layer(base);
 @import 'tailwindcss/utilities.css'   layer(utilities);
 
+@custom-variant dark (&:where([color-scheme=dark], [color-scheme=dark] *));
+
 /* [02] Custom Theme */
 @theme {
 
@@ -691,7 +693,7 @@
 /*  Custom Utilities */
 
 /* [35] Dynamic Padding */
-@utility p-inline-max { padding-inline: max(var(--spacing-sm-lg), calc(50vw - var(--content-size, 90em) / 2)) }
+@utility p-inline-max { padding-inline: max(var(--spacing-sm-lg), calc(50vw - var(--content-size, 75em) / 2)) }
 
 /* [36] The Stack */
 @utility stack {
