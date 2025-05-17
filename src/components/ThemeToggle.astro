@@ -1,39 +1,168 @@
 ---
 // src/components/DarkModeToggle.astro
 ---
+
+<style>
+  .theme-toggle {
+    --size: 2rem;
+    --icon-fill: hsl(210 10% 30%);
+    --icon-fill-hover: hsl(210 10% 15%);
+
+    background: none;
+    border: none;
+    padding: 0;
+
+    inline-size: var(--size);
+    block-size: var(--size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+
+    outline-offset: 5px;
+
+    & > svg {
+      inline-size: 100%;
+      block-size: 100%;
+      stroke-linecap: round;
+    }
+
+  [color-scheme="dark"] & {
+      --icon-fill: hsl(210 10% 70%);
+      --icon-fill-hover: hsl(210 15% 90%);
+    }
+
+    @media (hover: none) {
+      --size: 48px;
+    }
+  }
+
+  .sun-and-moon {
+    & > :is(.moon, .sun, .sun-beams) {
+      transform-origin: center center;
+    }
+
+    & > :is(.moon, .sun) {
+      fill: var(--icon-fill);
+
+    .theme-toggle:is(:hover, :focus-visible) > & {
+        fill: var(--icon-fill-hover);
+      }
+    }
+
+    & > .sun-beams {
+      stroke: var(--icon-fill);
+      stroke-width: 2px;
+
+    .theme-toggle:is(:hover, :focus-visible) & {
+        stroke: var(--icon-fill-hover);
+      }
+    }
+
+  [color-scheme="dark"] & {
+      & > .sun {
+        transform: scale(1.75);
+      }
+
+      & > .sun-beams {
+        opacity: 0;
+      }
+
+      & > .moon > circle {
+        transform: translateX(-7px);
+
+        @supports (cx: 1px) {
+          transform: translateX(0);
+          cx: 17px;
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      & > .sun {
+        transition: transform .5s var(--ease-elastic-3);
+      }
+
+      & > .sun-beams {
+        transition: 
+          transform .5s var(--ease-elastic-4),
+          opacity .5s var(--ease-3)
+        ;
+      }
+
+      & .moon > circle {
+        transition: transform .25s var(--ease-out-5);
+
+        @supports (cx: 1px) {
+          transition: cx .25s var(--ease-out-5);
+        }
+      }
+
+    [color-scheme="dark"] & {
+        & > .sun {
+          transform: scale(1.75);
+          transition-timing-function: var(--ease-3);
+          transition-duration: .25s;
+        }
+
+        & > .sun-beams {
+          transform: rotateZ(-25deg);
+          transition-duration: .15s;
+        }
+
+        & > .moon > circle {
+          transition-delay: .25s;
+          transition-duration: .5s;
+        }
+      }
+    }
+  }
+</style>
+
 <button
   id="theme-toggle"
   aria-label="Toggle theme"
-  class="p-2 rounded focus:outline-none focus:ring"
+  class="theme-toggle"
 >
-  <svg id="icon-sun"  class="w-6 h-6 hidden" viewBox="0 0 20 20" fill="currentColor">
-    <!-- …sun path… -->
-  </svg>
-  <svg id="icon-moon" class="w-6 h-6 hidden" viewBox="0 0 20 20" fill="currentColor">
-    <!-- …moon path… -->
-  </svg>
+<svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
+  <mask class="moon" id="moon-mask">
+    <rect x="0" y="0" width="100%" height="100%" fill="white" />
+    <circle cx="24" cy="10" r="6" fill="black" />
+  </mask>
+  <circle class="sun" cx="12" cy="12" r="6" mask="url(#moon-mask)" fill="currentColor" />
+  <g class="sun-beams" stroke="currentColor">
+    <line x1="12" y1="1" x2="12" y2="3" />
+    <line x1="12" y1="21" x2="12" y2="23" />
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line x1="1" y1="12" x2="3" y2="12" />
+    <line x1="21" y1="12" x2="23" y2="12" />
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+   </g>
+</svg>
 </button>
 
 <script is:inline>
   const root = document.documentElement;
   const btn  = document.getElementById('theme-toggle');
-  const sun  = document.getElementById('icon-sun');
-  const moon = document.getElementById('icon-moon');
 
-  function setIcons(isDark) {
-    moon.classList.toggle('hidden', !isDark);
-    sun .classList.toggle('hidden',  isDark);
+  // Apply the right class to the button and the html attr
+  function setTheme(isDark) {
+    btn.classList.toggle('dark-theme', isDark);
+    btn.classList.toggle('light-theme', !isDark);
+    root.setAttribute('color-scheme', isDark ? 'dark' : 'light');
+    localStorage.theme = isDark ? 'dark' : 'light';
   }
 
-  // initialize
+  // initialize from saved or system preference
   let isDark = root.getAttribute('color-scheme') === 'dark';
-  setIcons(isDark);
+  setTheme(isDark);
 
   btn.addEventListener('click', () => {
     isDark = !isDark;
-    const next = isDark ? 'dark' : 'light';
-    root.setAttribute('color-scheme', next);
-    localStorage.theme = next;
-    setIcons(isDark);
+    setTheme(isDark);
   });
 </script>
