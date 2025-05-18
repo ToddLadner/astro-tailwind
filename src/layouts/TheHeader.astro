@@ -4,17 +4,22 @@ import Logo from '@images/skull.svg'
 import TheNavigation from '@layouts/TheNavigation.astro';
 ---
 
-<header class="py-md px-lg stack stack-xs">
+<header class="py-md px-lg stack stack-xs flex flex-col">
   <a href="/" class="flex items-center gap-3xs" aria-label="Home">
-    <Logo class="logo"/>
+    <Logo class="logo" width='100%' height='auto'/>
   </a>
 
-  <TheNavigation />
+  <TheNavigation classes='mb-auto'/>
   <ThemeToggle />
 </header>
 
 <style>
-  header { container-type: inherit }
+  header { 
+    container-type: inherit;
+    height: 100dvh;
+    position: sticky;
+    top: 0; 
+  }
 
   a {
     text-decoration: none;

@@ -119,7 +119,7 @@ const {
 
       /* Button with Icon & Text */
       &:not(.icon-button) {
-        svg {
+        [data-icon] {
           max-block-size: 0.7lh;
           color: currentColor;
         }
@@ -142,7 +142,7 @@ const {
         padding: 0;
         aspect-ratio: var(--aspect-square);
         
-        svg {
+        [data-icon] {
           max-block-size: 1lh;
         }
       }

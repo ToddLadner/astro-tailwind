@@ -13,67 +13,73 @@ const {
 <Layout {title} {description}>
   <main class="bg-surface-2">
     <!-- Header -->
-    <section class="p-inline-max py-3xl bg-surface-3 stack stack-md">
+    <article class="p-inline-max py-2xl bg-surface-3 stack stack-md">
       <h1>Details</h1>
-      <p class="text-md">Details is a native HTML element that allows you to create a disclosure widget from a [details] element. It can be used to create an accordion, tab, or any other type of disclosure widget.</p>
-    </section>
+      <p class="text-md leading-lg">A disclosure widget is a simple control whose sole purpose is to hide or show stuff.</p>
+    </article>
      <!-- Content -->
-    <section class="p-inline-max py-lg stack">
+    <article class="p-inline-max py-lg stack stack-md">
       <p>Components</p>
-      <h1>Accordion</h1>
+      <h2>Accordion</h2>
+      <p>An accordion is more than a few disclosure widgets or <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> elements one after another. While an accordion is built up from a series of disclosure widgets, these widgets should be grouped and use a group label to inform screen reader users of the relationship.</p>
+      <p>Ideally they also should allow only one to be open at a time, (the is done by giving each detail a common 'name') and restrict the height of the entire collection to no taller than the viewport. The height is maintained by making the disclosed panels for each scroll instead.</p>
+      <p>The accordion section of the article <a href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">Designing for Progressive Disclosure</a> gives more detail (along with other disclosure widget uses)</p>
       
-      <p>Leverages the HTML details and summary elements. Uses the native HTML arrow, check out how to add your own custom arrow.</p>
-      
-      <Detail 
-        title="Custom arrow with Actions" 
-        name="accordion"
-        open
-      >
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+      <section class="stack stack-2xs" aria-label="Assorted Ipsums">
+        <Detail 
+          title="Custom arrow with Actions" 
+          name="accordion"
+          theme='outlined'
+          open
+        >
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+          
+          <div class="flex justify-end gap-xs">
+            <Button theme='outlined'>Button</Button>
+            <Button theme='outlined'>Button</Button>
+          </div>
+        </Detail>
         
-        <div class="flex justify-end gap-xs">
-          <Button theme='outlined'>Button</Button>
-          <Button theme='outlined'>Button</Button>
-        </div>
-      </Detail>
-      
-      <Detail 
-        title="Custom arrow"  
-        name="accordion"
-      >
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-      </Detail>
+        <Detail 
+          title="Custom arrow" 
+          theme='outlined' 
+          name="accordion"
+        >
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+        </Detail>
 
-      <Detail 
-        title="Outlined"
-        theme="outlined" 
-        name="accordion"
-        open
-      >
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-      </Detail>
-    
-      <Detail 
-        title="Custom arrow"
-        theme="elevated"  
-        name="accordion"
-      >
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-      </Detail>
+        <Detail 
+          title="Outlined"
+          theme="outlined" 
+          name="accordion"
+          open
+        >
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+        </Detail>
+      </section>
 
+      <h3>Themes</h3>
       <Detail 
-        title="Custom arrow"
-        theme="tonal"
-        name="accordion"
-      >
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-        <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
-      </Detail>
-    </section>
+          title="Custom arrow"
+          theme="elevated"  
+          name="accordion"
+        >
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+        </Detail>
+
+        <Detail 
+          title="Custom arrow"
+          theme="tonal"
+          name="accordion"
+        >
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+          <p>loreimpsum Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis minima quo dolor quibusdam. Consectetur, rerum architecto repellendus repellat pariatur id corporis, a natus porro animi ipsa debitis, similique quo fugit?</p>
+        </Detail>
+    </article>
   </main>
 
 </Layout>

@@ -59,12 +59,7 @@ const {
 <Layout {title} {description}>
   <main class="p-inline-max pt-lg bg-surface-2 stack">
     
-    <Avatar 
-      src={userAvatar} 
-      label="User Avatar" 
-      size="lg" 
-      badge="success" 
-    />
+    
     
     <p>Components</p>
     <h1>Popover</h1>
@@ -98,25 +93,57 @@ const {
 
   <div class="p-md bg-blue-3 flex justify-center">
     <Button 
-        id="my-dropdown" 
-        popovertarget="my-menu"
-        aria-controls="my-menu"
-        aria-haspopup="menu"
-        aria-expanded="false"
-        aria-label="Help menu"
-      >
-        Button
+      id="my-dropdown" 
+      popovertarget="my-menu"
+      aria-controls="my-menu"
+      aria-haspopup="menu"
+      aria-expanded="false"
+      aria-label="Help menu"
+      variant='icon-button'
+    >
+      Av
+    </Button>
+    <Dropdown id="my-menu" labelledBy="my-dropdown">
+      <ul role="list" class="my-[0]">
+        <li><Button role="menuitem">Profile</Button></li>
+        <li><Button role="menuitem">Settings</Button></li>
+        <li><Button role="menuitem">Log out</Button></li>
+        <hr>
+        <li><Button role="menuitem">Log out</Button></li>
+      </ul>
+    </Dropdown>
+      
+      <button>
+        <Avatar 
+          src={userAvatar} 
+          label="User Avatar" 
+          size="md" 
+          badge="success" 
+        />
+      </button>
+
+      <Button variant='icon-button'>
+        <Avatar 
+          src={userAvatar} 
+          label="User Avatar" 
+          size="md" 
+          badge="success" 
+        />
       </Button>
-      <Dropdown id="my-menu" labelledBy="my-dropdown">
-        <ul role="list" class="my-[0]">
-          <li><Button role="menuitem">Profile</Button></li>
-          <li><Button role="menuitem">Settings</Button></li>
-          <li><Button role="menuitem">Log out</Button></li>
-          <hr>
-          <li><Button role="menuitem">Log out</Button></li>
-        </ul>
-      </Dropdown>
+      
+      <Avatar 
+        src={userAvatar} 
+        label="User Avatar" 
+        size="md" 
+        badge="success" 
+      />
   </div>
+  <Avatar 
+        src={userAvatar} 
+        label="User Avatar" 
+        size="md" 
+        badge="success" 
+      />
   </main>
 </Layout>
 
