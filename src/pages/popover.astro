@@ -26,7 +26,7 @@ const {
   #my-dropdown { anchor-name: --my-anchor; }
   #my-menu {
     position-anchor: --my-anchor;
-    position-area: bottom span-right;
+    position-area: bottom ;
     margin: .25rem;
     /* position-try: flip-block, flip-inline; */
     position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
@@ -43,8 +43,8 @@ const {
   @position-try --bottom-right { 
     position-area: bottom right;
   }
-/* Tooltip */
-#info-btn { anchor-name: --my-tipanchor; }
+  /* Tooltip */
+  #info-btn { anchor-name: --my-tipanchor; }
   #tooltip-info {
     position-anchor: --my-tipanchor;
     position-area: bottom;
@@ -57,19 +57,22 @@ const {
 </style>
 
 <Layout {title} {description}>
-  <main class="p-inline-max pt-lg bg-surface-2 stack">
-    
-    
-    
-    <p>Components</p>
-    <h1>Popover</h1>
+  <main class="bg-surface-2 stack">
+    <!-- Header -->
+    <article class="p-inline-max py-2xl bg-surface-3 stack stack-md">
+      <h1>Popover</h1>
+      <p class="text-md leading-lg">A disclosure widget is a simple control whose sole purpose is to hide or show stuff.</p>
+    </article>
+    <article class="p-inline-max py-lg stack stack-md">
+      <p>Components</p>
+      <h2>Dropdown</h2>
   
-    <p>A minimally styled window overlaid on the Main Content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
+      <p>A minimally styled window overlaid on the Main Content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
 
-    <span id="info-btn">Hover me</span>
-    <Tooltip id="tooltip-info" for="info-btn">
-      This is an informative tooltip.
-    </Tooltip>
+      <span id="info-btn">Hover me</span>
+      <Tooltip id="tooltip-info" for="info-btn">
+        This is an informative tooltip.
+      </Tooltip>
 
     <Button 
       id="new-dropdown" 
@@ -78,6 +81,7 @@ const {
       aria-haspopup="menu"
       aria-expanded="false"
       aria-label="Help menu"
+      classes="rounded-full p-0"
     >
       ?
     </Button>
@@ -91,8 +95,8 @@ const {
       </ul>
     </Dropdown>
 
-  <div class="p-md bg-blue-3 flex justify-center">
-    <Button 
+  <div class="py-md bg-surface-3 flex justify-center">
+    <Button
       id="my-dropdown" 
       popovertarget="my-menu"
       aria-controls="my-menu"
@@ -101,7 +105,12 @@ const {
       aria-label="Help menu"
       variant='icon-button'
     >
-      Av
+      <Avatar 
+        src={userAvatar} 
+        label="User Avatar" 
+        size="md" 
+        badge="success" 
+      />
     </Button>
     <Dropdown id="my-menu" labelledBy="my-dropdown">
       <ul role="list" class="my-[0]">
@@ -112,39 +121,11 @@ const {
         <li><Button role="menuitem">Log out</Button></li>
       </ul>
     </Dropdown>
-      
-      <button>
-        <Avatar 
-          src={userAvatar} 
-          label="User Avatar" 
-          size="md" 
-          badge="success" 
-        />
-      </button>
-
-      <Button variant='icon-button'>
-        <Avatar 
-          src={userAvatar} 
-          label="User Avatar" 
-          size="md" 
-          badge="success" 
-        />
-      </Button>
-      
-      <Avatar 
-        src={userAvatar} 
-        label="User Avatar" 
-        size="md" 
-        badge="success" 
-      />
   </div>
-  <Avatar 
-        src={userAvatar} 
-        label="User Avatar" 
-        size="md" 
-        badge="success" 
-      />
+
+</article>
   </main>
+  
 </Layout>
 
 <script is:inline>
