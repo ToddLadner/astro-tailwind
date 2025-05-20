@@ -351,151 +351,156 @@ const {
 </style>
 
 <Layout {title} {description}>
-  <main id="main-content" class="p-inline-max bg-surface-2 overflow-auto">
-    <h1>Colors</h1>
+  <main id="main-content" class="bg-surface-2 ">
+    <article class="p-inline-max py-2xl bg-surface-3 stack stack-md">
+      <h1>Colors</h1>
+      <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
+    </article>
     
-    <div class='color'>
-      <h2>Brand</h2>
-      <ul role="list" class="brand swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-brand-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+    <article class="p-inline-max py-lg stack stack-md overflow-auto">
+      <div class='color'>
+        <h2>Brand</h2>
+        <ul role="list" class="brand swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-brand-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Red</h2>
-      <ul role="list" class="red swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-red-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
-  
-    <div class='color'>
-      <h2>Pink</h2>
-      <ul role="list" class="pink swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-pink-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Red</h2>
+        <ul role="list" class="red swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-red-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
     
-    <div class='color'>
-      <h2>Purple</h2>
-      <ul role="list" class="purple swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-purple-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Pink</h2>
+        <ul role="list" class="pink swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-pink-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
+      
+      <div class='color'>
+        <h2>Purple</h2>
+        <ul role="list" class="purple swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-purple-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Violet</h2>
-      <ul role="list" class="violet swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-violet-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Violet</h2>
+        <ul role="list" class="violet swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-violet-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Indigo</h2>
-      <ul role="list" class="indigo swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-indigo-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Indigo</h2>
+        <ul role="list" class="indigo swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-indigo-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Blue</h2>
-      <ul role="list" class="blue swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-blue-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Blue</h2>
+        <ul role="list" class="blue swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-blue-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Cyan</h2>
-      <ul role="list" class="cyan swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-cyan-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Cyan</h2>
+        <ul role="list" class="cyan swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-cyan-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Teal</h2>
-      <ul role="list" class="teal swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-teal-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Teal</h2>
+        <ul role="list" class="teal swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-teal-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Green</h2>
-      <ul role="list" class="green swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-green-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Green</h2>
+        <ul role="list" class="green swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-green-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Lime</h2>
-      <ul role="list" class="lime swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-lime-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Lime</h2>
+        <ul role="list" class="lime swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-lime-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Yellow</h2>
-      <ul role="list" class="yellow swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-yellow-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Yellow</h2>
+        <ul role="list" class="yellow swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-yellow-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Orange</h2>
-      <ul role="list" class="orange swatches flex">
-        {colors.map((i) => (
-          <li class={`bg-orange-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Orange</h2>
+        <ul role="list" class="orange swatches flex">
+          {colors.map((i) => (
+            <li class={`bg-orange-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Gray</h2>
-      <ul role="list" class="gray swatches flex">
-        {grays.map((i) => (
-          <li class={`bg-gray-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Gray</h2>
+        <ul role="list" class="gray swatches flex">
+          {grays.map((i) => (
+            <li class={`bg-gray-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Slate</h2>
-      <ul role="list" class="slate swatches flex">
-        {grays.map((i) => (
-          <li class={`bg-slate-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Slate</h2>
+        <ul role="list" class="slate swatches flex">
+          {grays.map((i) => (
+            <li class={`bg-slate-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
 
-    <div class='color'>
-      <h2>Stone</h2>
-      <ul role="list" class="stone swatches flex">
-        {grays.map((i) => (
-          <li class={`bg-stone-${i}`}><span>{i}</span></li>
-        ))}
-      </ul>
-    </div>
+      <div class='color'>
+        <h2>Stone</h2>
+        <ul role="list" class="stone swatches flex">
+          {grays.map((i) => (
+            <li class={`bg-stone-${i}`}><span>{i}</span></li>
+          ))}
+        </ul>
+      </div>
+    </article>
   </main>
 </Layout>

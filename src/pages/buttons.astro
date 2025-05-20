@@ -10,215 +10,220 @@ const {
 ---
 
 <Layout {title} {description}>
-	<main class='p-inline-max pt-lg bg-surface-2'>
-    <Button text='Default' />
+	<main class='bg-surface-2'>
+    <article class="p-inline-max py-2xl bg-surface-3 stack stack-md">
+      <h1>Buttons</h1>
+      <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
+    </article>
     
-    <Button 
-      theme='outlined' 
-      text='Outlined'
-    />
-    
-    <Button 
-      theme='tonal' 
-      text='Tonal'
-    />
-    
-    <Button 
-      theme='filled' 
-      text='Filled'
-    />
-    
-    <Button 
-      theme='custom' 
-      text='custom'
-      elevated
-    />
-    
-    <a href="#" class="button filled">Link</a>
+    <article class="p-inline-max py-lg stack stack-md">
+      <Button text='Default' />
+      
+      <Button 
+        theme='outlined' 
+        text='Outlined'
+      />
+      
+      <Button 
+        theme='tonal' 
+        text='Tonal'
+      />
+      
+      <Button 
+        theme='filled' 
+        text='Filled'
+      />
+      
+      <Button 
+        theme='custom' 
+        text='custom'
+        elevated
+      />
+      
+      <a href="#" class="button filled">Link</a>
 
-    <hr>
+      <hr>
 
-    <h3>Icon Buttons</h3>
-    
-    <Button 
-      variant='icon-button' 
-      icon='symbols-solid'
-      aria-label='default'
-    />
+      <h3>Icon Buttons</h3>
+      
+      <Button 
+        variant='icon-button' 
+        icon='symbols-solid'
+        aria-label='default'
+      />
 
-    <Button 
-      theme='outlined' 
-      variant='icon-button' 
-      icon='symbols-solid'
-      aria-label='outlined'
-    />
+      <Button 
+        theme='outlined' 
+        variant='icon-button' 
+        icon='symbols-solid'
+        aria-label='outlined'
+      />
 
-    <Button
-      theme='tonal'
-      variant='icon-button'
-      icon='symbols-solid'
-      aria-label='tonal'
-    />
-    
-    <Button 
-      theme="filled" 
-      variant='icon-button' 
-      icon='symbols-solid' 
-      aria-label='filled'
-    />
-    
-    <Button 
-      theme="custom" 
-      variant='icon-button' 
-      icon='symbols-solid' 
-      aria-label='custom'
-      shape='circle'
-    />
+      <Button
+        theme='tonal'
+        variant='icon-button'
+        icon='symbols-solid'
+        aria-label='tonal'
+      />
+      
+      <Button 
+        theme="filled" 
+        variant='icon-button' 
+        icon='symbols-solid' 
+        aria-label='filled'
+      />
+      
+      <Button 
+        theme="custom" 
+        variant='icon-button' 
+        icon='symbols-solid' 
+        aria-label='custom'
+        shape='circle'
+      />
 
-    <Button 
-      theme="custom" 
-      variant='icon-button' 
-      icon='symbols-solid' 
-      aria-label='custom'
-      shape='circle'
-      size='lg'
-    />
-    
-    <h3>With icons</h3>
-    
-    <Button 
-      icon='symbols-solid'
-      text='Default'
-    />
+      <Button 
+        theme="custom" 
+        variant='icon-button' 
+        icon='symbols-solid' 
+        aria-label='custom'
+        shape='circle'
+        size='lg'
+      />
+      
+      <h3>With icons</h3>
+      
+      <Button 
+        icon='symbols-solid'
+        text='Default'
+      />
 
-    <Button 
-      theme='outlined' 
-      icon='symbols-solid'
-      text='outlined'
-    />
+      <Button 
+        theme='outlined' 
+        icon='symbols-solid'
+        text='outlined'
+      />
 
-    <Button
-      theme='tonal'
-      icon='symbols-solid'
-      text='tonal'
-    />
-    
-    <Button 
-      theme="filled" 
-      icon='symbols-solid' 
-      text='filled'
-    />
-    
-    <Button 
-      theme="custom" 
-      icon='symbols-solid' 
-      text='custom'
-      dir='rtl'
-      elevated
-    />
+      <Button
+        theme='tonal'
+        icon='symbols-solid'
+        text='tonal'
+      />
+      
+      <Button 
+        theme="filled" 
+        icon='symbols-solid' 
+        text='filled'
+      />
+      
+      <Button 
+        theme="custom" 
+        icon='symbols-solid' 
+        text='custom'
+        dir='rtl'
+        elevated
+      />
 
-    <hr>
-    
-    <h3>Disabled Buttons</h3>
-    
-    <Button 
-      text='Default' 
-      disabled
-    />
-    <Button 
-      theme='outlined' 
-      text='Outlined' 
-      disabled 
-    />
-    <Button 
-      theme='tonal' 
-      text='Tonal' 
-      disabled 
-    />
-    <Button 
-      theme='filled' 
-      text='Filled' 
-      disabled 
-    />
-    <Button 
-      theme='custom' 
-      text='custom'
-      disabled 
-    />
+      <hr>
+      
+      <h3>Disabled Buttons</h3>
+      
+      <Button 
+        text='Default' 
+        disabled
+      />
+      <Button 
+        theme='outlined' 
+        text='Outlined' 
+        disabled 
+      />
+      <Button 
+        theme='tonal' 
+        text='Tonal' 
+        disabled 
+      />
+      <Button 
+        theme='filled' 
+        text='Filled' 
+        disabled 
+      />
+      <Button 
+        theme='custom' 
+        text='custom'
+        disabled 
+      />
 
-    <hr />
+      <hr />
 
-    <Button 
-      icon='symbols-solid' 
-      text='Default' 
-      disabled
-    />
-    <Button
-      icon='symbols-solid' 
-      theme='outlined' 
-      text='Outlined' 
-      disabled 
-    />
-    <Button 
-      icon='symbols-solid'
-      theme='tonal' 
-      text='Tonal' 
-      disabled 
-    />
-    <Button
-      icon='symbols-solid' 
-      theme='filled' 
-      text='Filled' 
-      disabled 
-    />
-    <Button
-      icon='symbols-solid'  
-      theme='custom' 
-      text='custom'
-      disabled 
-    />
+      <Button 
+        icon='symbols-solid' 
+        text='Default' 
+        disabled
+      />
+      <Button
+        icon='symbols-solid' 
+        theme='outlined' 
+        text='Outlined' 
+        disabled 
+      />
+      <Button 
+        icon='symbols-solid'
+        theme='tonal' 
+        text='Tonal' 
+        disabled 
+      />
+      <Button
+        icon='symbols-solid' 
+        theme='filled' 
+        text='Filled' 
+        disabled 
+      />
+      <Button
+        icon='symbols-solid'  
+        theme='custom' 
+        text='custom'
+        disabled 
+      />
 
-    <h3>Shapes</h3>
-    
-    <Button 
-      theme='outlined' 
-      text='Outlined'
-      shape='pill'
-    />
-    
-    <Button 
-      theme='tonal' 
-      text='Tonal'
-      shape='square'
-    />
-    
-    <Button 
-      theme='filled'
-      shape='circle'
-      text='Ci'
-    />
+      <h3>Shapes</h3>
+      
+      <Button 
+        theme='outlined' 
+        text='Outlined'
+        shape='pill'
+      />
+      
+      <Button 
+        theme='tonal' 
+        text='Tonal'
+        shape='square'
+      />
+      
+      <Button 
+        theme='filled'
+        shape='circle'
+        text='Ci'
+      />
 
-    <h2>Sizes</h2>
-    <Button 
-      theme='outlined' 
-      text='Outlined'
-      size='sm'
-    />
-    
-    <Button 
-      theme='tonal' 
-      text='Tonal'
-      size='lg'
-    />
+      <h2>Sizes</h2>
+      <Button 
+        theme='outlined' 
+        text='Outlined'
+        size='sm'
+      />
+      
+      <Button 
+        theme='tonal' 
+        text='Tonal'
+        size='lg'
+      />
 
-    <h2>Spring</h2>    
-    <Button 
-      theme='tonal' 
-      text='Press me'
-      size='lg'
-      classes="spring"
-    />
-    
-    
+      <h2>Spring</h2>    
+      <Button 
+        theme='tonal' 
+        text='Press me'
+        size='lg'
+        classes="spring"
+      />
+    </article>
   </main>
 </Layout>

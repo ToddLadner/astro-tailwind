@@ -11,7 +11,14 @@ const {
 ---
 
 <Layout {title} {description}>
-  <main class="p-inline-max pt-lg bg-surface-2 stack">
+  <main class="bg-surface-2">
+    <article class="p-inline-max py-2xl bg-surface-3 stack stack-md">
+      <h1>Modals</h1>
+      <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
+    </article>
+
+    <article class="p-inline-max py-lg stack stack-md">
+
     <p>Components</p>
     <h1>Dialog</h1>
   
@@ -36,6 +43,7 @@ const {
     With a popover, focus remains on the element that opened it even after the popup is opened. However, after the popup is open, the next tab will put focus into the popup’s content if there is any in there, regardless of where it is in the DOM, tab through the focusable elements of the popup, then onto other focusable elements outside the popup after the original element that opened it.
     
     This is all tricky work that you get for free by using the <dialog> element or popups and frankly a huge reason to use them 👍.
+    </article>
   </main>
 </Layout>
 
