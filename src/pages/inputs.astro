@@ -18,164 +18,172 @@ const {
 </style>
 
 <Layout {title} {description}>
-  <main class="p-inline-max p-lg bg-surface-2 stack">
-    <p>Components</p>
-    <h1>Inputs</h1>
+  <main class="bg-surface-2">
+    <!-- Header -->
+    <article class="p-inline-max py-2xl bg-surface-3 stack stack-md">
+      <h1>Popover</h1>
+      <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
+    </article>
     
-    <div class="stack columns-2">    
-      <Field 
-        as="input" 
-        type="Text"
-        id="text"    
-        label="Text"    
-        placeholder="Firstname Lastname"
-        required  
+    <article class="p-inline-max py-lg stack stack-md">
+      <p>Components</p>
+      <h1>Inputs</h1>
+      
+      <div class="stack columns-2">    
+        <Field 
+          as="input" 
+          type="Text"
+          id="text"    
+          label="Text"    
+          placeholder="Firstname Lastname"
+          required  
+        />
+        
+        <Field 
+          as="input" 
+          type="email"
+          id="email"    
+          label="Email"     
+          placeholder="you@example.com"
+          required  
+        />
+
+        <Field 
+          as="input" 
+          type="password"
+          id="password"    
+          label="Password"   
+          placeholder="••••••••••••••••••"
+          required  
+        />
+
+        <Field 
+          as="input" 
+          type="search"
+          id="search"    
+          label="Search"   
+          placeholder="Search"
+          required  
+        />
+
+        <Field 
+          as="input" 
+          type="phone"
+          id="phone"    
+          label="phone"   
+          placeholder="Phone"
+          required  
+        />
+
+        <Field 
+          as="input" 
+          type="url"
+          id="url"    
+          label="URL"   
+          placeholder="url"
+          required  
+        />
+
+        <Field 
+          as="input" 
+          type="date"
+          id="date"    
+          label="Date"   
+          placeholder="date"
+          required  
+        />
+
+        <Field 
+          as="input" 
+          type="datetime-local"
+          id="datetime"    
+          label="Datetime"   
+          placeholder="datetime"
+          required  
+        />
+
+
+        <Field 
+          as="input" 
+          type="month"
+          id="month"    
+          label="Month"   
+          placeholder="month"
+          required  
+        />
+
+
+        <Field 
+          as="input" 
+          type="time"
+          id="time"    
+          label="Time"   
+          placeholder="time"
+          required  
+        />
+
+
+        <Field 
+          as="input" 
+          type="week"
+          id="week"    
+          label="Week"   
+          placeholder="week"
+          required  
+        />
+
+        <Field 
+          as="input" 
+          type="color"
+          id="color"    
+          label="Color"   
+          placeholder="color"
+          required  
+        />
+        
+        <Field 
+          as="textarea" 
+          id="message"  
+          label="Message"  
+          rows="4" 
+        />
+        
+        <Field 
+          as="select"   
+          id="country"  
+          label="Country"  
+          options={[
+            { value: '',    label: '–' },
+            { value: '1',   label: 'Option 1' },
+            { value: '2',   label: 'Option 2' },
+          ]} 
+        />
+
+      <Switch label="Switch label"/>
+
+      <Checkable 
+        type="checkbox" 
+        label="I agree to the terms and conditions" 
+        required
+        classes="block"
       />
       
-      <Field 
-        as="input" 
-        type="email"
-        id="email"    
-        label="Email"     
-        placeholder="you@example.com"
-        required  
+      <Checkable 
+        type="radio" 
+        label="I agree to the terms and conditions" 
+        required
+        classes="block"
       />
+      </div>
 
-      <Field 
-        as="input" 
-        type="password"
-        id="password"    
-        label="Password"   
-        placeholder="••••••••••••••••••"
-        required  
-      />
-
-      <Field 
-        as="input" 
-        type="search"
-        id="search"    
-        label="Search"   
-        placeholder="Search"
-        required  
-      />
-
-      <Field 
-        as="input" 
-        type="phone"
-        id="phone"    
-        label="phone"   
-        placeholder="Phone"
-        required  
-      />
-
-      <Field 
-        as="input" 
-        type="url"
-        id="url"    
-        label="URL"   
-        placeholder="url"
-        required  
-      />
-
-      <Field 
-        as="input" 
-        type="date"
-        id="date"    
-        label="Date"   
-        placeholder="date"
-        required  
-      />
-
-      <Field 
-        as="input" 
-        type="datetime-local"
-        id="datetime"    
-        label="Datetime"   
-        placeholder="datetime"
-        required  
-      />
-
-
-      <Field 
-        as="input" 
-        type="month"
-        id="month"    
-        label="Month"   
-        placeholder="month"
-        required  
-      />
-
-
-      <Field 
-        as="input" 
-        type="time"
-        id="time"    
-        label="Time"   
-        placeholder="time"
-        required  
-      />
-
-
-      <Field 
-        as="input" 
-        type="week"
-        id="week"    
-        label="Week"   
-        placeholder="week"
-        required  
-      />
-
-      <Field 
-        as="input" 
-        type="color"
-        id="color"    
-        label="Color"   
-        placeholder="color"
-        required  
-      />
+      <hr>
       
-      <Field 
-        as="textarea" 
-        id="message"  
-        label="Message"  
-        rows="4" 
-      />
-      
-      <Field 
-        as="select"   
-        id="country"  
-        label="Country"  
-        options={[
-          { value: '',    label: '–' },
-          { value: '1',   label: 'Option 1' },
-          { value: '2',   label: 'Option 2' },
-        ]} 
-      />
-
-    <Switch label="Switch label"/>
-
-    <Checkable 
-      type="checkbox" 
-      label="I agree to the terms and conditions" 
-      required
-      classes="block"
-    />
-    
-    <Checkable 
-      type="radio" 
-      label="I agree to the terms and conditions" 
-      required
-      classes="block"
-    />
-    </div>
-
-    <hr>
-    
-    <form id="signup-form" class="stack" novalidate>
-      <Field as="input" id="username" name="username" label="Username" />
-      <Field as="input" id="email"    name="email"    label="Email" type="email" />
-      <button type="submit" class="button">Submit</button>
-    </form>  
+      <form id="signup-form" class="stack" novalidate>
+        <Field as="input" id="username" name="username" label="Username" />
+        <Field as="input" id="email"    name="email"    label="Email" type="email" />
+        <button type="submit" class="button">Submit</button>
+      </form>
+    </article>
   </main>
 </Layout>
 
