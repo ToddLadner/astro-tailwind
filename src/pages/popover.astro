@@ -55,29 +55,27 @@ const {
   [role="menuitem"] { width: 100%; justify-content: unset; }
 
   /**/
-  #my-anchor-positioning {
-    anchor-name: --my-anchor-positioning;
+  #anchor-pos-1 {
+    anchor-name: --anchor-pos-1;
   }
-
-  #my-target-positioning {
-    position-anchor: --my-anchor-positioning;
+  #target-pos-1 {
+    position-anchor: --anchor-pos-1;
     top: anchor(bottom);
     left: anchor(right);
     position: absolute;
     margin: 0;
   }
+  /* */
 
-#my-anchor-try-tactics {
-  anchor-name: --my-anchor-try-tactics;
-}
 
 #my-anchor-try-tactics-2 {
   anchor-name: --my-anchor-try-tactics-2;
+  position: relative;
+  top: 5rem
+  right:3rem;;
 }
 
-#my-target-try-tactics {
-  position-anchor: --my-anchor-try-tactics;
-}
+
 
 #my-target-try-tactics-2 {
   position-anchor: --my-anchor-try-tactics-2;
@@ -98,9 +96,10 @@ const {
     overflow: scroll;
     border: thin solid;
     position: relative;
+    resize: both;
 }
 .placefiller-above-anchor {
-    height: 150px;
+    height: 200px;
 }
 .placefiller-before-anchor {
     display: inline-block;
@@ -183,15 +182,15 @@ const {
     
     <article class="p-inline-max py-lg stack stack-md">
       <button 
-        id="my-anchor-positioning" 
-        popovertarget="my-target-positioning"
+        id="anchor-pos-1" 
+        popovertarget="target-pos-1"
         class="p-sm"  
         class="anchor"
       >
         Anchor
       </button>
       <div 
-        id="my-target-positioning" 
+        id="target-pos-1" 
         class="target p-sm" 
         popover
       >
@@ -204,10 +203,9 @@ const {
         <div class='placefiller-above-anchor'></div>
          <div class='placefiller-before-anchor'></div>
 
-          <button id="my-anchor-try-tactics" class="bg-gray-12 anchor">position-try-fallbacks Anchor</button>
-          <div id="my-target-try-tactics" class="bg-red-7 target">Target</div>
-          <button id="my-anchor-try-tactics-2" class="anchor">position-try-fallbacks Anchor 2</button>
-          <div id="my-target-try-tactics-2" class="bg-red-7 target">Target 2</div>
+          
+          <button id="my-anchor-try-tactics-2" class="p-2xs anchor">position-try-fallbacks Anchor 2</button>
+          <div id="my-target-try-tactics-2" class="p-2xs bg-red-7 target">Target 2</div>
 
           <div class='placefiller-after-anchor'></div>  
       </div>
