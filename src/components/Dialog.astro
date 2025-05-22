@@ -107,7 +107,7 @@ const {
     @starting-style {
       dialog[open]{
         opacity: 0;
-        transform: translateY(100%);
+        transform: translateY(20%);
       }
       
       dialog[open]::backdrop {
@@ -126,6 +126,10 @@ const {
         --glass-lightness: 0;
       }
     }
+  }
+
+  dialog[role="alertdialog"] {
+    margin-bottom: 10vh;
   }
 </style>
 <style is:global>

@@ -97,20 +97,20 @@ body {
 
 /* [06] Branded accents */
 :root { 
-  scrollbar-color: var(--color-brand) Canvas;
-  accent-color: var(--color-brand);
-  caret-color: var(--color-brand);
+  scrollbar-color: var(--color-pink-bright) Canvas;
+  accent-color: var(--color-pink-bright);
+  caret-color: var(--color-pink-bright);
  }
-:focus-visible { outline-color: var(--color-brand); }
-::selection { background-color: oklch(from var(--color-brand) l c h / 20%); }
-::marker { color: var(--color-brand); }
+:focus-visible { outline-color: var(--color-pink-bright); }
+::selection { background-color: oklch(from var(--color-pink-bright) l c h / 20%); }
+::marker { color: var(--color-pink-bright); }
 :is(
   ::-webkit-calendar-picker-indicator,
   ::-webkit-clear-button,
   ::-webkit-inner-spin-button, 
   ::-webkit-outer-spin-button
 ) {
-  color: var(--color-brand);
+  color: var(--color-pink-bright);
 }
 
 /* [07] Font Sizes */

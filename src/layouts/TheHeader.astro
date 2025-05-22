@@ -6,7 +6,7 @@ import TheNavigation from '@layouts/TheNavigation.astro';
 
 <header class="py-md px-lg stack stack-xs flex flex-col">
   <a href="/" class="flex items-center gap-3xs" aria-label="Home">
-    <Logo class="logo color-pink-5" width='100%' height='auto'/>
+    <Logo class="logo" width='100%' height='auto'/>
   </a>
 
   <TheNavigation classes='mb-auto'/>
@@ -17,8 +17,8 @@ import TheNavigation from '@layouts/TheNavigation.astro';
 
   @media (prefers-reduced-motion: no-preference) {
     .logo{
-      width: auto;
-      color: var(--color-brand);
+      width: var(--spacing-xl);
+      color: var(--color-pink-bright);
       animation: 
         cyberpunk-glitch 24s step-end infinite,
         skew-glitch 24s step-end infinite;

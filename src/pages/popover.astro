@@ -54,6 +54,21 @@ const {
 
   [role="menuitem"] { width: 100%; justify-content: unset; }
 
+  /**/
+#my-anchor-positioning {
+  anchor-name: --my-anchor-positioning;
+}
+
+#my-target-positioning {
+  position: absolute;
+  width: 10rem;
+  margin: 0;
+  top: anchor(--my-anchor-positioning bottom);
+  left: anchor(--my-anchor-positioning right, 0rem);
+  
+  & :popover-open { display: block;}
+}
+
 </style>
 
 <Layout {title} {description}>
@@ -75,55 +90,59 @@ const {
         This is an informative tooltip.
       </Tooltip>
 
-    <Button 
-      id="new-dropdown" 
-      popovertarget="dd-menu"
-      aria-controls="dd-menu"
-      aria-haspopup="menu"
-      aria-expanded="false"
-      aria-label="Help menu"
-    >
-      ?
-    </Button>
-    <Dropdown id="dd-menu" labelledBy="new-dropdown">
-      <ul role="list" class="my-[0]">
-        <li><Button role="menuitem">Profile</Button></li>
-        <li><Button role="menuitem">Settings</Button></li>
-        <li><Button role="menuitem">Log out</Button></li>
-        <hr>
-        <li><Button role="menuitem">Log out</Button></li>
-      </ul>
-    </Dropdown>
+      <Button 
+        id="new-dropdown" 
+        popovertarget="dd-menu"
+        aria-controls="dd-menu"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-label="Help menu"
+      >
+        ?
+      </Button>
+      <Dropdown id="dd-menu" labelledBy="new-dropdown">
+        <ul role="list" class="my-[0]">
+          <li><Button role="menuitem">Profile</Button></li>
+          <li><Button role="menuitem">Settings</Button></li>
+          <li><Button role="menuitem">Log out</Button></li>
+          <hr>
+          <li><Button role="menuitem">Log out</Button></li>
+        </ul>
+      </Dropdown>
 
-  <div class="py-md bg-surface-3 flex justify-center">
-    <Button
-      id="my-dropdown" 
-      popovertarget="my-menu"
-      aria-controls="my-menu"
-      aria-haspopup="menu"
-      aria-expanded="false"
-      aria-label="Help menu"
-      variant='icon-button'
-      shape='circle'
-    >
-      <Avatar 
-        src={userAvatar} 
-        label="User Avatar" 
-        size="md" 
-        badge="success" 
-      />
-    </Button>
-    <Dropdown id="my-menu" labelledBy="my-dropdown">
-      <ul role="list" class="my-[0]">
-        <li><Button role="menuitem">Profile</Button></li>
-        <li><Button role="menuitem">Settings</Button></li>
-        <li><Button role="menuitem">Log out</Button></li>
-        <hr>
-        <li><Button role="menuitem">Log out</Button></li>
-      </ul>
-    </Dropdown>
-  </div>
-
+      <div class="py-md bg-surface-3 flex justify-center">
+        <Button
+          id="my-dropdown" 
+          popovertarget="my-menu"
+          aria-controls="my-menu"
+          aria-haspopup="menu"
+          aria-expanded="false"
+          aria-label="Help menu"
+          variant='icon-button'
+          shape='circle'
+        >
+          <Avatar 
+            src={userAvatar} 
+            label="User Avatar" 
+            size="md" 
+            badge="success" 
+          />
+        </Button>
+        <Dropdown id="my-menu" labelledBy="my-dropdown">
+          <ul role="list" class="my-[0]">
+            <li><Button role="menuitem">Profile</Button></li>
+            <li><Button role="menuitem">Settings</Button></li>
+            <li><Button role="menuitem">Log out</Button></li>
+            <hr>
+            <li><Button role="menuitem">Log out</Button></li>
+          </ul>
+        </Dropdown>
+      </div>
+    </article>
+    
+    <article class="p-inline-max py-lg stack stack-md">
+      <button id="my-anchor-positioning" popovertarget="my-target-positioning" class="anchor">Anchor</button>
+      <div id="my-target-positioning" class="target" popover>Target</div>
     </article>
   </main>
 </Layout>
