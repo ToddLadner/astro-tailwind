@@ -55,20 +55,61 @@ const {
   [role="menuitem"] { width: 100%; justify-content: unset; }
 
   /**/
-#my-anchor-positioning {
-  anchor-name: --my-anchor-positioning;
+  #my-anchor-positioning {
+    anchor-name: --my-anchor-positioning;
+  }
+
+  #my-target-positioning {
+    position-anchor: --my-anchor-positioning;
+    top: anchor(bottom);
+    left: anchor(right);
+    position: absolute;
+    margin: 0;
+  }
+
+#my-anchor-try-tactics {
+  anchor-name: --my-anchor-try-tactics;
 }
 
-#my-target-positioning {
+#my-anchor-try-tactics-2 {
+  anchor-name: --my-anchor-try-tactics-2;
+}
+
+#my-target-try-tactics {
+  position-anchor: --my-anchor-try-tactics;
+}
+
+#my-target-try-tactics-2 {
+  position-anchor: --my-anchor-try-tactics-2;
+}
+
+#my-target-try-tactics,
+#my-target-try-tactics-2 {
+  margin:0;
   position: absolute;
-  width: 10rem;
-  margin: 0;
-  top: anchor(--my-anchor-positioning bottom);
-  left: anchor(--my-anchor-positioning right, 0rem);
-  
-  & :popover-open { display: block;}
+  bottom: anchor(top);
+  left: anchor(right);
+  position-try-fallbacks: flip-block, flip-inline, flip-start;
 }
 
+.scrollbox {
+      height: 400px;
+      aspect-ratio: 1.5;
+    overflow: scroll;
+    border: thin solid;
+    position: relative;
+}
+.placefiller-above-anchor {
+    height: 150px;
+}
+.placefiller-before-anchor {
+    display: inline-block;
+    width: 150px;
+}
+.placefiller-after-anchor {
+    height: 1000px;
+    width: 1000px;
+}
 </style>
 
 <Layout {title} {description}>
@@ -141,8 +182,35 @@ const {
     </article>
     
     <article class="p-inline-max py-lg stack stack-md">
-      <button id="my-anchor-positioning" popovertarget="my-target-positioning" class="anchor">Anchor</button>
-      <div id="my-target-positioning" class="target" popover>Target</div>
+      <button 
+        id="my-anchor-positioning" 
+        popovertarget="my-target-positioning"
+        class="p-sm"  
+        class="anchor"
+      >
+        Anchor
+      </button>
+      <div 
+        id="my-target-positioning" 
+        class="target p-sm" 
+        popover
+      >
+        Target
+      </div>
+    </article>
+
+    <article>
+      <div class="scrollbox">
+        <div class='placefiller-above-anchor'></div>
+         <div class='placefiller-before-anchor'></div>
+
+          <button id="my-anchor-try-tactics" class="bg-gray-12 anchor">position-try-fallbacks Anchor</button>
+          <div id="my-target-try-tactics" class="bg-red-7 target">Target</div>
+          <button id="my-anchor-try-tactics-2" class="anchor">position-try-fallbacks Anchor 2</button>
+          <div id="my-target-try-tactics-2" class="bg-red-7 target">Target 2</div>
+
+          <div class='placefiller-after-anchor'></div>  
+      </div>
     </article>
   </main>
 </Layout>
