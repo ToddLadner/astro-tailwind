@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+import robot from '@images/funkopop.png';
+
+const { 
+	title = 'My Astro Blog',
+	description = 'My musings about the Astro framework',
+	...rest 
+} = Astro.props;
+---
+
+<style>
+.media-pattern {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3xl);
+}
+
+.media-pattern > :first-child {
+	flex-basis: 400px; 
+  flex-grow: 1;
+}
+
+.media-pattern > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: 30%;
+}
+
+li {padding-block: var(--spacing-3xs);}
+li:not(:last-child) { border-bottom-width: 2px; }
+
+figure {
+	--glass-lightness: 100%;
+
+      background: hsl(0 0% var(--glass-lightness) / 30%);
+      backdrop-filter: blur(6px);
+}
+</style>
+
+<Layout {title} {description}>
+	<main class="p-inline-max bg-yellow-bright stack">
+    <div class="flex flex-wrap py-2xl items-end stack stack-sm">
+			<p class="text-pink-bright text-lg w-full">live and in color</p>
+	    	<h1 class="text-pink-14 text-6xl leading-3xs">Tailwind for UX / UI <br> & Developers</h1>
+	    	<p class="flex flex-col ml-[-4rem] text-right xl:translate-y-[50%]">
+					<span class="text-pink-14">From Todd Ladner</span>
+					<span class="bg-pink-bright text-pink-0 p-3xs rounded-md max-w-[22ch]">Design Engineer, Frontend Fanatic, CSS Whisperer</span>
+				</p>
+		</div>
+		
+		<div class="media-pattern items-center">
+			<figure class="p-lg rounded-2xl m-[0] bg-yellow-0">
+				<Image
+      		src={robot}
+      		alt="descriptive text"
+      		widths={[240, 540, 720, robot.width]}
+      		sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${robot.width}px`}
+    		/>
+			</figure>
+			
+			<div class="text-pink-14 stack stack-3xs">
+				<h2 class="text-pink-14 uppercase">This course is for</h2>
+				<ul role="list" class="mb-md">
+					<li>UX/UI Designers</li>
+					<li>Front End Developers</li>
+					<li>digital professionals in product development</li>
+					<li>Craig</li>
+				</ul>
+
+				<h2 class="text-pink-14 uppercase">Prerequisites</h2>
+				<ul role="list">
+					<li>basic understanding of HTML and CSS</li>
+					<li>basic knowledge of UX methodologies</li>
+				</ul>
+
+				<button>Sign up</button>
+		</div>
+		
+  </main>
+</Layout>
+
+
+<style>
+</style>

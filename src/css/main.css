@@ -100,7 +100,7 @@
   --font-serif: ui-serif, serif;
   --font-mono: Dank Mono, Operator Mono, Inconsolata, Fira Mono, ui-monospace, SF Mono, Monaco, Droid Sans Mono, Source Code Pro, monospace;
 
-  /* [05] Text Sizes */
+  /* [05] Text Sizes | Viewport */
   --text-xs: clamp(0.6944rem, 0.6577rem + 0.1836vi, 0.8rem);      /* 11.1111px → 12.8px */
   --text-sm: clamp(0.8333rem, 0.7754rem + 0.2899vi, 1rem);        /* 13.3333px → 16px */
   --text-md: clamp(1rem, 0.913rem + 0.4348vi, 1.25rem);           /* 16px → 20px */
@@ -109,6 +109,21 @@
   --text-2xl: clamp(1.728rem, 1.4799rem + 1.2407vi, 2.4414rem);   /* 27.648px → 39.0625px */
   --text-3xl: clamp(2.0736rem, 1.7334rem + 1.7011vi, 3.0518rem);  /* 33.1776px → 48.8281px */
   --text-4xl: clamp(2.4883rem, 2.027rem + 2.3067vi, 3.8147rem);   /* 39.8131px → 61.0352px */
+  --text-5xl: clamp(2.986rem, 2.366rem + 3.0998vw, 4.7684rem);    /* 47.7757px → 76.2939px */
+  --text-6xl: clamp(3.5832rem, 2.7563rem + 4.1344vw, 5.9605rem);  /* 57.3309px → 95.3674px */
+  --text-7xl: clamp(4.2998rem, 3.2039rem + 5.4796vw, 7.4506rem);  /* 68.7971px → 119.2093px */
+
+  --text-cq-xs: clamp(0.6944rem, 0.6577rem + 0.1836cqi, 0.8rem);
+  --text-cq-sm: clamp(0.8333rem, 0.7754rem + 0.2899cqi, 1rem);
+  --text-cq-md: clamp(1rem, 0.913rem + 0.4348cqi, 1.25rem);
+  --text-cq-lg: clamp(1.2rem, 1.0739rem + 0.6304cqi, 1.5625rem);
+  --text-cq-xl: clamp(1.44rem, 1.2615rem + 0.8924cqi, 1.9531rem);
+  --text-cq-2xl: clamp(1.728rem, 1.4799rem + 1.2407cqi, 2.4414rem);
+  --text-cq-3xl: clamp(2.0736rem, 1.7334rem + 1.7011cqi, 3.0518rem);
+  --text-cq-4xl: clamp(2.4883rem, 2.027rem + 2.3067cqi, 3.8147rem);
+  --text-cq-5xl: clamp(2.986rem, 2.366rem + 3.0998cqi, 4.7684rem);
+  --text-cq-6xl: clamp(3.5832rem, 2.7563rem + 4.1344cqi, 5.9605rem);
+  --text-cq-7xl: clamp(4.2998rem, 3.2039rem + 5.4796cqi, 7.4506rem);
 
   /* [06] Line height */
   --leading-3xs: 0.95;
@@ -130,29 +145,39 @@
   --tracking-4xl: 1em;
 
   /* [08] Fluid Space */
-  --spacing-3xs: clamp(0.25rem, 0.2283rem + 0.1087vi, 0.3125rem);
-  --spacing-2xs: clamp(0.5rem, 0.4565rem + 0.2174vi, 0.625rem);
-  --spacing-xs: clamp(0.75rem, 0.6848rem + 0.3261vi, 0.9375rem);
-  --spacing-sm: clamp(1rem, 0.913rem + 0.4348vi, 1.25rem);
-  --spacing-md: clamp(1.5rem, 1.3696rem + 0.6522vi, 1.875rem);
-  --spacing-lg: clamp(2rem, 1.8261rem + 0.8696vi, 2.5rem);
-  --spacing-xl: clamp(3rem, 2.7391rem + 1.3043vi, 3.75rem);
-  --spacing-2xl: clamp(4rem, 3.6522rem + 1.7391vi, 5rem);
-  --spacing-3xl: clamp(6rem, 5.4783rem + 2.6087vi, 7.5rem);
+  --spacing-3xs: clamp(0.25rem, 0.2283rem + 0.1087vw, 0.3125rem);
+  --spacing-2xs: clamp(0.5rem, 0.4565rem + 0.2174vw, 0.625rem);
+  --spacing-xs: clamp(0.75rem, 0.6848rem + 0.3261vw, 0.9375rem);
+  --spacing-sm: clamp(1rem, 0.913rem + 0.4348vw, 1.25rem);
+  --spacing-md: clamp(1.5rem, 1.3696rem + 0.6522vw, 1.875rem);
+  --spacing-lg: clamp(2rem, 1.8261rem + 0.8696vw, 2.5rem);
+  --spacing-xl: clamp(3rem, 2.7391rem + 1.3043vw, 3.75rem);
+  --spacing-2xl: clamp(4rem, 3.6522rem + 1.7391vw, 5rem);
+  --spacing-3xl: clamp(6rem, 5.4783rem + 2.6087vw, 7.5rem);
+
+  --spacing-3xs: clamp(0.25rem, 0.2283rem + 0.1087vw, 0.3125rem);
+  --spacing-2xs: clamp(0.5rem, 0.4565rem + 0.2174vw, 0.625rem);
+  --spacing-xs: clamp(0.75rem, 0.6848rem + 0.3261vw, 0.9375rem);
+  --spacing-sm: clamp(1rem, 0.913rem + 0.4348vw, 1.25rem);
+  --spacing-md: clamp(1.5rem, 1.3696rem + 0.6522vw, 1.875rem);
+  --spacing-lg: clamp(2rem, 1.8261rem + 0.8696vw, 2.5rem);
+  --spacing-xl: clamp(3rem, 2.7391rem + 1.3043vw, 3.75rem);
+  --spacing-2xl: clamp(4rem, 3.6522rem + 1.7391vw, 5rem);
+  --spacing-3xl: clamp(6rem, 5.4783rem + 2.6087vw, 7.5rem);
 
   /* [09] Fluid Space | One-up pairs */
-  --spacing-3xs-2xs: clamp(0.25rem, 0.1196rem + 0.6522vi, 0.625rem);
-  --spacing-2xs-xs: clamp(0.5rem, 0.3478rem + 0.7609vi, 0.9375rem);
-  --spacing-xs-sm: clamp(0.75rem, 0.5761rem + 0.8696vi, 1.25rem);
-  --spacing-sm-md: clamp(1rem, 0.6957rem + 1.5217vi, 1.875rem);
-  --spacing-md-lg: clamp(1.5rem, 1.1522rem + 1.7391vi, 2.5rem);
-  --spacing-lg-xl: clamp(2rem, 1.3913rem + 3.0435vi, 3.75rem);
-  --spacing-xl-2xl: clamp(3rem, 2.3043rem + 3.4783vi, 5rem);
-  --spacing-2xl-3xl: clamp(4rem, 2.7826rem + 6.087vi, 7.5rem);
+  --spacing-3xs-2xs: clamp(0.25rem, 0.1196rem + 0.6522vw, 0.625rem);
+  --spacing-2xs-xs: clamp(0.5rem, 0.3478rem + 0.7609vw, 0.9375rem);
+  --spacing-xs-sm: clamp(0.75rem, 0.5761rem + 0.8696vw, 1.25rem);
+  --spacing-sm-md: clamp(1rem, 0.6957rem + 1.5217vw, 1.875rem);
+  --spacing-md-lg: clamp(1.5rem, 1.1522rem + 1.7391vw, 2.5rem);
+  --spacing-lg-xl: clamp(2rem, 1.3913rem + 3.0435vw, 3.75rem);
+  --spacing-xl-2xl: clamp(3rem, 2.3043rem + 3.4783vw, 5rem);
+  --spacing-2xl-3xl: clamp(4rem, 2.7826rem + 6.087vw, 7.5rem);
 
   /* [10] Fluid Space | Custom pairs */
   --spacing-sm-md: clamp(1rem, 0.6957rem + 1.5217vw, 1.875rem);
-  --spacing-sm-lg: clamp(1rem, 0.4783rem + 2.6087vi, 2.5rem);
+  --spacing-sm-lg: clamp(1rem, 0.4783rem + 2.6087vw, 2.5rem);
   --spacing-sm-xl: clamp(1rem, 0.0435rem + 4.7826vw, 3.75rem);
   --spacing-sm-2xl: clamp(1rem, -0.3913rem + 6.9565vw, 5rem);
 
@@ -697,8 +722,10 @@
 
 /* [36] The Stack */
 @utility stack {
+  --space: 1em;
+
   > * { margin-block: 0; }
-  > * + * { margin-block-start: var(--space, 1em); }
+  > * + * { margin-block-start: var(--space); }
 }
 
 @utility stack-* {
@@ -709,14 +736,22 @@
 
 /* [37] Ram Grid */
 @utility grid-ram {
+  --grid-col: auto-fit;
+  --col-min: 2rem;
+  --col-max: 1fr;
+  
 	display: grid; 
-	grid-template-columns: repeat(var(--grid-col, auto-fit), minmax(var(--col-min, 2rem), var(--col-max, 1fr))) 
+	grid-template-columns: repeat(var(--grid-col), minmax(var(--col-min), var(--col-max))) 
 }
 
 /* [38] 12 column Grid */
-@utility grid-col { 
-  grid-template-columns: repeat(var(--grid-col, 12), 1fr); 
-  gap: var(--col-gap, 0) var(--row-gap, var(--space-sm-lg));
+@utility grid-col {
+  --grid-col: 12;
+  --grid-gutter: var(--spacing-sm-lg, clamp(1rem, 0.4783rem + 2.6087vw, 2.5rem));
+  
+  display: grid;
+  grid-template-columns: repeat(var(--grid-col), 1fr); 
+  gap: var(--grid-gutter);
 }
 
 /* [39] Pile Grid */
@@ -759,7 +794,7 @@
 @utility square {
   border-radius: var(--radius-0);
 }
-/* Circle & Pill | Use for both  */
+/* Circle & Pill */
 @utility ellipse {
   border-radius: var(--radius-ellipse); 
 }
