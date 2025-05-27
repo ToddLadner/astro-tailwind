@@ -36,21 +36,27 @@ li {
 }
 li:not(:last-child) { border-bottom-width: 2px; }
 
+/* figure {
+	--glass-lightness: 100%;
+
+      background: hsl(0 0% var(--glass-lightness) / 30%);
+      backdrop-filter: blur(6px);
+} */
 </style>
 
 <Layout {title} {description}>
-	<main class="">
-    <div class="">
-			<p class="">live and in color</p>
-	    	<h1 class="">Tailwind for UX / UI <br> & Developers</h1>
-	    	<p class="">
-					<span class="">From Todd Ladner</span>
-					<span class="">Design Engineer, Frontend Fanatic, CSS Whisperer</span>
+	<main class="p-inline-max bg-yellow-bright stack">
+    <div class="flex flex-wrap py-2xl items-end stack stack-sm">
+			<p class="text-pink-bright text-lg w-full">live and in color</p>
+	    	<h1 class="text-pink-14 text-6xl leading-3xs">Tailwind for UX / UI <br> & Developers</h1>
+	    	<p class="flex flex-col ml-[-4rem] text-right ml-[-7%] translate-y-[50%]">
+					<span class="text-pink-14">From Todd Ladner</span>
+					<span class="bg-pink-bright text-pink-0 p-3xs rounded-md max-w-[22ch]">Design Engineer, Frontend Fanatic, CSS Whisperer</span>
 				</p>
 		</div>
 		
-		<div class="">
-			<figure class="" style="">
+		<div class="media-pattern items-center">
+			<figure class="p-lg rounded-2xl m-[0]" style="background-color:oklch(from var(--color-yellow-0) l c h / 25% )">
 				<Image
       		src={robot}
       		alt="descriptive text"
@@ -59,22 +65,22 @@ li:not(:last-child) { border-bottom-width: 2px; }
     		/>
 			</figure>
 			
-			<div class="">
-				<h2 class="">This course is for</h2>
-				<ul role="list" class="">
+			<div class="flex flex-col text-pink-14 stack stack-3xs">
+				<h2 class="text-pink-14 uppercase">This course is for</h2>
+				<ul role="list" class="mb-md">
 					<li>UX/UI Designers</li>
 					<li>Front End Developers</li>
 					<li>digital professionals in product development</li>
 					<li>Craig</li>
 				</ul>
 
-				<h2 class="">Prerequisites</h2>
+				<h2 class="text-pink-14 uppercase">Prerequisites</h2>
 				<ul role="list">
 					<li>basic understanding of HTML and CSS</li>
 					<li>basic knowledge of UX methodologies</li>
 				</ul>
 
-				<Button size='lg' classes="" style="">Sign up</Button>
+				<Button size='lg' classes="ml-auto mt-lg" style="--bg-color: var(--color-pink-bright); color: var(--color-pink-0);">Sign up</Button>
 			</div>
 		</div>
   </main>

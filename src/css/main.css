@@ -736,7 +736,7 @@
 
 /* [37] Ram Grid */
 @utility grid-ram {
-  --grid-col: auto-fit;
+  --grid-col: auto-fit; 
   --col-min: 2rem;
   --col-max: 1fr;
   
