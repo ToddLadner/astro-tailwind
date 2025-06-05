@@ -20,7 +20,7 @@ const {
 	    <p>This color scheme and font represents your brand.</p>
 	
 	    <h2 class="text-md">Theme colors</h2>
-	    <ul role="list" class="pallette theme scroll-x-overflow" style="--overflow-space: 0;">
+	    <ul role="list" class="palette theme scroll-x-overflow" style="--overflow-space: 0;">
         <li>
           <span class="swatch bg-brand-4"></span>
           <span>--brand-1</span>
@@ -49,7 +49,7 @@ const {
 
 	    <h2 class="text-md">Grayscale</h2>
       
-      <ul role="list" class="flex	pallette grayscale">
+      <ul role="list" class="flex	palette grayscale">
         <li>
           <span class="swatch bg-surface-1"></span>
           <span>--surface-1</span>
@@ -70,7 +70,7 @@ const {
 
 	    <h2 class="text-md">Text</h2>
       
-      <ul role="list" class="flex	pallette text">
+      <ul role="list" class="flex	palette text">
         <li>
           <span class="swatch bg-text-1"></span>
           <span>--text-1</span>
@@ -82,7 +82,7 @@ const {
       </ul>
 
 	<h2 class="text-md">Alert Colors</h2>
-	<ul role="list" class="flex	pallette alert">
+	<ul role="list" class="flex	palette alert">
 		<li>
 			<span class="swatch bg-danger"></span>
 			<span>--danger</span>
@@ -101,7 +101,7 @@ const {
 		</li>
 	</ul>
 
-	<div class="nested-pallette">
+	<div class="nested-palette">
 		<div style="background-color: var(--color-surface-1)">
 			<span>var(--surface-1)</span>
 			<div style="background-color: var(--color-surface-2)">
@@ -215,7 +215,7 @@ const {
 		border: 1px solid var(--surface-2);
 	}
 	
-	.pallette {
+	.palette {
 		/* Stack space */
 		--space: var(--spacing-xs);
 		display: flex;
@@ -228,12 +228,12 @@ const {
 		gap: var(--spacing-xs);
 	}
 
-	.nested-pallette { 
+	.nested-palette { 
 		max-width: 55%;
 		background-color: var(--color-surface-0); 
 		border-radius: var(--radius-md);
 	}
-	.nested-pallette div {
+	.nested-palette div {
 		padding: var(--spacing-xs);
 		margin: var(--spacing-sm);
 		border-radius: var(--radius-md);
