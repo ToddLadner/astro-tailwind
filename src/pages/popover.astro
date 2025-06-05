@@ -17,12 +17,19 @@ const {
 ---
 
 <style>
-  #new-dropdown { anchor-name: --question; }
-  #dd-menu {
+  #new-dropdown { anchor-name: --question, --my-tipanchor; }
+  #new-menu {
     position-anchor: --question;
     position-area: bottom center;
   } 
-
+  #tooltip-info {
+    position-anchor: --my-tipanchor;
+    position-area: top;
+    /* position-try: flip-block, flip-inline;  */
+    position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
+  } 
+  
+  /* Avatar */
   #my-dropdown { anchor-name: --avatar; }
   #my-menu {
     position-anchor: --avatar;
@@ -35,14 +42,15 @@ const {
   @position-try --bottom-left { position-area: bottom left; }
   @position-try --top-center { position-area: top center; }
   @position-try --bottom-right { position-area: bottom right; }
-  /* Tooltip */
-  #info-btn { anchor-name: --my-tipanchor; }
-  #tooltip-info {
-    position-anchor: --my-tipanchor;
-    position-area: bottom;
-    /* position-try: flip-block, flip-inline;  */
-    position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
-  } 
+  
+
+  /* Click me */
+  #click-btn { anchor-name: --click-btn; }
+  #click-menu {
+    position-anchor: --click-btn;
+    position-area: bottom center;
+  }   
+
 
  
 
@@ -116,20 +124,22 @@ const {
       <p>Components</p>
       <h2>Dropdown</h2>
       <p>A minimally styled window overlaid on the Main Content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
-
       
-
+      <!-- Button & Tooltip -->
       <Button 
         id="new-dropdown" 
-        popovertarget="dd-menu"
-        aria-controls="dd-menu"
+        popovertarget="new-menu"
+        aria-controls="new-menu"
         aria-haspopup="menu"
         aria-expanded="false"
         aria-label="Help menu"
       >
         ?
       </Button>
-      <Dropdown id="dd-menu" labelledBy="new-dropdown">
+      <Tooltip id="tooltip-info" for="new-dropdown">
+        This is an informative tooltip.
+      </Tooltip>
+      <Dropdown id="new-menu" labelledBy="new-dropdown">
         <ul role="list" class="my-[0]">
           <li><Button role="menuitem">Profile</Button></li>
           <li><Button role="menuitem">Settings</Button></li>
@@ -138,6 +148,7 @@ const {
           <li><Button role="menuitem">Log out</Button></li>
         </ul>
       </Dropdown>
+       <!-- /Button & Tooltip -->
 
       <div class="py-md bg-surface-3 flex justify-center">
         <Button
@@ -170,10 +181,21 @@ const {
     </article>
 
     <article class="p-inline-max py-lg stack stack-md">
-      <span id="info-btn">Hover me</span>
-      <Tooltip id="tooltip-info" for="info-btn">
-        This is an informative tooltip.
-      </Tooltip>
+      <Button 
+        id="click-btn"  
+        popovertarget="click-menu"
+      >
+        Click me
+      </Button>
+      <Dropdown id="click-menu" labelledBy="click-btn">
+        <ul role="list" class="my-[0]">
+          <li><Button role="menuitem">Profile</Button></li>
+          <li><Button role="menuitem">Settings</Button></li>
+          <li><Button role="menuitem">Log out</Button></li>
+          <hr>
+          <li><Button role="menuitem">Log out</Button></li>
+        </ul>
+      </Dropdown>
     </article>
     
     <article class="p-inline-max py-lg stack stack-md">
