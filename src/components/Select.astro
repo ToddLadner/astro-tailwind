@@ -1,6 +1,11 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
+interface Option {
+  value: string;
+  label: string;
+}
+
 interface Props extends HTMLAttributes<'select'> {
   label: string;
   uid?: string;
