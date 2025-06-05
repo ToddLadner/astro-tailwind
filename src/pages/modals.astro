@@ -3,6 +3,11 @@ import Layout from '@layouts/Layout.astro';
 import Dialog from '@components/Dialog.astro';
 import Button from '@components/Button.astro';
 
+import { Image } from 'astro:assets';
+
+import popoverRoles from '@images/popover-roles.webp';
+import dialogRoles from '@images/dialog-roles.webp';
+
 const { 
 	title = "My Astro Blog",
 	description = "My musings about the Astro framework",
@@ -18,29 +23,60 @@ const {
     </article>
 
     <article class="p-inline-max py-lg stack stack-md">
+      <p>Components</p>
+      
+      <h2>Modal vs Non-Modal</h2>
+      <p>The term "modal" and "dialog" are often used interchangeably, but there's an important difference. A modal window describes parts of a UI that blocks user interaction. A dialog doesn't have to be blocking.</p>
+      <p>A minimally styled window overlaid on the main content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
+      
+      <Button onclick="myDialog.showModal()">Open 'Modal' dialog</Button>
+      <Button onclick="myOtherDialog.show()">Open 'Non-Modal' dialog</Button>
+    
+      <p><a href="https://modalzmodalzmodalz.com/">Not everyone likes modality</a> — as a UI concept, they are very disruptive. Use the pattern sparsely, only when disrupting is very much necessary. If you want to ask the user “Are you sure you want to delete all that?”, go ahead and make it disruptive. If you want to promote your newsletter sign-up or advertising, the disruption is unlikely to be appreciated.</p>
+      <p>In terms of implementation, you will need to make everything except your modal element inert. The <code>&lt;dialog&gt;</code> element (used with showModal()) does this for and would be the best to use.</p>
+      
+      <h2>Focus Trapping</h2>
+      <p>The ability of the dialog element to be opened in a modal state and thus trap focus inside of it is a superpower of this element. It is unique to the dialog element, popovers cannot do this (on their own).</p>
+      <p>Focus trapping, while it sounds kinda bad, is actually an accessibility feature. After all, that’s what a modal is: it forces you to deal with some interaction before anything else can be done. It’s actually also a WCAG requirement to not trap focus when you shouldn’t, but in the case of a modal, you should be trapping focus — as well as providing a standard way to close the dialog and escape the trap.</p>
+    
+      <h2>Moving Focus</h2>
+      <p>When a dialog is opened (either modal or non-modal), focus is moved to the first focusable element within it. When it is closed, focus is moved back to the element that opened it.</p> 
+      <p>With a popover, focus remains on the element that opened it even after the popup is opened. However, after the popup is open, the next tab will put focus into the popup’s content if there is any in there, regardless of where it is in the DOM, tab through the focusable elements of the popup, then onto other focusable elements outside the popup after the original element that opened it.</p>
+      <p>This is all tricky work that you get for free by using the <code>&lt;dialog&gt;</code> element or popups and frankly a huge reason to use them 👍.</p>
+    </article>
 
-    <p>Components</p>
-    
-    <h2>Modal vs Non-Modal</h2>
-    <p>The term "modal" and "dialog" are often used interchangeably, but there's an important difference. A modal window describes parts of a UI that blocks user interaction. A dialog doesn't have to be blocking.</p>
-    <p>A minimally styled window overlaid on the main content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
-    
-    <Button onclick="myDialog.showModal()">Open 'Modal' dialog</Button>
-    <Button onclick="myOtherDialog.show()">Open 'Non-Modal' dialog</Button>
-  
-    <p><a href="https://modalzmodalzmodalz.com/">Not everyone likes modality</a> — as a UI concept, they are very disruptive. Use the pattern sparsely, only when disrupting is very much necessary. If you want to ask the user “Are you sure you want to delete all that?”, go ahead and make it disruptive. If you want to promote your newsletter sign-up or advertising, the disruption is unlikely to be appreciated.</p>
+    <article class="p-inline-max py-lg stack stack-md">
+      <h2>Distinguishing Popovers From Dialogs</h2>
+      <p>Let’s pull back on the technical implementations and consider the greater picture that makes more sense and puts everything into perspective.</p>
+      <Image src={dialogRoles} alt="A bird sitting on a nest of eggs." />
+      <p>The reason for this categorization comes from a couple of noteworthy points.</p>
+      <p>First, we know that a popover is content that “pops” up when a user clicks a button (or hovers over it, or focuses on it). In the ARIA world, there is a useful attribute called aria-haspopup that categorizes such popups into five different roles:</p>
+      <ul>
+        <li>menu</li>
+        <li>listbox</li>
+        <li>tree</li>
+        <li>grid</li>
+        <li>dialog</li>
+      </ul>
+      <p>By virtue of dialog being on this list, we already know that dialog is a type of popover. But there’s more evidence behind this too.</p>
+      
+      <h2>The Three Types of Dialogues</h2>
+      <p>Since we’re already talking about the dialog role, let’s further expand that into its subcategories:</p>
+      <Image src={popoverRoles} alt="A bird sitting on a nest of eggs." />
+      <p>Dialogs can be categorized into three main kinds:</p>
+      <ul>
+        <li>Modal: A dialog with an overlay and focus trapping</li>
+        <li>Non-Modal: A dialog with neither an overlay nor focus trapping</li>
+        <li>Alert Dialog: A dialog that alerts screen readers when shown. It can be either modal or non-modal.</li>
+      </ul>
 
-    <p>In terms of implementation, you will need to make everything except your modal element inert. The <dialog> element (used with showModal()) does this for and would be the best to use.</p>
-    <h2>Focus Trapping</h2>
-    <p>The ability of the dialog element to be opened in a modal state and thus trap focus inside of it is a superpower of this element. It is unique to the dialog element, popovers cannot do this (on their own).</p>
-    <p>Focus trapping, while it sounds kinda bad, is actually an accessibility feature. After all, that’s what a modal is: it forces you to deal with some interaction before anything else can be done. It’s actually also a WCAG requirement to not trap focus when you shouldn’t, but in the case of a modal, you should be trapping focus — as well as providing a standard way to close the dialog and escape the trap.</p>
-  
-    <h2>Moving Focus</h2>
-    When a dialog is opened (either modal or non-modal), focus is moved to the first focusable element within it. When it is closed, focus is moved back to the element that opened it.
-    
-    With a popover, focus remains on the element that opened it even after the popup is opened. However, after the popup is open, the next tab will put focus into the popup’s content if there is any in there, regardless of where it is in the DOM, tab through the focusable elements of the popup, then onto other focusable elements outside the popup after the original element that opened it.
-    
-    This is all tricky work that you get for free by using the <dialog> element or popups and frankly a huge reason to use them 👍.
+      <p>This brings us to another reason why a dialog is considered a popover.</p>
+      <p>Some people may say that popovers are strictly non-modal, but this seems to be a major misunderstanding — because popovers have a ::backdrop pseudo-element on the top layer. The presence of ::backdrop indicates that popovers are modal. Quoting the <a href="https://css-tricks.com/almanac/pseudo-selectors/b/backdrop/">CSS-Tricks almanac</a>:</p>
+      <blockquote>
+        <p>The ::backdrop CSS pseudo-element creates a backdrop that covers the entire viewport and is rendered immediately below a [dialog], an element with the popup attribute, or any element that enters fullscreen mode using the Fullscreen API.</p>
+      </blockquote>
+      <p>That said, I don’t recommend using the Popover API for modality because it doesn’t have a showModal() method (that [dialog] has) that creates inertness, focus trapping, and other necessary features to make it a real modal. If you only use the Popover API, you’ll need to build those features from scratch.</p>
+      <p>So, the fact that popovers can be modal means that a dialog is simply one kind of popover.</p>
     </article>
   </main>
 </Layout>
