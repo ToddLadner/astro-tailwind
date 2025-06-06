@@ -1,0 +1,15 @@
+---
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+const { params } = Astro;
+const posts = await Astro.glob('../*.mdx');
+const filtered = posts.filter(p => (p.frontmatter.tags || []).map(t => t.toLowerCase()).includes(params.tag.toLowerCase()));
+---
+
+<BlogLayout title={`Tag: ${params.tag}`} description={`Posts tagged ${params.tag}`}>
+  <h1>Tag: {params.tag}</h1>
+  <ul>
+    {filtered.map(post => (
+      <li><a href={post.url}>{post.frontmatter.title}</a></li>
+    ))}
+  </ul>
+</BlogLayout>

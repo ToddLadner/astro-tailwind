@@ -1,0 +1,16 @@
+---
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+const posts = await Astro.glob('../*.mdx');
+const tagSet = new Set();
+posts.forEach(p => (p.frontmatter.tags || []).forEach(t => tagSet.add(t)));
+const tags = [...tagSet];
+---
+
+<BlogLayout title="Tags" description="Blog tags">
+  <h1>Tags</h1>
+  <ul>
+    {tags.map(tag => (
+      <li><a href={`./${tag.toLowerCase()}/`}>{tag}</a></li>
+    ))}
+  </ul>
+</BlogLayout>
