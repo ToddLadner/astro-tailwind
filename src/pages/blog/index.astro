@@ -1,11 +1,12 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
-const posts = await Astro.glob('./*.mdx');
-posts.sort((a, b) => new Date(b.frontmatter.pubDate) - new Date(a.frontmatter.pubDate));
+import { getCollection } from 'astro:content';
+const posts = await getCollection('blog');
+posts.sort((a, b) => new Date(b.data.pubDate) - new Date(a.data.pubDate));
 
-const categories = Array.from(new Set(posts.map(p => p.frontmatter.category)));
+const categories = Array.from(new Set(posts.map(p => p.data.category)));
 const tagSet = new Set();
-posts.forEach(p => (p.frontmatter.tags || []).forEach(t => tagSet.add(t)));
+posts.forEach(p => (p.data.tags || []).forEach(t => tagSet.add(t)));
 const tags = [...tagSet];
 ---
 
@@ -14,8 +15,8 @@ const tags = [...tagSet];
   <ul>
     {posts.map(post => (
       <li>
-        <a href={post.url}>{post.frontmatter.title}</a>
-        <p>{post.frontmatter.description}</p>
+        <a href={`./${post.slug}/`}>{post.data.title}</a>
+        <p>{post.data.description}</p>
       </li>
     ))}
   </ul>
