@@ -124,22 +124,14 @@ const {
       <p>Components</p>
       <h2>Dropdown</h2>
       <p>A minimally styled window overlaid on the Main Content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
-      
-      <!-- Button & Tooltip -->
+
       <Button 
-        id="new-dropdown" 
-        popovertarget="new-menu"
-        aria-controls="new-menu"
-        aria-haspopup="menu"
-        aria-expanded="false"
-        aria-label="Help menu"
+        id="click-btn"  
+        popovertarget="click-menu"
       >
-        ?
+        Click me
       </Button>
-      <Tooltip id="tooltip-info" for="new-dropdown">
-        This is an informative tooltip.
-      </Tooltip>
-      <Dropdown id="new-menu" labelledBy="new-dropdown">
+      <Dropdown id="click-menu" labelledBy="click-btn">
         <ul role="list" class="my-[0]">
           <li><Button role="menuitem">Profile</Button></li>
           <li><Button role="menuitem">Settings</Button></li>
@@ -148,7 +140,6 @@ const {
           <li><Button role="menuitem">Log out</Button></li>
         </ul>
       </Dropdown>
-       <!-- /Button & Tooltip -->
 
       <div class="py-md bg-surface-3 flex justify-center">
         <Button
@@ -181,13 +172,21 @@ const {
     </article>
 
     <article class="p-inline-max py-lg stack stack-md">
+      <!-- Button & Tooltip -->
       <Button 
-        id="click-btn"  
-        popovertarget="click-menu"
+        id="new-dropdown" 
+        popovertarget="new-menu"
+        aria-controls="new-menu"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-label="Help menu"
       >
-        Click me
+        ?
       </Button>
-      <Dropdown id="click-menu" labelledBy="click-btn">
+      <Tooltip id="tooltip-info" for="new-dropdown">
+        This is an informative tooltip.
+      </Tooltip>
+      <Dropdown id="new-menu" labelledBy="new-dropdown">
         <ul role="list" class="my-[0]">
           <li><Button role="menuitem">Profile</Button></li>
           <li><Button role="menuitem">Settings</Button></li>
@@ -196,6 +195,7 @@ const {
           <li><Button role="menuitem">Log out</Button></li>
         </ul>
       </Dropdown>
+      <!-- /Button & Tooltip -->
     </article>
     
     <article class="p-inline-max py-lg stack stack-md">
