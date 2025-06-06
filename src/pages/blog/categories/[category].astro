@@ -4,6 +4,12 @@ import { getCollection } from 'astro:content';
 const { params } = Astro;
 const posts = await getCollection('blog');
 const filtered = posts.filter(p => p.data.category.toLowerCase() === params.category.toLowerCase());
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const categories = Array.from(new Set(posts.map(p => p.data.category)));
+  return categories.map(category => ({ params: { category: category.toLowerCase() } }));
+}
 ---
 
 <BlogLayout title={`Category: ${params.category}`} description={`Posts in ${params.category}`}>

@@ -4,6 +4,13 @@ import { getCollection } from 'astro:content';
 const { params } = Astro;
 const posts = await getCollection('blog');
 const filtered = posts.filter(p => (p.data.tags || []).map(t => t.toLowerCase()).includes(params.tag.toLowerCase()));
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const tagSet = new Set();
+  posts.forEach(p => (p.data.tags || []).forEach(t => tagSet.add(t.toLowerCase())));
+  return Array.from(tagSet).map(tag => ({ params: { tag } }));
+}
 ---
 
 <BlogLayout title={`Tag: ${params.tag}`} description={`Posts tagged ${params.tag}`}>
