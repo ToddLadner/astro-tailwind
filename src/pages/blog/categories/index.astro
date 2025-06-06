@@ -1,0 +1,14 @@
+---
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+const posts = await Astro.glob('../*.mdx');
+const categories = Array.from(new Set(posts.map(p => p.frontmatter.category)));
+---
+
+<BlogLayout title="Categories" description="Blog categories">
+  <h1>Categories</h1>
+  <ul>
+    {categories.map(cat => (
+      <li><a href={`./${cat.toLowerCase()}/`}>{cat}</a></li>
+    ))}
+  </ul>
+</BlogLayout>

@@ -1,0 +1,10 @@
+---
+import Layout from './Layout.astro';
+const { title = 'Blog', description = 'Blog posts' } = Astro.props;
+---
+
+<Layout {title} {description}>
+  <main class="p-inline-max py-lg stack stack-md">
+    <slot />
+  </main>
+</Layout>
