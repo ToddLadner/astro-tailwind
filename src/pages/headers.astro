@@ -24,159 +24,48 @@ a {
 </style>
 
 <Layout {title} {description}>
-  <main class="p-inline-max pt-lg bg-surface-2 stack">
-    <p>Components</p>
-    <h1>Headers</h1>
+  <main class="bg-surface-2">
+    <article class="p-inline-max py-2xl stack stack-md">
+      <p>Components</p>
+      <h1>Headers</h1>
 
-    <header class="flex items-center justify-between px-lg py-sm bg-surface-0">
-      <a href="#" class="font-bold text-xl">LOGO</a>
-      <nav class="nav">
-        <button class="hidden" aria-expanded="false" type="button">
-          menu
-        </button>
-        <ul role="list" class="flex gap-3xs m-[0] font-bold">
-          <li><a href="#" class="py-2xs px-sm">Home</a></li>
-          <li><a href="#" class="py-2xs px-sm">About</a></li>
-          <li><a href="#" class="py-2xs px-sm">Services</a></li>
-          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
-          <li>
-            <Button
-              variant='icon-button'
-              icon='magnifying-glass-solid' 
-              aria-label="search button"
-              style="color: black"
-            />
-          </li>
-        </ul>
-      </nav>
-    </header>
+      <header class="flex items-center justify-between px-lg py-sm bg-surface-0">
+        <a href="#" class="font-bold text-xl">LOGO</a>
+        <nav class="nav">
+          <button class="hidden" aria-expanded="false" type="button">
+            menu
+          </button>
+          <ul role="list" class="flex gap-3xs m-[0] font-bold">
+            <li><a href="#" class="py-2xs px-sm">Home</a></li>
+            <li><a href="#" class="py-2xs px-sm">About</a></li>
+            <li><a href="#" class="py-2xs px-sm">Services</a></li>
+            <li><a href="#" class="py-2xs px-sm">Contact</a></li>
+            <li>
+              <Button
+                variant='icon-button'
+                icon='magnifying-glass-solid' 
+                aria-label="search button"
+                style="color: black"
+              />
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-    <header class="flex gap-md items-center px-lg py-sm bg-surface-0">
-      <a href="#" class="font-bold text-xl">LOGO</a>
-      <nav class="nav">
-        <button class="hidden" aria-expanded="false" type="button">
-          menu
-        </button>
-        <ul role="list" class="flex gap-3xs m-[0] font-bold">
-          <li><a href="#" class="py-2xs px-sm">Home</a></li>
-          <li><a href="#" class="py-2xs px-sm">About</a></li>
-          <li><a href="#" class="py-2xs px-sm">Services</a></li>
-          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
-        </ul>
-      </nav>
-      <search class="ml-auto">
-        <form action="./search/" >
-          <label for="search" class="sr-only">Accessible name</label>
-          <input type="search" id="search" name="q" />
-          <Button
-            variant='icon-button'
-            type='submit'
-            icon='magnifying-glass-solid' 
-            aria-label="search button"
-            style="color: black"
-          />
-        </form>
-      </search>  
-    </header>
-
-    <header class="flex gap-md items-center px-lg py-sm bg-surface-0">
-      <a href="#" class="font-bold text-xl">LOGO</a>
-
-      <nav class="mx-auto">
-        <button class="hidden" aria-expanded="false" type="button">
-          menu
-        </button>
-        <ul role="list" class="flex gap-3xs m-[0] font-bold">
-          <li><a href="#" class="py-2xs px-sm">Home</a></li>
-          <li><a href="#" class="py-2xs px-sm">About</a></li>
-          <li><a href="#" class="py-2xs px-sm">Services</a></li>
-          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="flex gap-3xs">
-        <Button
-          variant='icon-button'
-          icon='magnifying-glass-solid' 
-          aria-label="search button"
-          style="color: black"
-        />
-        <Button
-          variant='icon-button'
-          icon='user-bounty-hunter-regular' 
-          aria-label="user button"
-          style="color: black"
-        />
-        <Button
-          variant='icon-button'
-          icon='cart-shopping-regular' 
-          aria-label="cart button"
-          style="color: black"/>
-
-      </div>
-    </header>
-
-    <header class="grid-pile items-center justify-items-center  px-lg py-sm bg-surface-0">
-      <nav class="">
-        <button class="hidden" aria-expanded="false" type="button">
-          menu
-        </button>
-        <ul role="list" class="flex gap-3xs m-[0] font-bold items-center">
-          <li><a href="#" class="py-2xs px-sm">About</a></li>
-          <li><a href="#" class="py-2xs px-sm">Portfolio</a></li>
-
-          <li class="justify-self-center mx-lg">
-            <a href="#" class="font-bold text-xl">LOGO</a>
-          </li>
-          
-          <li><a href="#" class="py-2xs px-sm">Services</a></li>
-          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
-          <li> 
-            <Button
-              variant='icon-button'
-              icon='magnifying-glass-solid' 
-              aria-label="search button"
-              style="color: black"
-            />
-          </li>
-        </ul>
-      </nav>
-
-     
-
-      
-    </header>
-
-    <header class="flex items-center justify-between px-lg py-sm bg-surface-0">
-      <nav class="nav">
-        <Button
-        variant='icon-button'
-        icon='bars-regular' 
-        aria-label="search button"
-        style="color: black"
-      />
-        <ul role="list" class="flex gap-3xs m-[0] font-bold hidden">
-          <li><a href="#" class="py-2xs px-sm">Home</a></li>
-          <li><a href="#" class="py-2xs px-sm">About</a></li>
-          <li><a href="#" class="py-2xs px-sm">Services</a></li>
-          <li><a href="#" class="py-2xs px-sm">Contact</a></li>
-        </ul>
-      </nav>
-      
-      <a href="#" class="font-bold text-xl">LOGO</a>
-
-      <Button
-        variant='icon-button'
-        icon='magnifying-glass-solid' 
-        aria-label="search button"
-        style="color: black"
-      />
-
-    </header>
-
-    <header class="  bg-surface-0">
-      <div class="flex items-center justify-between px-lg py-sm">
-        <search >
+      <header class="flex gap-md items-center px-lg py-sm bg-surface-0">
+        <a href="#" class="font-bold text-xl">LOGO</a>
+        <nav class="nav">
+          <button class="hidden" aria-expanded="false" type="button">
+            menu
+          </button>
+          <ul role="list" class="flex gap-3xs m-[0] font-bold">
+            <li><a href="#" class="py-2xs px-sm">Home</a></li>
+            <li><a href="#" class="py-2xs px-sm">About</a></li>
+            <li><a href="#" class="py-2xs px-sm">Services</a></li>
+            <li><a href="#" class="py-2xs px-sm">Contact</a></li>
+          </ul>
+        </nav>
+        <search class="ml-auto">
           <form action="./search/" >
             <label for="search" class="sr-only">Accessible name</label>
             <input type="search" id="search" name="q" />
@@ -188,14 +77,28 @@ a {
               style="color: black"
             />
           </form>
-        </search>
+        </search>  
+      </header>
 
-        <a href="#" class="font-bold text-xl mx-auto">LOGO</a>
+      <header class="flex gap-md items-center px-lg py-sm bg-surface-0">
+        <a href="#" class="font-bold text-xl">LOGO</a>
+
+        <nav class="mx-auto">
+          <button class="hidden" aria-expanded="false" type="button">
+            menu
+          </button>
+          <ul role="list" class="flex gap-3xs m-[0] font-bold">
+            <li><a href="#" class="py-2xs px-sm">Home</a></li>
+            <li><a href="#" class="py-2xs px-sm">About</a></li>
+            <li><a href="#" class="py-2xs px-sm">Services</a></li>
+            <li><a href="#" class="py-2xs px-sm">Contact</a></li>
+          </ul>
+        </nav>
 
         <div class="flex gap-3xs">
           <Button
             variant='icon-button'
-            icon='user-bounty-hunter-regular' 
+            icon='magnifying-glass-solid' 
             aria-label="search button"
             style="color: black"
           />
@@ -210,31 +113,130 @@ a {
             icon='cart-shopping-regular' 
             aria-label="cart button"
             style="color: black"/>
+
         </div>
-      </div>
+      </header>
+
+      <header class="grid-pile items-center justify-items-center  px-lg py-sm bg-surface-0">
+        <nav class="">
+          <button class="hidden" aria-expanded="false" type="button">
+            menu
+          </button>
+          <ul role="list" class="flex gap-3xs m-[0] font-bold items-center">
+            <li><a href="#" class="py-2xs px-sm">About</a></li>
+            <li><a href="#" class="py-2xs px-sm">Portfolio</a></li>
+
+            <li class="justify-self-center mx-lg">
+              <a href="#" class="font-bold text-xl">LOGO</a>
+            </li>
+            
+            <li><a href="#" class="py-2xs px-sm">Services</a></li>
+            <li><a href="#" class="py-2xs px-sm">Contact</a></li>
+            <li> 
+              <Button
+                variant='icon-button'
+                icon='magnifying-glass-solid' 
+                aria-label="search button"
+                style="color: black"
+              />
+            </li>
+          </ul>
+        </nav>
+
       
-      <div class="flex items-center px-lg py-sm bg-surface-4">
-        <nav class="nav mr-auto">
+
+        
+      </header>
+
+      <header class="flex items-center justify-between px-lg py-sm bg-surface-0">
+        <nav class="nav">
           <Button
-          classes="hidden"
           variant='icon-button'
           icon='bars-regular' 
           aria-label="search button"
           style="color: black"
         />
-          <ul role="list" class="flex gap-3xs m-[0] font-bold">
-            <li><a href="#" class="py-2xs px-sm text-brand-0">Home</a></li>
-            <li><a href="#" class="py-2xs px-sm text-brand-0">About</a></li>
-            <li><a href="#" class="py-2xs px-sm text-brand-0">Services</a></li>
-            <li><a href="#" class="py-2xs px-sm text-brand-0">Contact</a></li>
+          <ul role="list" class="flex gap-3xs m-[0] font-bold hidden">
+            <li><a href="#" class="py-2xs px-sm">Home</a></li>
+            <li><a href="#" class="py-2xs px-sm">About</a></li>
+            <li><a href="#" class="py-2xs px-sm">Services</a></li>
+            <li><a href="#" class="py-2xs px-sm">Contact</a></li>
           </ul>
         </nav>
         
-        <div class="flex gap-sm"> 
-          <a href="">test</a>
-          <a href="">test</a>
+        <a href="#" class="font-bold text-xl">LOGO</a>
+
+        <Button
+          variant='icon-button'
+          icon='magnifying-glass-solid' 
+          aria-label="search button"
+          style="color: black"
+        />
+
+      </header>
+
+      <header class="  bg-surface-0">
+        <div class="flex items-center justify-between px-lg py-sm">
+          <search >
+            <form action="./search/" >
+              <label for="search" class="sr-only">Accessible name</label>
+              <input type="search" id="search" name="q" />
+              <Button
+                variant='icon-button'
+                type='submit'
+                icon='magnifying-glass-solid' 
+                aria-label="search button"
+                style="color: black"
+              />
+            </form>
+          </search>
+
+          <a href="#" class="font-bold text-xl mx-auto">LOGO</a>
+
+          <div class="flex gap-3xs">
+            <Button
+              variant='icon-button'
+              icon='user-bounty-hunter-regular' 
+              aria-label="search button"
+              style="color: black"
+            />
+            <Button
+              variant='icon-button'
+              icon='user-bounty-hunter-regular' 
+              aria-label="user button"
+              style="color: black"
+            />
+            <Button
+              variant='icon-button'
+              icon='cart-shopping-regular' 
+              aria-label="cart button"
+              style="color: black"/>
+          </div>
         </div>
-      </div>
-    </header>
+        
+        <div class="flex items-center px-lg py-sm bg-surface-4">
+          <nav class="nav mr-auto">
+            <Button
+            classes="hidden"
+            variant='icon-button'
+            icon='bars-regular' 
+            aria-label="search button"
+            style="color: black"
+          />
+            <ul role="list" class="flex gap-3xs m-[0] font-bold">
+              <li><a href="#" class="py-2xs px-sm text-brand-0">Home</a></li>
+              <li><a href="#" class="py-2xs px-sm text-brand-0">About</a></li>
+              <li><a href="#" class="py-2xs px-sm text-brand-0">Services</a></li>
+              <li><a href="#" class="py-2xs px-sm text-brand-0">Contact</a></li>
+            </ul>
+          </nav>
+          
+          <div class="flex gap-sm"> 
+            <a href="">test</a>
+            <a href="">test</a>
+          </div>
+        </div>
+      </header>
+    </article>
   </main>
 </Layout>

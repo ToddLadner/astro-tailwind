@@ -8,6 +8,7 @@ const {
 	...rest 
 } = Astro.props;
 ---
+
 <style>
   .swatches {
     gap: var(--spacing-2xs);
@@ -351,8 +352,8 @@ const {
 </style>
 
 <Layout {title} {description}>
-  <main id="main-content" class="bg-surface-2 ">
-    <article class="p-inline-max py-2xl bg-surface-3 stack stack-md">
+  <main id="main-content" class="bg-surface-2">
+    <article class="p-inline-max py-2xl stack stack-md">
       <h1>Colors</h1>
       <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
     </article>
