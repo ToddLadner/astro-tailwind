@@ -161,7 +161,7 @@ const {
       <!-- Icon -->
       {icon && <Icon name={icon} class="icon" />}
       <!-- Heading -->
-      <hgroup class="flex flex-col stack stack-3xs">
+      <hgroup class="flex flex-col stack-3xs">
         {overline && <p class="text-xs">{overline}</p>}  
         <h2 id="dialog-heading" class="text-lg">{heading}</h2>
       </hgroup>
@@ -177,7 +177,7 @@ const {
     </header>
   )}
   <!-- Content -->
-  <article id="dialog-content" class="content stack stack-md">
+  <article id="dialog-content" class="content stack-md">
     <slot/>
   </article>
   <!-- Footer -->

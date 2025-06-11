@@ -13,19 +13,19 @@ const {
 <Layout {title} {description}>
   <main class="bg-surface-2">
     <!-- Header -->
-    <article class="p-inline-max py-2xl stack stack-md">
+    <article class="p-inline-max py-2xl stack-md">
       <h1>Details</h1>
       <p class="text-md leading-lg">A disclosure widget is a simple control whose sole purpose is to hide or show stuff.</p>
     </article>
      <!-- Content -->
-    <article class="p-inline-max py-lg stack stack-md">
+    <article class="p-inline-max py-lg stack-md">
       <p>Components</p>
       <h2>Accordion</h2>
       <p>An accordion is more than a few disclosure widgets or <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> elements one after another. While an accordion is built up from a series of disclosure widgets, these widgets should be grouped and use a group label to inform screen reader users of the relationship.</p>
       <p>Ideally they also should allow only one to be open at a time, (the is done by giving each detail a common 'name') and restrict the height of the entire collection to no taller than the viewport. The height is maintained by making the disclosed panels for each scroll instead.</p>
       <p>The accordion section of the article <a href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">Designing for Progressive Disclosure</a> gives more detail (along with other disclosure widget uses)</p>
       
-      <section class="stack stack-2xs" aria-label="Assorted Ipsums">
+      <section class="stack-2xs" aria-label="Assorted Ipsums">
         <Detail 
           title="Custom arrow with Actions" 
           name="accordion"

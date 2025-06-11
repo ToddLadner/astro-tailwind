@@ -10,118 +10,123 @@ const {
 
 <Layout {title} {description}>
 	<main class="bg-surface-2">
-		<article class="p-inline-max py-xl stack stack-md">
-			<h1 class="text-3xl">Your Brand</h1>
-      <p class="text-md leading-lg">Introduction</p>
-
-	    <h2 class="test-heading mt-2xl">Brand identity</h2>
-	    <p>This color scheme and font represents your brand.</p>
-	
+		<article class="p-inline-max py-xl stack-xl">
+			<h1 class="text-3xl">Brand identity</h1>
+      <p class="text-md leading-lg mt-sm">This color scheme and font represents your brand.</p>
+			
 	    <h2 class="text-md">Theme colors</h2>
-	    <ul role="list" class="palette theme scroll-x-overflow" style="--overflow-space: 0;">
+	    <ul role="list" class="flex mt-sm gap-xs scroll-x-overflow" style="--overflow-space: 0;">
         <li>
-          <span class="swatch bg-brand-4"></span>
-          <span>--brand-1</span>
+          <span class="swatch bg-brand-3"></span>
+          <code>--brand-1</code>
         </li>
         <li>
-          <span class="swatch bg-blue-2"></span>
-          <span>--brand-2</span>
+          <span class="swatch bg-blue-3"></span>
+          <code>--brand-2</code>
         </li>
         <li>
           <span class="swatch" style="background-color: var(--color-violet-3);"></span>
-          <span>--brand-1</span>
+          <code>--brand-1</code>
         </li>
         <li>
           <span class="swatch"></span>
-          <span>--brand-2</span>
+          <code>--brand-2</code>
         </li>
         <li>
-        <span class="swatch"></span>
-        <span>--brand-1</span>
+        	<span class="swatch"></span>
+        	<code>--brand-1</code>
         </li>
         <li>
           <span class="swatch"></span>
-          <span>--brand-2</span>
+          <code>--brand-2</code>
         </li>
       </ul>
 
 	    <h2 class="text-md">Grayscale</h2>
-      
-      <ul role="list" class="flex	palette grayscale">
+      <ul role="list" class="flex gap-xs mt-sm">
         <li>
           <span class="swatch bg-surface-1"></span>
-          <span>--surface-1</span>
+          <code>--color-surface-1</code>
         </li>
         <li>
           <span class="swatch bg-surface-2"></span>
-          <span>--surface-2</span>
+          <code>--color-surface-2</code>
         </li>
         <li>
           <span class="swatch bg-surface-3"></span>
-          <span>--surface-3</span>
+          <code>--color-surface-3</code>
         </li>
         <li>
           <span class="swatch bg-surface-4"></span>
-          <span>--surface-4</span>
+          <code>--color-surface-4</code>
         </li>
       </ul>
 
 	    <h2 class="text-md">Text</h2>
-      
-      <ul role="list" class="flex	palette text">
+      <ul role="list" class="flex gap-xs mt-sm">
         <li>
           <span class="swatch bg-text-1"></span>
-          <span>--text-1</span>
+          <code>--color-text-1</code>
         </li>
         <li>
           <span class="swatch bg-text-2"></span>
-          <span>--text-2</span>
+          <code>--color-text-2</code>
+        </li>
+				 <li>
+          <span class="swatch bg-text-1-reverse"></span>
+          <code>--color-text-1-reverse</code>
+        </li>
+        <li>
+          <span class="swatch bg-text-2-reverse"></span>
+          <code>--color-text-2-reverse</code>
         </li>
       </ul>
 
-	<h2 class="text-md">Alert Colors</h2>
-	<ul role="list" class="flex	palette alert">
-		<li>
-			<span class="swatch bg-danger"></span>
-			<span>--danger</span>
-		</li>
-		<li>
-			<span class="swatch bg-warning"></span>
-			<span>--warning</span>
-		</li>
-		<li>
-			<span class="swatch bg-info"></span>
-			<span>--info</span>
-		</li>
-		<li>
-			<span class="swatch bg-success"></span>
-			<span>--success</span>
-		</li>
-	</ul>
+			<h2 class="text-md">Alert Colors</h2>
+			<ul role="list" class="flex gap-xs mt-sm">
+				<li>
+					<span class="swatch bg-danger"></span>
+					<code>--color-danger</code>
+				</li>
+				<li>
+					<span class="swatch bg-warning"></span>
+					<code>--color-warning</code>
+				</li>
+				<li>
+					<span class="swatch bg-info"></span>
+					<code>--color-info</code>
+				</li>
+				<li>
+					<span class="swatch bg-success"></span>
+					<code>--color-success</code>
+				</li>
+			</ul>
 
-	<div class="nested-palette">
-		<div style="background-color: var(--color-surface-1)">
-			<span>var(--surface-1)</span>
-			<div style="background-color: var(--color-surface-2)">
-				<span>var(--surface-2)</span>
-				<div style="background-color: var(--color-surface-3)">
-					<span>var(--surface-3)</span>
-					<div style="background-color: var(--color-surface-4)">
-						<span>var(--surface-4)</span>
+			<div class="nested-palette p-xs">
+				<div style="background-color: var(--color-surface-1)">
+					<code>var(--color-surface-1)</code>
+					<div style="background-color: var(--color-surface-2)">
+						<code>var(--color-surface-2)</code>
+						<div style="background-color: var(--color-surface-3)">
+							<code>var(--color-surface-3)</code>
+							<div style="background-color: var(--color-surface-4)">
+								<code>var(--color-surface-4)</code>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
 
-	<h2>Fonts in use</h2>
-		<p>These fonts have been crafted specifically for the brand</p>
+			<hgroup>
+				<h2>Fonts in use</h2>
+				<p>These fonts have been crafted specifically for the brand</p>
+			</hgroup>
 
 		<p class="text-3xl">
 			Aa
 		</p>
-		<p class="font-name">Roboto Flex 400</p>
-		<p class="grid-ram [--grid-col:18] [--col-min:2ch] [--col-max:2ch] gap-[1ch]"> 
+		<p class="font-name mt-xs">Roboto Flex 400</p>
+		<p class="mt-md grid-ram [--grid-col:18] [--col-min:2ch] [--col-max:2ch] gap-[1ch]"> 
 <!-- <p class="grid-ram gap-sm" style="--grid-col: 18; --col-min: 2ch; --col-max: 2ch"> -->
 			<span>A</span><span>B</span><span>C</span><span>D</span>
 			<span>E</span><span>F</span><span>G</span><span>H</span>
@@ -146,8 +151,8 @@ const {
 		<p class="text-3xl bold">
 			Aa
 		</p>
-		<p class="font-name font-bold">Roboto Flex 900</p>
-		<p class="grid-ram font-bold" style="--grid-col:18; --col-min: 2ch; --col-max: 3ch">
+		<p class="font-name font-bold mt-xs">Roboto Flex 900</p>
+		<p class="mt-md grid-ram font-bold" style="--grid-col:18; --col-min: 2ch; --col-max: 3ch">
 			<span>A</span><span>B</span><span>C</span><span>D</span>
 			<span>E</span><span>F</span><span>G</span><span>H</span>
 			<span>I</span><span>J</span><span>K</span><span>L</span>
@@ -168,23 +173,32 @@ const {
 			<span>$</span><span>%</span><span>^</span><span>&amp;</span>
 		</p>
 
-		<h1 class="text-4xl">Whereas a common understanding of these rights and freedoms is</h1>
-		<h1 class="text-3xl">Whereas a common understanding of these rights and freedoms is</h1>
+		<h1 class="text-4xl">Display Whereas a common understanding of these rights and freedoms is</h1>
+		<code class="mt-sm">--text-4xl</code>
+		
+		<h1 class="text-3xl">Display Whereas a common understanding of these rights and freedoms is</h1>
+		<code class="mt-sm">--text-3xl</code>
+
 		<h1 class="text-2xl">
 			No one shall be held in slavery or servitude; slavery and the slave
 			trade shall be prohibited in all their forms.
 		</h1>
+		<code class="mt-sm">--text-2xl</code>
+
 		<h2 class="text-xl">
 			Everyone has the right to an effective remedy by the competent
 			national tribunals for acts violating the fundamental rights granted
 			him by the constitution or by law.
 		</h2>
+		<code class="mt-sm">--text-xl</code>
+
 		<h3 class="text-md">
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
 			eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
 			minim veniam, quis nostrud exercitation ullamco laboris nisi ut
 			aliquip ex ea commodo consequat.
 		</h3>
+		<code class="mt-sm">--text-md</code>
 
 		<p class="text-sm measure-lg">
 			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
@@ -192,6 +206,7 @@ const {
 			proident, sunt in culpa qui officia deserunt mollit anim id est
 			laborum.
 		</p>
+		<code class="mt-sm">--text-sm</code>
 
 		<p class="text-xs measure-lg">
 			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
@@ -199,11 +214,23 @@ const {
 			proident, sunt in culpa qui officia deserunt mollit anim id est
 			laborum.
 		</p>
+		<code class="mt-sm">--text-xs</code>
 		</article>
   </main>
 </Layout>
 
 <style>
+	code {
+		display: inline-block;
+		background-color: light-dark(var(--color-surface-1), var(--color-surface-4));
+		border: 1px solid var(--color-surface-3);
+		padding: var(--spacing-3xs) var(--spacing-2xs);
+		border-radius: var(--radius-md);
+		font-size: var(--text-xs);
+		width: fit-content;
+		line-height: var(--leading-3xs);
+	}
+
 	.swatch {
 		padding: var(--spacing-sm); 
 		width: var(--spacing-3xl);
@@ -211,13 +238,6 @@ const {
 		border-radius: var(--radius-md);
 		box-shadow: var(--shadow-md);
 		border: 1px solid var(--surface-2);
-	}
-	
-	.palette {
-		/* Stack space */
-		--space: var(--spacing-xs);
-		display: flex;
-		gap: var(--spacing-xs);
 	}
 	
 	li { 
