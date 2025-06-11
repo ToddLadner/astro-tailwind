@@ -718,19 +718,19 @@
 /*  Custom Utilities */
 
 /* [35] Dynamic Padding */
-@utility p-inline-max { padding-inline: max(var(--spacing-sm-lg), calc(50vw - var(--content-size, 75em) / 2)) }
+@utility px-max { padding-inline: max(var(--spacing-sm-lg), calc(50vw - var(--content-size, 75em) / 2)) }
 
 /* [36] The Stack */
 @utility stack {
-  > * { margin-block: 0; }
-  > * + * { margin-block-start: 1em; }
+  > * { margin-block: 0 }
+  > * + * { margin-block-start: 1em }
 }
 
 @utility stack-* {
   --space: --value(--spacing-*);
 
-  > * { margin-block: 0; }
-  > * + * { margin-block-start: var(--space, 1em); }
+  > * { margin-block: 0 }
+  > * + * { margin-block-start: var(--space, 1em) }
 }
 /* Grid Layouts */
 
