@@ -69,6 +69,9 @@
   --*: initial;  
 
   --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
+  --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
+  --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
+  --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
 
   --color-surface-0: light-dark(white, var(--color-gray-13));
   --color-surface-1: light-dark(var(--color-gray-0), var(--color-gray-12));
@@ -238,6 +241,9 @@
   --hue-orange: 75; 
 
   /* [16] Grays */
+  --color-white: oklch(1 0 0);
+  --color-black: oklch(0 0 0);
+
   /* Gray Neutral */
   --gray-hue: 0;
   --gray-chroma: 0;
@@ -707,6 +713,15 @@
     0.908 72.4%, 0.885, 0.878, 0.885, 0.908 79.4%, 1 83%, 0.954 85.5%, 0.943,
     0.939, 0.943, 0.954 90.5%, 1 93%, 0.977, 0.97, 0.977, 1
   );
+
+  /* [**] Duration */
+    --duration-instant:    0ms;    /* e.g. text change */
+    --duration-quick-1:    80ms;   /* e.g. checkbox, radio, hover */
+    --duration-quick-2:    120ms;  /* e.g. toggle, tab, chip, color, fade */
+    --duration-moderate-1: 180ms;  /* e.g. dropdown, tooltip */
+    --duration-moderate-2: 260ms;  /* e.g. modal, toast, dialog, notification */
+    --duration-gentle-1:   320ms;  /* e.g. bottom sheet, card expand */
+    --duration-gentle-2:   420ms;  /* e.g. advanced animations */
 
   /* [**] Measure | Line length */
   --measure-sm: 45ch;

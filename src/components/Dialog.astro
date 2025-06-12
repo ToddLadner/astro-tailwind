@@ -67,7 +67,9 @@ const {
       }
     }
 
-    html:has(dialog[open]) { overflow: hidden }
+    html:has(dialog[open]:not([role="alertdialog"])) {
+      overflow: hidden;
+    }
     
     /* Transition */
     dialog, 
@@ -131,6 +133,7 @@ const {
 
   dialog[role="alertdialog"] {
     margin-bottom: 10vh;
+    position: fixed;
   }
 </style>
 <style is:global>

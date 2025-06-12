@@ -45,8 +45,8 @@ li:not(:last-child) { border-bottom-width: 2px; }
 </style>
 
 <Layout {title} {description}>
-	<main class="px-max bg-yellow-bright stack">
-    <div class="flex flex-wrap py-2xl items-end stack-sm">
+	<main class="bg-yellow-bright stack">
+    <div class="flex flex-wrap py-2xl items-end stack-sm px-max">
 			<p class="text-pink-bright text-lg w-full">live and in color</p>
 	    	<h1 class="text-pink-14 text-6xl leading-3xs">Tailwind for UX / UI <br> & Developers</h1>
 	    	<p class="flex flex-col ml-[-4rem] text-right ml-[-7%] translate-y-[50%]">
@@ -55,8 +55,8 @@ li:not(:last-child) { border-bottom-width: 2px; }
 				</p>
 		</div>
 		
-		<div class="media-pattern items-center">
-			<figure class="p-lg rounded-2xl m-[0]" style="background-color:oklch(from var(--color-yellow-0) l c h / 25% )">
+		<div class="media-pattern items-center px-max">
+			<figure class="p-lg rounded-2xl m-[0] bg-white/20">
 				<Image
       		src={robot}
       		alt="descriptive text"
@@ -80,7 +80,7 @@ li:not(:last-child) { border-bottom-width: 2px; }
 					<li>basic knowledge of UX methodologies</li>
 				</ul>
 
-				<Button size='lg' classes="ml-auto mt-lg" style="--bg-color: var(--color-pink-bright); color: var(--color-pink-0);">Sign up</Button>
+				<Button size='lg' classes="ml-auto mt-lg bg-pink-bright text-pink-0">Sign up</Button>
 			</div>
 		</div>
   </main>

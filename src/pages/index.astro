@@ -17,28 +17,16 @@ const {
 	    <h2 class="text-md">Theme colors</h2>
 	    <ul role="list" class="flex mt-sm gap-xs scroll-x-overflow" style="--overflow-space: 0;">
         <li>
-          <span class="swatch bg-brand-3"></span>
-          <code>--brand-1</code>
+          <span class="swatch bg-pink-bright"></span>
+          <code>--color-pink-bright</code>
         </li>
         <li>
-          <span class="swatch bg-blue-3"></span>
-          <code>--brand-2</code>
+          <span class="swatch bg-cyan-5"></span>
+          <code>--color-cyan-5</code>
         </li>
         <li>
-          <span class="swatch" style="background-color: var(--color-violet-3);"></span>
-          <code>--brand-1</code>
-        </li>
-        <li>
-          <span class="swatch"></span>
-          <code>--brand-2</code>
-        </li>
-        <li>
-        	<span class="swatch"></span>
-        	<code>--brand-1</code>
-        </li>
-        <li>
-          <span class="swatch"></span>
-          <code>--brand-2</code>
+          <span class="swatch bg-indigo-3"></span>
+          <code>--color-indigo-3</code>
         </li>
       </ul>
 
@@ -104,13 +92,13 @@ const {
 
 			<div class="nested-palette p-xs">
 				<div style="background-color: var(--color-surface-1)">
-					<code>var(--color-surface-1)</code>
+					<span>var(--color-surface-1)</span>
 					<div style="background-color: var(--color-surface-2)">
-						<code>var(--color-surface-2)</code>
+						<span>var(--color-surface-2)</span>
 						<div style="background-color: var(--color-surface-3)">
-							<code>var(--color-surface-3)</code>
+							<span>var(--color-surface-3)</span>
 							<div style="background-color: var(--color-surface-4)">
-								<code>var(--color-surface-4)</code>
+								<span>var(--color-surface-4)</span>
 							</div>
 						</div>
 					</div>
@@ -173,48 +161,48 @@ const {
 			<span>$</span><span>%</span><span>^</span><span>&amp;</span>
 		</p>
 
-		<h1 class="text-4xl">Display Whereas a common understanding of these rights and freedoms is</h1>
-		<code class="mt-sm">--text-4xl</code>
+		<code>--text-4xl</code>
+		<h1 class="text-4xl mt-sm">Display Whereas a common understanding of these rights and freedoms is</h1>
 		
-		<h1 class="text-3xl">Display Whereas a common understanding of these rights and freedoms is</h1>
-		<code class="mt-sm">--text-3xl</code>
-
-		<h1 class="text-2xl">
+		<code>--text-3xl</code>
+		<h1 class="text-3xl mt-sm">Display Whereas a common understanding of these rights and freedoms is</h1>
+		
+		<code>--text-2xl</code>
+		<h1 class="text-2xl mt-sm">
 			No one shall be held in slavery or servitude; slavery and the slave
 			trade shall be prohibited in all their forms.
 		</h1>
-		<code class="mt-sm">--text-2xl</code>
-
-		<h2 class="text-xl">
+		
+		<code>--text-xl</code>
+		<h2 class="text-xl mt-sm">
 			Everyone has the right to an effective remedy by the competent
 			national tribunals for acts violating the fundamental rights granted
 			him by the constitution or by law.
 		</h2>
-		<code class="mt-sm">--text-xl</code>
-
-		<h3 class="text-md">
+		
+		<code>--text-md</code>
+		<h3 class="text-md mt-sm">
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
 			eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
 			minim veniam, quis nostrud exercitation ullamco laboris nisi ut
 			aliquip ex ea commodo consequat.
 		</h3>
-		<code class="mt-sm">--text-md</code>
-
-		<p class="text-sm measure-lg">
+		
+		<code>--text-sm</code>
+		<p class="text-sm measure-lg mt-sm">
 			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
 			dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 			proident, sunt in culpa qui officia deserunt mollit anim id est
 			laborum.
 		</p>
-		<code class="mt-sm">--text-sm</code>
-
-		<p class="text-xs measure-lg">
+		
+		<code>--text-xs</code>
+		<p class="text-xs measure-lg mt-sm">
 			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
 			dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 			proident, sunt in culpa qui officia deserunt mollit anim id est
 			laborum.
 		</p>
-		<code class="mt-sm">--text-xs</code>
 		</article>
   </main>
 </Layout>
@@ -226,14 +214,14 @@ const {
 		border: 1px solid var(--color-surface-3);
 		padding: var(--spacing-3xs) var(--spacing-2xs);
 		border-radius: var(--radius-md);
-		font-size: var(--text-xs);
+		font-size: .75em;
 		width: fit-content;
 		line-height: var(--leading-3xs);
 	}
 
 	.swatch {
-		padding: var(--spacing-sm); 
-		width: var(--spacing-3xl);
+		padding: var(--spacing-md) var(--spacing-sm); 
+		width: 12.5rem;
 		height: auto;
 		border-radius: var(--radius-md);
 		box-shadow: var(--shadow-md);
