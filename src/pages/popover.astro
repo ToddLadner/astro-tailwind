@@ -110,6 +110,7 @@ const {
     width: 1000px;
 }
  [role="menuitem"] { width: 100%; justify-content: unset; }
+ .target { position: absolute; }
 </style>
 
 <Layout {title} {description}>
@@ -198,7 +199,7 @@ const {
       <!-- /Button & Tooltip -->
     </article>
     
-    <article class="px-max py-lg stack-md">
+    <article class="px-max py-lg">
       <button 
         id="anchor-pos-1" 
         popovertarget="target-pos-1"
@@ -211,6 +212,7 @@ const {
         id="target-pos-1" 
         class="target p-sm" 
         popover
+        style="position-area: bottom center;"
       >
         Target
       </div>
@@ -223,7 +225,7 @@ const {
 
           
           <button id="my-anchor-try-tactics-2" class="p-2xs anchor">position-try-fallbacks Anchor 2</button>
-          <div id="my-target-try-tactics-2" class="p-2xs bg-red-7 target">Target 2</div>
+          <div id="my-target-try-tactics-2" class="p-2xs bg-red-7 target" >Target 2</div>
 
           <div class='placefiller-after-anchor'></div>  
       </div>

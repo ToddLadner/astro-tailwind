@@ -42,24 +42,20 @@ const {
   --position: 50%;
 
   /* Create arrow via clip-path */
-  clip-path: polygon(
-    /* box */
+  /* clip-path: polygon(
     0 0, 0 100%, 100% 100%, 100% 0,
-    /* arrow right half */
     min(100%, var(--position) + var(--base)/2) 0,
-    /* tip */
     var(--position) calc(-1*var(--height)),
-    /* arrow left half */
     max(0%, var(--position) - var(--base)/2) 0
-  );
+  ); */
 
   /* Seamless border for arrow */
-  border-image: conic-gradient(var(--color-surface-1) 0 0) fill 0/
+  /* border-image: conic-gradient(var(--color-surface-1) 0 0) fill 0/
     0 calc(100% - var(--position) - var(--base)/2) var(--radius-md)
     calc(var(--position) - var(--base)/2)/
-    var(--height) 0 0 0;
+    var(--height) 0 0 0; */
 }
-
+[popover]:focus { outline: none; }
 /* Transition */
 [popover] {
   --duration: 1s;
