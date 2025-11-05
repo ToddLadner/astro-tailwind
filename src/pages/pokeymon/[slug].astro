@@ -1,0 +1,46 @@
+---
+import type { GetStaticPaths } from "astro";
+import Layout from "@layouts/Layout.astro";
+
+type Pokeymon = {
+  name: string;
+  url: string;
+}
+
+export type PokeymonRes = {
+  count: number;
+  next: string;
+  previous: string;
+  results: Pokeymon[];
+}
+
+export const getStaticPaths = (async() => {
+  const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100');
+  const data: PokeymonRes = await res.json();
+  
+  return data.results.map(p => ({
+    params: { slug: p.name },
+    props: {
+      ...p,           
+      title: `Pokémon – ${p.name}`,
+      description: `All about ${p.name}.`,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+
+
+const { 
+  name, 
+  url,
+	title,
+	description,
+} = Astro.props;
+---
+
+<Layout {title} {description}>
+  <main>
+      <h1>{name}</h1>
+  <a href={url}>Learn more</a>
+  </main>
+</Layout>
