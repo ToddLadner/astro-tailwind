@@ -13,6 +13,13 @@ const {
   ...rest
 } = Astro.props;
 
+const normalizePath = (path: string) => {
+  const trimmed = path.replace(/\/+$/, '');
+  return trimmed === '' ? '/' : trimmed;
+};
+
+const currentPath = normalizePath(Astro.url.pathname);
+
 // Enter your navigation links here
 const navLinks = [
   { 
@@ -78,17 +85,21 @@ const navLinks = [
 <nav class="nav" aria-label={ariaLabel} class:list={[classes]} {...rest}>
   <ul role="list" class="nav-list stack-3xs">
     {
-      navLinks.map(({ name, path, icon }) => (
-        <li class="list-item">
-          <a href={path} 
-            class="nav-link flex items-center"
-            aria-current={Astro.url.pathname === path ? 'page' : undefined} 
-          >
-            { icon && <Icon name={icon} aria-hidden='true'/> }
-            <span class="label">{name}</span>
-          </a>
-        </li>
-      ))
+      navLinks.map(({ name, path, icon }) => {
+        const isActive = normalizePath(path) === currentPath;
+        return (
+          <li class="list-item">
+            <a
+              href={path}
+              class="nav-link flex items-center"
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {icon && <Icon name={icon} aria-hidden="true" />}
+              <span class="label">{name}</span>
+            </a>
+          </li>
+        );
+      })
     }
   </ul>
 </nav>
