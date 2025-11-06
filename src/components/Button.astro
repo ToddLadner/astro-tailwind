@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 
-interface Props extends HTMLAttributes<"button"> {
+interface Props extends HTMLAttributes<"button">, HTMLAttributes<"a"> {
   type?: "button" | "submit" | "reset";
   theme?: "outlined" | "tonal" | "filled" | "custom";
   size?: "sm" | "lg";
@@ -24,11 +24,21 @@ const {
   text, 
   icon,
   classes, 
+  href,
   ...rest 
   } = Astro.props;
+
+const classList = [
+  size,
+  theme,
+  shape === "circle" && "ellipse",
+  elevated && "elevated",
+  variant,
+  classes
+];
 ---
 
-<style is:global>
+<style>
   @layer components {
     /* General Button Styles */
     :is(.button, [type=button], [type=submit], [type=reset]) {
@@ -362,19 +372,24 @@ const {
     }
 </style>
 
-<button 
-  {type} 
-  class:list={[
-    size, 
-    theme, 
-    shape === 'circle' && 'ellipse',
-    elevated && 'elevated', 
-    variant,
-    classes
-    ]} 
-  {...rest}
->
-  { icon && <Icon name={icon} /> }
-  <slot/>
-  {text}
-</button>
+{href ? (
+  <a
+    href={href}
+    class:list={classList}
+    {...rest}
+  >
+    { icon && <Icon name={icon} /> }
+    <slot/>
+    {text}
+  </a>
+) : (
+  <button
+    type={type}
+    class:list={classList}
+    {...rest}
+  >
+    { icon && <Icon name={icon} /> }
+    <slot/>
+    {text}
+  </button>
+)}
