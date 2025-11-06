@@ -192,26 +192,32 @@ const {
 </dialog>
 
 <script>
-  import { createFocusTrap } from 'focus-trap';
+  if (typeof window !== "undefined") {
+    import('focus-trap')
+      .then(({ createFocusTrap }) => {
+        document.querySelectorAll('.modal').forEach(dialog => {
+          const trap = createFocusTrap(dialog, {
+            clickOutsideDeactivates: true,
+            escapeDeactivates:       true,
+            onDeactivate:            () => dialog.close(),
+            fallbackFocus:           dialog,
+          });
 
-  document.querySelectorAll('.modal').forEach(dialog => {
-    const trap = createFocusTrap(dialog, {
-      clickOutsideDeactivates: true,
-      escapeDeactivates:       true,
-      onDeactivate:            () => dialog.close(),
-      fallbackFocus:           dialog,
-    });
+          // Open → showModal() + activate trap
+          const origShow = dialog.showModal;
+          dialog.showModal = function() {
+            origShow.call(dialog);
+            trap.activate();
+          };
 
-    // Open → showModal() + activate trap
-    const origShow = dialog.showModal;
-    dialog.showModal = function() {
-      origShow.call(dialog);
-      trap.activate();
-    };
-
-    // Teardown on close/cancel/backdrop
-    dialog.addEventListener('close',  () => trap.deactivate());
-    dialog.addEventListener('cancel', () => dialog.close());
-    dialog.addEventListener('click', e => e.target === dialog && dialog.close());
-  });
+          // Teardown on close/cancel/backdrop
+          dialog.addEventListener('close',  () => trap.deactivate());
+          dialog.addEventListener('cancel', () => dialog.close());
+          dialog.addEventListener('click', e => e.target === dialog && dialog.close());
+        });
+      })
+      .catch((err) => {
+        console.error('Failed to load focus-trap for dialog focus management.', err);
+      });
+  }
 </script>
