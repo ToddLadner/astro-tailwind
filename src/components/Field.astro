@@ -15,6 +15,11 @@ interface Props extends HTMLAttributes<any> {
   options?: { value: string; label: string }[];
 }
 
+const props = Astro.props as Props & {
+  'aria-describedby'?: string;
+  'aria-invalid'?: string | boolean;
+};
+
 const {
   as = 'input',
   id: propId,
@@ -24,18 +29,28 @@ const {
   error,
   classes = '',
   options = [],
+  'aria-describedby': ariaDescribedByProp,
+  'aria-invalid': ariaInvalidProp,
   ...rest
-} = Astro.props;
+} = props;
 
 // now choose the ID in priority order:
-const id = propId ?? uid ?? `field-${Math.random().toString(36).slice(2,8)}`;
+const fallbackId =
+  typeof globalThis !== 'undefined' &&
+  'crypto' in globalThis &&
+  typeof globalThis.crypto?.randomUUID === 'function'
+    ? globalThis.crypto.randomUUID()
+    : `field-${Math.random().toString(36).slice(2, 8)}`;
+const id = propId ?? uid ?? fallbackId;
+const describedBy = ariaDescribedByProp ?? (error ? `${id}-error` : undefined);
+const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
 ---
 <style>
   /* [1] Field */
   .field {
     background-color: var(--color-surface-0);
     max-width: var(--measure-sm);
-    padding: var(--spacing-2xs);
+    padding: var(--spacing-xs);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-inset-lg);
     border: 1px solid var(--color-surface-3);
@@ -66,22 +81,19 @@ const id = propId ?? uid ?? `field-${Math.random().toString(36).slice(2,8)}`;
   }
   
   /* [4] Validation */
-  label:has(input:user-valid) {
+  .field:has(:is(input, textarea, select):user-valid) {
     color: var(--color-green-7);
     border: 1px solid var(--color-green-4);
     line-height: inherit;
   }
-  label:has(input:user-invalid) {
+  .field:has(:is(input, textarea, select):user-invalid) {
     color: var(--color-red-7);
     border: 1px solid var(--color-red-7);
     line-height: inherit;
   }
-  /* */
-  textarea { resize: vertical; }
-  /* * { border: 1px solid red; } */
 </style>
 
-<label for={id} class="field grid gap-3xs" class:list={[classes]}>
+<label for={id} class="field grid gap-2xs" class:list={[classes]}>
   {label && (
     <span class="label flex items-center gap-xs">
       {icon && <Icon name={icon} />}
@@ -90,15 +102,33 @@ const id = propId ?? uid ?? `field-${Math.random().toString(36).slice(2,8)}`;
   )}
 
   {as === 'input' && (
-    <input id={id} class="control" {...rest} />
+    <input
+      id={id}
+      class="control"
+      aria-describedby={describedBy}
+      aria-invalid={ariaInvalid}
+      {...rest}
+    />
   )}
 
   {as === 'textarea' && (
-    <textarea id={id} class="control resize-y" {...rest} />
+    <textarea
+      id={id}
+      class="control resize-y"
+      aria-describedby={describedBy}
+      aria-invalid={ariaInvalid}
+      {...rest}
+    />
   )}
 
   {as === 'select' && (
-    <select id={id} class="control" {...rest}>
+    <select
+      id={id}
+      class="control"
+      aria-describedby={describedBy}
+      aria-invalid={ariaInvalid}
+      {...rest}
+    >
       {options.map(o => <option value={o.value}>{o.label}</option>)}
     </select>
   )}
