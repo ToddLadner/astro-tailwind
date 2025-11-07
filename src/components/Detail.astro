@@ -4,12 +4,13 @@ import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<"details"> {
   title: string;
-  theme?: "outlined" | "tonal" | "filled" | "elevated";
+  theme?: "text" | "outlined" | "tonal" | "elevated";
   open?: boolean;
   name?: string;
   id?: string;
-  classes?: string;
 }
+
+const props = Astro.props as Props;
 
 const {
   title,
@@ -17,9 +18,9 @@ const {
   open = false,
   name,
   id: idProp,
-  classes = '',
+  class: className,
   ...rest
-} = Astro.props;
+} = props;
 
 // generate a short, unique-ish ID if none provided
 const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
@@ -46,18 +47,21 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
         block-size 
         var(--accordion-transition-time) ease-out;
       
-      /* Content Closed */
+      /* Content Container | Closed */
       &::details-content {
+        margin-block-start: 0;
         block-size: 0;
         opacity: 0;
         overflow-y: clip;
         transition:
           content-visibility var(--accordion-transition-time) allow-discrete,
-          opacity, block-size var(--accordion-transition-time) ease-out;
+          opacity, 
+          block-size var(--accordion-transition-time) ease-out;
       }
       
-      /* Content Open */
+      /* Content Container | Open */
       &[open]::details-content {
+        padding-block: var(--spacing-2xs) var(--spacing-sm);
         block-size: auto;
         opacity: 1;
       }
@@ -65,10 +69,17 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
       /* Summary */
       & > summary {
         background-color: inherit;
+        border-radius: inherit;
         cursor: pointer;
         padding-block: var(--spacing-sm);
+        padding-inline: var(--spacing-sm);
         user-select: none;
-        background-color: inherit;
+        outline: none;
+
+        &:focus-visible {
+          outline: 2px solid var(--color-brand-1, currentColor);
+          outline-offset: 2px;
+        }
       }
 
       /* Custom Arrow */
@@ -90,12 +101,6 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
       /* Rotate Arrow */
       &[open] > summary svg {
         rotate: 180deg;
-      }
-      
-      /* Content Container */
-      & > .content {
-        margin-block-start: 0;
-        padding-block: var(--spacing-2xs) var(--spacing-sm);
       }
 
       /* Variants */
@@ -126,20 +131,31 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
         padding-inline: var(--spacing-sm);
       }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      details {
+        transition: none;
+      }
+
+      details::details-content {
+        transition: none;
+      }
+
+      details summary svg {
+        transition: none;
+      }
+    }
   }
 </style>
 
 <details 
- 
-  class:list={[theme, classes]}
+  class:list={[theme, className]}
   open={open}
   name={name} 
   {...rest}
 >
   <summary 
     id={id}
-    aria-controls={`${id}-content`}
-    aria-expanded={open}
     class="font-bold"
   >
     {title} 
