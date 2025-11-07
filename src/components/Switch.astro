@@ -97,7 +97,7 @@ const labelClassList = [
       --transition-time: 0.2s;
 
       align-items: center;
-      color: var(--text-color-1);
+      color: var(--color-text-1);
       display: inline-grid;
       gap: 0 var(--spacing-xs);
       grid-auto-columns: auto;
@@ -190,9 +190,9 @@ const labelClassList = [
       }
 
       /* Required dot */
-      &:has([required]:not(:checked)) {
+      &:has([required]) {
         .label:after {
-          color: var(--red);
+          color: var(--color-red-4);
           content: "*";
           inset: 0 -0.25ex auto auto;
           position: absolute;
@@ -213,28 +213,30 @@ const labelClassList = [
       /* Label */
       .label {
         grid-column: 2;
-        grid-row: 1;
+        /* grid-row: 1; */
+        color: var(--color-text-1);
         min-width: 0;
+        width: fit-content;
         padding-inline: 0 1ex;
         position: relative;
-        user-select: none;
+        display: inline-flex;
       }
 
       /* Supporting text */
       .supporting-text {
-        color: var(--text-color-2);
+        color: var(--color-text-2);
         font-size: var(--font-size-xs);
         grid-column: 2;
-        grid-row: 2;
+        /* grid-row: 2; */
         line-height: 1.5;
         z-index: 1;
       }
 
       .error-text {
-        color: var(--color-9);
+        color: var(--color-red-4);
         font-size: var(--font-size-xs);
         grid-column: 2;
-        grid-row: 3;
+        /* grid-row: 3; */
         line-height: 1.5;
       }
 
@@ -283,7 +285,7 @@ const labelClassList = [
 
         .label,
         .supporting-text {
-          color: var(--color-9);
+          color: var(--color-red-4);
         }
       }
     }
