@@ -12,7 +12,6 @@ interface Props extends HTMLAttributes<'input'> {
   error?: string;
   supportingText?: string;
   size?: 'small' | 'large';
-  layout?: 'inline' | 'block';
   classes?: string;
 }
 
@@ -25,7 +24,6 @@ const {
   error,
   supportingText,
   size,
-  layout = 'inline',
   classes,
   disabled = false,
   ...rest
@@ -40,8 +38,7 @@ const describedBy = [
 ].filter(Boolean).join(' ') || undefined;
 
 const classList = [
-  type,
-  layout === 'stack' && 'stack',
+  'checkable',
   error && 'error',
   classes,
 ];
@@ -53,18 +50,16 @@ const inputClassList = [
 
 <style>
   @layer components {
-    label:is(.checkbox, .radio) {
+    .checkable {
       align-items: center;
-      color: var(--text-color-1);
+      color: var(--color-text-1);
       cursor: pointer;
       display: inline-grid;
-      gap: 0 var(--spacing-2xs);
+      gap: 0 var(--spacing-xs);
       grid-auto-columns: auto;
       grid-auto-flow: column;
       inline-size: fit-content;
       line-height: 1.5;
-      transform: translateZ(0);
-      user-select: none;
 
       /* Disabled */
       &:has([disabled]) {
@@ -82,7 +77,7 @@ const inputClassList = [
         .label:after {
           color: var(--color-red-5);
           content: "*";
-          inset: 0 -0.25ex auto auto;
+          inset: 0 -1.25ex auto auto;
           position: absolute;
         }
       }
@@ -92,10 +87,9 @@ const inputClassList = [
         grid-column: 2;
         grid-row: 1;
         position: relative;
-        padding-inline: 0 1ex;
         display: inline-flex;
         align-items: center;
-        gap: var(--spacing-xs);
+
 
         [data-icon] {
           color: currentColor;
@@ -149,6 +143,7 @@ const inputClassList = [
     }
   }
 </style>
+
 <label for={id} class:list={classList}>
   <input
     id={id}
