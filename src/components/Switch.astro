@@ -1,20 +1,82 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-interface Props extends HTMLAttributes<"label"> {
-  size?: "sm" | "lg";
-  text?: string;
+interface Props extends Omit<HTMLAttributes<'input'>, 'size'> {
+  uid?: string;
   label?: string;
+  supportingText?: string;
+  text?: string;
+  error?: string;
+  stacked?: boolean;
+  size?: 'small' | 'sm' | 'large' | 'lg';
   classes?: string;
+  labelProps?: HTMLAttributes<'label'>;
 }
 
-const { 
-  size,
-  text,
+const props = Astro.props as Props & {
+  'aria-describedby'?: string;
+  'aria-invalid'?: string | boolean;
+};
+
+const {
+  id: propId,
+  uid,
   label,
-  classes, 
-  ...rest 
-  } = Astro.props;
+  supportingText,
+  text,
+  error,
+  stacked = false,
+  size,
+  classes,
+  labelProps = {},
+  ...rawInputProps
+} = props;
+
+const {
+  class: labelClass,
+  ...restLabelProps
+} = labelProps;
+
+const {
+  class: rootClass,
+  type: inputType = 'checkbox',
+  'aria-describedby': ariaDescribedByProp,
+  'aria-invalid': ariaInvalidProp,
+  ...inputAttributes
+} = rawInputProps;
+
+const fallbackId =
+  typeof globalThis !== 'undefined' &&
+  'crypto' in globalThis &&
+  typeof globalThis.crypto?.randomUUID === 'function'
+    ? globalThis.crypto.randomUUID()
+    : `switch-${Math.random().toString(36).slice(2, 8)}`;
+const id = propId ?? uid ?? fallbackId;
+
+const supporting = supportingText ?? text;
+const describedByIds = [
+  supporting && `${id}-supporting`,
+  error && `${id}-error`,
+].filter(Boolean) as string[];
+const describedBy =
+  ariaDescribedByProp ?? (describedByIds.length ? describedByIds.join(' ') : undefined);
+const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
+
+const normalizedSize =
+  size === 'sm'
+    ? 'small'
+    : size === 'lg'
+      ? 'large'
+      : size;
+
+const labelClassList = [
+  normalizedSize,
+  stacked && 'stack',
+  error && 'error',
+  classes,
+  labelClass,
+  rootClass,
+];
 ---
 
 <style>
@@ -168,11 +230,25 @@ const {
         z-index: 1;
       }
 
+      .error-text {
+        color: var(--color-9);
+        font-size: var(--font-size-xs);
+        grid-column: 2;
+        grid-row: 3;
+        line-height: 1.5;
+      }
+
       /* Size */
       &.small {
         --dot-size: 0.75rem;
         --track-height: var(--spacing-lg);
         --track-width: 2.5rem;
+      }
+
+      &.large {
+        --dot-size: 1.15rem;
+        --track-height: calc(var(--spacing-sm) + 0.25rem);
+        --track-width: 3.25rem;
       }
 
       /* Stacked layout */
@@ -190,6 +266,11 @@ const {
         .supporting-text {
           grid-column: 1/-1;
           grid-row: 3;
+        }
+
+        .error-text {
+          grid-column: 1 / -1;
+          grid-row: 4;
         }
       }
 
@@ -209,7 +290,24 @@ const {
   }
 </style>
 
-<label class="switch" class:list={[ size, classes ]} {...rest}>
-  <input type="checkbox" role="switch" />
-  <span class="label">{label}</span>
+<label class="switch" class:list={labelClassList} {...restLabelProps}>
+  <input
+    id={id}
+    type={inputType}
+    role="switch"
+    aria-describedby={describedBy}
+    aria-invalid={ariaInvalid}
+    {...inputAttributes}
+  />
+  {label && <span class="label">{label}</span>}
+  {supporting && (
+    <span id={`${id}-supporting`} class="supporting-text">
+      {supporting}
+    </span>
+  )}
+  {error && (
+    <span id={`${id}-error`} class="error-text" role="alert">
+      {error}
+    </span>
+  )}
 </label>

@@ -159,7 +159,20 @@ const {
           ]} 
         />
 
-      <Switch label="Switch label"/>
+      <Switch 
+        label="Push notifications" 
+        supportingText="Send me occasional product updates"
+        name="notifications"
+        stacked
+      />
+
+      <Switch 
+        label="Terms consent" 
+        supportingText="I agree to receive marketing emails"
+        name="marketing"
+        required
+        error="Consent is required"
+      />
 
       <Checkable 
         type="checkbox" 
