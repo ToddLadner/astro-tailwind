@@ -69,9 +69,6 @@
   --*: initial;  
 
   --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
-  --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
-  --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
-  --color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
 
   --color-surface-0: light-dark(white, var(--color-gray-13));
   --color-surface-1: light-dark(var(--color-gray-0), var(--color-gray-12));
@@ -158,16 +155,6 @@
   --spacing-2xl: clamp(4rem, 3.6522rem + 1.7391vw, 5rem);
   --spacing-3xl: clamp(6rem, 5.4783rem + 2.6087vw, 7.5rem);
 
-  --spacing-3xs: clamp(0.25rem, 0.2283rem + 0.1087vw, 0.3125rem);
-  --spacing-2xs: clamp(0.5rem, 0.4565rem + 0.2174vw, 0.625rem);
-  --spacing-xs: clamp(0.75rem, 0.6848rem + 0.3261vw, 0.9375rem);
-  --spacing-sm: clamp(1rem, 0.913rem + 0.4348vw, 1.25rem);
-  --spacing-md: clamp(1.5rem, 1.3696rem + 0.6522vw, 1.875rem);
-  --spacing-lg: clamp(2rem, 1.8261rem + 0.8696vw, 2.5rem);
-  --spacing-xl: clamp(3rem, 2.7391rem + 1.3043vw, 3.75rem);
-  --spacing-2xl: clamp(4rem, 3.6522rem + 1.7391vw, 5rem);
-  --spacing-3xl: clamp(6rem, 5.4783rem + 2.6087vw, 7.5rem);
-
   /* [09] Fluid Space | One-up pairs */
   --spacing-3xs-2xs: clamp(0.25rem, 0.1196rem + 0.6522vw, 0.625rem);
   --spacing-2xs-xs: clamp(0.5rem, 0.3478rem + 0.7609vw, 0.9375rem);
@@ -179,7 +166,6 @@
   --spacing-2xl-3xl: clamp(4rem, 2.7826rem + 6.087vw, 7.5rem);
 
   /* [10] Fluid Space | Custom pairs */
-  --spacing-sm-md: clamp(1rem, 0.6957rem + 1.5217vw, 1.875rem);
   --spacing-sm-lg: clamp(1rem, 0.4783rem + 2.6087vw, 2.5rem);
   --spacing-sm-xl: clamp(1rem, 0.0435rem + 4.7826vw, 3.75rem);
   --spacing-sm-2xl: clamp(1rem, -0.3913rem + 6.9565vw, 5rem);

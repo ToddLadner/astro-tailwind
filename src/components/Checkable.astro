@@ -7,28 +7,48 @@ interface Props extends HTMLAttributes<'input'> {
   uid?: string;
   label?: string;
   name?: string;
-  placeholder?: string;
   disabled?: boolean;
   icon?: string;
   error?: string;
+  supportingText?: string;
+  size?: 'small' | 'large';
+  layout?: 'inline' | 'block';
   classes?: string;
 }
 
 const {
-  type  = 'checkbox',
+  type = 'checkbox',
   uid,
   label,
   name,
-  placeholder,
   icon,
   error,
+  supportingText,
+  size,
+  layout = 'inline',
   classes,
-  disabled  = false,
+  disabled = false,
   ...rest
 } = Astro.props;
 
 // generate a short random id if none provided
 const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
+
+const describedBy = [
+  supportingText && `${id}-supporting`,
+  error && `${id}-error`,
+].filter(Boolean).join(' ') || undefined;
+
+const classList = [
+  type,
+  layout === 'stack' && 'stack',
+  error && 'error',
+  classes,
+];
+
+const inputClassList = [
+  size,
+];
 ---
 
 <style>
@@ -38,7 +58,7 @@ const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
       color: var(--text-color-1);
       cursor: pointer;
       display: inline-grid;
-      gap: 0 var(--size-2);
+      gap: 0 var(--spacing-2xs);
       grid-auto-columns: auto;
       grid-auto-flow: column;
       inline-size: fit-content;
@@ -58,9 +78,9 @@ const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
       }
 
       /* Required dot */
-      &:has([required]:not([type="checkbox"]:checked)) {
+      &:has([required]) {
         .label:after {
-          color: var(--red);
+          color: var(--color-red-5);
           content: "*";
           inset: 0 -0.25ex auto auto;
           position: absolute;
@@ -73,11 +93,20 @@ const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
         grid-row: 1;
         position: relative;
         padding-inline: 0 1ex;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+
+        [data-icon] {
+          color: currentColor;
+          block-size: 0.7lh;
+          aspect-ratio: 1;
+        }
       }
 
       /* Supporting text */
       .supporting-text {
-        color: var(--text-color-2);
+        color: var(--color-text-2);
         font-size: var(--font-size-xs);
         grid-column: 2;
         grid-row: 2;
@@ -85,79 +114,64 @@ const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
         z-index: 1;
       }
 
-      /* Stacked layout */
-      &.stack {
-        justify-items: center;
-        grid-auto-columns: unset;
-
-        .label {
-          grid-column: 1/-1;
-          grid-row: 2;
-          margin-block-start: var(--size-1);
-          padding-inline: 1ex;
-
-          /* Required dot */
-          &::after {
-            inset: 0 -0.25ex auto auto;
-          }
-        }
-
-        .supporting-text {
-          grid-column: 1/-1;
-          grid-row: 3;
-        }
-      }
-
       /* Input */
       input {
         aspect-ratio: 1;
         block-size: 1.125rem;
         cursor: pointer;
-        inline-size: 1.125rem;
-
-        &::before {
-          --highlight-size: 175%;
-        }
+        margin: 0;
       }
 
       /* Sizes */
-      &.small {
-        input {
-          block-size: var(--size-3);
-          inline-size: var(--size-3);
-        }
-      }
-
-      &.large {
-        input {
-          block-size: var(--size-4);
-          inline-size: var(--size-4);
-        }
-      }
+      input.small { block-size: var(--spacing-xs); }
+      input.large { block-size: var(--spacing-sm); }
 
       /* Validation */
       &.error {
-        input[type="checkbox"] {
-          accent-color: var(--color-9);
+        input { accent-color: var(--color-red-4); }
 
-          & ~ :where(.label, .supporting-text) {
-            color: var(--color-9);
-          }
+        :where(.label, .supporting-text) {
+          color: var(--color-red-4);
         }
+      }
+       .error-text {
+        color: var(--color-red-4);
+        font-size: var(--font-size-xs);
+        grid-column: 2;
+        grid-row: 3;
+        line-height: 1.5;
       }
 
       /* Touch devices */
       @media (pointer: coarse) {
-        input {
-          block-size: var(--size-4);
-          inline-size: var(--size-4);
-        }
+        input { block-size: var(--spacing-md); }
       }
     }
   }
 </style>
-
-<label for={id} class:list={[classes]} {...rest}>
-  <input id={id} name={name} type={type} />
-  <span class="label">{label}</span>
+<label for={id} class:list={classList}>
+  <input
+    id={id}
+    name={name}
+    type={type}
+    disabled={disabled}
+    aria-invalid={error ? "true" : undefined}
+    aria-describedby={describedBy}
+    class:list={inputClassList}
+    {...rest}
+  />
+  <span class="label">
+    {icon && <Icon name={icon} data-icon aria-hidden="true" />}
+    {label}
+  </span>
+  {supportingText && (
+    <span id={`${id}-supporting`} class="supporting-text">
+      {supportingText}
+    </span>
+  )}
+  {error && (
+    <span id={`${id}-error`} class="error-text" role="alert">
+      {error}
+    </span>
+  )}
 </label>
