@@ -1,0 +1,72 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<"div"> {
+  classes?: string;
+}
+
+const { 
+ classes,
+  ...rest 
+} = Astro.props;
+
+
+const uniqueId = `mask-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+
+<div role="tablist" aria-label="Music">
+  <button role="tab" aria-selected="true" id="t1" aria-controls="p1">Recent</button>
+  <button role="tab" aria-selected="false" id="t2" aria-controls="p2" tabindex="-1">Loved</button>
+  <button role="tab" aria-selected="false" id="t3" aria-controls="p3" tabindex="-1">Following</button>
+</div>
+
+<section role="tabpanel" id="p1" aria-labelledby="t1">…Recent tracks…</section>
+<section role="tabpanel" id="p2" hidden aria-labelledby="t2">…Loved tracks…</section>
+<section role="tabpanel" id="p3" hidden aria-labelledby="t3">…Following…</section>
+
+<script is:inline>
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  const panels = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
+  function activate(i) {
+    tabs.forEach((t,j)=>{ t.setAttribute('aria-selected', j===i); t.tabIndex = j===i ? 0 : -1; });
+    panels.forEach((p,j)=> p.hidden = j!==i);
+    tabs[i].focus();
+  }
+  document.querySelector('[role="tablist"]').addEventListener('keydown', e => {
+    const i = tabs.indexOf(document.activeElement);
+    if (e.key === 'ArrowRight') { e.preventDefault(); activate((i+1)%tabs.length); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); activate((i-1+tabs.length)%tabs.length); }
+  });
+  tabs.forEach((t,i)=> t.addEventListener('click', ()=>activate(i)));
+</script>
+
+<noscript>
+  <section>
+    <h2>Recent</h2>
+    <p>Your recent tracks:</p>
+    <ul>
+      <li>The Beths - Mother, Pray For Me</li>
+      <li>The Beths - Metal</li>
+      <li>The Beths - No Joy</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Loved</h2>
+    <p>Tracks you loved:</p>
+    <ul>
+      <li>Marnie Stern - Believing Is Seeing</li>
+      <li>FKA twigs - Girl Feels Good</li>
+      <li>Fat Dog - Running</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Following</h2>
+    <p>Artists you follow:</p>
+    <ul>
+      <li>Amyl and the Sniffers</li>
+      <li>Du Blonde</li>
+      <li>Magdalena Bay</li>
+    </ul>
+  </section>
+</noscript>
