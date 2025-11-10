@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Tabs from '@components/Tab.astro';
+
+const { 
+	title = "My Astro Blog",
+	description = "My musings about the Astro framework",
+	...rest 
+} = Astro.props;
+---
+
+<Layout {title} {description}>
+	<main class='bg-surface-2'>
+    <article class="px-max py-2xl stack-md">
+      <h1>Tabs</h1>
+      <Tabs label="Music" classes="block">
+      <section id="recent" data-label="Recent">
+        Recent content
+         <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+         </ul>
+      </section>
+
+      <section id="loved" data-label="Loved">
+        <!-- Your content -->Loved content
+      </section>
+
+      <section id="following" data-label="Following">
+        <!-- Your content -->Following content
+      </section>
+    </Tabs>
+    </article>
+  </main>
+</Layout>

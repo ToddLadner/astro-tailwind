@@ -1,72 +1,173 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+// Tab.astro
+import type { HTMLAttributes } from "astro/types";
 
 interface Props extends HTMLAttributes<"div"> {
+  /** Visual label for SR and context */
+  label?: string; // e.g., "Music"
+  /** Breakpoint where tabs become vertical (accordion-like) */
+  verticalAt?: string; // e.g., "(max-width: 640px)"
   classes?: string;
 }
 
-const { 
- classes,
-  ...rest 
-} = Astro.props;
-
-
-const uniqueId = `mask-${Math.random().toString(36).substr(2, 9)}`;
+const { label = "Tabs", verticalAt = "(max-width: 640px)", classes = "", ...rest } = Astro.props;
 ---
 
+  <style>
+    /* Focus styles for visibility */
+    .tabs__tab:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+    /* Example Tailwind 4 hooks (keep styling in your CSS):
+       .tabs__list { @apply gap-2; }
+       .tabs__tab[aria-selected="true"] { @apply bg-neutral-800 text-white; }
+       .tabs__tab[aria-selected="false"] { @apply bg-neutral-100 text-neutral-900; }
+       [role="tabpanel"] { @apply mt-4; }
+    */
+    @media (prefers-reduced-motion: reduce) {
+      [role="tabpanel"] { transition: none !important; }
+    }
+  </style>
 
-<div role="tablist" aria-label="Music">
-  <button role="tab" aria-selected="true" id="t1" aria-controls="p1">Recent</button>
-  <button role="tab" aria-selected="false" id="t2" aria-controls="p2" tabindex="-1">Loved</button>
-  <button role="tab" aria-selected="false" id="t3" aria-controls="p3" tabindex="-1">Following</button>
+<div class={`tabs ${classes}`} {...rest}>
+  <!-- Tablist will be hydrated from the child sections' data-labels -->
+  <div role="tablist" aria-label={label} aria-orientation="horizontal" class="tabs__list flex gap-2 flex-wrap"></div>
+
+  <!--
+    Usage: put panels inside the default slot.
+    Each panel MUST have:
+      id="unique-id"
+      data-label="Tab label"
+    Example:
+      <section id="recent" data-label="Recent">...</section>
+  -->
+  <slot />
+
+  <script is:inline>
+    (() => {
+      const root = document.currentScript.closest('.tabs');
+      const tablist = root.querySelector('[role="tablist"]');
+      const dir = getComputedStyle(document.documentElement).direction || 'ltr';
+      const rtl = dir === 'rtl';
+
+      // Collect panels declared by the user
+      const panels = [...root.querySelectorAll(':scope > section[id][data-label]')];
+
+      if (panels.length === 0) return;
+
+      // Build tabs from panels
+      const tabs = panels.map((panel, idx) => {
+        const id = panel.id;
+        const label = panel.dataset.label.trim();
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `tab-${id}`;
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-controls', id);
+        btn.className = 'tabs__tab inline-flex items-center gap-2 px-3 py-2 rounded-md focus:outline-none focus-visible:outline-2';
+        btn.textContent = label;
+        if (idx === 0) {
+          btn.setAttribute('aria-selected', 'true');
+          btn.tabIndex = 0;
+          panel.hidden = false;
+        } else {
+          btn.setAttribute('aria-selected', 'false');
+          btn.tabIndex = -1;
+          panel.hidden = true;
+        }
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', btn.id);
+        tablist.appendChild(btn);
+        return btn;
+      });
+
+      function indexOf(el) { return Math.max(0, tabs.indexOf(el)); }
+      function next(i) { return (i + 1) % tabs.length; }
+      function prev(i) { return (i - 1 + tabs.length) % tabs.length; }
+
+      function activate(i, { focus = true, updateHash = true } = {}) {
+        tabs.forEach((t, j) => {
+          const selected = j === i;
+          t.setAttribute('aria-selected', String(selected));
+          t.tabIndex = selected ? 0 : -1;
+          panels[j].hidden = !selected;
+        });
+        if (focus) tabs[i].focus();
+        if (updateHash) history.replaceState(null, '', '#' + panels[i].id);
+      }
+
+      // Deep-link on load
+      const fromHash = location.hash ? panels.findIndex(p => '#' + p.id === location.hash) : -1;
+      if (fromHash >= 0) activate(fromHash, { focus: false, updateHash: false });
+
+      // Click activate
+      tabs.forEach((t, i) => t.addEventListener('click', () => activate(i)));
+
+      // Keyboard: Arrow keys + Home/End + type-ahead
+      tablist.addEventListener('keydown', (e) => {
+        const i = indexOf(document.activeElement);
+        if (i < 0) return;
+
+        const labelAt = (idx) => tabs[idx].textContent.trim().toLowerCase();
+
+        switch (e.key) {
+          case 'ArrowRight':
+            e.preventDefault();
+            activate(rtl ? prev(i) : next(i));
+            break;
+          case 'ArrowLeft':
+            e.preventDefault();
+            activate(rtl ? next(i) : prev(i));
+            break;
+          case 'ArrowDown': // when vertical
+            e.preventDefault();
+            activate(next(i));
+            break;
+          case 'ArrowUp': // when vertical
+            e.preventDefault();
+            activate(prev(i));
+            break;
+          case 'Home':
+            e.preventDefault();
+            activate(0);
+            break;
+          case 'End':
+            e.preventDefault();
+            activate(tabs.length - 1);
+            break;
+          default:
+            if (e.key.length === 1 && /\S/.test(e.key)) {
+              const q = e.key.toLowerCase();
+              // search forward starting after current
+              const order = [...tabs.keys()].map(k => (k + i + 1) % tabs.length);
+              const hit = order.find(k => labelAt(k).startsWith(q));
+              if (hit != null) {
+                e.preventDefault();
+                activate(hit);
+              }
+            }
+        }
+      });
+
+      // Responsive: set aria-orientation = vertical when small
+      const mql = window.matchMedia(`${verticalAt}`);
+      function applyOrientation() {
+        tablist.setAttribute('aria-orientation', mql.matches ? 'vertical' : 'horizontal');
+        // Optional: if vertical and you want Up/Down to be primary, we already support both.
+      }
+      applyOrientation();
+      mql.addEventListener?.('change', applyOrientation);
+
+      // Respect prefers-reduced-motion if you animate with CSS. Panels default to hidden toggle only.
+    })();
+  </script>
+
+  <noscript>
+    <!-- No-JS fallback: show all content with headings.
+         This preserves SEO and readability even if JS fails mid-load. -->
+    <div class="tabs__noscript space-y-6">
+      <slot />
+    </div>
+  </noscript>
 </div>
-
-<section role="tabpanel" id="p1" aria-labelledby="t1">…Recent tracks…</section>
-<section role="tabpanel" id="p2" hidden aria-labelledby="t2">…Loved tracks…</section>
-<section role="tabpanel" id="p3" hidden aria-labelledby="t3">…Following…</section>
-
-<script is:inline>
-  const tabs = [...document.querySelectorAll('[role="tab"]')];
-  const panels = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
-  function activate(i) {
-    tabs.forEach((t,j)=>{ t.setAttribute('aria-selected', j===i); t.tabIndex = j===i ? 0 : -1; });
-    panels.forEach((p,j)=> p.hidden = j!==i);
-    tabs[i].focus();
-  }
-  document.querySelector('[role="tablist"]').addEventListener('keydown', e => {
-    const i = tabs.indexOf(document.activeElement);
-    if (e.key === 'ArrowRight') { e.preventDefault(); activate((i+1)%tabs.length); }
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); activate((i-1+tabs.length)%tabs.length); }
-  });
-  tabs.forEach((t,i)=> t.addEventListener('click', ()=>activate(i)));
-</script>
-
-<noscript>
-  <section>
-    <h2>Recent</h2>
-    <p>Your recent tracks:</p>
-    <ul>
-      <li>The Beths - Mother, Pray For Me</li>
-      <li>The Beths - Metal</li>
-      <li>The Beths - No Joy</li>
-    </ul>
-  </section>
-  <section>
-    <h2>Loved</h2>
-    <p>Tracks you loved:</p>
-    <ul>
-      <li>Marnie Stern - Believing Is Seeing</li>
-      <li>FKA twigs - Girl Feels Good</li>
-      <li>Fat Dog - Running</li>
-    </ul>
-  </section>
-  <section>
-    <h2>Following</h2>
-    <p>Artists you follow:</p>
-    <ul>
-      <li>Amyl and the Sniffers</li>
-      <li>Du Blonde</li>
-      <li>Magdalena Bay</li>
-    </ul>
-  </section>
-</noscript>
