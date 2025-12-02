@@ -149,6 +149,24 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
   }
 }
 :not(:active):focus-visible { outline-offset: .5rem }
+/* Universal Focus */
+@supports (position-area: top) {
+  html:after {
+    content: "";
+    position: fixed;
+    position-anchor: --focus;
+    inset: anchor(inside,0);
+    outline: 2px solid var(--color-success);
+    outline-offset: 3px;
+    border-radius: 2px;
+    pointer-events: none;
+    transition: .4s;
+  }
+  *:focus-visible {
+    outline: none;
+    anchor-name: --focus;
+  }
+}
 
 /* [10] Elements */
 hr {
