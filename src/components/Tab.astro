@@ -1,173 +1,152 @@
 ---
-// Tab.astro
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends HTMLAttributes<"div"> {
-  /** Visual label for SR and context */
-  label?: string; // e.g., "Music"
-  /** Breakpoint where tabs become vertical (accordion-like) */
-  verticalAt?: string; // e.g., "(max-width: 640px)"
-  classes?: string;
+  label?: string;                  // aria-label on tablist
+  verticalAt?: string;             // media query for vertical mode
+  classes?: string;                // wrapper hooks
+  buttonClasses?: string;          // default classes for auto-generated buttons
 }
-
-const { label = "Tabs", verticalAt = "(max-width: 640px)", classes = "", ...rest } = Astro.props;
+const {
+  label = "Tabs",
+  verticalAt = "(max-width: 640px)",
+  classes = "",
+  buttonClasses = "inline-flex items-center gap-2 px-3 py-2 rounded-md",
+  ...rest
+} = Astro.props;
 ---
 
-  <style>
-    /* Focus styles for visibility */
-    .tabs__tab:focus-visible {
-      outline: 2px solid currentColor;
-      outline-offset: 2px;
-    }
-    /* Example Tailwind 4 hooks (keep styling in your CSS):
-       .tabs__list { @apply gap-2; }
-       .tabs__tab[aria-selected="true"] { @apply bg-neutral-800 text-white; }
-       .tabs__tab[aria-selected="false"] { @apply bg-neutral-100 text-neutral-900; }
-       [role="tabpanel"] { @apply mt-4; }
-    */
-    @media (prefers-reduced-motion: reduce) {
-      [role="tabpanel"] { transition: none !important; }
-    }
-  </style>
-
 <div class={`tabs ${classes}`} {...rest}>
-  <!-- Tablist will be hydrated from the child sections' data-labels -->
-  <div role="tablist" aria-label={label} aria-orientation="horizontal" class="tabs__list flex gap-2 flex-wrap"></div>
+  <!-- If you hand-author buttons here, Tabs will use them. Otherwise it will generate from panels. -->
+  <div role="tablist" aria-label={label} aria-orientation="horizontal" class="tabs__list flex gap-2 flex-wrap">
+    <slot name="tabs" />
+  </div>
 
-  <!--
-    Usage: put panels inside the default slot.
-    Each panel MUST have:
-      id="unique-id"
-      data-label="Tab label"
-    Example:
-      <section id="recent" data-label="Recent">...</section>
-  -->
+  <!-- Author panels directly as children: <section id="…" data-label="…"> -->
   <slot />
 
   <script is:inline>
     (() => {
       const root = document.currentScript.closest('.tabs');
       const tablist = root.querySelector('[role="tablist"]');
-      const dir = getComputedStyle(document.documentElement).direction || 'ltr';
-      const rtl = dir === 'rtl';
-
-      // Collect panels declared by the user
+      let tabs = [...tablist.querySelectorAll('[role="tab"]')];
       const panels = [...root.querySelectorAll(':scope > section[id][data-label]')];
 
       if (panels.length === 0) return;
 
-      // Build tabs from panels
-      const tabs = panels.map((panel, idx) => {
-        const id = panel.id;
-        const label = panel.dataset.label.trim();
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.id = `tab-${id}`;
-        btn.setAttribute('role', 'tab');
-        btn.setAttribute('aria-controls', id);
-        btn.className = 'tabs__tab inline-flex items-center gap-2 px-3 py-2 rounded-md focus:outline-none focus-visible:outline-2';
-        btn.textContent = label;
-        if (idx === 0) {
-          btn.setAttribute('aria-selected', 'true');
-          btn.tabIndex = 0;
-          panel.hidden = false;
-        } else {
-          btn.setAttribute('aria-selected', 'false');
-          btn.tabIndex = -1;
-          panel.hidden = true;
-        }
-        panel.setAttribute('role', 'tabpanel');
-        panel.setAttribute('aria-labelledby', btn.id);
-        tablist.appendChild(btn);
-        return btn;
+      // Ensure roles on panels
+      panels.forEach(p => p.setAttribute('role', 'tabpanel'));
+
+      // Auto-generate buttons if none authored
+      if (tabs.length === 0) {
+        panels.forEach((panel, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.id = `t-${panel.id}`;
+          btn.setAttribute('role', 'tab');
+          btn.setAttribute('aria-controls', panel.id);
+          btn.className = `tabs__tab ${CSS.escape ? '${buttonClasses}' : buttonClasses}`;
+          btn.textContent = panel.dataset.label.trim();
+          tablist.appendChild(btn);
+        });
+        tabs = [...tablist.querySelectorAll('[role="tab"]')];
+      }
+
+      // Link tabs ↔ panels
+      tabs.forEach((t) => {
+        const panelId = t.getAttribute('aria-controls');
+        const panel = panelId && root.querySelector(`#${CSS.escape(panelId)}`);
+        if (panel) panel.setAttribute('aria-labelledby', t.id || (t.id = `t-${panelId}`));
       });
 
-      function indexOf(el) { return Math.max(0, tabs.indexOf(el)); }
-      function next(i) { return (i + 1) % tabs.length; }
-      function prev(i) { return (i - 1 + tabs.length) % tabs.length; }
+      // Helpers
+      const dir = getComputedStyle(document.documentElement).direction || 'ltr';
+      const rtl = dir === 'rtl';
+      const panelsById = panels.reduce((m,p,i)=>(m[p.id]=i,m),{});
+      const next = (i) => (i + 1) % tabs.length;
+      const prev = (i) => (i - 1 + tabs.length) % tabs.length;
 
-      function activate(i, { focus = true, updateHash = true } = {}) {
+      function setSelected(i, { focus = true, updateHash = true } = {}) {
         tabs.forEach((t, j) => {
-          const selected = j === i;
-          t.setAttribute('aria-selected', String(selected));
-          t.tabIndex = selected ? 0 : -1;
-          panels[j].hidden = !selected;
+          const sel = j === i;
+          t.setAttribute('aria-selected', String(sel));
+          t.tabIndex = sel ? 0 : -1;
+          panels[j].hidden = !sel;
+          // Mirror as data-selected for CSS if you prefer
+          t.dataset.selected = sel ? "true" : "false";
         });
         if (focus) tabs[i].focus();
         if (updateHash) history.replaceState(null, '', '#' + panels[i].id);
       }
 
-      // Deep-link on load
-      const fromHash = location.hash ? panels.findIndex(p => '#' + p.id === location.hash) : -1;
-      if (fromHash >= 0) activate(fromHash, { focus: false, updateHash: false });
+      // Initial state (hash wins)
+      const hashIdx = (location.hash && panelsById[location.hash.slice(1)]);
+      const initial = Number.isInteger(hashIdx) ? hashIdx : 0;
+      tabs.forEach((t, j) => {
+        const sel = j === initial;
+        t.setAttribute('aria-selected', String(sel));
+        t.tabIndex = sel ? 0 : -1;
+        panels[j].hidden = !sel;
+      });
 
-      // Click activate
-      tabs.forEach((t, i) => t.addEventListener('click', () => activate(i)));
+      // Click
+      tabs.forEach((t, i) => t.addEventListener('click', () => setSelected(i)));
 
-      // Keyboard: Arrow keys + Home/End + type-ahead
+      // Keys
       tablist.addEventListener('keydown', (e) => {
-        const i = indexOf(document.activeElement);
+        const i = tabs.indexOf(document.activeElement);
         if (i < 0) return;
-
-        const labelAt = (idx) => tabs[idx].textContent.trim().toLowerCase();
-
         switch (e.key) {
-          case 'ArrowRight':
-            e.preventDefault();
-            activate(rtl ? prev(i) : next(i));
-            break;
-          case 'ArrowLeft':
-            e.preventDefault();
-            activate(rtl ? next(i) : prev(i));
-            break;
-          case 'ArrowDown': // when vertical
-            e.preventDefault();
-            activate(next(i));
-            break;
-          case 'ArrowUp': // when vertical
-            e.preventDefault();
-            activate(prev(i));
-            break;
-          case 'Home':
-            e.preventDefault();
-            activate(0);
-            break;
-          case 'End':
-            e.preventDefault();
-            activate(tabs.length - 1);
-            break;
+          case 'ArrowRight': e.preventDefault(); setSelected(rtl ? prev(i) : next(i)); break;
+          case 'ArrowLeft':  e.preventDefault(); setSelected(rtl ? next(i) : prev(i)); break;
+          case 'ArrowDown':  e.preventDefault(); setSelected(next(i)); break; // vertical helpful
+          case 'ArrowUp':    e.preventDefault(); setSelected(prev(i)); break; // vertical helpful
+          case 'Home':       e.preventDefault(); setSelected(0); break;
+          case 'End':        e.preventDefault(); setSelected(tabs.length - 1); break;
           default:
             if (e.key.length === 1 && /\S/.test(e.key)) {
               const q = e.key.toLowerCase();
-              // search forward starting after current
-              const order = [...tabs.keys()].map(k => (k + i + 1) % tabs.length);
-              const hit = order.find(k => labelAt(k).startsWith(q));
-              if (hit != null) {
-                e.preventDefault();
-                activate(hit);
-              }
+              const order = tabs.map((_,k)=>(k+i+1)%tabs.length);
+              const hit = order.find(k => tabs[k].textContent.trim().toLowerCase().startsWith(q));
+              if (hit != null) { e.preventDefault(); setSelected(hit); }
             }
         }
       });
 
-      // Responsive: set aria-orientation = vertical when small
-      const mql = window.matchMedia(`${verticalAt}`);
+      // Orientation toggle
+      const mql = window.matchMedia(`${{verticalAt}.toString ? `${verticalAt}` : verticalAt}`);
       function applyOrientation() {
         tablist.setAttribute('aria-orientation', mql.matches ? 'vertical' : 'horizontal');
-        // Optional: if vertical and you want Up/Down to be primary, we already support both.
       }
       applyOrientation();
       mql.addEventListener?.('change', applyOrientation);
 
-      // Respect prefers-reduced-motion if you animate with CSS. Panels default to hidden toggle only.
+      // Hash navigation after load
+      window.addEventListener('hashchange', () => {
+        const id = location.hash.slice(1);
+        if (id in panelsById) setSelected(panelsById[id], { focus: false, updateHash: false });
+      });
     })();
   </script>
 
+  <style>
+  /* Focus visibility */
+  .tabs__tab:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+  /* Panel spacing */
+  [role="tabpanel"] { /* @apply mt-4; */ }
+
+  /* Small-screen stack is just CSS; semantics stay tabs */
+  @media ${verticalAt} {
+    .tabs__list { /* @apply flex-col; */ }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [role="tabpanel"] { transition: none !important; }
+  }
+  </style>
+
   <noscript>
-    <!-- No-JS fallback: show all content with headings.
-         This preserves SEO and readability even if JS fails mid-load. -->
-    <div class="tabs__noscript space-y-6">
-      <slot />
-    </div>
+    <!-- SEO/no-JS: show all content -->
+    <div class="space-y-6"><slot /></div>
   </noscript>
 </div>

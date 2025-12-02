@@ -14,23 +14,16 @@ const {
     <article class="px-max py-2xl stack-md">
       <h1>Tabs</h1>
       <Tabs label="Music" classes="block">
-      <section id="recent" data-label="Recent">
-        Recent content
-         <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-         </ul>
-      </section>
+  <div slot="tabs">
+    <TabButton id="t-recent" aria-controls="recent" selected classes="px-3 py-2 rounded-md">Recent</TabButton>
+    <TabButton id="t-loved"  aria-controls="loved"  classes="px-3 py-2 rounded-md">Loved</TabButton>
+    <TabButton id="t-follow" aria-controls="following" classes="px-3 py-2 rounded-md">Following</TabButton>
+  </div>
 
-      <section id="loved" data-label="Loved">
-        <!-- Your content -->Loved content
-      </section>
-
-      <section id="following" data-label="Following">
-        <!-- Your content -->Following content
-      </section>
-    </Tabs>
+  <section id="recent" data-label="Recent">…</section>
+  <section id="loved" data-label="Loved">…</section>
+  <section id="following" data-label="Following">…</section>
+</Tabs>
     </article>
   </main>
 </Layout>
