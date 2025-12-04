@@ -29,8 +29,8 @@ const {
   ...rest
 } = Astro.props;
 
-// generate a short random id if none provided
-const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
+// generate a short random id if none provided - using cryptographically secure random
+const id = uid ?? `input-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, '0'), '')}`;
 
 const describedBy = [
   supportingText && `${id}-supporting`,
@@ -51,6 +51,8 @@ const inputClassList = [
 <style>
   @layer components {
     .checkable {
+      --checkable-size: 1.125rem;
+      
       align-items: center;
       color: var(--color-text-1);
       cursor: pointer;
@@ -110,9 +112,15 @@ const inputClassList = [
       /* Input */
       input {
         aspect-ratio: 1;
-        block-size: 1.125rem;
+        block-size: var(--checkable-size);
         cursor: pointer;
         margin: 0;
+
+        &:focus-visible {
+          outline: 2px solid var(--color-brand);
+          outline-offset: 2px;
+          border-radius: 2px;
+        }
       }
 
       /* Sizes */
@@ -121,21 +129,28 @@ const inputClassList = [
 
       /* Validation */
       &.error {
-        input { accent-color: var(--color-red-4); }
+        input { 
+          accent-color: var(--color-red-5);
+
+          &:focus-visible {
+            outline-color: var(--color-red-5);
+          }
+        }
 
         :where(.label, .supporting-text) {
-          color: var(--color-red-4);
+          color: var(--color-red-5);
         }
       }
-       .error-text {
-        color: var(--color-red-4);
+
+      .error-text {
+        color: var(--color-red-5);
         font-size: var(--font-size-xs);
         grid-column: 2;
         grid-row: 3;
         line-height: 1.5;
       }
 
-      /* Touch devices */
+      /* Touch devices - increase size for easier interaction */
       @media (pointer: coarse) {
         input { block-size: var(--spacing-md); }
       }
