@@ -4,7 +4,7 @@ import type { HTMLAttributes } from 'astro/types';
 
 type Element = 'input' | 'textarea' | 'select';
 
-interface Props extends HTMLAttributes<any> {
+interface Props extends HTMLAttributes<'input'> {
   as?: Element;
   id?: string;
   uid?: string;
@@ -34,14 +34,8 @@ const {
   ...rest
 } = props;
 
-// now choose the ID in priority order:
-const fallbackId =
-  typeof globalThis !== 'undefined' &&
-  'crypto' in globalThis &&
-  typeof globalThis.crypto?.randomUUID === 'function'
-    ? globalThis.crypto.randomUUID()
-    : `field-${Math.random().toString(36).slice(2, 8)}`;
-const id = propId ?? uid ?? fallbackId;
+// Generate ID with secure random fallback
+const id = propId ?? uid ?? `field-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, '0'), '')}`;
 const describedBy = ariaDescribedByProp ?? (error ? `${id}-error` : undefined);
 const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
 ---
@@ -50,10 +44,11 @@ const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
   .field {
     background-color: var(--color-surface-0);
     max-width: var(--measure-sm);
-    padding: var(--spacing-xs);
+    padding: var(--spacing-2xs);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-inset-lg);
     border: 1px solid var(--color-surface-3);
+    transition: border-color 0.2s, box-shadow 0.2s;
 
     &:focus-within {
       border: 1px solid var(--color-brand);
@@ -62,6 +57,12 @@ const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
       .label {
         color: var(--color-brand);
       }
+    }
+
+    /* Error state */
+    &[aria-invalid="true"] {
+      border-color: var(--color-red-5);
+      --error-color: var(--color-red-5);
     }
   }
   
@@ -76,20 +77,32 @@ const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
     
     &:focus { outline: none; }
   }
-  input::placeholder {
+  input::placeholder,
+  textarea::placeholder,
+  select::placeholder {
     color: var(--color-surface-4);
   }
   
   /* [4] Validation */
   .field:has(:is(input, textarea, select):user-valid) {
-    color: var(--color-green-7);
-    border: 1px solid var(--color-green-4);
-    line-height: inherit;
+    border-color: var(--color-green-5);
   }
-  .field:has(:is(input, textarea, select):user-invalid) {
-    color: var(--color-red-7);
-    border: 1px solid var(--color-red-7);
-    line-height: inherit;
+  .field:has(:is(input, textarea, select):user-invalid),
+  .field[aria-invalid="true"] {
+    border-color: var(--color-red-5);
+  }
+
+  /* [5] Control focus styles */
+  /* .control:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: -1px;
+  } */
+
+  /* [6] Error message */
+  .error-message {
+    color: var(--error-color, var(--color-red-5));
+    font-size: var(--font-size-xs);
+    margin-top: var(--spacing-2xs);
   }
 </style>
 
@@ -134,7 +147,7 @@ const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
   )}
 
   {error && (
-    <span id={`${id}-error`} class="mt-xs text-xs text-red-6">
+    <span id={`${id}-error`} class="error-message" role="alert">
       {error}
     </span>
   )}
