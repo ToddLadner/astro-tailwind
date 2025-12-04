@@ -2,8 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 
-interface Props extends HTMLAttributes<"button">, HTMLAttributes<"a"> {
-  type?: "button" | "submit" | "reset";
+type BaseProps = {
   theme?: "outlined" | "tonal" | "filled" | "custom";
   size?: "sm" | "lg";
   elevated?: boolean;
@@ -12,30 +11,52 @@ interface Props extends HTMLAttributes<"button">, HTMLAttributes<"a"> {
   text?: string;
   icon?: string;
   classes?: string;
-}
+  class?: string;
+  disabled?: boolean;
+  "aria-label"?: string;
+};
 
-const { 
-  type = "button", 
+type AnchorProps = BaseProps & HTMLAttributes<"a"> & {
+  href: string;
+};
+
+type ButtonProps = BaseProps & HTMLAttributes<"button"> & {
+  href?: undefined;
+  type?: "button" | "submit" | "reset";
+};
+
+type Props = ButtonProps | AnchorProps;
+
+const {
+  type = "button",
   theme,
   size,
   elevated,
-  variant, 
+  variant,
   shape,
-  text, 
+  text,
   icon,
-  classes, 
+  classes,
+  class: className,
   href,
-  ...rest 
-  } = Astro.props;
+  disabled = false,
+  "aria-label": ariaLabelProp,
+  title,
+  ...rest
+} = Astro.props as Props;
 
+const isLink = typeof href === "string" && href.length > 0;
 const classList = [
+  "button",
   size,
   theme,
   shape === "circle" && "ellipse",
   elevated && "elevated",
   variant,
-  classes
+  classes,
+  className,
 ];
+const ariaLabel = ariaLabelProp ?? text ?? (icon && !text ? icon : undefined);
 ---
 
 <style>
@@ -51,6 +72,18 @@ const classList = [
       --text-color: light-dark(var(--color-purple-7), var(--color-purple-3));
       --button-ripple-duration: 0.5s;
       --button-ripple-size: 100%;
+      
+      /* Disabled state colors - extracted for reusability */
+      --disabled-bg: color-mix(
+        in oklch,
+        var(--color-text-1) 8%,
+        var(--color-surface-3)
+      );
+      --disabled-text: color-mix(
+        in oklch,
+        var(--color-text-1) 70%,
+        var(--color-surface-3)
+      );
 
       /* General Button Styles */
       align-items: center;
@@ -71,9 +104,14 @@ const classList = [
       user-select: none;
 
       /* Default Disabled Button Styles */
-      &[disabled] {
+      &:is([disabled], [aria-disabled="true"]) {
         cursor: not-allowed;
         opacity: 0.64;
+      }
+
+      /* Enable pointer cursor for non-disabled buttons */
+      &:not(:is([disabled], [aria-disabled="true"])) {
+        cursor: pointer;
       }
 
       /* Color & Ripple Effect | Motion OK  */
@@ -87,7 +125,7 @@ const classList = [
           background-position: center;
 
         /* Hover and Active Effects */
-        &:not([disabled]) {
+        &:not(:is([disabled], [aria-disabled="true"])) {
           &:not(:active):hover {
             --ripple: radial-gradient(circle, transparent 1%, var(--bg-color) 1%) center/15000%;
             transition: background var(--button-ripple-duration);
@@ -100,8 +138,19 @@ const classList = [
         }
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+        background-position: center;
+        &:not(:is([disabled], [aria-disabled="true"])) {
+          &:hover,
+          &:active {
+            --ripple: none;
+          }
+        }
+      }
+
       /* Hover State */
-      &:not([disabled]) {
+      &:not(:is([disabled], [aria-disabled="true"])) {
         &:not(:active):hover {
           --bg-color: light-dark(
             oklch(from var(--color-brand) l 0.01 h / 15%),
@@ -119,7 +168,7 @@ const classList = [
       }
 
       /* Disabled Text Color */
-      &[disabled] {
+      &:is([disabled], [aria-disabled="true"]) {
         --text-color: color-mix(
           in oklch,
           var(--color-text-2) 90%,
@@ -164,7 +213,7 @@ const classList = [
         --text-color: var(--color-brand);
 
         /* Hover State */
-        &:not([disabled]) {
+        &:not(:is([disabled], [aria-disabled="true"])) {
           &:not(:active):hover {
             --bg-color: var(--color-brand);
             --border-color: var(--color-brand);
@@ -185,7 +234,7 @@ const classList = [
         }
 
         /* Disabled Outlined Button */
-        &[disabled] {
+        &:is([disabled], [aria-disabled="true"]) {
           --bg-color: transparent;
           --border-color: color-mix(
             in oklch,
@@ -208,7 +257,7 @@ const classList = [
         --text-color: var(--color-purple-13);
         
         /* Hover State */
-        &:not([disabled]) {
+        &:not(:is([disabled], [aria-disabled="true"])) {
           &:not(:active):hover {
             --bg-color: light-dark(
               oklch(from var(--color-brand) 85% .12 h / 100%),
@@ -234,7 +283,7 @@ const classList = [
         }
 
         /* Disabled Tonal Button */
-        &[disabled] {
+        &:is([disabled], [aria-disabled="true"]) {
           --bg-color: color-mix(
             in oklch,
             var(--color-text-1) 8%,
@@ -252,7 +301,7 @@ const classList = [
         --bg-color: var(--color-purple-8);
         --text-color: var(--color-gray-1);
 
-        &:not([disabled]) {
+        &:not(:is([disabled], [aria-disabled="true"])) {
           &:not(:active):hover {
             --bg-color: var(--color-purple-10);
             --border-color: var(--color-purple-10);
@@ -265,7 +314,7 @@ const classList = [
         }
 
         /* Disabled Filled Button */
-        &[disabled] {
+        &:is([disabled], [aria-disabled="true"]) {
           --bg-color: color-mix(
             in oklch,
             var(--color-text-2) 20%,
@@ -273,7 +322,7 @@ const classList = [
           );
           --text-color: color-mix(
             in oklch,
-            var(--color-text-4) 70%,
+            var(--color-text-3) 85%,
             var(--color-surface-2)
           );
         }
@@ -292,7 +341,7 @@ const classList = [
 
 
         /* Hover & Pressed background‑color change  */
-        &:not([disabled]) {
+        &:not(:is([disabled], [aria-disabled="true"])) {
           &:not(:active):hover {
             --ripple: radial-gradient(
               circle,
@@ -314,17 +363,17 @@ const classList = [
           }
         }
 
-        /* Disabled Elevated Button */
-        &[disabled] {
+        /* Disabled Custom Button */
+        &:is([disabled], [aria-disabled="true"]) {
           --bg-color: color-mix(
             in oklch,
-            var(--text-color-2) 8%,
-            var(--surface-elevated)
+            var(--color-text-1) 8%,
+            var(--color-surface-3)
           );
           --text-color: color-mix(
             in oklch,
-            var(--text-color-2) 70%,
-            var(--surface-elevated)
+            var(--color-text-1) 70%,
+            var(--color-surface-3)
           );
         }
       }
@@ -340,24 +389,6 @@ const classList = [
       &.ellipse { aspect-ratio: var(--aspect-square) }
     }
 
-    /* File Input Styles */
-    input[type="file"] {
-      align-self: flex-start;
-      border-radius: var(--radius-2);
-      border: var(--border-size-1) solid var(--surface-filled);
-      box-shadow: var(--inner-shadow-4);
-      color: var(--text-color-2-contrast);
-      cursor: initial;
-      max-inline-size: 100%;
-      padding: 0;
-    }
-
-    /* File Input Button Styling */
-    input[type="file"]::-webkit-file-upload-button,
-    input[type="file"]::file-selector-button {
-      cursor: pointer;
-      margin-inline-end: var(--size-relative-6);
-    }
   }
 
   .spring {
@@ -370,12 +401,24 @@ const classList = [
         transform: scale(.9);
       }
     }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spring {
+      transition: none;
+      &:active {
+        transform: none;
+      }
+    }
+  }
 </style>
 
-{href ? (
+{isLink ? (
   <a
     href={href}
-    class:list={['button', classList]}
+    aria-disabled={disabled ? "true" : undefined}
+    aria-label={ariaLabel}
+    tabindex={disabled ? -1 : undefined}
+    class:list={classList}
     {...rest}
   >
     { icon && <Icon name={icon} /> }
@@ -385,7 +428,9 @@ const classList = [
 ) : (
   <button
     type={type}
+    aria-label={ariaLabel}
     class:list={classList}
+    disabled={disabled}
     {...rest}
   >
     { icon && <Icon name={icon} /> }
