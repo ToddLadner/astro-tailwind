@@ -22,8 +22,8 @@ const {
   ...rest
 } = props;
 
-// generate a short, unique-ish ID if none provided
-const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
+// generate a short, unique ID if none provided
+const id = idProp ?? `disclosure-${crypto.getRandomValues(new Uint8Array(4)).reduce((acc, byte) => acc + ('0' + byte.toString(16)).slice(-2), '')}`;
 ---
 
 <style>
@@ -74,12 +74,6 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
         padding-block: var(--spacing-sm);
         padding-inline: var(--spacing-sm);
         user-select: none;
-        outline: none;
-
-        &:focus-visible {
-          outline: 2px solid var(--color-brand-1, currentColor);
-          outline-offset: 2px;
-        }
       }
 
       /* Custom Arrow */
@@ -156,6 +150,8 @@ const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
 >
   <summary 
     id={id}
+    aria-expanded={open ? 'true' : 'false'}
+    aria-controls={`${id}-content`}
     class="font-bold"
   >
     {title} 

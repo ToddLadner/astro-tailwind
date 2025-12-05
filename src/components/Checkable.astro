@@ -115,12 +115,6 @@ const inputClassList = [
         block-size: var(--checkable-size);
         cursor: pointer;
         margin: 0;
-
-        &:focus-visible {
-          outline: 2px solid var(--color-brand);
-          outline-offset: 2px;
-          border-radius: 2px;
-        }
       }
 
       /* Sizes */
@@ -131,10 +125,6 @@ const inputClassList = [
       &.error {
         input { 
           accent-color: var(--color-red-5);
-
-          &:focus-visible {
-            outline-color: var(--color-red-5);
-          }
         }
 
         :where(.label, .supporting-text) {

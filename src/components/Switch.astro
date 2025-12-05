@@ -45,12 +45,7 @@ const {
   ...inputAttributes
 } = rawInputProps;
 
-const fallbackId =
-  typeof globalThis !== 'undefined' &&
-  'crypto' in globalThis &&
-  typeof globalThis.crypto?.randomUUID === 'function'
-    ? globalThis.crypto.randomUUID()
-    : `switch-${Math.random().toString(36).slice(2, 8)}`;
+const fallbackId = `switch-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, '0'), '')}`;
 const id = propId ?? uid ?? fallbackId;
 
 const supporting = supportingText ?? text;
@@ -63,9 +58,9 @@ const describedBy =
 const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
 
 const normalizedSize =
-  size === 'sm'
+  size === 'sm' || size === 'small'
     ? 'small'
-    : size === 'lg'
+    : size === 'lg' || size === 'large'
       ? 'large'
       : size;
 
@@ -122,11 +117,6 @@ const labelClassList = [
           inline-size: var(--track-width);
           inset: 0;
           position: absolute;
-        }
-
-        &:focus-visible {
-          outline-offset: 2px;
-          outline: 2px solid currentColor;
         }
 
         /* Dot */
@@ -192,7 +182,7 @@ const labelClassList = [
       /* Required dot */
       &:has([required]) {
         .label:after {
-          color: var(--color-red-4);
+          color: var(--color-red-5);
           content: "*";
           inset: 0 -0.25ex auto auto;
           position: absolute;
@@ -233,7 +223,7 @@ const labelClassList = [
       }
 
       .error-text {
-        color: var(--color-red-4);
+        color: var(--color-red-5);
         font-size: var(--font-size-xs);
         grid-column: 2;
         /* grid-row: 3; */
@@ -278,14 +268,9 @@ const labelClassList = [
 
       /* Validation */
       &.error {
-        input {
-          outline: 2px solid var(--color-9);
-          border-radius: var(--radius-round);
-        }
-
         .label,
         .supporting-text {
-          color: var(--color-red-4);
+          color: var(--color-red-5);
         }
       }
     }

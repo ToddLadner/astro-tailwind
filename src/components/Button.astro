@@ -427,7 +427,7 @@ const ariaLabel = ariaLabelProp ?? text ?? (icon && !text ? icon : undefined);
   </a>
 ) : (
   <button
-    type={type}
+    type={type as "button" | "submit" | "reset"}
     aria-label={ariaLabel}
     class:list={classList}
     disabled={disabled}
