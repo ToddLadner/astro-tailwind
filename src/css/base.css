@@ -152,7 +152,7 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 
 /* Universal Focus */
 @supports (position-area: top) {
-  html:after {
+  :is(html, dialog)::after {
     content: "";
     position: fixed;
     position-anchor: --focus;

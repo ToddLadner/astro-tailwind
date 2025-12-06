@@ -12,8 +12,6 @@ interface Props extends HTMLAttributes<"dialog"> {
   heading: string;
   overline?: string;
   icon?: string;
-  theme?: "outlined" | "tonal" | "filled" | "elevated";
-  classes?: string;
 }
 
 const {
@@ -24,8 +22,7 @@ const {
   heading,
   overline,
   icon,
-  theme,
-  classes = '',
+  class: className,
   ...rest
 } = Astro.props;
 ---
@@ -149,7 +146,7 @@ const {
   id={id}
   role={role}
   class="modal"
-  class:list={[classes]}
+  class:list={[className]}
   aria-modal="true"
   aria-describedby="dialog-content"
   {...(showHeader
@@ -175,7 +172,8 @@ const {
         variant='icon-button'
         icon='xmark-large-solid' 
         aria-label='close dialog'
-        classes="ml-[auto]"
+        aria-controls="dialog-content"
+        class="ml-[auto]"
       />
     </header>
   )}
@@ -193,31 +191,74 @@ const {
 
 <script>
   if (typeof window !== "undefined") {
-    import('focus-trap')
-      .then(({ createFocusTrap }) => {
-        document.querySelectorAll('.modal').forEach(dialog => {
+    // Initialize focus trap when DOM is ready
+    const initializeFocusTrap = async () => {
+      try {
+        const { createFocusTrap } = await import('focus-trap');
+        
+        document.querySelectorAll<HTMLDialogElement>('.modal').forEach(dialog => {
+          // Create trap but don't activate yet
           const trap = createFocusTrap(dialog, {
             clickOutsideDeactivates: true,
-            escapeDeactivates:       true,
-            onDeactivate:            () => dialog.close(),
-            fallbackFocus:           dialog,
+            escapeDeactivates: true,
+            onDeactivate: () => dialog.close(),
+            fallbackFocus: dialog,
           });
 
-          // Open → showModal() + activate trap
-          const origShow = dialog.showModal;
-          dialog.showModal = function() {
-            origShow.call(dialog);
+          // Override showModal to activate trap
+          const origShowModal = dialog.showModal.bind(dialog);
+          (dialog as any).showModal = function() {
+            origShowModal();
             trap.activate();
           };
 
-          // Teardown on close/cancel/backdrop
-          dialog.addEventListener('close',  () => trap.deactivate());
-          dialog.addEventListener('cancel', () => dialog.close());
-          dialog.addEventListener('click', e => e.target === dialog && dialog.close());
+          // Override show to activate trap
+          const origShow = dialog.show.bind(dialog);
+          (dialog as any).show = function() {
+            origShow();
+            trap.activate();
+          };
+
+          // Deactivate on close
+          dialog.addEventListener('close', () => {
+            trap.deactivate();
+          });
+          
+          // Close on cancel
+          dialog.addEventListener('cancel', (e) => {
+            e.preventDefault();
+            dialog.close();
+          });
+          
+          // Close on backdrop click
+          dialog.addEventListener('click', (e) => {
+            if (e.target === dialog) {
+              dialog.close();
+            }
+          });
         });
-      })
-      .catch((err) => {
-        console.error('Failed to load focus-trap for dialog focus management.', err);
-      });
+      } catch (err) {
+        console.error('Failed to initialize focus-trap:', err);
+        // Fallback: basic dialog setup without focus trap
+        document.querySelectorAll<HTMLDialogElement>('.modal').forEach(dialog => {
+          dialog.addEventListener('cancel', (e) => {
+            e.preventDefault();
+            dialog.close();
+          });
+          dialog.addEventListener('click', (e) => {
+            if (e.target === dialog) {
+              dialog.close();
+            }
+          });
+        });
+      }
+    };
+
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeFocusTrap);
+    } else {
+      initializeFocusTrap();
+    }
   }
 </script>
