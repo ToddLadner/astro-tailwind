@@ -791,11 +791,17 @@
 @utility font-italic { font-variation-settings: "ital" 1 }
 
 /* [43] Shapes */
-/* Square */
-@utility square {
-  border-radius: var(--radius-0);
+/* Square, Ellipsis, Pill, & Circle */
+@utility square { border-radius: var(--radius-0) }
+@utility ellipse { border-radius: var(--radius-ellipse) }
+@utility pill { border-radius: var(--radius-ellipse) }
+@utility circle { border-radius: var(--radius-ellipse) }
+@utility squircle { 
+  corner-shape: squircle;
+  border-radius: var(--radius-ellipse) 
 }
-/* Circle & Pill */
-@utility ellipse {
-  border-radius: var(--radius-ellipse); 
-}
+@utility superellipse { 
+  corner-shape: superellipse(1.25);
+  border-radius: var(--radius-ellipse)
+ }
+

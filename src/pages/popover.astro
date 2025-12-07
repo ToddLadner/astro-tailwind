@@ -21,6 +21,7 @@ const {
   #new-menu {
     position-anchor: --question;
     position-area: bottom center;
+    
   } 
   #tooltip-info {
     position-anchor: --my-tipanchor;
@@ -51,7 +52,9 @@ const {
     position-area: bottom center;
   }   
 
-
+:is(#click-btn, #my-dropdown,  #tooltip-info):focus-visible {
+  anchor-name: --click-btn, --focus;
+}
  
 
   /**/
@@ -117,6 +120,12 @@ const {
   <main class="bg-surface-2 stack">
     <!-- Header -->
     <article class="px-max py-2xl stack-md">
+      <Button 
+        theme='custom' 
+        text='custom'
+        elevated
+        popovertarget="click-menu"
+      />
       <h1>Popover</h1>
       <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
     </article>
@@ -133,7 +142,7 @@ const {
         Click me
       </Button>
       <Dropdown id="click-menu" labelledBy="click-btn">
-        <ul role="list" class="my-[0]">
+        <ul role="list" class="my-[0]" style="tabindex: 0;">
           <li><Button role="menuitem">Profile</Button></li>
           <li><Button role="menuitem">Settings</Button></li>
           <li><Button role="menuitem">Log out</Button></li>

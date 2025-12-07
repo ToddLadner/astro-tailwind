@@ -5,25 +5,26 @@ import type { HTMLAttributes } from 'astro/types';
 type BaseProps = {
   theme?: "outlined" | "tonal" | "filled" | "custom";
   size?: "sm" | "lg";
-  elevated?: boolean;
-  shape?: "square" | "circle" | "pill";
-  variant?: "icon-button";
+  elevated?: "shadow-xs" | "shadow-sm" | "shadow-md" | "shadow-lg" | "shadow-xl" | "shadow-2xl";
+  shape?: "square" | "circle" | "pill" | "squircle" | "superellipse";
+  variant?: "default" | "icon-button";
   text?: string;
   icon?: string;
   classes?: string;
-  class?: string;
   disabled?: boolean;
   "aria-label"?: string;
 };
 
-type AnchorProps = BaseProps & HTMLAttributes<"a"> & {
-  href: string;
-};
+type AnchorProps = BaseProps &
+  Omit<HTMLAttributes<"a">, "href" | "class"> & {
+    href: string;
+  };
 
-type ButtonProps = BaseProps & HTMLAttributes<"button"> & {
-  href?: undefined;
-  type?: "button" | "submit" | "reset";
-};
+type ButtonProps = BaseProps &
+  Omit<HTMLAttributes<"button">, "type" | "class"> & {
+    href?: undefined;
+    type?: "button" | "submit" | "reset";
+  };
 
 type Props = ButtonProps | AnchorProps;
 
@@ -37,26 +38,24 @@ const {
   text,
   icon,
   classes,
-  class: className,
   href,
   disabled = false,
-  "aria-label": ariaLabelProp,
-  title,
+  "aria-label": ariaLabel,
   ...rest
 } = Astro.props as Props;
 
-const isLink = typeof href === "string" && href.length > 0;
+const isLink = "href" in (Astro.props as Props) && !!href;
+const safeHref = disabled ? undefined : href;
+
 const classList = [
   "button",
   size,
   theme,
-  shape === "circle" && "ellipse",
-  elevated && "elevated",
+  shape,
+  elevated,
   variant,
   classes,
-  className,
 ];
-const ariaLabel = ariaLabelProp ?? text ?? (icon && !text ? icon : undefined);
 ---
 
 <style>
@@ -340,7 +339,7 @@ const ariaLabel = ariaLabelProp ?? text ?? (icon && !text ? icon : undefined);
         --text-color: light-dark(var(--color-purple-9), var(--color-purple-2));
 
 
-        /* Hover & Pressed background‑color change  */
+        /* Hover & Pressed background-color change  */
         &:not(:is([disabled], [aria-disabled="true"])) {
           &:not(:active):hover {
             --ripple: radial-gradient(
@@ -378,15 +377,7 @@ const ariaLabel = ariaLabelProp ?? text ?? (icon && !text ? icon : undefined);
         }
       }
 
-      /* Box Shadow */
-      &.elevated {
-        box-shadow:
-          0px 3px 1px -2px oklch(0 0 0 / 20%),
-          0px 2px 2px 0px oklch(0 0 0 / 14%),
-          0px 1px 5px 0px oklch(0 0 0 / 12%);
-      }
-
-      &.ellipse { aspect-ratio: var(--aspect-square) }
+      &.icon-button { aspect-ratio: var(--aspect-square) }
     }
 
   }
@@ -414,15 +405,15 @@ const ariaLabel = ariaLabelProp ?? text ?? (icon && !text ? icon : undefined);
 
 {isLink ? (
   <a
-    href={href}
+    href={safeHref}
     aria-disabled={disabled ? "true" : undefined}
-    aria-label={ariaLabel}
     tabindex={disabled ? -1 : undefined}
+    aria-label={ariaLabel}
     class:list={classList}
     {...rest}
   >
-    { icon && <Icon name={icon} /> }
-    <slot/>
+    { icon && <Icon name={icon} data-icon /> }
+    <slot />
     {text}
   </a>
 ) : (
@@ -433,8 +424,8 @@ const ariaLabel = ariaLabelProp ?? text ?? (icon && !text ? icon : undefined);
     disabled={disabled}
     {...rest}
   >
-    { icon && <Icon name={icon} /> }
-    <slot/>
+    { icon && <Icon name={icon} data-icon /> }
+    <slot />
     {text}
   </button>
 )}
