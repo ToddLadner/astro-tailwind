@@ -62,17 +62,17 @@ const classList = [
   @layer components {
     /* General Button Styles */
     :is(.button, [type=button], [type=submit], [type=reset]) {
-      /* Props */
+      /* Design tokens / props */
       --bg-color: transparent;
       --border-color: transparent;
       --border-radius: var(--radius-md);
       --font-size: initial;
-      --min-height: 2.375rem;
+      --min-height: auto;
       --text-color: light-dark(var(--color-purple-7), var(--color-purple-3));
       --button-ripple-duration: 0.5s;
       --button-ripple-size: 100%;
-      
-      /* Disabled state colors - extracted for reusability */
+
+      /* Re-usable disabled colors (variants can override) */
       --disabled-bg: color-mix(
         in oklch,
         var(--color-text-1) 8%,
@@ -84,36 +84,37 @@ const classList = [
         var(--color-surface-3)
       );
 
-      /* General Button Styles */
-      align-items: center;
+      /* Base button */
+      font-size: var(--font-size);
+      font-weight: 600;
+      line-height: 1;
+      color: var(--text-color);
       background: var(--bg-color) var(--ripple, none);
       border-radius: var(--border-radius);
       border: 1px solid var(--border-color);
-      color: var(--text-color);
       display: inline-flex;
-      font-size: var(--font-size);
-      font-weight: 600;
-      gap: 1ex;
       justify-content: center;
+      align-items: center;
+      gap: 1ex;
       min-block-size: var(--min-height);
-      padding-block: 0.5ex;
-      padding-inline: 1.5ex;
+      padding-block: 1ex;
+      padding-inline: 2ex;
       text-align: center;
       text-decoration: none;
       user-select: none;
 
-      /* Default Disabled Button Styles */
+      /* Disabled: shared behavior */
       &:is([disabled], [aria-disabled="true"]) {
         cursor: not-allowed;
         opacity: 0.64;
       }
 
-      /* Enable pointer cursor for non-disabled buttons */
-      &:not(:is([disabled], [aria-disabled="true"])) {
+      /* Non-disabled: shared behavior */
+      &:where(:not([disabled], [aria-disabled="true"])) {
         cursor: pointer;
       }
 
-      /* Color & Ripple Effect | Motion OK  */
+      /* Motion-OK: color & ripple */
       @media (prefers-reduced-motion: no-preference) {
         transition:
           background-color 0.2s var(--ease-out-3),
@@ -123,24 +124,28 @@ const classList = [
           outline-offset 0.05s var(--ease-1);
           background-position: center;
 
-        /* Hover and Active Effects */
-        &:not(:is([disabled], [aria-disabled="true"])) {
-          &:not(:active):hover {
-            --ripple: radial-gradient(circle, transparent 1%, var(--bg-color) 1%) center/15000%;
+        &:where(:not([disabled], [aria-disabled="true"])) {
+          /* Hover (ripple in) */
+          &:hover {
+            --ripple: radial-gradient(circle, transparent 1%, var(--bg-color) 1%)
+              center/15000%;
             transition: background var(--button-ripple-duration);
           }
 
-          &:hover:active {
+          /* Active (ripple out) */
+          &:active {
             background-size: var(--button-ripple-size);
             transition: background 0s;
           }
         }
       }
 
+      /* Motion-reduced: keep states but kill fancy ripple */
       @media (prefers-reduced-motion: reduce) {
         transition: none;
         background-position: center;
-        &:not(:is([disabled], [aria-disabled="true"])) {
+
+        &:where(:not([disabled], [aria-disabled="true"])) {
           &:hover,
           &:active {
             --ripple: none;
@@ -148,17 +153,18 @@ const classList = [
         }
       }
 
-      /* Hover State */
-      &:not(:is([disabled], [aria-disabled="true"])) {
-        &:not(:active):hover {
+      /* Brand-based default hover / active backgrounds */
+      &:where(:not([disabled], [aria-disabled="true"])) {
+        /* Hover (not pressed) */
+        &:hover:not(:active) {
           --bg-color: light-dark(
             oklch(from var(--color-brand) l 0.01 h / 15%),
             oklch(from var(--color-brand) l 0.01 h / 10%)
           );
         }
-        
-        /* Pressed State */
-        &:hover:active {
+
+        /* Pressed */
+        &:active {
           --bg-color: light-dark(
             oklch(from var(--color-brand) l 0.06 h / 30%),
             oklch(from var(--color-brand) l 0.06 h / 40%)
@@ -166,7 +172,7 @@ const classList = [
         }
       }
 
-      /* Disabled Text Color */
+      /* Disabled text color (base) */
       &:is([disabled], [aria-disabled="true"]) {
         --text-color: color-mix(
           in oklch,
@@ -175,7 +181,7 @@ const classList = [
         );
       }
 
-      /* Button with Icon & Text */
+      /* Button with icon + text */
       &:not(.icon-button) {
         [data-icon] {
           max-block-size: 0.7lh;
@@ -183,56 +189,53 @@ const classList = [
         }
       }
 
-      /* Button Size Variations */
-      &.sm {
-        --min-height: 1.875rem;
-        padding-block: 0;
-        padding-inline: 1ex;
-      }
+      /* Size variants */
+      &.sm { font-size: var(--text-xs); }
+      &.lg { font-size: var(--text-md); }
 
-      &.lg {
-        --min-height: 2.875rem;
-        padding-inline: 4ex;
-      }
-
-      /* Icon Button | Remove padding for better Icon placement */
-      &.icon-button { 
-        padding: 0;
+      /* Icon button variant */
+      &.icon-button {
+        padding: 1.35ex;
         aspect-ratio: var(--aspect-square);
-        
+
         [data-icon] {
           max-block-size: 1lh;
         }
       }
 
-      /* Button Variants */
+      /* =========================
+        VARIANTS
+        ========================= */
+
+      /* OUTLINED */
       &.outlined {
         --bg-color: var(--color-surface-1);
         --border-color: var(--color-brand);
         --text-color: var(--color-brand);
 
-        /* Hover State */
-        &:not(:is([disabled], [aria-disabled="true"])) {
-          &:not(:active):hover {
+        &:where(:not([disabled], [aria-disabled="true"])) {
+          /* Hover */
+          &:hover {
             --bg-color: var(--color-brand);
             --border-color: var(--color-brand);
             --text-color: var(--color-gray-0);
           }
-          /* Pressed State */
+
+          /* Active (pressed) */
           &:active {
             --bg-color: light-dark(
-              oklch(from var(--color-brand)  calc(l + .1) c h / 100%),
+              oklch(from var(--color-brand) calc(l + .1) c h / 100%),
               oklch(from var(--color-brand) calc(l - .1) c h / 100%)
             );
             --border-color: light-dark(
-              oklch(from var(--color-brand)  calc(l + .1) c h / 100%),
+              oklch(from var(--color-brand) calc(l + .1) c h / 100%),
               oklch(from var(--color-brand) calc(l - .1) c h / 100%)
             );
             --text-color: var(--color-gray-0);
           }
         }
 
-        /* Disabled Outlined Button */
+        /* Outlined – disabled colors */
         &:is([disabled], [aria-disabled="true"]) {
           --bg-color: transparent;
           --border-color: color-mix(
@@ -248,71 +251,67 @@ const classList = [
         }
       }
 
+      /* TONAL */
       &.tonal {
         --bg-color: light-dark(
-            oklch(from var(--color-brand) 80% .12 h / 100%),
-            oklch(from var(--color-brand) l c h / 100%)
-          );
+          oklch(from var(--color-brand) 80% .12 h / 100%),
+          oklch(from var(--color-brand) l c h / 100%)
+        );
         --text-color: var(--color-purple-13);
-        
-        /* Hover State */
-        &:not(:is([disabled], [aria-disabled="true"])) {
-          &:not(:active):hover {
+
+        &:where(:not([disabled], [aria-disabled="true"])) {
+          /* Hover */
+          &:hover {
             --bg-color: light-dark(
               oklch(from var(--color-brand) 85% .12 h / 100%),
               oklch(from var(--color-brand) 65% c h / 100%)
             );
-            --border-color:light-dark(
+            --border-color: light-dark(
               oklch(from var(--color-brand) 85% .12 h / 100%),
               oklch(from var(--color-brand) 65% c h / 100%)
             );
           }
-          
-          /* Pressed State */
+
+          /* Active */
           &:active {
             --bg-color: light-dark(
               oklch(from var(--color-brand) 90% .12 h / 100%),
               oklch(from var(--color-brand) 70% c h / 100%)
             );
-            --border-color:light-dark(
+            --border-color: light-dark(
               oklch(from var(--color-brand) 90% .12 h / 100%),
               oklch(from var(--color-brand) 70% c h / 100%)
             );
           }
         }
 
-        /* Disabled Tonal Button */
+        /* Tonal – disabled */
         &:is([disabled], [aria-disabled="true"]) {
-          --bg-color: color-mix(
-            in oklch,
-            var(--color-text-1) 8%,
-            var(--color-surface-3)
-          );
-          --text-color: color-mix(
-            in oklch,
-            var(--color-text-1) 70%,
-            var(--color-surface-3)
-          );
+          --bg-color: var(--disabled-bg);
+          --text-color: var(--disabled-text);
         }
       }
 
+      /* FILLED */
       &.filled {
-        --bg-color: var(--color-purple-8);
+        --bg-color: light-dark(var(--color-purple-7), var(--color-purple-3));
         --text-color: var(--color-gray-1);
 
-        &:not(:is([disabled], [aria-disabled="true"])) {
-          &:not(:active):hover {
+        &:where(:not([disabled], [aria-disabled="true"])) {
+          /* Hover */
+          &:hover {
             --bg-color: var(--color-purple-10);
             --border-color: var(--color-purple-10);
           }
 
+          /* Active */
           &:active {
             --bg-color: var(--color-purple-9);
             --border-color: var(--color-purple-9);
           }
         }
 
-        /* Disabled Filled Button */
+        /* Filled – disabled */
         &:is([disabled], [aria-disabled="true"]) {
           --bg-color: color-mix(
             in oklch,
@@ -327,6 +326,7 @@ const classList = [
         }
       }
 
+      /* CUSTOM */
       &.custom {
         --bg-color: light-dark(
           color-mix(in oklab, var(--color-brand) 20%, var(--color-gray-1)),
@@ -338,23 +338,24 @@ const classList = [
         );
         --text-color: light-dark(var(--color-purple-9), var(--color-purple-2));
 
-
-        /* Hover & Pressed background-color change  */
-        &:not(:is([disabled], [aria-disabled="true"])) {
-          &:not(:active):hover {
+        &:where(:not([disabled], [aria-disabled="true"])) {
+          /* Hover */
+          &:hover {
             --ripple: radial-gradient(
-              circle,
-              transparent 1%,
-              var(--ripple-color) 1%
-            )
-            center/15000%;
+                circle,
+                transparent 1%,
+                var(--ripple-color) 1%
+              )
+              center/15000%;
+
             --bg-color: light-dark(
               color-mix(in oklch, var(--color-gray-2) 93%, var(--color-purple-8)),
               color-mix(in oklch, var(--color-gray-13) 93%, var(--color-purple-8))
             );
           }
 
-          &:hover:active {
+          /* Active */
+          &:active {
             --bg-color: light-dark(
               color-mix(in oklch, var(--color-gray-2) 91%, var(--color-purple-8)),
               color-mix(in oklch, var(--color-gray-13) 91%, var(--color-purple-8))
@@ -362,42 +363,33 @@ const classList = [
           }
         }
 
-        /* Disabled Custom Button */
+        /* Custom – disabled */
         &:is([disabled], [aria-disabled="true"]) {
-          --bg-color: color-mix(
-            in oklch,
-            var(--color-text-1) 8%,
-            var(--color-surface-3)
-          );
-          --text-color: color-mix(
-            in oklch,
-            var(--color-text-1) 70%,
-            var(--color-surface-3)
-          );
+          --bg-color: var(--disabled-bg);
+          --text-color: var(--disabled-text);
         }
       }
-
-      &.icon-button { aspect-ratio: var(--aspect-square) }
     }
 
-  }
-
-  .spring {
-      transition: 
+    /* Spring interaction helper */
+    .spring {
+      transition:
         transform 1s var(--ease-spring-5),
         box-shadow 1s var(--ease-spring-5),
         outline-offset 145ms var(--ease-4);
-        
-        &:active {
+
+      &:active {
         transform: scale(.9);
       }
     }
 
-  @media (prefers-reduced-motion: reduce) {
-    .spring {
-      transition: none;
-      &:active {
-        transform: none;
+    @media (prefers-reduced-motion: reduce) {
+      .spring {
+        transition: none;
+
+        &:active {
+          transform: none;
+        }
       }
     }
   }
