@@ -71,6 +71,7 @@ const classList = [
       --text-color: light-dark(var(--color-purple-7), var(--color-purple-3));
       --button-ripple-duration: 0.5s;
       --button-ripple-size: 100%;
+      --icon-size: 1cap;
 
       /* Re-usable disabled colors (variants can override) */
       --disabled-bg: color-mix(
@@ -87,17 +88,15 @@ const classList = [
       /* Base button */
       font-size: var(--font-size);
       font-weight: 600;
-      line-height: 1;
+      line-height: var(--leading-xs);
       color: var(--text-color);
       background: var(--bg-color) var(--ripple, none);
       border-radius: var(--border-radius);
       border: 1px solid var(--border-color);
-      display: inline-flex;
-      justify-content: center;
+      display: inline-block; 
       align-items: center;
-      gap: 1ex;
       min-block-size: var(--min-height);
-      padding-block: 1ex;
+      padding-block: 1.5ex;
       padding-inline: 2ex;
       text-align: center;
       text-decoration: none;
@@ -184,14 +183,16 @@ const classList = [
       /* Button with icon + text */
       &:not(.icon-button) {
         [data-icon] {
-          max-block-size: 0.7lh;
+          max-block-size: var(--icon-size);
+          max-inline-size: var(--icon-size);
           color: currentColor;
+          margin-inline-end: 1ex;
         }
       }
 
       /* Size variants */
       &.sm { font-size: var(--text-xs); }
-      &.lg { font-size: var(--text-md); }
+      &.lg { font-size: var(--text-lg); }
 
       /* Icon button variant */
       &.icon-button {
@@ -199,7 +200,7 @@ const classList = [
         aspect-ratio: var(--aspect-square);
 
         [data-icon] {
-          max-block-size: 1lh;
+          max-block-size: var(--icon-size);
         }
       }
 
@@ -417,7 +418,9 @@ const classList = [
     {...rest}
   >
     { icon && <Icon name={icon} data-icon /> }
+    
     <slot />
     {text}
+   
   </button>
 )}
