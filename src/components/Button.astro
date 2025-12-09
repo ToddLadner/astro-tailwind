@@ -371,26 +371,26 @@ const classList = [
         }
       }
     }
+  }
 
-    /* Spring interaction helper */
+  /* Spring interaction helper */
+  .spring {
+    transition:
+      transform 1s var(--ease-spring-5),
+      box-shadow 1s var(--ease-spring-5),
+      outline-offset 145ms var(--ease-4);
+
+    &:active {
+      transform: scale(.9);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
     .spring {
-      transition:
-        transform 1s var(--ease-spring-5),
-        box-shadow 1s var(--ease-spring-5),
-        outline-offset 145ms var(--ease-4);
+      transition: none;
 
       &:active {
-        transform: scale(.9);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .spring {
-        transition: none;
-
-        &:active {
-          transform: none;
-        }
+        transform: none;
       }
     }
   }
