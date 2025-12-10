@@ -3,6 +3,7 @@ import type { HTMLAttributes } from 'astro/types';
 import { Icon } from 'astro-icon/components';
 import Button from '@components/Button.astro';
 
+
 interface Props extends HTMLAttributes<"dialog"> {
   id: string;
   role?: "alertdialog" | "dialog";
@@ -22,8 +23,13 @@ const {
   overline,
   icon,
   class: className,
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedby,
   ...rest
 } = Astro.props;
+
+const headingId = `${id}-heading`;
+const contentId = `${id}-content`;
 ---
 
 <style>
@@ -147,10 +153,10 @@ const {
   class="modal"
   class:list={[className]}
   aria-modal="true"
-  aria-describedby="dialog-content"
+  aria-describedby={ariaDescribedby ?? contentId}
   {...(showHeader
-    ? { 'aria-labelledby': 'dialog-heading' }
-    : { 'aria-label': heading })
+    ? { 'aria-labelledby': headingId }
+    : { 'aria-label': ariaLabel ?? heading })
   }
   {...rest}
 >
@@ -162,7 +168,7 @@ const {
       <!-- Heading -->
       <hgroup class="flex flex-col stack-3xs">
         {overline && <p class="text-xs">{overline}</p>}  
-        <h2 id="dialog-heading" class="text-lg">{heading}</h2>
+        <h2 id={headingId} class="text-lg">{heading}</h2>
       </hgroup>
       <!-- Close Button -->
       <Button
@@ -171,13 +177,13 @@ const {
         variant='icon-button'
         icon='xmark-large-solid' 
         aria-label='close dialog'
-        aria-controls="dialog-content"
+        aria-controls={contentId}
         classes="ml-[auto]"
       />
     </header>
   )}
   <!-- Content -->
-  <article id="dialog-content" class="content stack-md">
+  <article id={contentId} class="content stack-md">
     <slot/>
   </article>
   <!-- Footer -->
@@ -190,66 +196,67 @@ const {
 
 <script>
   if (typeof window !== "undefined") {
+    const addBaseDialogHandlers = (dialog: HTMLDialogElement) => {
+      if (dialog.dataset.dialogHydrated === 'true') return;
+      dialog.dataset.dialogHydrated = 'true';
+
+      const handleCancel = (event: Event) => {
+        event.preventDefault();
+        dialog.close();
+      };
+
+      const handleBackdropClick = (event: MouseEvent) => {
+        if (event.target === dialog) {
+          dialog.close();
+        }
+      };
+
+      dialog.addEventListener('cancel', handleCancel);
+      dialog.addEventListener('click', handleBackdropClick);
+    };
+
     // Initialize focus trap when DOM is ready
     const initializeFocusTrap = async () => {
       try {
         const { createFocusTrap } = await import('focus-trap');
         
         document.querySelectorAll<HTMLDialogElement>('.modal').forEach(dialog => {
-          // Create trap but don't activate yet
+          addBaseDialogHandlers(dialog);
+          if (dialog.dataset.focusTrapReady === 'true') return;
+          dialog.dataset.focusTrapReady = 'true';
+
           const trap = createFocusTrap(dialog, {
             clickOutsideDeactivates: true,
             escapeDeactivates: true,
-            onDeactivate: () => dialog.close(),
+            returnFocusOnDeactivate: true,
             fallbackFocus: dialog,
           });
 
+          const activateTrap = () => trap.activate();
+          const deactivateTrap = () => trap.deactivate();
+
           // Override showModal to activate trap
           const origShowModal = dialog.showModal.bind(dialog);
-          (dialog as any).showModal = function() {
+          dialog.showModal = (() => {
             origShowModal();
-            trap.activate();
-          };
+            activateTrap();
+          }) as HTMLDialogElement['showModal'];
 
           // Override show to activate trap
           const origShow = dialog.show.bind(dialog);
-          (dialog as any).show = function() {
+          dialog.show = (() => {
             origShow();
-            trap.activate();
-          };
+            activateTrap();
+          }) as HTMLDialogElement['show'];
 
           // Deactivate on close
           dialog.addEventListener('close', () => {
-            trap.deactivate();
-          });
-          
-          // Close on cancel
-          dialog.addEventListener('cancel', (e) => {
-            e.preventDefault();
-            dialog.close();
-          });
-          
-          // Close on backdrop click
-          dialog.addEventListener('click', (e) => {
-            if (e.target === dialog) {
-              dialog.close();
-            }
+            deactivateTrap();
           });
         });
       } catch (err) {
         console.error('Failed to initialize focus-trap:', err);
-        // Fallback: basic dialog setup without focus trap
-        document.querySelectorAll<HTMLDialogElement>('.modal').forEach(dialog => {
-          dialog.addEventListener('cancel', (e) => {
-            e.preventDefault();
-            dialog.close();
-          });
-          dialog.addEventListener('click', (e) => {
-            if (e.target === dialog) {
-              dialog.close();
-            }
-          });
-        });
+        document.querySelectorAll<HTMLDialogElement>('.modal').forEach(addBaseDialogHandlers);
       }
     };
 
