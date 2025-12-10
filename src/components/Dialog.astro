@@ -3,7 +3,6 @@ import type { HTMLAttributes } from 'astro/types';
 import { Icon } from 'astro-icon/components';
 import Button from '@components/Button.astro';
 
-
 interface Props extends HTMLAttributes<"dialog"> {
   id: string;
   role?: "alertdialog" | "dialog";
@@ -173,7 +172,7 @@ const {
         icon='xmark-large-solid' 
         aria-label='close dialog'
         aria-controls="dialog-content"
-        class="ml-[auto]"
+        classes="ml-[auto]"
       />
     </header>
   )}
