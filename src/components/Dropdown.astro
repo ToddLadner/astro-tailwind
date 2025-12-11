@@ -19,7 +19,7 @@ const menuId = `${id}-menu`;
 
 // Normalize classes for the trigger button
 const triggerClasses = [
-  "dropdown__button",
+  "dropdown-button",
   triggerProps?.classes,
 ].filter(Boolean).join(" ");
 
@@ -49,7 +49,7 @@ const buttonProps: PureButtonProps = {
   />
 
   <ul
-    class="dropdown__menu"
+    class="dropdown-menu list-none"
     id={menuId}
     role="menu"
     aria-labelledby={buttonId}
@@ -61,27 +61,61 @@ const buttonProps: PureButtonProps = {
 </div>
 
 <style>
-  /* Minimal structural styles; adjust to match your design system */
-
   .dropdown {
     position: relative;
     display: inline-block;
+    /* This is the element we anchor to (like #anchor) */
+    anchor-name: --anchor;
   }
 
-  .dropdown__menu {
-    position: absolute;
-    inset-block-start: 100%;
-    inset-inline-start: 0;
-    margin: 0.25rem 0 0;
-    padding: 0.25rem 0;
-    list-style: none;
-    min-inline-size: 10rem;
-    z-index: 20;
+  .dropdown-menu {
+    --d: 1em;
+    --s: 1.2em;
 
-    /* Example surface styles; swap to your tokens */
+    position: absolute;
+    z-index: 0;
+
+    /* Anchor this menu to the trigger container */
+    position-anchor: --anchor;
+
+    /* Starts at bottom, flips to top if no room */
+    inset-inline: auto;
+    bottom: var(--d);
+    position-area: bottom;
+    margin-top: var(--d);       /* margin below anchor, like the original */
+    position-try: flip-block;   /* flips position and margin when needed */
+    anchor-name: --tooltip;     /* the pseudo-element will reference this */
+
+    padding-left: 0;
+
     background: var(--color-surface-2, white);
     border-radius: var(--radius-md, 0.375rem);
     box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0,0,0,.1));
+  }
+
+  .dropdown-menu::before {
+    content: "";
+    position: fixed;            /* same as the original demo */
+    z-index: -1;
+    width: var(--s);
+    background: inherit;
+
+    /* vertical position from tooltip (restored from your reference) */
+    top:    calc(anchor(--tooltip top)    - var(--d));
+    bottom: calc(anchor(--tooltip bottom) - var(--d));
+
+    /* horizontal position from the anchor (the trigger container) */
+    left: calc(anchor(--anchor center) - var(--s) / 2);
+    margin: inherit;
+
+    clip-path: polygon(
+      50% .2em,
+      100% var(--d),
+      100% calc(100% - var(--d)),
+      50% calc(100% - .2em),
+      0 calc(100% - var(--d)),
+      0 var(--d)
+    );
   }
 
   [role="menuitem"] {
