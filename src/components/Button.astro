@@ -16,12 +16,12 @@ type BaseProps = {
 };
 
 type AnchorProps = BaseProps &
-  Omit<HTMLAttributes<"a">, "href" | "class"> & {
+  Omit<HTMLAttributes<"a">, "href"> & {
     href: string;
   };
 
 type ButtonProps = BaseProps &
-  Omit<HTMLAttributes<"button">, "type" | "class"> & {
+  Omit<HTMLAttributes<"button">, "type"> & {
     href?: undefined;
     type?: "button" | "submit" | "reset";
   };
@@ -56,6 +56,9 @@ const classList = [
   variant,
   classes,
 ];
+
+// Export Props type for use in other components
+export type PureButtonProps = ButtonProps;
 ---
 
 <style>

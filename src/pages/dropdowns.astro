@@ -1,0 +1,103 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Button from '@components/Button.astro';
+import Dropdown from '@components/Dropdown.astro';
+import MenuItem from "@components/MenuItem.astro";
+
+import userAvatar from '@images/killer-mike.jpg';
+import altUserAvatar from '@images/elp.jpg';
+
+const { 
+	title = "My Astro Blog",
+	description = "My musings about the Astro framework",
+	...rest 
+} = Astro.props;
+---
+
+<style>
+  #new-dropdown { anchor-name: --question, --my-tipanchor; }
+  #new-menu {
+    position-anchor: --question;
+    position-area: bottom center;
+    
+  } 
+  #tooltip-info {
+    position-anchor: --my-tipanchor;
+    position-area: top;
+    /* position-try: flip-block, flip-inline;  */
+    position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
+  } 
+  
+  /* Avatar */
+  #my-dropdown { anchor-name: --avatar; }
+  #my-menu {
+    position-anchor: --avatar;
+    position-area: bottom ;
+    margin: .25rem;
+    /* position-try: flip-block, flip-inline; */
+    position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
+  }
+  @position-try --bottom-center { position-area: bottom center; }
+  @position-try --bottom-left { position-area: bottom left; }
+  @position-try --top-center { position-area: top center; }
+  @position-try --bottom-right { position-area: bottom right; }
+  
+
+ [role="menuitem"] { width: 100%; justify-content: unset; }
+
+</style>
+
+<Layout {title} {description}>
+  <main class="bg-surface-2 stack">
+    <!-- Header -->
+    <article class="px-max py-2xl stack-md">
+      <h1>Dropdown</h1>
+      <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
+    
+<Dropdown
+  id="actions"
+  triggerProps={{
+    text: "Actions",
+    theme: "filled",
+    size: "sm",
+    shape: "pill"
+  }}
+>
+  <MenuItem>
+    <button type="button" role="menuitem">Profile</button>
+  </MenuItem>
+
+  <MenuItem>
+    <button type="button" role="menuitem">Notifications</button>
+  </MenuItem>
+
+  <MenuItem>
+    <button type="button" role="menuitem">Sign out</button>
+  </MenuItem>
+</Dropdown>
+</article>
+
+
+  </main>
+</Layout>
+
+<script is:inline>
+  // Listen for *any* popover toggling:
+  document.addEventListener('toggle', (e) => {
+    const pop = (e.target);
+    if (!pop.hasAttribute('popover') || !pop.id) return;
+
+    // Find the matching control by its popovertarget:
+    const btn = document.querySelector(
+      `[popovertarget="${pop.id}"]`
+    );
+    if (btn) {
+      btn.setAttribute(
+        'aria-expanded',
+        e.newState === 'open' ? 'true' : 'false'
+      );
+    }
+  });
+</script>
+
+/** */
