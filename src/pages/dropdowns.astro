@@ -15,66 +15,23 @@ const {
 ---
 
 <style>
-  #new-dropdown { anchor-name: --question, --my-tipanchor; }
-  #new-menu {
-    position-anchor: --question;
-    position-area: bottom center;
-    
-  } 
-  #tooltip-info {
-    position-anchor: --my-tipanchor;
-    position-area: top;
-    /* position-try: flip-block, flip-inline;  */
-    position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
-  } 
-  
-  /* Avatar */
-  #my-dropdown { anchor-name: --avatar; }
-  #my-menu {
-    position-anchor: --avatar;
-    position-area: bottom ;
-    margin: .25rem;
-    /* position-try: flip-block, flip-inline; */
-    position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
-  }
-  @position-try --bottom-center { position-area: bottom center; }
-  @position-try --bottom-left { position-area: bottom left; }
-  @position-try --top-center { position-area: top center; }
-  @position-try --bottom-right { position-area: bottom right; }
-  
-
- [role="menuitem"] { width: 100%; justify-content: unset; }
+ 
 
 </style>
 
 <Layout {title} {description}>
   <main class="bg-surface-2 stack">
     <!-- Header -->
-    <article class="px-max py-2xl stack-md">
+    <article class="px-max py-2xl stack-md grid place-content-center">
       <h1>Dropdown</h1>
       <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
     
-<Dropdown
-  id="actions"
-  triggerProps={{
-    text: "Actions",
-    theme: "filled",
-    size: "sm",
-    shape: "pill"
-  }}
->
-  <MenuItem>
-    <button type="button" role="menuitem">Profile</button>
-  </MenuItem>
-
-  <MenuItem>
-    <button type="button" role="menuitem">Notifications</button>
-  </MenuItem>
-
-  <MenuItem>
-    <button type="button" role="menuitem">Sign out</button>
-  </MenuItem>
+<Dropdown id="settings" behavior="popover-menu" triggerProps={{ theme: "filled",text: "Settings" }}>
+  <MenuItem><button role="menuitem">Profile</button></MenuItem>
+  <MenuItem><button role="menuitem">Notifications</button></MenuItem>
+  <MenuItem><button role="menuitem">Sign out</button></MenuItem>
 </Dropdown>
+
 </article>
 
 
@@ -98,6 +55,32 @@ const {
       );
     }
   });
+
+  const anchor = document.getElementById('settings');
+let isDragging = false;
+let offsetX, offsetY;
+
+anchor.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  
+  // Calculate offset between cursor and element's top-left corner
+  const rect = anchor.getBoundingClientRect();
+  offsetX = e.clientX - rect.left;
+  offsetY = e.clientY - rect.top;
+  
+  anchor.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  
+  anchor.style.left = (e.clientX - offsetX) + 'px';
+  anchor.style.top = (e.clientY - offsetY) + 'px';
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  anchor.style.cursor = 'move';
+});
 </script>
 
-/** */
