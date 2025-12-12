@@ -6,6 +6,13 @@ type Props = HTMLAttributes<"li">;
 const props = Astro.props as Props;
 ---
 
+<style>
+    [role="menuitem"] {
+    inline-size: 100%;
+    justify-content: flex-start;
+  }
+</style>
+
 <li role="none" {...props}>
   <slot />
 </li>

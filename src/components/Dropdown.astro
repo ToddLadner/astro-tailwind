@@ -3,10 +3,8 @@
 import type { HTMLAttributes } from "astro/types";
 import Button, { type PureButtonProps } from "@components/Button.astro";
 
-type Behavior = "menu" | "popover-menu";
-
 interface Props extends HTMLAttributes<"div"> {
-  /** Base id for this dropdown (used to generate button + menu ids) */
+  /** Used as the button id + referenced by aria-labelledby */
   id: string;
 
   /** Optional label; falls back to triggerProps.text or "Actions" */
@@ -14,39 +12,29 @@ interface Props extends HTMLAttributes<"div"> {
 
   /** Props to pass to your Button.astro */
   triggerProps?: PureButtonProps;
-
-  /**
-   * "menu"         = classic hidden/absolute dropdown (no top layer)
-   * "popover-menu" = Popover API (top layer + light dismiss) + Anchor positioning
-   */
-  behavior?: Behavior;
 }
 
-const { id, label, triggerProps, behavior = "menu", ...rest } = Astro.props as Props;
+const { id, label, triggerProps, ...rest } = Astro.props as Props;
 
-const rootId = `dropdown-${id}`;
-const buttonId = `${id}-button`;
-const menuId = `${id}-menu`;
-
-const triggerClasses = ["dropdown-button", triggerProps?.classes].filter(Boolean).join(" ");
+const triggerText = label ?? triggerProps?.text ?? "Actions";
 
 const buttonProps: PureButtonProps = {
   type: "button",
   "aria-haspopup": "menu",
   "aria-expanded": "false",
-  "aria-controls": menuId,
+  "aria-controls": `${id}-menu`, // kept stable for a11y; menu id below matches
   ...triggerProps,
-  classes: triggerClasses,
-  text: label ?? triggerProps?.text ?? "Actions",
+  // do NOT compute/force classes; you said you already handle classes via triggerProps.classes
+  text: triggerText,
 };
 
-const isPopover = behavior === "popover-menu";
+const menuId = `${id}-menu`;
 ---
 
-<div id={rootId} class="dropdown" data-dropdown data-behavior={behavior} {...rest}>
+<div id="dropdown" data-dropdown {...rest}>
   <Button
     {...buttonProps}
-    id={buttonId}
+    id={id}
     data-dropdown-button
     data-dropdown-anchor
   />
@@ -55,70 +43,57 @@ const isPopover = behavior === "popover-menu";
     class="dropdown-menu list-none"
     id={menuId}
     role="menu"
-    aria-labelledby={buttonId}
+    aria-labelledby={id}
     data-dropdown-menu
-    {...(isPopover ? { popover: "auto" } : { hidden: true })}
+    popover="auto"
   >
     <slot />
   </ul>
 </div>
 
 <style>
-  .dropdown {
+  #dropdown {
     display: inline-block;
-    position: relative;
+    position: fixed;
+    width: fit-content;
+
   }
 
   [data-dropdown-anchor] {
-  anchor-name: --dropdown-anchor;
-}
+    anchor-name: --dropdown-anchor;
+  }
 
-  /* Shared menu surface styles */
   .dropdown-menu {
-    --d: 0.75rem;
-    --s: 1.1rem;
+    --d: 1rem;
+    --s: 1.2rem;
 
-    padding-left: 0;
-    margin: 0;
-
+    /* Popover positioning (top layer) + Anchor positioning */
+    position: absolute;
+    z-index: 0;
+    position-anchor: --dropdown-anchor;
+    top: calc(var(--d) + 0.5rem);
+    position-area: bottom;
+    margin-bottom: var(--d);
+    position-try: flip-block;
     anchor-name: --dropdown-menu;
-    
-    background: var(--color-surface-2, white);
+
+
+    min-inline-size: 9rem;
+    padding-block: var(--spacing-3xs);
+    padding-inline: 0;  
+    background: var(--color-surface-3, white);
     border-radius: var(--radius-md, 0.375rem);
     box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0,0,0,.1));
-    min-inline-size: 9rem;
   }
 
-  /* Classic dropdown positioning (in normal layer) */
-  .dropdown-menu[hidden] {
-    display: none;
-  }
-  .dropdown-menu:not([popover]) {
-    position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: var(--d);
-  z-index: 50;
-    
-  }
-
-  /* Popover positioning (top layer) + Anchor positioning */
-  .dropdown-menu[popover] {
-    position: absolute; /* ok in top-layer; can also be fixed */
-    position-anchor: --dropdown-anchor;
-    position-area: bottom;
-    margin-top: var(--d);
-    position-try: flip-block;
-  }
-
-  /* Optional "arrow" (kept from your approach) */
+  /* Optional "arrow" */
   .dropdown-menu::before {
     content: "";
     position: fixed;
     z-index: -1;
     width: var(--s);
     background: inherit;
-    background: red;
+    margin: inherit;
 
     top:    calc(anchor(--dropdown-menu top)    - var(--d));
     bottom: calc(anchor(--dropdown-menu bottom) - var(--d));
@@ -133,41 +108,32 @@ const isPopover = behavior === "popover-menu";
       0 var(--d)
     );
   }
-
-  [role="menuitem"] {
-    inline-size: 100%;
-    justify-content: flex-start;
-  }
 </style>
 
-<script is:inline define:vars={{ rootId, behavior }}>
+<script is:inline define:vars={{ id, menuId }}>
   (function () {
-    const root = document.getElementById(rootId);
-    if (!root) return;
-
-    const button = root.querySelector("[data-dropdown-button]");
-    const menu = root.querySelector("[data-dropdown-menu]");
+    const button = document.getElementById(id);
+    const menu = document.getElementById(menuId);
     if (!button || !menu) return;
 
-    const supportsPopover = typeof menu.showPopover === "function" && typeof menu.hidePopover === "function";
-    const usePopover = behavior === "popover-menu" && supportsPopover;
+    const supportsPopover =
+      typeof menu.showPopover === "function" &&
+      typeof menu.hidePopover === "function";
+
+    if (!supportsPopover) return;
 
     /** @returns {HTMLElement[]} */
     const getItems = () => Array.from(menu.querySelectorAll('[role="menuitem"]'));
 
-    const isOpen = () => (usePopover ? menu.matches(":popover-open") : !menu.hidden);
+    const isOpen = () => menu.matches(":popover-open");
 
-    const setExpanded = (value) => button.setAttribute("aria-expanded", value ? "true" : "false");
+    const setExpanded = (value) =>
+      button.setAttribute("aria-expanded", value ? "true" : "false");
 
     const openMenu = (focus = "first") => {
       if (isOpen()) return;
 
-      if (usePopover) {
-        menu.showPopover();
-      } else {
-        menu.hidden = false;
-      }
-
+      menu.showPopover();
       setExpanded(true);
 
       const items = getItems();
@@ -178,17 +144,13 @@ const isPopover = behavior === "popover-menu";
     const closeMenu = ({ returnFocus = true } = {}) => {
       if (!isOpen()) return;
 
-      if (usePopover) {
-        menu.hidePopover();
-      } else {
-        menu.hidden = true;
-      }
-
+      menu.hidePopover();
       setExpanded(false);
       if (returnFocus) button.focus();
     };
 
-    const toggleMenu = () => (isOpen() ? closeMenu({ returnFocus: true }) : openMenu("first"));
+    const toggleMenu = () =>
+      isOpen() ? closeMenu({ returnFocus: true }) : openMenu("first");
 
     const moveFocus = (direction) => {
       const items = getItems();
@@ -206,10 +168,8 @@ const isPopover = behavior === "popover-menu";
       items[nextIndex].focus();
     };
 
-    // Keep aria-expanded synced for popover open/close (light dismiss / ESC)
-    if (usePopover) {
-      menu.addEventListener("toggle", () => setExpanded(isOpen()));
-    }
+    // Keep aria-expanded synced for light dismiss / ESC / etc.
+    menu.addEventListener("toggle", () => setExpanded(isOpen()));
 
     // Click on button toggles menu
     button.addEventListener("click", (event) => {
@@ -255,28 +215,17 @@ const isPopover = behavior === "popover-menu";
           break;
         }
         case "Escape":
-          // Popover will close on ESC by default; keep this so focus returns reliably.
           event.preventDefault();
           closeMenu({ returnFocus: true });
           break;
       }
     });
 
-    // Click on any menuitem closes dropdown (common menu behavior)
+    // Click on any menuitem closes dropdown
     menu.addEventListener("click", (event) => {
       const menuItem = event.target.closest("[role='menuitem']");
       if (!menuItem) return;
-
-      // Don’t force focus back if navigation will occur immediately
       closeMenu({ returnFocus: false });
     });
-
-    // Outside click closes only for classic mode (popover mode already light-dismisses)
-    if (!usePopover) {
-      document.addEventListener("pointerdown", (event) => {
-        if (menu.hidden) return;
-        if (!root.contains(event.target)) closeMenu({ returnFocus: false });
-      });
-    }
   })();
 </script>

@@ -13,10 +13,70 @@ const {
 	...rest 
 } = Astro.props;
 ---
-
 <style>
- 
+  body {
+  position: relative;
+}
+#anchor {
+  position: absolute;
+  anchor-name: --anchor;
+}
+{ position: fixed; }
+#tooltip {
+  --d: 1em; 
+  --s: 1.2em; /* tail size */
+  
+  position: absolute;
+  z-index: 0;
+  position-anchor: --anchor;
+  bottom: var(--d);
+  position-area: top;
+  margin-top: var(--d); /* the margin is need for the pseudo element, it does nothing here */
+  position-try: flip-block; /* this will flip the position and the margin ! */
+  anchor-name: --tooltip;
+}
 
+#tooltip:before {
+  content:"";
+  position: fixed;
+  z-index: -1;
+  width: var(--s);
+  background: inherit;
+  /* vertical position from tootlip  */
+  top:    calc(anchor(--tooltip top   ) - var(--d));
+  bottom: calc(anchor(--tooltip bottom) - var(--d));
+  /* horizontal position from anchor but we clamp it to the tooltip area */
+  left: calc(anchor(--anchor center) - var(--s)/2);
+  margin: inherit; /* this will do the magic, it will hide either the top or the bottom of the shape */
+  /* the arrow shape */
+  clip-path: polygon(50% .2em,100% var(--d),100% calc(100% - var(--d)),50% calc(100% - .2em),0 calc(100% - var(--d)),0 var(--d));
+}
+
+
+
+
+/* Extra Styling */
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: system-ui,sans-serif;
+}
+#anchor {
+  left: 50%;
+  top: 50%;
+  background: #ddd;
+  border-radius: 1rem;
+  padding: 1rem; 
+  user-select: none;
+}
+#tooltip {
+  max-width: 15em;
+  text-align: center;
+  border-radius: 1rem;
+  padding: 1rem;
+  background: #0088ff;
+  color: #fff;
+}
 </style>
 
 <Layout {title} {description}>
@@ -25,13 +85,21 @@ const {
     <article class="px-max py-2xl stack-md grid place-content-center">
       <h1>Dropdown</h1>
       <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
-    
-<Dropdown id="settings" behavior="popover-menu" triggerProps={{ theme: "filled",text: "Settings" }}>
+    <div class="flex ">
+<Dropdown id="settings" triggerProps={{ theme: "filled",text: "Settings" }}>
   <MenuItem><button role="menuitem">Profile</button></MenuItem>
   <MenuItem><button role="menuitem">Notifications</button></MenuItem>
   <MenuItem><button role="menuitem">Sign out</button></MenuItem>
 </Dropdown>
+</div>
 
+<div id='anchor'>
+  ⚓️
+</div>
+
+<div id='tooltip'>
+  🔗 Drag the anchor and I should follow...
+</div>
 </article>
 
 
@@ -39,24 +107,10 @@ const {
 </Layout>
 
 <script is:inline>
-  // Listen for *any* popover toggling:
-  document.addEventListener('toggle', (e) => {
-    const pop = (e.target);
-    if (!pop.hasAttribute('popover') || !pop.id) return;
 
-    // Find the matching control by its popovertarget:
-    const btn = document.querySelector(
-      `[popovertarget="${pop.id}"]`
-    );
-    if (btn) {
-      btn.setAttribute(
-        'aria-expanded',
-        e.newState === 'open' ? 'true' : 'false'
-      );
-    }
-  });
 
-  const anchor = document.getElementById('settings');
+// Wait for the element to be in the DOM
+const anchor = document.getElementById('anchor');
 let isDragging = false;
 let offsetX, offsetY;
 
@@ -80,6 +134,38 @@ document.addEventListener('mousemove', (e) => {
 
 document.addEventListener('mouseup', () => {
   isDragging = false;
+  anchor.style.cursor = 'move';
+});
+</script>
+
+<script is:inline>
+
+
+// Wait for the element to be in the DOM
+const anchor1 = document.getElementById('settings');
+let isDragging1 = false;
+let offsetX1, offsetY1;
+
+anchor.addEventListener('mousedown', (e) => {
+  isDragging1 = true;
+  
+  // Calculate offset between cursor and element's top-left corner
+  const rect = anchor.getBoundingClientRect();
+  offsetX1 = e.clientX - rect.left;
+  offsetY1 = e.clientY - rect.top;
+  
+  anchor.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging1) return;
+  
+  anchor.style.left = (e.clientX - offsetX1) + 'px';
+  anchor.style.top = (e.clientY - offsetY1) + 'px';
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging1 = false;
   anchor.style.cursor = 'move';
 });
 </script>
