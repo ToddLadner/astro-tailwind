@@ -152,7 +152,10 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
 
 /* Universal Focus */
 @supports (position-area: top) {
-  :is(html, dialog)::after {
+  /* Allow the anchor to be found inside top-layer popovers as well */
+  :is(html, dialog, [popover]) { anchor-scope: --focus; }
+
+  :is(html, dialog, [popover])::after {
     content: "";
     position: fixed;
     position-anchor: --focus;
@@ -163,6 +166,7 @@ strong, b { font-variation-settings: "wght" var(--weight, 800) }
     pointer-events: none;
     transition: .4s;
   }
+
   *:focus-visible {
     outline: none;
     anchor-name: --focus;
