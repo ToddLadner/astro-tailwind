@@ -40,7 +40,7 @@ const mergedItemProps = {
   ...(href ? { href } : {}),
   ...(itemProps ?? {}),
   // Ensure a predictable class hook for styling
-  classes: ["menu-item-button", itemProps?.classes].filter(Boolean).join(" "),
+  classes: [itemProps?.classes].filter(Boolean).join(" "),
   // If label provided, use it as aria-label (caller can still override via itemProps)
   ...(label ? { "aria-label": label } : {}),
 };
@@ -48,7 +48,7 @@ const mergedItemProps = {
 
 <style>
   /* Make Button look like a menuitem */
-  :global(.menu-item-button) {
+  [role^="menuitem"]  {
     inline-size: 100%;
     display: flex;
     justify-content: flex-start;
@@ -62,7 +62,7 @@ const mergedItemProps = {
   }
 
   /* Optional: make icon align nicely if you use your Button icon prop */
-  :global(.menu-item-button [data-icon]) {
+  [role^="menuitem"]  [data-icon] {
     margin-inline-end: 0.5rem;
   }
 

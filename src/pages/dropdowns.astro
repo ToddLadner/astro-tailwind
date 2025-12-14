@@ -23,11 +23,14 @@ const {
     <div class="flex ">
 
 </div>
-
+<div class="flex gap-lg">
   <Dropdown
     id="settings"
-    label="Open settings menu"
-    triggerProps={{ theme: "filled", variant: "icon-button", icon: "magnifying-glass-solid"  }}
+    buttonProps={{ 
+      theme: "filled", 
+      icon: "magnifying-glass-solid", 
+      text:"testlabel"  
+    }}
   >
     <MenuItem itemProps={{ text: "Profile" }} />
     <MenuItem itemProps={{ text: "Notifications" }} />
@@ -37,14 +40,14 @@ const {
 
     <Dropdown
     id="test"
-    label="Open settings menu"
-    triggerProps={{ theme: "filled", variant: "icon-button", icon: "magnifying-glass-solid"  }}
+    buttonProps={{ theme: "filled", variant: "icon-button", icon: "magnifying-glass-solid"  }}
   >
     <MenuItem itemProps={{ text: "Profile1" }} />
     <MenuItem itemProps={{ text: "Notifications1" }} />
     <MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
     <MenuItem href="/account" itemProps={{ text: "Account1", theme: "tonal" }} />
   </Dropdown>
+  </div>
 </article>
 
 

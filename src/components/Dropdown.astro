@@ -7,11 +7,8 @@ type Props = HTMLAttributes<"div"> & {
   /** Base id for this dropdown */
   id: string;
 
-  /** SR label for trigger (falls back to triggerProps.aria-label or "Open menu") */
-  label?: string;
-
   /** Props forwarded to your Button.astro */
-  triggerProps?: PureButtonProps;
+  buttonProps?: PureButtonProps;
 
   /** Close menu when a menuitem is clicked */
   closeOnSelect?: boolean;
@@ -19,8 +16,7 @@ type Props = HTMLAttributes<"div"> & {
 
 const {
   id,
-  label,
-  triggerProps,
+  buttonProps,
   closeOnSelect = true,
   ...rest
 } = Astro.props as Props;
@@ -28,22 +24,24 @@ const {
 const triggerId = `${id}-trigger`;
 const menuId = `${id}-menu`;
 
-const ariaLabel = label ?? triggerProps?.["aria-label"] ?? "Open menu";
+// Only provide aria-label when the button has no visible text
+const ariaLabel =
+  buttonProps?.["aria-label"] ??
+  (buttonProps?.text ? undefined : "Open menu");
 
 const mergedTriggerProps: PureButtonProps = {
   type: "button",
-  // Menu trigger semantics
   "aria-haspopup": "menu",
   "aria-controls": menuId,
   "aria-expanded": "false",
-  "aria-label": ariaLabel,
 
-  // Popover API wiring
+  // Only apply aria-label when needed
+  ...(ariaLabel ? { "aria-label": ariaLabel } : {}),
+
   popovertarget: menuId,
   popovertargetaction: "toggle",
 
-  // Allow caller overrides (theme, size, icon, etc.)
-  ...(triggerProps ?? {})
+  ...(buttonProps ?? {})
 };
 ---
 
