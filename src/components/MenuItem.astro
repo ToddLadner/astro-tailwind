@@ -7,7 +7,7 @@ import Button, { type PureButtonProps } from "@components/Button.astro";
  * Menu items can be either a <button> or an <a>.
  * Your Button.astro already supports both via `href`.
  */
-type MenuItemProps = HTMLAttributes<"li"> & {
+type Props = HTMLAttributes<"li"> & {
   /** Render the menu item as a link when provided */
   href?: string;
 
@@ -22,6 +22,7 @@ type MenuItemProps = HTMLAttributes<"li"> & {
 
   /** Optional label (falls back to itemProps.aria-label or text/slot) */
   label?: string;
+  classes?: string;
 };
 
 const {
@@ -29,59 +30,24 @@ const {
   itemProps,
   role = "menuitem",
   label,
-  class: liClass,
-  ...liRest
-} = Astro.props as MenuItemProps;
+  classes,
+  ...rest
+} = Astro.props as Props;
 
 const mergedItemProps = {
-  // Menu semantics: JS queries [role^="menuitem"] and focuses these
   role,
-  // If you pass href, render Button as <a>
-  ...(href ? { href } : {}),
-  ...(itemProps ?? {}),
-  // Ensure a predictable class hook for styling
-  classes: [itemProps?.classes].filter(Boolean).join(" "),
-  // If label provided, use it as aria-label (caller can still override via itemProps)
-  ...(label ? { "aria-label": label } : {}),
-};
+  ...(href && { href }),
+  ...(label && { "aria-label": label }),
+  ...itemProps,
+} as const satisfies Record<string, any>;
 ---
 
 <style>
   /* Make Button look like a menuitem */
-  [role^="menuitem"]  {
-    inline-size: 100%;
-    display: flex;
-    justify-content: flex-start;
-    gap: 0.5rem;
-
-    /* Your Button base styles center text; override for menu rows */
-    text-align: left;
-    padding-block: 0.75rem;
-    padding-inline: 1rem;
-    border-radius: 0.75rem;
-  }
-
-  /* Optional: make icon align nicely if you use your Button icon prop */
-  [role^="menuitem"]  [data-icon] {
-    margin-inline-end: 0.5rem;
-  }
-
-    /* Reasonable defaults for slotted menu items */
   [role^="menuitem"] {
-    display: block;
-    width: 100%;
+    inline-size: 100%;
     text-align: left;
     background: transparent;
-    color: inherit;
-    border: 0;
-    padding: 0.75rem 1rem;
-    border-radius: 0.75rem;
-    cursor: pointer;
-  }
-
-  [role^="menuitem"]:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 2px;
   }
 
   [role^="menuitem"][aria-disabled="true"],
@@ -91,7 +57,7 @@ const mergedItemProps = {
   }
 </style>
 
-<li role="none" class={liClass} {...liRest}>
+<li role="none" class:list={[classes]} {...rest}>
   <Button {...mergedItemProps}>
     <slot />
   </Button>
