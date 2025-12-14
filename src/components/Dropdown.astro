@@ -1,5 +1,5 @@
 ---
-// DropdownPopover.astro
+// Dropdown.astro
 import type { HTMLAttributes } from "astro/types";
 import Button, { type PureButtonProps } from "@components/Button.astro";
 
@@ -37,9 +37,6 @@ const mergedTriggerProps: PureButtonProps = {
 
   // Only apply aria-label when needed
   ...(ariaLabel ? { "aria-label": ariaLabel } : {}),
-
-  popovertarget: menuId,
-  popovertargetaction: "toggle",
 
   ...(buttonProps ?? {})
 };
@@ -108,13 +105,7 @@ const mergedTriggerProps: PureButtonProps = {
   [data-dropdown-menu] :global([role^="menuitem"]) {
     display: block;
     width: 100%;
-    text-align: left;
-    background: transparent;
     color: inherit;
-    border: 0;
-    padding: 0.75rem 1rem;
-    border-radius: 0.75rem;
-    cursor: pointer;
   }
 
   [data-dropdown-menu] :global([role^="menuitem"]:focus-visible) {
@@ -133,6 +124,8 @@ const mergedTriggerProps: PureButtonProps = {
   <Button
     id={triggerId}
     data-dropdown-trigger
+    popovertarget={menuId}
+    popovertargetaction="toggle"
     {...mergedTriggerProps}
   />
 
