@@ -1,18 +1,74 @@
 ---
+// MenuItem.astro
 import type { HTMLAttributes } from "astro/types";
+import Button, { type PureButtonProps } from "@components/Button.astro";
 
-type Props = HTMLAttributes<"li">;
+/**
+ * Menu items can be either a <button> or an <a>.
+ * Your Button.astro already supports both via `href`.
+ */
+type MenuItemProps = HTMLAttributes<"li"> & {
+  /** Render the menu item as a link when provided */
+  href?: string;
 
-const props = Astro.props as Props;
+  /** Button.astro props */
+  itemProps?: PureButtonProps & {
+    /** Allowed here even though PureButtonProps is "button-only" */
+    href?: string;
+  };
+
+  /** Role variant (defaults to menuitem) */
+  role?: "menuitem" | "menuitemcheckbox" | "menuitemradio";
+
+  /** Optional label (falls back to itemProps.aria-label or text/slot) */
+  label?: string;
+};
+
+const {
+  href,
+  itemProps,
+  role = "menuitem",
+  label,
+  class: liClass,
+  ...liRest
+} = Astro.props as MenuItemProps;
+
+const mergedItemProps = {
+  // Menu semantics: JS queries [role^="menuitem"] and focuses these
+  role,
+  // If you pass href, render Button as <a>
+  ...(href ? { href } : {}),
+  ...(itemProps ?? {}),
+  // Ensure a predictable class hook for styling
+  classes: ["menu-item-button", itemProps?.classes].filter(Boolean).join(" "),
+  // If label provided, use it as aria-label (caller can still override via itemProps)
+  ...(label ? { "aria-label": label } : {}),
+};
 ---
 
 <style>
-    [role="menuitem"] {
+  /* Make Button look like a menuitem */
+  :global(.menu-item-button) {
     inline-size: 100%;
+    display: flex;
     justify-content: flex-start;
+    gap: 0.5rem;
+
+    /* Your Button base styles center text; override for menu rows */
+    text-align: left;
+    padding-block: 0.75rem;
+    padding-inline: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  /* Optional: make icon align nicely if you use your Button icon prop */
+  :global(.menu-item-button [data-icon]) {
+    margin-inline-end: 0.5rem;
   }
 </style>
 
-<li role="none" {...props}>
-  <slot />
+<li role="none" class={liClass} {...liRest}>
+  <Button {...mergedItemProps}>
+    <slot />
+  </Button>
 </li>

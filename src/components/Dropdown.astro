@@ -1,103 +1,100 @@
 ---
-// Dropdown.astro
+// DropdownPopover.astro
 import type { HTMLAttributes } from "astro/types";
 import Button, { type PureButtonProps } from "@components/Button.astro";
 
-interface Props extends HTMLAttributes<"div"> {
-  /** Used as the button id + referenced by aria-labelledby */
+type Props = HTMLAttributes<"div"> & {
+  /** Base id for this dropdown */
   id: string;
 
-  /** Optional label; falls back to triggerProps.text or "Actions" */
+  /** SR label for trigger (falls back to triggerProps.aria-label or "Open menu") */
   label?: string;
 
-  /** Props to pass to your Button.astro */
+  /** Props forwarded to your Button.astro */
   triggerProps?: PureButtonProps;
-}
 
-const { id, label, triggerProps, ...rest } = Astro.props as Props;
-
-const triggerText = label ?? triggerProps?.text ?? "Actions";
-
-const buttonProps: PureButtonProps = {
-  type: "button",
-  "aria-haspopup": "menu",
-  "aria-expanded": "false",
-  "aria-controls": `${id}-menu`, // kept stable for a11y; menu id below matches
-  ...triggerProps,
-  // do NOT compute/force classes; you said you already handle classes via triggerProps.classes
-  text: triggerText,
+  /** Close menu when a menuitem is clicked */
+  closeOnSelect?: boolean;
 };
 
+const {
+  id,
+  label,
+  triggerProps,
+  closeOnSelect = true,
+  ...rest
+} = Astro.props as Props;
+
+const triggerId = `${id}-trigger`;
 const menuId = `${id}-menu`;
+
+const ariaLabel = label ?? triggerProps?.["aria-label"] ?? "Open menu";
+
+const mergedTriggerProps: PureButtonProps = {
+  type: "button",
+  // Menu trigger semantics
+  "aria-haspopup": "menu",
+  "aria-controls": menuId,
+  "aria-expanded": "false",
+  "aria-label": ariaLabel,
+
+  // Popover API wiring
+  popovertarget: menuId,
+  popovertargetaction: "toggle",
+
+  // Allow caller overrides (theme, size, icon, etc.)
+  ...(triggerProps ?? {})
+};
 ---
 
-<div id="dropdown" data-dropdown {...rest}>
-  <Button
-    {...buttonProps}
-    id={id}
-    data-dropdown-button
-    data-dropdown-anchor
-  />
-
-  <ul
-    class="dropdown-menu list-none"
-    id={menuId}
-    role="menu"
-    aria-labelledby={id}
-    data-dropdown-menu
-    popover="auto"
-  >
-    <slot />
-  </ul>
-</div>
-
 <style>
-  #dropdown {
-    display: inline-block;
-    position: fixed;
+  /* Make the trigger an anchor */
+  [data-dropdown-trigger] {
+    anchor-name: --anchor;
     width: fit-content;
-
   }
 
-  [data-dropdown-anchor] {
-    anchor-name: --dropdown-anchor;
-  }
+  /* Popover positioned from trigger via Anchor Positioning */
+  [data-dropdown-menu] {
+    --d: 1em;
+    --s: 1.2em;
 
-  .dropdown-menu {
-    --d: 1rem;
-    --s: 1.2rem;
+    position: fixed;
+    inset: auto;
+    z-index: 10;
 
-    /* Popover positioning (top layer) + Anchor positioning */
-    position: absolute;
-    z-index: 0;
-    position-anchor: --dropdown-anchor;
-    top: calc(var(--d) + 0.5rem);
+    position-anchor: --anchor;
     position-area: bottom;
+    top: calc(var(--d) + 0.5rem);
+
+    justify-self: anchor-center;
+    align-self: normal;
+
     margin-bottom: var(--d);
     position-try: flip-block;
-    anchor-name: --dropdown-menu;
 
+    max-width: 15em;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    background: #0088ff;
+    color: #fff;
 
-    min-inline-size: 9rem;
-    padding-block: var(--spacing-3xs);
-    padding-inline: 0;  
-    background: var(--color-surface-3, white);
-    border-radius: var(--radius-md, 0.375rem);
-    box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0,0,0,.1));
+    anchor-name: --dropdown;
   }
 
-  /* Optional "arrow" */
-  .dropdown-menu::before {
+  /* Arrow (optional) */
+  [data-dropdown-menu]::before {
     content: "";
     position: fixed;
     z-index: -1;
     width: var(--s);
     background: inherit;
-    margin: inherit;
 
-    top:    calc(anchor(--dropdown-menu top)    - var(--d));
-    bottom: calc(anchor(--dropdown-menu bottom) - var(--d));
-    left:   calc(anchor(--dropdown-anchor center) - var(--s) / 2);
+    top: calc(anchor(--dropdown top) - var(--d));
+    bottom: calc(anchor(--dropdown bottom) - var(--d));
+    left: calc(anchor(--anchor center) - var(--s) / 2);
+
+    margin: inherit;
 
     clip-path: polygon(
       50% .2em,
@@ -108,124 +105,207 @@ const menuId = `${id}-menu`;
       0 var(--d)
     );
   }
+
+  /* Reasonable defaults for slotted menu items */
+  [data-dropdown-menu] :global([role^="menuitem"]) {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    color: inherit;
+    border: 0;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+  }
+
+  [data-dropdown-menu] :global([role^="menuitem"]:focus-visible) {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  [data-dropdown-menu] :global([role^="menuitem"][aria-disabled="true"]),
+  [data-dropdown-menu] :global([role^="menuitem"]:disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 </style>
 
-<script is:inline define:vars={{ id, menuId }}>
-  (function () {
-    const button = document.getElementById(id);
-    const menu = document.getElementById(menuId);
-    if (!button || !menu) return;
+<div class="dropdown" data-dropdown {...rest}>
+  <Button
+    id={triggerId}
+    data-dropdown-trigger
+    {...mergedTriggerProps}
+  />
 
-    const supportsPopover =
-      typeof menu.showPopover === "function" &&
-      typeof menu.hidePopover === "function";
+  <ul
+    id={menuId}
+    class="dropdown__menu"
+    popover="auto"
+    role="menu"
+    aria-labelledby={triggerId}
+    data-dropdown-menu
+  >
+    <slot />
+  </ul>
+</div>
 
-    if (!supportsPopover) return;
 
-    /** @returns {HTMLElement[]} */
-    const getItems = () => Array.from(menu.querySelectorAll('[role="menuitem"]'));
 
-    const isOpen = () => menu.matches(":popover-open");
+<script define:vars={{ closeOnSelect }}>
+  /** @type {HTMLElement | null} */
+  const root = document.currentScript?.closest?.("[data-dropdown]") ?? null;
+  if (!root) return;
 
-    const setExpanded = (value) =>
-      button.setAttribute("aria-expanded", value ? "true" : "false");
+  /** @type {HTMLElement | null} */
+  const trigger = root.querySelector("[data-dropdown-trigger]");
+  /** @type {HTMLElement | null} */
+  const menu = root.querySelector("[data-dropdown-menu]");
+  if (!trigger || !menu) return;
 
-    const openMenu = (focus = "first") => {
-      if (isOpen()) return;
+  // Popover API isn’t fully typed everywhere
+  const pop = /** @type {any} */ (menu);
 
-      menu.showPopover();
-      setExpanded(true);
+  const isOpen = () => (menu.matches?.(":popover-open") ?? false);
 
-      const items = getItems();
-      if (!items.length) return;
-      (focus === "last" ? items[items.length - 1] : items[0]).focus();
-    };
+  /** @returns {HTMLElement[]} */
+  const getItems = () =>
+    Array.from(menu.querySelectorAll('[role^="menuitem"]'))
+      .map((el) => /** @type {HTMLElement} */ (el))
+      .filter((el) => !el.hasAttribute("disabled") && el.getAttribute("aria-disabled") !== "true");
 
-    const closeMenu = ({ returnFocus = true } = {}) => {
-      if (!isOpen()) return;
+  /** @param {boolean} open */
+  const setExpanded = (open) => {
+    trigger.setAttribute("aria-expanded", String(open));
+  };
 
-      menu.hidePopover();
-      setExpanded(false);
-      if (returnFocus) button.focus();
-    };
+  /** @param {number} focusIndex */
+  const focusItem = (focusIndex) => {
+    const items = getItems();
+    if (!items.length) return;
 
-    const toggleMenu = () =>
-      isOpen() ? closeMenu({ returnFocus: true }) : openMenu("first");
+    const i = Math.max(0, Math.min(focusIndex, items.length - 1));
+    items[i]?.focus();
+  };
 
-    const moveFocus = (direction) => {
-      const items = getItems();
-      if (!items.length) return;
+  /** @param {number} focusIndex */
+  const openMenu = (focusIndex = 0) => {
+    if (typeof pop.showPopover === "function") pop.showPopover();
+    setExpanded(true);
+    focusItem(focusIndex);
+  };
 
-      const active = document.activeElement;
-      let index = items.indexOf(active);
+  const closeMenu = (returnFocus = true) => {
+    if (typeof pop.hidePopover === "function") pop.hidePopover();
+    setExpanded(false);
+    if (returnFocus) trigger.focus();
+  };
 
-      if (index === -1) index = direction > 0 ? -1 : 0;
+  // Sync aria-expanded + focus on open/close (covers light dismiss + click)
+  menu.addEventListener("toggle", () => {
+    const open = isOpen();
+    setExpanded(open);
 
-      let nextIndex = index + direction;
-      if (nextIndex < 0) nextIndex = items.length - 1;
-      if (nextIndex >= items.length) nextIndex = 0;
+    if (open) {
+      // When opened (by click or keyboard), move focus into menu
+      focusItem(0);
+    } else {
+      // When closed, restore focus if focus was inside
+      if (menu.contains(document.activeElement)) trigger.focus();
+    }
+  });
 
-      items[nextIndex].focus();
-    };
+  // Trigger keyboard behavior (Menu Button pattern)
+  trigger.addEventListener("keydown", (e) => {
+    const items = getItems();
+    if (!items.length) return;
 
-    // Keep aria-expanded synced for light dismiss / ESC / etc.
-    menu.addEventListener("toggle", () => setExpanded(isOpen()));
-
-    // Click on button toggles menu
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      toggleMenu();
-    });
-
-    // Keyboard on button
-    button.addEventListener("keydown", (event) => {
-      switch (event.key) {
-        case "ArrowDown":
-        case "Enter":
-        case " ":
-          event.preventDefault();
-          openMenu("first");
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          openMenu("last");
-          break;
-      }
-    });
-
-    // Keyboard inside menu
-    menu.addEventListener("keydown", (event) => {
-      switch (event.key) {
-        case "ArrowDown":
-          event.preventDefault();
-          moveFocus(1);
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          moveFocus(-1);
-          break;
-        case "Home":
-          event.preventDefault();
-          getItems()[0]?.focus();
-          break;
-        case "End": {
-          event.preventDefault();
-          const items = getItems();
-          items[items.length - 1]?.focus();
-          break;
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        openMenu(0);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        openMenu(items.length - 1);
+        break;
+      case "Enter":
+      case " ":
+        // Let native click toggle happen; focus will move on "toggle"
+        break;
+      case "Escape":
+        if (isOpen()) {
+          e.preventDefault();
+          closeMenu(true);
         }
-        case "Escape":
-          event.preventDefault();
-          closeMenu({ returnFocus: true });
-          break;
-      }
-    });
+        break;
+    }
+  });
 
-    // Click on any menuitem closes dropdown
-    menu.addEventListener("click", (event) => {
-      const menuItem = event.target.closest("[role='menuitem']");
-      if (!menuItem) return;
-      closeMenu({ returnFocus: false });
-    });
-  })();
+  // Menu navigation (roving focus)
+  menu.addEventListener("keydown", (e) => {
+    const items = getItems();
+    if (!items.length) return;
+
+    const active = /** @type {HTMLElement | null} */ (document.activeElement);
+    const idx = Math.max(0, items.indexOf(active ?? items[0]));
+
+    switch (e.key) {
+      case "Escape":
+        e.preventDefault();
+        closeMenu(true);
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        items[(idx + 1) % items.length]?.focus();
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        items[(idx - 1 + items.length) % items.length]?.focus();
+        break;
+      case "Home":
+        e.preventDefault();
+        items[0]?.focus();
+        break;
+      case "End":
+        e.preventDefault();
+        items[items.length - 1]?.focus();
+        break;
+      case "Tab":
+        // Common menu behavior: close on Tab to restore normal tab order
+        e.preventDefault();
+        closeMenu(true);
+        break;
+      default: {
+        // Optional typeahead (single-character quick nav)
+        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          const ch = e.key.toLowerCase();
+          const start = (idx + 1) % items.length;
+
+          const labelOf = (el) =>
+            (el.getAttribute("aria-label") ||
+              el.textContent ||
+              "")
+              .trim()
+              .toLowerCase();
+
+          for (let step = 0; step < items.length; step++) {
+            const i = (start + step) % items.length;
+            if (labelOf(items[i]).startsWith(ch)) {
+              e.preventDefault();
+              items[i].focus();
+              break;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Close on selection (optional)
+  menu.addEventListener("click", (e) => {
+    if (!closeOnSelect) return;
+    const t = e.target instanceof HTMLElement ? e.target : null;
+    if (t?.closest?.('[role^="menuitem"]')) closeMenu(true);
+  });
 </script>
