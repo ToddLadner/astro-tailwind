@@ -131,12 +131,15 @@ h6 { font-size: var(--text-size, var(--text-xs)) }
 
 h1, h2, h3, h4, h5, h6, dt, label { color: var(--color-text-1) }
 h1, h2, h3, h4 { text-wrap: balance; }
-h1, p, button, a { text-box: trim-both cap alphabetic; }
 p:only-child { margin-block: 0; }
 p { max-width: var(--measure-lg); }
 
+/* Weights & Italic */
 i, em { font-variation-settings: "ital" 1 }
 strong, b { font-variation-settings: "wght" var(--weight, 800) }
+
+/* Text Box Trim */
+h1, p, button:not(:has(:not(svg, span, i, img))), a { text-box: trim-both cap alphabetic; }
 
 /* [09] Focus */
 @media (prefers-reduced-motion: no-preference) {

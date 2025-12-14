@@ -7,7 +7,7 @@ type BaseProps = {
   size?: "sm" | "lg";
   elevated?: "shadow-xs" | "shadow-sm" | "shadow-md" | "shadow-lg" | "shadow-xl" | "shadow-2xl";
   shape?: "square" | "circle" | "pill" | "squircle" | "superellipse";
-  variant?: "default" | "icon-button";
+  variant?: "icon-button" | "bare";
   text?: string;
   icon?: string;
   classes?: string;
@@ -89,19 +89,21 @@ export type PureButtonProps = ButtonProps;
       );
 
       /* Base button */
+      min-block-size: var(--min-height);
+      padding-block: 1.5ex;
+      padding-inline: 2ex;
+
       font-size: var(--font-size);
       font-weight: 600;
       line-height: var(--leading-xs);
       color: var(--text-color);
+      text-align: center;
+      
       background: var(--bg-color) var(--ripple, none);
       border-radius: var(--border-radius);
       border: 1px solid var(--border-color);
       display: inline-block;
-      text-align: center;
-      min-block-size: var(--min-height);
-      padding-block: 1.5ex;
-      padding-inline: 1.75ex;
-      text-align: center;
+      
       text-decoration: none;
       user-select: none;
 
@@ -372,6 +374,15 @@ export type PureButtonProps = ButtonProps;
           --bg-color: var(--disabled-bg);
           --text-color: var(--disabled-text);
         }
+      }
+
+      /* Bare */
+      &.bare {
+        --bg-color: transparent;
+        display: grid;
+        margin: -.5ex;
+        padding-block: .5ex;
+        padding-inline: .5ex;
       }
     }
   }

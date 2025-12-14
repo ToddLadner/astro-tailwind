@@ -105,7 +105,7 @@ const mergedTriggerProps: PureButtonProps = {
 </style>
 
 <div 
-  class="dropdown" 
+  class="dropdown h-fit" 
   data-dropdown 
   data-dropdown-id={id} 
   style={`
@@ -120,7 +120,9 @@ const mergedTriggerProps: PureButtonProps = {
     popovertarget={menuId}
     popovertargetaction="toggle"
     {...mergedTriggerProps}
-  />
+  >
+    <slot name="trigger" />
+  </Button>
 
   <ul
     id={menuId}
