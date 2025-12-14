@@ -120,7 +120,16 @@ const mergedTriggerProps: PureButtonProps = {
   }
 </style>
 
-<div class="dropdown" data-dropdown data-dropdown-id={id} style={`--dropdown-trigger-anchor: --dropdown-${id}-trigger; --dropdown-menu-anchor: --dropdown-${id}-menu;`} {...rest}>
+<div 
+  class="dropdown" 
+  data-dropdown 
+  data-dropdown-id={id} 
+  style={`
+    --dropdown-trigger-anchor: --dropdown-${id}-trigger; 
+    --dropdown-menu-anchor: --dropdown-${id}-menu;`
+  } 
+  {...rest}
+  >
   <Button
     id={triggerId}
     data-dropdown-trigger
