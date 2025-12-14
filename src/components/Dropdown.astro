@@ -50,6 +50,10 @@ const mergedTriggerProps: PureButtonProps = {
       width: fit-content;
     }
 
+    [data-dropdown-trigger]:focus-visible {
+      anchor-name: --focus;
+    }
+
     /* Popover positioned from trigger via Anchor Positioning */
     [data-dropdown-menu] {
       --d: 1em;
