@@ -49,10 +49,10 @@ const mergedItemProps = {
     inline-size: 100%;
     text-align: left;
     background: transparent !important;
-    border: 0 !important;
+    border: 0;
     padding: 0.75rem 1rem;
     text-decoration: none;
-    display: block;
+    color: inherit;
   }
 
   /* Focus state for menu items */
@@ -80,6 +80,9 @@ const mergedItemProps = {
       background-color: rgba(0, 0, 0, 0.12);
     }
   }
+
+
+
 </style>
 
 <li role="none" class:list={[classes]} {...rest}>
