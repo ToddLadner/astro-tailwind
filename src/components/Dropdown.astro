@@ -131,7 +131,7 @@ const mergedTriggerProps: PureButtonProps = {
   }
 </style>
 
-<div class="dropdown" data-dropdown {...rest}>
+<div class="dropdown" data-dropdown data-dropdown-id={id} {...rest}>
   <Button
     id={triggerId}
     data-dropdown-trigger
@@ -152,9 +152,9 @@ const mergedTriggerProps: PureButtonProps = {
 
 
 
-<script define:vars={{ closeOnSelect }}>
+<script define:vars={{ closeOnSelect, id }}>
   /** @type {HTMLElement | null} */
-  const root = document.currentScript?.closest?.("[data-dropdown]") ?? null;
+  const root = document.querySelector(`[data-dropdown-id="${id}"]`);
   if (!root) return;
 
   /** @type {HTMLElement | null} */
