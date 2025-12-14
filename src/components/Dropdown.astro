@@ -47,10 +47,10 @@ const mergedTriggerProps: PureButtonProps = {
 };
 ---
 
-<style>
+<style define:vars={{ triggerId, menuId }}>
   /* Make the trigger an anchor */
   [data-dropdown-trigger] {
-    anchor-name: --anchor;
+    anchor-name: var(--dropdown-trigger-anchor);
     width: fit-content;
   }
 
@@ -63,7 +63,7 @@ const mergedTriggerProps: PureButtonProps = {
     inset: auto;
     z-index: 10;
 
-    position-anchor: --anchor;
+    position-anchor: var(--dropdown-trigger-anchor);
     position-area: bottom;
     top: calc(var(--d) + 0.5rem);
 
@@ -79,7 +79,7 @@ const mergedTriggerProps: PureButtonProps = {
     background: #0088ff;
     color: #fff;
 
-    anchor-name: --dropdown;
+    anchor-name: var(--dropdown-menu-anchor);
   }
 
   /* Arrow (optional) */
@@ -90,9 +90,9 @@ const mergedTriggerProps: PureButtonProps = {
     width: var(--s);
     background: inherit;
 
-    top: calc(anchor(--dropdown top) - var(--d));
-    bottom: calc(anchor(--dropdown bottom) - var(--d));
-    left: calc(anchor(--anchor center) - var(--s) / 2);
+    top: calc(anchor(var(--dropdown-menu-anchor) top) - var(--d));
+    bottom: calc(anchor(var(--dropdown-menu-anchor) bottom) - var(--d));
+    left: calc(anchor(var(--dropdown-trigger-anchor) center) - var(--s) / 2);
 
     margin: inherit;
 
@@ -131,7 +131,7 @@ const mergedTriggerProps: PureButtonProps = {
   }
 </style>
 
-<div class="dropdown" data-dropdown data-dropdown-id={id} {...rest}>
+<div class="dropdown" data-dropdown data-dropdown-id={id} style={`--dropdown-trigger-anchor: --dropdown-${id}-trigger; --dropdown-menu-anchor: --dropdown-${id}-menu;`} {...rest}>
   <Button
     id={triggerId}
     data-dropdown-trigger

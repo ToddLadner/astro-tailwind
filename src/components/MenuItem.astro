@@ -65,6 +65,30 @@ const mergedItemProps = {
   :global(.menu-item-button [data-icon]) {
     margin-inline-end: 0.5rem;
   }
+
+    /* Reasonable defaults for slotted menu items */
+  [role^="menuitem"] {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    color: inherit;
+    border: 0;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+  }
+
+  [role^="menuitem"]:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  [role^="menuitem"][aria-disabled="true"],
+  [role^="menuitem"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 </style>
 
 <li role="none" class={liClass} {...liRest}>
