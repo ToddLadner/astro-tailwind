@@ -47,12 +47,12 @@ const mergedTriggerProps: PureButtonProps = {
 <style define:vars={{ triggerId, menuId }}>
   @layer components {
     /* Make the trigger an anchor */
-    [data-dropdown-trigger] {
+    .dropdown-trigger {
       anchor-name: var(--dropdown-trigger-anchor);
       width: fit-content;
     }
 
-    [data-dropdown-trigger]:focus-visible {
+    .dropdown-trigger:focus-visible {
       anchor-name: --focus;
     }
 
@@ -124,7 +124,7 @@ const mergedTriggerProps: PureButtonProps = {
   >
   <Button
     id={triggerId}
-    data-dropdown-trigger
+    classes="dropdown-trigger"
     popovertarget={menuId}
     popovertargetaction="toggle"
     {...mergedTriggerProps}
@@ -134,7 +134,7 @@ const mergedTriggerProps: PureButtonProps = {
 
   <ul
     id={menuId}
-    class="dropdown__menu"
+    class="dropdown-menu"
     popover="auto"
     role="menu"
     aria-labelledby={triggerId}
@@ -152,7 +152,7 @@ const mergedTriggerProps: PureButtonProps = {
   if (!root) return;
 
   /** @type {HTMLElement | null} */
-  const trigger = root.querySelector("[data-dropdown-trigger]");
+  const trigger = root.querySelector(".dropdown-trigger");
   /** @type {HTMLElement | null} */
   const menu = root.querySelector("[data-dropdown-menu]");
   if (!trigger || !menu) return;
