@@ -12,10 +12,12 @@ type Props = HTMLAttributes<"div"> & {
 
   /** Close menu when a menuitem is clicked */
   closeOnSelect?: boolean;
+  classes?: string;
 };
 
 const {
   id,
+  classes,
   buttonProps,
   closeOnSelect = true,
   ...rest
@@ -105,13 +107,13 @@ const mergedTriggerProps: PureButtonProps = {
         0 var(--d)
       );
     }
-    
+  }  
 
   
 </style>
 
 <div 
-  class="dropdown h-fit" 
+  class:list={["dropdown h-fit", classes]}
   data-dropdown 
   data-dropdown-id={id} 
   style={`
