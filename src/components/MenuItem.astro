@@ -44,6 +44,7 @@ const mergedItemProps = {
 ---
 
 <style>
+  @layer components {
   /* Make Button look like a menuitem - override Button's defaults */
   [role^="menuitem"] {
     inline-size: 100%;
@@ -53,12 +54,6 @@ const mergedItemProps = {
     padding: 0.75rem 1rem;
     text-decoration: none;
     color: inherit;
-  }
-
-  /* Focus state for menu items */
-  [role^="menuitem"]:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 2px;
   }
 
   /* Disabled states */
@@ -80,9 +75,7 @@ const mergedItemProps = {
       background-color: rgba(0, 0, 0, 0.12);
     }
   }
-
-
-
+}
 </style>
 
 <li role="none" class:list={[classes]} {...rest}>
