@@ -57,7 +57,7 @@ const mergedTriggerProps: PureButtonProps = {
     }
 
     /* Popover positioned from trigger via Anchor Positioning */
-    [data-dropdown-menu] {
+    .dropdown-menu {
       --d: 1em;
       --s: 1.2em;
 
@@ -85,7 +85,7 @@ const mergedTriggerProps: PureButtonProps = {
     }
 
     /* Arrow (optional) */
-    [data-dropdown-menu]::before {
+    .dropdown-menu::before {
       content: "";
       position: fixed;
       z-index: -1;
@@ -114,7 +114,6 @@ const mergedTriggerProps: PureButtonProps = {
 
 <div 
   class:list={["dropdown h-fit", classes]}
-  data-dropdown 
   data-dropdown-id={id} 
   style={`
     --dropdown-trigger-anchor: --dropdown-${id}-trigger; 
@@ -138,7 +137,6 @@ const mergedTriggerProps: PureButtonProps = {
     popover="auto"
     role="menu"
     aria-labelledby={triggerId}
-    data-dropdown-menu
   >
     <slot />
   </ul>
@@ -154,7 +152,7 @@ const mergedTriggerProps: PureButtonProps = {
   /** @type {HTMLElement | null} */
   const trigger = root.querySelector(".dropdown-trigger");
   /** @type {HTMLElement | null} */
-  const menu = root.querySelector("[data-dropdown-menu]");
+  const menu = root.querySelector(".dropdown-menu");
   if (!trigger || !menu) return;
 
   // Popover API isn’t fully typed everywhere
