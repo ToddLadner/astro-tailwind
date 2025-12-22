@@ -81,25 +81,17 @@ const mergedTriggerProps: PureButtonProps = {
       color: #fff;
 
       anchor-name: var(--dropdown-menu-anchor);
-    }
 
-    /* Arrow (optional) */
-    ul { 
-      background: inherit; 
-      margin: inherit;
-    
       &::before {
         content: "";
         position: fixed;
         z-index: -1;
         width: var(--s);
-        background: inherit;
-
+        background:inherit;
+        margin: inherit;
         top: calc(anchor(var(--dropdown-menu-anchor) top) - var(--d));
         bottom: calc(anchor(var(--dropdown-menu-anchor) bottom) - var(--d));
         left: calc(anchor(var(--dropdown-trigger-anchor) center) - var(--s) / 2);
-
-        margin: inherit;
 
         clip-path: polygon(
           50% .2em,
@@ -111,7 +103,7 @@ const mergedTriggerProps: PureButtonProps = {
         );
       }
     }
-  }  
+  } 
 
   
 
@@ -142,7 +134,7 @@ const mergedTriggerProps: PureButtonProps = {
     role="menu"
     aria-labelledby={triggerId}
   >
-    <ul class="list-none pl-0">
+    <ul class="list-none pl-0 my-2xs">
       <slot />
     </ul>
   </div>
