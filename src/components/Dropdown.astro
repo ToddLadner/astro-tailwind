@@ -110,6 +110,7 @@ const mergedTriggerProps: PureButtonProps = {
   }  
 
   
+
 </style>
 
 <div 
@@ -130,16 +131,17 @@ const mergedTriggerProps: PureButtonProps = {
   >
     <slot name="trigger" />
   </Button>
-
-  <ul
-    id={menuId}
+  <div 
+   id={menuId}
     class="dropdown-menu"
     popover="auto"
     role="menu"
     aria-labelledby={triggerId}
   >
-    <slot />
-  </ul>
+    <ul class="list-none pl-0">
+      <slot />
+    </ul>
+  </div>
 </div>
 
 

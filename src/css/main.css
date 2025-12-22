@@ -145,6 +145,7 @@
   --tracking-4xl: 1em;
 
   /* [08] Fluid Space */
+  --spacing-0: 0;
   --spacing-3xs: clamp(0.25rem, 0.2283rem + 0.1087vw, 0.3125rem);
   --spacing-2xs: clamp(0.5rem, 0.4565rem + 0.2174vw, 0.625rem);
   --spacing-xs: clamp(0.75rem, 0.6848rem + 0.3261vw, 0.9375rem);
