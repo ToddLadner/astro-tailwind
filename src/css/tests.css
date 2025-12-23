@@ -1,0 +1,27 @@
+/* Universal Focus */
+/* Allow the anchor to be found inside top-layer elements */
+@supports (position-area: top) {
+  :is(html, dialog, [popover]) { anchor-scope: --focus; }
+
+  :is(html, dialog, [popover])::after {
+    content: "";
+    position: fixed;
+    position-anchor: --focus;
+    inset: anchor(inside, 0);
+    outline: 2px solid var(--color-brand-4);
+    outline-offset: 3px;
+    border-radius: 2px;
+    pointer-events: none;
+    transition: .4s;
+  }
+
+  *:focus-visible {
+    outline: none;
+    anchor-name: --focus;
+  }
+}
+
+    /* Needed for Universal Focus & Triggers */
+    :focus-visible {
+      anchor-name: var(--triggerAnchor), --focus;
+    }

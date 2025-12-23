@@ -144,6 +144,7 @@ h1, p, button:not(:has(:not(svg, span, i, img))), a { text-box: trim-both cap al
 /* [09] Focus */
 @media (prefers-reduced-motion: no-preference) {
   :focus-visible { 
+   border-radius: inherit;
     transition: outline-offset 75ms ease-out, 
     box-shadow 75ms ease;  
   }
@@ -153,28 +154,7 @@ h1, p, button:not(:has(:not(svg, span, i, img))), a { text-box: trim-both cap al
 }
 :not(:active):focus-visible { outline-offset: .5rem }
 
-/* Universal Focus */
-@supports (position-area: top) {
-  /* Allow the anchor to be found inside top-layer popovers as well */
-  :is(html, dialog, [popover]) { anchor-scope: --focus; }
 
-  :is(html, dialog, [popover])::after {
-    content: "";
-    position: fixed;
-    position-anchor: --focus;
-    inset: anchor(inside,0);
-    outline: 2px solid var(--color-brand-4);
-    outline-offset: 3px;
-    border-radius: 2px;
-    pointer-events: none;
-    transition: .4s;
-  }
-
-  *:focus-visible {
-    outline: none;
-    anchor-name: --focus;
-  }
-}
 
 /* [10] Elements */
 hr {
