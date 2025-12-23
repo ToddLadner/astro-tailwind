@@ -44,30 +44,28 @@
     }
 
     .dropdown-menu {
-      --d: .75rem;
+      --d: var(--spacing-xs); /* distance from trigger */
 
       position: absolute;
       overflow: visible;
       inset: auto;
-      z-index: 10;
+      padding-inline: 0;
+      padding-block: 1ex;
+      z-index: var(--z);
 
       position-anchor: var(--triggerAnchor);
       position-area: bottom;
+      position-try: flip-block;
       top: calc(var(--d));
       margin-bottom: var(--d);
-      position-try: flip-block;
+      margin-inline: calc(var(--d) / 2);
 
       justify-self: anchor-center;
       align-self: normal;
-
-      max-width: 15em;
+      
       border-radius: var(--radius-md);
       background: #0088ff;
       color: #fff;
-    }
-
-    .dropdown-menu::after {
-      display: none !important;
     }
 
     /* Transition */
