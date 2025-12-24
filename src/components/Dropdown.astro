@@ -72,7 +72,7 @@ const mergedTriggerProps: PureButtonProps = {
     }
 
     /* Transition */
-    [popover] {
+    .dropdown-menu[popover] {
       --duration: 1s;
       --timing-function: var(--ease-spring-2);
 
@@ -83,24 +83,24 @@ const mergedTriggerProps: PureButtonProps = {
       transition-behavior: allow-discrete;
     }
 
-    [popover] {
+    .dropdown-menu[popover] {
       transform: scale(0.9);
       opacity: 0;
     }
 
-    [popover]:popover-open {
+    .dropdown-menu[popover]:popover-open {
       transform: translateY(0) scale(1);
       opacity: 1;
     }
 
     @starting-style {
-      [popover]:popover-open {
+      .dropdown-menu[popover]:popover-open {
         transform: translateY(3rem);
         opacity: 0;
       }
     }
 
-    [popover]:popover-open:focus-visible {
+    .dropdown-menu[popover]:popover-open:focus-visible {
       outline-offset: 1px;
     }
   }
