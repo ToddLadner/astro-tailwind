@@ -221,8 +221,10 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
 
     let hoverOpen = false;
     let hoverCloseTimer = 0;
+    let lastOpenReason = "unknown";
 
-    const open = () => {
+    const open = (reason = "unknown") => {
+      lastOpenReason = reason;
       // showPopover() is the correct call; it does not take args
       if (!tip.matches(":popover-open")) tip.showPopover();
     };
@@ -249,7 +251,7 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
       trigger.addEventListener("mouseenter", () => {
         hoverOpen = true;
         clearTimer();
-        open();
+        open("hover");
       });
 
       trigger.addEventListener("mouseleave", () => {
@@ -260,7 +262,7 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
       tip.addEventListener("mouseenter", () => {
         hoverOpen = true;
         clearTimer();
-        open();
+        open("hover");
       });
 
       tip.addEventListener("mouseleave", () => {
@@ -269,7 +271,7 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
       });
 
       // Keyboard: show on focus, hide on blur (tooltip-like)
-      trigger.addEventListener("focusin", open);
+      trigger.addEventListener("focusin", () => open("focus"));
       trigger.addEventListener("focusout", close);
     }
 
@@ -280,7 +282,7 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
         // don’t let the click immediately re-close from outside-click heuristics
         e.stopPropagation();
         if (tip.matches(":popover-open")) close();
-        else open();
+        else open("toggle");
       };
 
       trigger.addEventListener("click", onTriggerClick);
@@ -302,8 +304,8 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
     // Ensure the tooltip never steals focus on open (keeps it tooltip-like)
     tip.addEventListener("toggle", (e) => {
       if (e.newState === "open") {
-        // keep focus on trigger
-        trigger.focus({ preventScroll: true });
+        // Keep focus on trigger except when opened via hover (don't steal focus on hover)
+        if (lastOpenReason !== "hover") trigger.focus({ preventScroll: true });
         syncPositionVars();
       } else if (e.newState === "closed") {
         // If the element is removed, stop observers/listeners
