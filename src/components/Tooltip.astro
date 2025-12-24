@@ -1,122 +1,257 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+// Tooltip.astro
+import type { HTMLAttributes } from "astro/types";
 
-interface Props extends HTMLAttributes<"dialog"> {
-  id?: string;
-  for?: string;
+type Props = HTMLAttributes<"dialog"> & {
+  /** Unique id for the tooltip popover */
+  id: string;
+
+  /** The trigger element id this tooltip is anchored to */
+  for: string;
+
+  /** Optional extra classes */
   classes?: string;
-}
 
-const { 
-  id, 
-  for: forId, 
-  classes = '', 
-  ...rest 
-} = Astro.props;
+  /**
+   * Mobile behavior:
+   * - "auto": hover on fine pointers, click toggletip on coarse pointers
+   * - "hover": force hover behavior (desktop-like)
+   * - "toggle": force click-to-toggle behavior
+   */
+  mode?: "auto" | "hover" | "toggle";
+
+  /** If true, allow hover on desktop (mode=auto or hover) */
+  hover?: boolean;
+};
+
+const { id, for: forId, classes = "", mode = "auto", hover = true, ...rest } =
+  Astro.props as Props;
+
+const triggerId = forId;
+const tipId = id;
+
+// CSS Anchor name for THIS instance (prevents collisions)
+const triggerAnchor = `--tt-${tipId}-trigger`;
 ---
 
-<style>
-  [popover] {
-    box-shadow: var(--shadow-md);
-    border-radius: var(--radius-md);
-    margin-block: 0;
-    margin-inline: 0;
-    overflow: visible;
-    padding: 0;
-    min-width: 150px;
-    position: absolute;
-    inset: auto;
+<style define:vars={{ triggerAnchor }}>
+  @layer components {
+    /* The trigger must exist in the DOM; this assigns an anchor-name to it */
+    [data-tooltip-trigger][data-tooltip-id] {
+      anchor-name: var(--triggerAnchor);
+    }
+
+    dialog[popover][role="tooltip"] {
+      /* Base */
+      background: var(--color-surface-1);
+      border: 1px solid var(--color-border-2);
+      box-shadow: var(--shadow-md);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-2xs);
+      text-align: center;
+      min-width: 150px;
+
+      margin: 0;
+      overflow: visible;
+
+      /* Position via Anchor API */
+      position: fixed;
+      inset: auto;
+      position-anchor: var(--triggerAnchor);
+
+      /* Below trigger by default */
+      top: anchor(bottom);
+      left: anchor(center);
+      translate: -50% 0.5rem;
+
+      /* Prevent focus outline on the dialog itself */
+      outline: none;
+    }
+
+    dialog[popover][role="tooltip"]:focus {
+      outline: none;
+    }
+
+    /* Motion */
+    dialog[popover][role="tooltip"] {
+      --duration: 180ms;
+      --timing-function: var(--ease-spring-2);
+
+      transition:
+        display var(--duration) var(--timing-function),
+        transform var(--duration) var(--timing-function),
+        opacity var(--duration) var(--timing-function);
+      transition-behavior: allow-discrete;
+
+      transform: translateY(0.5rem) scale(0.98);
+      opacity: 0;
+    }
+
+    dialog[popover][role="tooltip"]:popover-open {
+      transform: translateY(0rem) scale(1);
+      opacity: 1;
+    }
+
+    @starting-style {
+      dialog[popover][role="tooltip"]:popover-open {
+        transform: translateY(0.75rem) scale(0.98);
+        opacity: 0;
+      }
+    }
+
+    /* Optional: flip above if it would overflow bottom (basic) */
+    @supports (top: anchor(bottom)) {
+      @media (max-height: 520px) {
+        dialog[popover][role="tooltip"] {
+          top: anchor(top);
+          translate: -50% -0.5rem;
+        }
+      }
+    }
+
+    /* Optional: reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      dialog[popover][role="tooltip"] {
+        transition: none;
+      }
+    }
   }
-
-  .tooltip-inner {
-  position: relative;
-  background: var(--color-surface-1);
-  border: 1px solid var(--color-border-2);
-  padding: var(--spacing-2xs);
-  text-align: center;
-  border-radius: var(--radius-md);
-
-  /* Arrow dimensions */
-  --base: 0.8em;
-  --height: 0.4em;
-  --position: 50%;
-
-  /* Create arrow via clip-path */
-  /* clip-path: polygon(
-    0 0, 0 100%, 100% 100%, 100% 0,
-    min(100%, var(--position) + var(--base)/2) 0,
-    var(--position) calc(-1*var(--height)),
-    max(0%, var(--position) - var(--base)/2) 0
-  ); */
-
-  /* Seamless border for arrow */
-  /* border-image: conic-gradient(var(--color-surface-1) 0 0) fill 0/
-    0 calc(100% - var(--position) - var(--base)/2) var(--radius-md)
-    calc(var(--position) - var(--base)/2)/
-    var(--height) 0 0 0; */
-}
-[popover]:focus { outline: none; }
-/* Transition */
-[popover] {
-  --duration: 1s;
-  --timing-function: var(--ease-spring-2);
-
-  transition: 
-    display var(--duration) var(--timing-function),
-    transform var(--duration) var(--timing-function),
-    opacity var(--duration) var(--timing-function);
-  transition-behavior: allow-discrete; /* [!] Be sure to write this after the transition */
-}
-
-/* Ending | Off Stage (for exiting) */
-[popover] {
-  transform: translateY(1.25rem) scale(0.90);
-  opacity: 0;
-}
-
-/* On Stage */
-[popover]:popover-open {
-  transform: translateY(0rem) scale(1);
-  opacity: 1;
-  margin-block-end: .5rem; 
-}
-
-/* Starting | Off Stage (for entering) */
-@starting-style {
-  [popover]:popover-open {
-    transform: translateY(1.5rem);
-    opacity: 0;
-  }
-}
 </style>
 
+<!--
+  Trigger wiring: you can either:
+  A) Add these attributes to your trigger manually, OR
+  B) Use the example below that shows the recommended markup.
+-->
 <dialog
+  id={tipId}
   popover="hint"
-  id={id}
-  data-for={forId}
   role="tooltip"
+  data-tooltip-for={triggerId}
   class:list={[classes]}
-  {...rest}
   tabindex="-1"
+  {...rest}
 >
-  <div class="tooltip-inner">
-    <slot />
-  </div>
+  <slot />
 </dialog>
 
 <script type="module">
-  document.querySelectorAll('[popover][role=tooltip]').forEach(dialog => {
-    const trigger = document.getElementById(dialog.dataset.for);
+  const root = document.currentScript?.closest("astro-island, body, html") ?? document;
+
+  const tips = root.querySelectorAll('dialog[popover][role="tooltip"][data-tooltip-for]');
+
+  const isCoarse = () =>
+    matchMedia("(pointer: coarse)").matches || matchMedia("(hover: none)").matches;
+
+  tips.forEach((tip) => {
+    const triggerId = tip.getAttribute("data-tooltip-for");
+    if (!triggerId) return;
+
+    const trigger = root.getElementById
+      ? root.getElementById(triggerId)
+      : document.getElementById(triggerId);
+
     if (!trigger) return;
 
-    // Show popover on hover
-    trigger.addEventListener('mouseenter', () => {
-      dialog.showPopover(trigger);
-    });
+    // Mark trigger so the component CSS can assign anchor-name without global ids.
+    trigger.setAttribute("data-tooltip-trigger", "");
+    trigger.setAttribute("data-tooltip-id", tip.id);
 
-    // Hide popover when no longer hovering
-    trigger.addEventListener('mouseleave', () => {
-      dialog.hidePopover();
+    // A11y baseline
+    trigger.setAttribute("aria-describedby", tip.id);
+
+    const MODE = tip.getAttribute("data-mode") ?? "auto";
+    const HOVER = tip.getAttribute("data-hover") ?? "true";
+
+    const useToggle = MODE === "toggle" || (MODE === "auto" && isCoarse());
+    const useHover = !useToggle && (MODE === "hover" || (MODE === "auto" && HOVER !== "false"));
+
+    let hoverOpen = false;
+    let hoverCloseTimer = 0;
+
+    const open = () => {
+      // showPopover() is the correct call; it does not take args
+      if (!tip.matches(":popover-open")) tip.showPopover();
+    };
+
+    const close = () => {
+      if (tip.matches(":popover-open")) tip.hidePopover();
+    };
+
+    // ----- Hover (desktop) -----
+    if (useHover) {
+      const clearTimer = () => {
+        if (hoverCloseTimer) window.clearTimeout(hoverCloseTimer);
+        hoverCloseTimer = 0;
+      };
+
+      const scheduleClose = () => {
+        clearTimer();
+        // small delay lets pointer move from trigger -> tooltip without flicker
+        hoverCloseTimer = window.setTimeout(() => {
+          if (!hoverOpen) close();
+        }, 80);
+      };
+
+      trigger.addEventListener("mouseenter", () => {
+        hoverOpen = true;
+        clearTimer();
+        open();
+      });
+
+      trigger.addEventListener("mouseleave", () => {
+        hoverOpen = false;
+        scheduleClose();
+      });
+
+      tip.addEventListener("mouseenter", () => {
+        hoverOpen = true;
+        clearTimer();
+        open();
+      });
+
+      tip.addEventListener("mouseleave", () => {
+        hoverOpen = false;
+        scheduleClose();
+      });
+
+      // Keyboard: show on focus, hide on blur (tooltip-like)
+      trigger.addEventListener("focusin", open);
+      trigger.addEventListener("focusout", close);
+    }
+
+    // ----- Toggletip (mobile / coarse) -----
+    if (useToggle) {
+      // Make it behave like an info button pattern: click toggles, Esc closes, outside click closes (native)
+      const onTriggerClick = (e) => {
+        // don’t let the click immediately re-close from outside-click heuristics
+        e.stopPropagation();
+        if (tip.matches(":popover-open")) close();
+        else open();
+      };
+
+      trigger.addEventListener("click", onTriggerClick);
+
+      // Close when the trigger loses focus AND focus isn’t inside the tooltip
+      trigger.addEventListener("blur", () => {
+        // defer to allow tap inside tooltip (if you add links/buttons later)
+        queueMicrotask(() => {
+          const active = document.activeElement;
+          if (active && tip.contains(active)) return;
+          close();
+        });
+      });
+
+      // If you want the tooltip to be purely informational, you can prevent focus entering it:
+      // tip.addEventListener("beforetoggle", () => tip.focus({ preventScroll: true }));
+    }
+
+    // Ensure the tooltip never steals focus on open (keeps it tooltip-like)
+    tip.addEventListener("toggle", (e) => {
+      if (e.newState === "open") {
+        // keep focus on trigger
+        trigger.focus({ preventScroll: true });
+      }
     });
   });
 </script>
