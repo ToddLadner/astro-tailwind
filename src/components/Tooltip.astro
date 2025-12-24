@@ -59,10 +59,10 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
       inset: auto;
       position-anchor: var(--triggerAnchor);
 
-      /* Below trigger by default */
-      top: anchor(bottom);
-      left: anchor(center);
-      translate: -50% 0.5rem;
+      /* Below trigger by default (fallback to JS-computed vars if anchors fail) */
+      top: anchor(bottom, var(--trigger-block-end, 0px));
+      left: anchor(center, var(--trigger-inline-center, 0px));
+      translate: -50% var(--tooltip-offset, 0.5rem);
 
       /* Prevent focus outline on the dialog itself */
       outline: none;
@@ -153,12 +153,65 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
 
     if (!trigger) return;
 
+    const tooltipAnchorName = `--tt-${tip.id}-trigger`;
+
     // Mark trigger so the component CSS can assign anchor-name without global ids.
     trigger.setAttribute("data-tooltip-trigger", "");
     trigger.setAttribute("data-tooltip-id", tip.id);
 
     // A11y baseline
     trigger.setAttribute("aria-describedby", tip.id);
+
+    // Merge existing anchor-name (e.g. from Dropdown) with this tooltip's anchor.
+    const normalizeAnchors = (value) =>
+      (value || "")
+        .split(/\s+/)
+        .map((v) => v.trim())
+        .filter(Boolean)
+        .filter((v) => v !== "none");
+
+    const anchors = new Set();
+    const existingSources = [
+      trigger.getAttribute("data-anchor-name"),
+      trigger.getAttribute("data-dropdown-anchor"),
+      trigger.style.getPropertyValue?.("anchor-name"),
+    ];
+
+    try {
+      existingSources.push(getComputedStyle(trigger).getPropertyValue("anchor-name"));
+    } catch {
+      /* no-op */
+    }
+
+    existingSources.forEach((value) => {
+      normalizeAnchors(value).forEach((a) => anchors.add(a));
+    });
+
+    anchors.add(tooltipAnchorName);
+
+    const anchorNameList = Array.from(anchors).join(" ");
+    if (anchorNameList) {
+      trigger.style.setProperty("anchor-name", anchorNameList);
+      trigger.setAttribute("data-anchor-name", anchorNameList);
+    }
+
+    // Keep CSS fallback vars in sync for centering when anchors aren't honored.
+    const syncPositionVars = () => {
+      const rect = trigger.getBoundingClientRect();
+      const inlineCenter = rect.left + rect.width / 2;
+      tip.style.setProperty("--trigger-inline-center", `${inlineCenter}px`);
+      tip.style.setProperty("--trigger-block-end", `${rect.bottom}px`);
+    };
+    syncPositionVars();
+
+    const resizeObserver = new ResizeObserver(syncPositionVars);
+    resizeObserver.observe(trigger);
+    window.addEventListener("resize", syncPositionVars);
+
+    const cleanup = () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", syncPositionVars);
+    };
 
     const MODE = tip.getAttribute("data-mode") ?? "auto";
     const HOVER = tip.getAttribute("data-hover") ?? "true";
@@ -251,6 +304,10 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
       if (e.newState === "open") {
         // keep focus on trigger
         trigger.focus({ preventScroll: true });
+        syncPositionVars();
+      } else if (e.newState === "closed") {
+        // If the element is removed, stop observers/listeners
+        if (!tip.isConnected) cleanup();
       }
     });
   });
