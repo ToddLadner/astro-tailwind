@@ -2,6 +2,7 @@
 // Dropdown.astro (id is the trigger id)
 import type { HTMLAttributes } from "astro/types";
 import Button, { type PureButtonProps } from "@components/Button.astro";
+import dropdownScript from "../scripts/dropdown.ts?url";
 
 type Props = HTMLAttributes<"div"> & {
   /** Trigger id (so Tooltip can target it directly) */
@@ -103,12 +104,22 @@ const mergedTriggerProps: PureButtonProps = {
     .dropdown-menu[popover]:popover-open:focus-visible {
       outline-offset: 1px;
     }
+    /* “polyfill” for browsers without @starting-style */
+    @supports not (@starting-style) {
+      .dropdown-menu[popover]:popover-open {
+        animation: dropdown-in .3s var(--ease-spring-2);
+      }
+      @keyframes dropdown-in {
+        from { transform: translateY(3rem); opacity: 0; }
+        to   { transform: translateY(0) scale(1); opacity: 1; }
+      }
+    }
   }
 </style>
 
 <div
-  class:list={["dropdown h-fit", classes]}
-  style={`--triggerAnchor: ${triggerAnchor};`}
+  class:list={["dropdown w-fit h-fit", classes]}
+  style={`--triggerAnchor: ${triggerAnchor}`}
   data-dropdown-root
   data-close-on-select={closeOnSelect ? "true" : "false"}
   {...rest}
@@ -136,225 +147,6 @@ const mergedTriggerProps: PureButtonProps = {
   >
     <slot />
   </ul>
-
-  <script is:inline>
-    (() => {
-      const root = document.currentScript?.closest("[data-dropdown-root]");
-      if (!root) return;
-
-      const trigger = root.querySelector("[data-dropdown-trigger]");
-      const menu = root.querySelector("[data-dropdown-menu]");
-      if (!(trigger instanceof HTMLElement) || !(menu instanceof HTMLElement)) return;
-
-      const closeOnSelect = root.getAttribute("data-close-on-select") === "true";
-
-      let openIntent = /** @type {"first"|"last"|null} */ (null);
-      let shouldRestoreFocus = false;
-
-      let typeBuffer = "";
-      let typeTimer = /** @type {number|undefined} */ (undefined);
-
-      const isFocusable = (el) => {
-        if (!(el instanceof HTMLElement)) return false;
-        if (el.hasAttribute("disabled")) return false;
-        if (el.getAttribute("aria-disabled") === "true") return false;
-        const cs = window.getComputedStyle(el);
-        if (cs.display === "none" || cs.visibility === "hidden") return false;
-        return true;
-      };
-
-      const getMenuItems = () => {
-        const candidates = Array.from(
-          menu.querySelectorAll(
-            '[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],a,button'
-          )
-        ).filter((el) => el instanceof HTMLElement);
-
-        const items = /** @type {HTMLElement[]} */ (
-          candidates
-            .map((el) => /** @type {HTMLElement} */ (el))
-            .filter(isFocusable)
-            .filter((el) => {
-              const role = el.getAttribute("role");
-              if (role) return role.startsWith("menuitem");
-              const tag = el.tagName.toLowerCase();
-              return tag === "a" || tag === "button";
-            })
-        );
-
-        for (const el of items) {
-          if (!el.hasAttribute("role")) el.setAttribute("role", "menuitem");
-          if (el.tabIndex < 0) el.tabIndex = 0;
-        }
-
-        return items;
-      };
-
-      const focusItemByIndex = (idx) => {
-        const items = getMenuItems();
-        if (!items.length) return;
-        const len = items.length;
-        const next = ((idx % len) + len) % len;
-        items[next].focus({ preventScroll: true });
-      };
-
-      const focusFirst = () => focusItemByIndex(0);
-      const focusLast = () => {
-        const items = getMenuItems();
-        if (!items.length) return;
-        focusItemByIndex(items.length - 1);
-      };
-
-      const indexOfActive = () => {
-        const items = getMenuItems();
-        const active = document.activeElement;
-        const idx = items.findIndex((el) => el === active);
-        return { items, idx };
-      };
-
-      const nextByDelta = (delta) => {
-        const { items, idx } = indexOfActive();
-        if (!items.length) return;
-        const start = idx >= 0 ? idx : 0;
-        focusItemByIndex(start + delta);
-      };
-
-      const getItemText = (el) =>
-        (el.getAttribute("aria-label") || el.textContent || "").trim().toLowerCase();
-
-      const typeahead = (char) => {
-        const items = getMenuItems();
-        if (!items.length) return;
-
-        typeBuffer += char.toLowerCase();
-        window.clearTimeout(typeTimer);
-        typeTimer = window.setTimeout(() => (typeBuffer = ""), 500);
-
-        const active = document.activeElement;
-        const startIndex = Math.max(0, items.findIndex((el) => el === active));
-        const ordered = items.slice(startIndex + 1).concat(items.slice(0, startIndex + 1));
-
-        const match = ordered.find((el) => getItemText(el).startsWith(typeBuffer));
-        if (match) match.focus({ preventScroll: true });
-      };
-
-      const showMenu = () => {
-        if (typeof menu.showPopover === "function") {
-          menu.showPopover();
-          return;
-        }
-        if (typeof menu.togglePopover === "function") {
-          menu.togglePopover(true);
-          return;
-        }
-        trigger.click();
-      };
-
-      const closeMenu = () => {
-        if (typeof menu.hidePopover === "function") menu.hidePopover();
-        else if (typeof menu.togglePopover === "function") menu.togglePopover(false);
-      };
-
-      document.addEventListener(
-        "pointerdown",
-        (e) => {
-          const t = e.target;
-          const inside = t instanceof Node && root.contains(t);
-          if (!inside) shouldRestoreFocus = false;
-        },
-        { capture: true }
-      );
-
-      menu.addEventListener("beforetoggle", (e) => {
-        // @ts-ignore
-        const opening = e?.newState === "open";
-        trigger.setAttribute("aria-expanded", opening ? "true" : "false");
-        if (opening) {
-          shouldRestoreFocus = shouldRestoreFocus || document.activeElement === trigger;
-        }
-      });
-
-      menu.addEventListener("toggle", (e) => {
-        // @ts-ignore
-        const newState = e?.newState;
-        if (newState === "open") {
-          const intent = openIntent;
-          openIntent = null;
-
-          requestAnimationFrame(() => {
-            const items = getMenuItems();
-            if (!items.length) {
-              menu.focus({ preventScroll: true });
-              return;
-            }
-            if (intent === "last") focusLast();
-            else focusFirst();
-          });
-        } else if (newState === "closed") {
-          if (shouldRestoreFocus) {
-            requestAnimationFrame(() => trigger.focus({ preventScroll: true }));
-          }
-          shouldRestoreFocus = false;
-          openIntent = null;
-          typeBuffer = "";
-        }
-      });
-
-      trigger.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-          e.preventDefault();
-          openIntent = e.key === "ArrowUp" ? "last" : "first";
-          shouldRestoreFocus = true;
-          showMenu();
-        }
-      });
-
-      menu.addEventListener("keydown", (e) => {
-        switch (e.key) {
-          case "ArrowDown":
-            e.preventDefault();
-            nextByDelta(1);
-            return;
-          case "ArrowUp":
-            e.preventDefault();
-            nextByDelta(-1);
-            return;
-          case "Home":
-            e.preventDefault();
-            focusFirst();
-            return;
-          case "End":
-            e.preventDefault();
-            focusLast();
-            return;
-          case "Tab":
-            shouldRestoreFocus = false;
-            closeMenu();
-            return;
-          case "Escape":
-            shouldRestoreFocus = true;
-            return;
-          default:
-            if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-              typeahead(e.key);
-            }
-        }
-      });
-
-      menu.addEventListener("click", (e) => {
-        if (!closeOnSelect) return;
-        const target = e.target instanceof Element ? e.target : null;
-        if (!target) return;
-
-        const item = target.closest(
-          '[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],a,button'
-        );
-        if (!(item instanceof HTMLElement)) return;
-        if (!isFocusable(item)) return;
-
-        shouldRestoreFocus = true;
-        queueMicrotask(() => closeMenu());
-      });
-    })();
-  </script>
 </div>
+
+<script type="module" src={dropdownScript}></script>
