@@ -14,8 +14,10 @@ type SharedProps = {
 	classes?: string;
 };
 
-type InputProps = HTMLAttributes<"input"> & SharedProps & { as?: "input"; options?: never };
-type TextareaProps = HTMLAttributes<"textarea"> & SharedProps & { as: "textarea"; options?: never };
+type InputProps = HTMLAttributes<"input"> &
+	SharedProps & { as?: "input"; options?: never };
+type TextareaProps = HTMLAttributes<"textarea"> &
+	SharedProps & { as: "textarea"; options?: never };
 type SelectProps = HTMLAttributes<"select"> &
 	SharedProps & { as: "select"; options?: { value: string; label: string }[] };
 
