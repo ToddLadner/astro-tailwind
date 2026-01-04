@@ -1,28 +1,29 @@
 ---
-import Layout from '@layouts/Layout.astro';
-import Button from '@components/Button.astro';
-import Card from '@components/Card.astro';
+import Button from "@components/Button.astro";
+import Card from "@components/Card.astro";
+import Layout from "@layouts/Layout.astro";
 
-const { 
+const {
 	title = "My Astro Blog",
 	description = "My musings about the Astro framework",
-	...rest 
+	...rest
 } = Astro.props;
 ---
 
 <Layout {title} {description}>
-  <main class="bg-surface-2">
-    <article class="px-max py-xl stack-md">
-      <p>Components</p>
-      <h1>Card</h1>
-    
-      <p>A minimally styled window overlaid on the main content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
-      <Card 
-        theme='tonal' 
-        classes='shadow-lg'
-      >
-      <h3>card test title</h3>
-      </Card>
-    </article>
-  </main>
+	<main class="bg-surface-2">
+		<article class="px-max py-xl stack-md">
+			<p>Components</p>
+			<h1>Card</h1>
+
+			<p>
+				A minimally styled window overlaid on the main content. By design the
+				Dialog is minimal with zero content to allow for both modal and
+				non-modal use.
+			</p>
+			<Card theme="tonal" classes="shadow-lg">
+				<h3>card test title</h3>
+			</Card>
+		</article>
+	</main>
 </Layout>

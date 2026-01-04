@@ -1,67 +1,58 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
+import spaceWhale from "@images/space-whale.jpg";
+import type { HTMLAttributes } from "astro/types";
 
-import spaceWhale from '@images/space-whale.jpg';
-
-interface Props extends HTMLAttributes<'article'> {
-  theme?: 'outlined' | 'tonal' | 'filled';
-  classes?: string;
+interface Props extends HTMLAttributes<"article"> {
+	theme?: "outlined" | "tonal" | "filled";
+	classes?: string;
 }
 
-const { 
-  theme,
-  classes,
-  ...rest
-} = Astro.props;
+const { theme, classes, ...rest } = Astro.props;
 ---
 
 <style>
-  @layer components {
-    .card {
-      --bg-color: transparent;
-      --border-color: transparent;
-      --border-width: 0;
-    
-      
-      
-      background-color: var(--bg-color);
-      border-color: var(--border-color);
-      border-radius: var(--border-radius, 0.25rem);
-      border-style: solid;
-      border-width: var(--border-width);
+@layer components {
+	.card {
+		--bg-color: transparent;
+		--border-color: transparent;
+		--border-width: 0;
 
+		background-color: var(--bg-color);
+		border-color: var(--border-color);
+		border-radius: var(--border-radius, 0.25rem);
+		border-style: solid;
+		border-width: var(--border-width);
 
-      /* Variants */
-      &.tonal {
-        --bg-color: var(--color-surface-1);
-        --border-width: 1px;
-      }
+		/* Variants */
+		&.tonal {
+			--bg-color: var(--color-surface-1);
+			--border-width: 1px;
+		}
 
-      &.outlined {
-        --bg-color: var(--surface-default);
-        --border-color: var(--border-color);
-        --border-width: 1px;
-      }
-    }
-    img {
-      border-top-left-radius: inherit;
-      border-top-right-radius: inherit;
-    }
-  }
+		&.outlined {
+			--bg-color: var(--surface-default);
+			--border-color: var(--border-color);
+			--border-width: 1px;
+		}
+	}
+	img {
+		border-top-left-radius: inherit;
+		border-top-right-radius: inherit;
+	}
+}
 </style>
 
-<article 
-  class:list={[
+<article
+	class:list={[
     'card',
     theme,
     classes
-  ]} 
-  {...rest}
+  ]}
+	{...rest}
 >
-  <Image src={spaceWhale} alt="A bird sitting on a nest of eggs." />
-  <div class="stack p-sm">
-    <slot />
-  </div>
-  
+	<Image src={spaceWhale} alt="A bird sitting on a nest of eggs." />
+	<div class="stack p-sm">
+		<slot />
+	</div>
 </article>

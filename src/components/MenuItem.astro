@@ -1,85 +1,85 @@
 ---
+import Button, { type PureButtonProps } from "@components/Button.astro";
 // MenuItem.astro
 import type { HTMLAttributes } from "astro/types";
-import Button, { type PureButtonProps } from "@components/Button.astro";
 
 /**
  * Menu items are rendered as buttons or links within a menu.
  * Automatically applies menu item semantics and styling.
  */
 type Props = HTMLAttributes<"li"> & {
-  /** Render the menu item as a link when provided */
-  href?: string;
+	/** Render the menu item as a link when provided */
+	href?: string;
 
-  /** Button.astro props - all button styling is supported */
-  itemProps?: PureButtonProps & {
-    /** Allowed here even though PureButtonProps is "button-only" */
-    href?: string;
-  };
+	/** Button.astro props - all button styling is supported */
+	itemProps?: PureButtonProps & {
+		/** Allowed here even though PureButtonProps is "button-only" */
+		href?: string;
+	};
 
-  /** Role variant (defaults to menuitem) */
-  role?: "menuitem" | "menuitemcheckbox" | "menuitemradio";
+	/** Role variant (defaults to menuitem) */
+	role?: "menuitem" | "menuitemcheckbox" | "menuitemradio";
 
-  /** Optional label (falls back to itemProps.aria-label or text/slot) */
-  label?: string;
-  
-  classes?: string;
+	/** Optional label (falls back to itemProps.aria-label or text/slot) */
+	label?: string;
+
+	classes?: string;
 };
 
 const {
-  href,
-  itemProps,
-  role = "menuitem",
-  label,
-  classes,
-  ...rest
+	href,
+	itemProps,
+	role = "menuitem",
+	label,
+	classes,
+	...rest
 } = Astro.props as Props;
 
 const mergedItemProps = {
-  role,
-  ...(href && { href }),
-  ...(label && { "aria-label": label }),
-  ...itemProps,
-} as const satisfies Record<string, any>;
+	role,
+	...(href && { href }),
+	...(label && { "aria-label": label }),
+	...itemProps,
+} as const satisfies Record<string, unknown>;
 ---
 
 <style>
-  @layer components {
-  /* Make Button look like a menuitem - override Button's defaults */
-  [role^="menuitem"] {
-    inline-size: 100%;
-    text-align: left;
-    background: transparent !important;
-    border: 0;
-    padding: 0.75rem 1rem;
-    text-decoration: none;
-    color: inherit;
-  }
+@layer components {
+	/* Make Button look like a menuitem - override Button's defaults */
+	[role^="menuitem"] {
+		inline-size: 100%;
+		text-align: left;
+		background: transparent;
+		border: 0;
+		padding: 0.75rem 1rem;
+		text-decoration: none;
+		color: inherit;
+	}
 
-  /* Disabled states */
-  [role^="menuitem"][aria-disabled="true"],
-  [role^="menuitem"]:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+	/* Disabled states */
+	[role^="menuitem"][aria-disabled="true"],
+	[role^="menuitem"]:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
 
-  /* Hover/active effects */
-  [role^="menuitem"]:not([aria-disabled="true"]):not(:disabled) {
-    cursor: pointer;
-    
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.08);
-    }
+	/* Hover/active effects */
+	[role^="menuitem"]:not([aria-disabled="true"]):not(:disabled) {
+		cursor: pointer;
 
-    &:active {
-      background-color: rgba(0, 0, 0, 0.12);
-    }
-  }
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.08);
+		}
+
+		&:active {
+			background-color: rgba(0, 0, 0, 0.12);
+		}
+	}
 }
 </style>
 
 <li role="none" class:list={[classes]} {...rest}>
-  <Button {...mergedItemProps} tabindex="0">
-    <slot />
-  </Button>
+	<Button {...mergedItemProps} tabindex="0">
+		<slot />
+	</Button>
 </li>

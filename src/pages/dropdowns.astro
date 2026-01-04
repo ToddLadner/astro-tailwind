@@ -1,143 +1,155 @@
 ---
-import Layout from '@layouts/Layout.astro';
-import Dropdown from '@components/Dropdown.astro';
-import MenuItem from "@components/MenuItem.astro";
 import Avatar from "@components/Avatar.astro";
+import Dropdown from "@components/Dropdown.astro";
+import MenuItem from "@components/MenuItem.astro";
+import altUserAvatar from "@images/elp.jpg";
 
-import userAvatar from '@images/killer-mike.jpg';
-import altUserAvatar from '@images/elp.jpg';
+import userAvatar from "@images/killer-mike.jpg";
+import Layout from "@layouts/Layout.astro";
 
-const { 
+const {
 	title = "My Astro Blog",
 	description = "My musings about the Astro framework",
-	...rest 
+	...rest
 } = Astro.props;
 ---
 
-
 <Layout {title} {description}>
-  <main class="bg-surface-2 stack">
-    <!-- Header -->
-    <article class="px-max py-2xl stack-md grid place-content-center">
-      <h1>Dropdown</h1>
-      <p class="text-md leading-lg">The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover content on top of other page content. Popover content can be controlled either declaratively using HTML attributes, or via JavaScript.</p>
-    <div class="flex ">
-
-</div>
-<div class="flex gap-lg">
-  <Dropdown
-    id="settings"
-    buttonProps={{ 
+	<main class="bg-surface-2 stack">
+		<!-- Header -->
+		<article class="px-max py-2xl stack-md grid place-content-center">
+			<h1>Dropdown</h1>
+			<p class="text-md leading-lg">
+				The Popover API provides developers with a standard, consistent,
+				flexible mechanism for displaying popover content on top of other page
+				content. Popover content can be controlled either declaratively using
+				HTML attributes, or via JavaScript.
+			</p>
+			<div class="flex "></div>
+			<div class="flex gap-lg">
+				<Dropdown
+					id="settings"
+					buttonProps={{ 
       theme: "filled", 
       icon: "magnifying-glass-solid", 
       text:"testlabel"  
     }}
-  >
-    <MenuItem itemProps={{ text: "Profile" }} />
-    <MenuItem itemProps={{ text: "Notifications" }} />
-    <MenuItem itemProps={{ text: "Sign out", disabled: true }} />
-    <MenuItem href="/account" itemProps={{ text: "Account", theme: "tonal" }} />
-  </Dropdown>
+				>
+					<MenuItem itemProps={{ text: "Profile" }} />
+					<MenuItem itemProps={{ text: "Notifications" }} />
+					<MenuItem itemProps={{ text: "Sign out", disabled: true }} />
+					<MenuItem
+						href="/account"
+						itemProps={{ text: "Account", theme: "tonal" }}
+					/>
+				</Dropdown>
 
-  <Dropdown
-    id="test"
-    buttonProps={{ theme: "filled", variant: "icon-button", icon: "magnifying-glass-solid"  }}
-  >
-    <MenuItem itemProps={{ text: "Profile1" }} />
-    <MenuItem itemProps={{ text: "Notifications1" }} />
-    <MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
-    <MenuItem href="/account" itemProps={{ text: "Account1", theme: "tonal" }} />
-  </Dropdown>
+				<Dropdown
+					id="test"
+					buttonProps={{ theme: "filled", variant: "icon-button", icon: "magnifying-glass-solid"  }}
+				>
+					<MenuItem itemProps={{ text: "Profile1" }} />
+					<MenuItem itemProps={{ text: "Notifications1" }} />
+					<MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
+					<MenuItem
+						href="/account"
+						itemProps={{ text: "Account1", theme: "tonal" }}
+					/>
+				</Dropdown>
 
-  <Dropdown
-    id="avatar"
-    classes="ml-auto"
-    buttonProps={{ 
+				<Dropdown
+					id="avatar"
+					classes="ml-auto"
+					buttonProps={{ 
       variant: "bare",
       shape: "circle",
       "aria-label": "Open user menu",
     }}
-  >
-    <Avatar 
-      src={userAvatar} 
-      label="User Avatar" 
-      size="md"
-      badge="success"
-      slot="trigger"
-    />
-      <MenuItem itemProps={{ text: "Profile1" }} />
-      <MenuItem itemProps={{ text: "Notifications1" }} />
-      <MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
-      <MenuItem href="/account" itemProps={{ text: "Account1", theme: "tonal" }} />
-  </Dropdown>
-  </div>
-</article>
-
-
-  </main>
+				>
+					<Avatar
+						src={userAvatar}
+						label="User Avatar"
+						size="md"
+						badge="success"
+						slot="trigger"
+					/>
+					<MenuItem itemProps={{ text: "Profile1" }} />
+					<MenuItem itemProps={{ text: "Notifications1" }} />
+					<MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
+					<MenuItem
+						href="/account"
+						itemProps={{ text: "Account1", theme: "tonal" }}
+					/>
+				</Dropdown>
+			</div>
+		</article>
+	</main>
 </Layout>
 
 <script is:inline>
-
-
 // Wait for the element to be in the DOM
-const anchor = document.getElementById('anchor');
+const anchor = document.getElementById("anchor");
+if (!anchor) {
+	throw new Error("Anchor element not found");
+}
 let isDragging = false;
-let offsetX, offsetY;
+let offsetX = 0;
+let offsetY = 0;
 
-anchor.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  
-  // Calculate offset between cursor and element's top-left corner
-  const rect = anchor.getBoundingClientRect();
-  offsetX = e.clientX - rect.left;
-  offsetY = e.clientY - rect.top;
-  
-  anchor.style.cursor = 'grabbing';
+anchor.addEventListener("mousedown", (e) => {
+	isDragging = true;
+
+	// Calculate offset between cursor and element's top-left corner
+	const rect = anchor.getBoundingClientRect();
+	offsetX = e.clientX - rect.left;
+	offsetY = e.clientY - rect.top;
+
+	anchor.style.cursor = "grabbing";
 });
 
-document.addEventListener('mousemove', (e) => {
-  if (!isDragging) return;
-  
-  anchor.style.left = (e.clientX - offsetX) + 'px';
-  anchor.style.top = (e.clientY - offsetY) + 'px';
+document.addEventListener("mousemove", (e) => {
+	if (!isDragging) return;
+
+	anchor.style.left = `${e.clientX - offsetX}px`;
+	anchor.style.top = `${e.clientY - offsetY}px`;
 });
 
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-  anchor.style.cursor = 'move';
+document.addEventListener("mouseup", () => {
+	isDragging = false;
+	anchor.style.cursor = "move";
 });
 </script>
 
 <script is:inline>
-
-
 // Wait for the element to be in the DOM
-const anchor1 = document.getElementById('settings');
+const anchor1 = document.getElementById("settings");
+if (!anchor1) {
+	throw new Error("Settings anchor element not found");
+}
 let isDragging1 = false;
-let offsetX1, offsetY1;
+let offsetX1 = 0;
+let offsetY1 = 0;
 
-anchor.addEventListener('mousedown', (e) => {
-  isDragging1 = true;
-  
-  // Calculate offset between cursor and element's top-left corner
-  const rect = anchor.getBoundingClientRect();
-  offsetX1 = e.clientX - rect.left;
-  offsetY1 = e.clientY - rect.top;
-  
-  anchor.style.cursor = 'grabbing';
+anchor1.addEventListener("mousedown", (e) => {
+	isDragging1 = true;
+
+	// Calculate offset between cursor and element's top-left corner
+	const rect = anchor1.getBoundingClientRect();
+	offsetX1 = e.clientX - rect.left;
+	offsetY1 = e.clientY - rect.top;
+
+	anchor1.style.cursor = "grabbing";
 });
 
-document.addEventListener('mousemove', (e) => {
-  if (!isDragging1) return;
-  
-  anchor.style.left = (e.clientX - offsetX1) + 'px';
-  anchor.style.top = (e.clientY - offsetY1) + 'px';
+document.addEventListener("mousemove", (e) => {
+	if (!isDragging1) return;
+
+	anchor1.style.left = `${e.clientX - offsetX1}px`;
+	anchor1.style.top = `${e.clientY - offsetY1}px`;
 });
 
-document.addEventListener('mouseup', () => {
-  isDragging1 = false;
-  anchor.style.cursor = 'move';
+document.addEventListener("mouseup", () => {
+	isDragging1 = false;
+	anchor1.style.cursor = "move";
 });
 </script>
-

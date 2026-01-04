@@ -3,29 +3,35 @@
 import type { HTMLAttributes } from "astro/types";
 
 type Props = HTMLAttributes<"dialog"> & {
-  /** Unique id for the tooltip popover */
-  id: string;
+	/** Unique id for the tooltip popover */
+	id: string;
 
-  /** The trigger element id this tooltip is anchored to */
-  for: string;
+	/** The trigger element id this tooltip is anchored to */
+	for: string;
 
-  /** Optional extra classes */
-  classes?: string;
+	/** Optional extra classes */
+	classes?: string;
 
-  /**
-   * Mobile behavior:
-   * - "auto": hover on fine pointers, click toggletip on coarse pointers
-   * - "hover": force hover behavior (desktop-like)
-   * - "toggle": force click-to-toggle behavior
-   */
-  mode?: "auto" | "hover" | "toggle";
+	/**
+	 * Mobile behavior:
+	 * - "auto": hover on fine pointers, click toggletip on coarse pointers
+	 * - "hover": force hover behavior (desktop-like)
+	 * - "toggle": force click-to-toggle behavior
+	 */
+	mode?: "auto" | "hover" | "toggle";
 
-  /** If true, allow hover on desktop (mode=auto or hover) */
-  hover?: boolean;
+	/** If true, allow hover on desktop (mode=auto or hover) */
+	hover?: boolean;
 };
 
-const { id, for: forId, classes = "", mode = "auto", hover = true, ...rest } =
-  Astro.props as Props;
+const {
+	id,
+	for: forId,
+	classes = "",
+	mode = "auto",
+	hover = true,
+	...rest
+} = Astro.props as Props;
 
 const triggerId = forId;
 const tipId = id;
@@ -35,87 +41,87 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
 ---
 
 <style define:vars={{ triggerAnchor }}>
-  @layer components {
-    /* The trigger must exist in the DOM; this assigns an anchor-name to it */
-    [data-tooltip-trigger][data-tooltip-id] {
-      anchor-name: var(--triggerAnchor);
-    }
+@layer components {
+	/* The trigger must exist in the DOM; this assigns an anchor-name to it */
+	[data-tooltip-trigger][data-tooltip-id] {
+		anchor-name: var(--triggerAnchor);
+	}
 
-    dialog[popover][role="tooltip"] {
-      /* Base */
-      background: var(--color-surface-1);
-      border: 1px solid var(--color-border-2);
-      box-shadow: var(--shadow-md);
-      border-radius: var(--radius-md);
-      padding: var(--spacing-2xs);
-      text-align: center;
-      min-width: 150px;
+	dialog[popover][role="tooltip"] {
+		/* Base */
+		background: var(--color-surface-1);
+		border: 1px solid var(--color-border-2);
+		box-shadow: var(--shadow-md);
+		border-radius: var(--radius-md);
+		padding: var(--spacing-2xs);
+		text-align: center;
+		min-width: 150px;
 
-      margin: 0;
-      overflow: visible;
+		margin: 0;
+		overflow: visible;
 
-      /* Position via Anchor API */
-      position: fixed;
-      inset: auto;
-      position-anchor: var(--triggerAnchor);
+		/* Position via Anchor API */
+		position: fixed;
+		inset: auto;
+		position-anchor: var(--triggerAnchor);
 
-      /* Below trigger by default (fallback to JS-computed vars if anchors fail) */
-      top: anchor(bottom, var(--trigger-block-end, 0px));
-      left: anchor(center, var(--trigger-inline-center, 0px));
-      translate: -50% var(--tooltip-offset, 0.5rem);
+		/* Below trigger by default (fallback to JS-computed vars if anchors fail) */
+		top: anchor(bottom, var(--trigger-block-end, 0px));
+		left: anchor(center, var(--trigger-inline-center, 0px));
+		translate: -50% var(--tooltip-offset, 0.5rem);
 
-      /* Prevent focus outline on the dialog itself */
-      outline: none;
-    }
+		/* Prevent focus outline on the dialog itself */
+		outline: none;
+	}
 
-    dialog[popover][role="tooltip"]:focus {
-      outline: none;
-    }
+	dialog[popover][role="tooltip"]:focus {
+		outline: none;
+	}
 
-    /* Motion */
-    dialog[popover][role="tooltip"] {
-      --duration: 180ms;
-      --timing-function: var(--ease-spring-2);
+	/* Motion */
+	dialog[popover][role="tooltip"] {
+		--duration: 180ms;
+		--timing-function: var(--ease-spring-2);
 
-      transition:
-        display var(--duration) var(--timing-function),
-        transform var(--duration) var(--timing-function),
-        opacity var(--duration) var(--timing-function);
-      transition-behavior: allow-discrete;
+		transition:
+			display var(--duration) var(--timing-function),
+			transform var(--duration) var(--timing-function),
+			opacity var(--duration) var(--timing-function);
+		transition-behavior: allow-discrete;
 
-      transform: translateY(0.5rem) scale(0.98);
-      opacity: 0;
-    }
+		transform: translateY(0.5rem) scale(0.98);
+		opacity: 0;
+	}
 
-    dialog[popover][role="tooltip"]:popover-open {
-      transform: translateY(0rem) scale(1);
-      opacity: 1;
-    }
+	dialog[popover][role="tooltip"]:popover-open {
+		transform: translateY(0rem) scale(1);
+		opacity: 1;
+	}
 
-    @starting-style {
-      dialog[popover][role="tooltip"]:popover-open {
-        transform: translateY(0.75rem) scale(0.98);
-        opacity: 0;
-      }
-    }
+	@starting-style {
+		dialog[popover][role="tooltip"]:popover-open {
+			transform: translateY(0.75rem) scale(0.98);
+			opacity: 0;
+		}
+	}
 
-    /* Optional: flip above if it would overflow bottom (basic) */
-    @supports (top: anchor(bottom)) {
-      @media (max-height: 520px) {
-        dialog[popover][role="tooltip"] {
-          top: anchor(top);
-          translate: -50% -0.5rem;
-        }
-      }
-    }
+	/* Optional: flip above if it would overflow bottom (basic) */
+	@supports (top: anchor(bottom)) {
+		@media (max-height: 520px) {
+			dialog[popover][role="tooltip"] {
+				top: anchor(top);
+				translate: -50% -0.5rem;
+			}
+		}
+	}
 
-    /* Optional: reduce motion */
-    @media (prefers-reduced-motion: reduce) {
-      dialog[popover][role="tooltip"] {
-        transition: none;
-      }
-    }
-  }
+	/* Optional: reduce motion */
+	@media (prefers-reduced-motion: reduce) {
+		dialog[popover][role="tooltip"] {
+			transition: none;
+		}
+	}
+}
 </style>
 
 <!--
@@ -124,193 +130,202 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
   B) Use the example below that shows the recommended markup.
 -->
 <dialog
-  id={tipId}
-  popover="hint"
-  role="tooltip"
-  data-tooltip-for={triggerId}
-  class:list={[classes]}
-  tabindex="-1"
-  {...rest}
+	id={tipId}
+	popover="hint"
+	role="tooltip"
+	data-tooltip-for={triggerId}
+	class:list={[classes]}
+	tabindex="-1"
+	{...rest}
 >
-  <slot />
+	<slot />
 </dialog>
 
 <script type="module">
-  const root = document.currentScript?.closest("astro-island, body, html") ?? document;
+const root =
+	document.currentScript?.closest("astro-island, body, html") ?? document;
 
-  const tips = root.querySelectorAll('dialog[popover][role="tooltip"][data-tooltip-for]');
+const tips = root.querySelectorAll(
+	'dialog[popover][role="tooltip"][data-tooltip-for]',
+);
 
-  const isCoarse = () =>
-    matchMedia("(pointer: coarse)").matches || matchMedia("(hover: none)").matches;
+const isCoarse = () =>
+	matchMedia("(pointer: coarse)").matches ||
+	matchMedia("(hover: none)").matches;
 
-  tips.forEach((tip) => {
-    const triggerId = tip.getAttribute("data-tooltip-for");
-    if (!triggerId) return;
+tips.forEach((tip) => {
+	const triggerId = tip.getAttribute("data-tooltip-for");
+	if (!triggerId) return;
 
-    const trigger = root.getElementById
-      ? root.getElementById(triggerId)
-      : document.getElementById(triggerId);
+	const trigger = root.getElementById
+		? root.getElementById(triggerId)
+		: document.getElementById(triggerId);
 
-    if (!trigger) return;
+	if (!trigger) return;
 
-    const tooltipAnchorName = `--tt-${tip.id}-trigger`;
+	const tooltipAnchorName = `--tt-${tip.id}-trigger`;
 
-    // Mark trigger so the component CSS can assign anchor-name without global ids.
-    trigger.setAttribute("data-tooltip-trigger", "");
-    trigger.setAttribute("data-tooltip-id", tip.id);
+	// Mark trigger so the component CSS can assign anchor-name without global ids.
+	trigger.setAttribute("data-tooltip-trigger", "");
+	trigger.setAttribute("data-tooltip-id", tip.id);
 
-    // A11y baseline
-    trigger.setAttribute("aria-describedby", tip.id);
+	// A11y baseline
+	trigger.setAttribute("aria-describedby", tip.id);
 
-    // Merge existing anchor-name (e.g. from Dropdown) with this tooltip's anchor.
-    const normalizeAnchors = (value) =>
-      (value || "")
-        .split(/\s+/)
-        .map((v) => v.trim())
-        .filter(Boolean)
-        .filter((v) => v !== "none");
+	// Merge existing anchor-name (e.g. from Dropdown) with this tooltip's anchor.
+	const normalizeAnchors = (value) =>
+		(value || "")
+			.split(/\s+/)
+			.map((v) => v.trim())
+			.filter(Boolean)
+			.filter((v) => v !== "none");
 
-    const anchors = new Set();
-    const existingSources = [
-      trigger.getAttribute("data-anchor-name"),
-      trigger.getAttribute("data-dropdown-anchor"),
-      trigger.style.getPropertyValue?.("anchor-name"),
-    ];
+	const anchors = new Set();
+	const existingSources = [
+		trigger.getAttribute("data-anchor-name"),
+		trigger.getAttribute("data-dropdown-anchor"),
+		trigger.style.getPropertyValue?.("anchor-name"),
+	];
 
-    try {
-      existingSources.push(getComputedStyle(trigger).getPropertyValue("anchor-name"));
-    } catch {
-      /* no-op */
-    }
+	try {
+		existingSources.push(
+			getComputedStyle(trigger).getPropertyValue("anchor-name"),
+		);
+	} catch {
+		/* no-op */
+	}
 
-    existingSources.forEach((value) => {
-      normalizeAnchors(value).forEach((a) => anchors.add(a));
-    });
+	existingSources.forEach((value) => {
+		normalizeAnchors(value).forEach((a) => {
+			anchors.add(a);
+		});
+	});
 
-    anchors.add(tooltipAnchorName);
+	anchors.add(tooltipAnchorName);
 
-    const anchorNameList = Array.from(anchors).join(" ");
-    if (anchorNameList) {
-      trigger.style.setProperty("anchor-name", anchorNameList);
-      trigger.setAttribute("data-anchor-name", anchorNameList);
-    }
+	const anchorNameList = Array.from(anchors).join(" ");
+	if (anchorNameList) {
+		trigger.style.setProperty("anchor-name", anchorNameList);
+		trigger.setAttribute("data-anchor-name", anchorNameList);
+	}
 
-    // Keep CSS fallback vars in sync for centering when anchors aren't honored.
-    const syncPositionVars = () => {
-      const rect = trigger.getBoundingClientRect();
-      const inlineCenter = rect.left + rect.width / 2;
-      tip.style.setProperty("--trigger-inline-center", `${inlineCenter}px`);
-      tip.style.setProperty("--trigger-block-end", `${rect.bottom}px`);
-    };
-    syncPositionVars();
+	// Keep CSS fallback vars in sync for centering when anchors aren't honored.
+	const syncPositionVars = () => {
+		const rect = trigger.getBoundingClientRect();
+		const inlineCenter = rect.left + rect.width / 2;
+		tip.style.setProperty("--trigger-inline-center", `${inlineCenter}px`);
+		tip.style.setProperty("--trigger-block-end", `${rect.bottom}px`);
+	};
+	syncPositionVars();
 
-    const resizeObserver = new ResizeObserver(syncPositionVars);
-    resizeObserver.observe(trigger);
-    window.addEventListener("resize", syncPositionVars);
+	const resizeObserver = new ResizeObserver(syncPositionVars);
+	resizeObserver.observe(trigger);
+	window.addEventListener("resize", syncPositionVars);
 
-    const cleanup = () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", syncPositionVars);
-    };
+	const cleanup = () => {
+		resizeObserver.disconnect();
+		window.removeEventListener("resize", syncPositionVars);
+	};
 
-    const MODE = tip.getAttribute("data-mode") ?? "auto";
-    const HOVER = tip.getAttribute("data-hover") ?? "true";
+	const MODE = tip.getAttribute("data-mode") ?? "auto";
+	const HOVER = tip.getAttribute("data-hover") ?? "true";
 
-    const useToggle = MODE === "toggle" || (MODE === "auto" && isCoarse());
-    const useHover = !useToggle && (MODE === "hover" || (MODE === "auto" && HOVER !== "false"));
+	const useToggle = MODE === "toggle" || (MODE === "auto" && isCoarse());
+	const useHover =
+		!useToggle && (MODE === "hover" || (MODE === "auto" && HOVER !== "false"));
 
-    let hoverOpen = false;
-    let hoverCloseTimer = 0;
-    let lastOpenReason = "unknown";
+	let hoverOpen = false;
+	let hoverCloseTimer = 0;
+	let lastOpenReason = "unknown";
 
-    const open = (reason = "unknown") => {
-      lastOpenReason = reason;
-      // showPopover() is the correct call; it does not take args
-      if (!tip.matches(":popover-open")) tip.showPopover();
-    };
+	const open = (reason = "unknown") => {
+		lastOpenReason = reason;
+		// showPopover() is the correct call; it does not take args
+		if (!tip.matches(":popover-open")) tip.showPopover();
+	};
 
-    const close = () => {
-      if (tip.matches(":popover-open")) tip.hidePopover();
-    };
+	const close = () => {
+		if (tip.matches(":popover-open")) tip.hidePopover();
+	};
 
-    // ----- Hover (desktop) -----
-    if (useHover) {
-      const clearTimer = () => {
-        if (hoverCloseTimer) window.clearTimeout(hoverCloseTimer);
-        hoverCloseTimer = 0;
-      };
+	// ----- Hover (desktop) -----
+	if (useHover) {
+		const clearTimer = () => {
+			if (hoverCloseTimer) window.clearTimeout(hoverCloseTimer);
+			hoverCloseTimer = 0;
+		};
 
-      const scheduleClose = () => {
-        clearTimer();
-        // small delay lets pointer move from trigger -> tooltip without flicker
-        hoverCloseTimer = window.setTimeout(() => {
-          if (!hoverOpen) close();
-        }, 80);
-      };
+		const scheduleClose = () => {
+			clearTimer();
+			// small delay lets pointer move from trigger -> tooltip without flicker
+			hoverCloseTimer = window.setTimeout(() => {
+				if (!hoverOpen) close();
+			}, 80);
+		};
 
-      trigger.addEventListener("mouseenter", () => {
-        hoverOpen = true;
-        clearTimer();
-        open("hover");
-      });
+		trigger.addEventListener("mouseenter", () => {
+			hoverOpen = true;
+			clearTimer();
+			open("hover");
+		});
 
-      trigger.addEventListener("mouseleave", () => {
-        hoverOpen = false;
-        scheduleClose();
-      });
+		trigger.addEventListener("mouseleave", () => {
+			hoverOpen = false;
+			scheduleClose();
+		});
 
-      tip.addEventListener("mouseenter", () => {
-        hoverOpen = true;
-        clearTimer();
-        open("hover");
-      });
+		tip.addEventListener("mouseenter", () => {
+			hoverOpen = true;
+			clearTimer();
+			open("hover");
+		});
 
-      tip.addEventListener("mouseleave", () => {
-        hoverOpen = false;
-        scheduleClose();
-      });
+		tip.addEventListener("mouseleave", () => {
+			hoverOpen = false;
+			scheduleClose();
+		});
 
-      // Keyboard: show on focus, hide on blur (tooltip-like)
-      trigger.addEventListener("focusin", () => open("focus"));
-      trigger.addEventListener("focusout", close);
-    }
+		// Keyboard: show on focus, hide on blur (tooltip-like)
+		trigger.addEventListener("focusin", () => open("focus"));
+		trigger.addEventListener("focusout", close);
+	}
 
-    // ----- Toggletip (mobile / coarse) -----
-    if (useToggle) {
-      // Make it behave like an info button pattern: click toggles, Esc closes, outside click closes (native)
-      const onTriggerClick = (e) => {
-        // don’t let the click immediately re-close from outside-click heuristics
-        e.stopPropagation();
-        if (tip.matches(":popover-open")) close();
-        else open("toggle");
-      };
+	// ----- Toggletip (mobile / coarse) -----
+	if (useToggle) {
+		// Make it behave like an info button pattern: click toggles, Esc closes, outside click closes (native)
+		const onTriggerClick = (e) => {
+			// don’t let the click immediately re-close from outside-click heuristics
+			e.stopPropagation();
+			if (tip.matches(":popover-open")) close();
+			else open("toggle");
+		};
 
-      trigger.addEventListener("click", onTriggerClick);
+		trigger.addEventListener("click", onTriggerClick);
 
-      // Close when the trigger loses focus AND focus isn’t inside the tooltip
-      trigger.addEventListener("blur", () => {
-        // defer to allow tap inside tooltip (if you add links/buttons later)
-        queueMicrotask(() => {
-          const active = document.activeElement;
-          if (active && tip.contains(active)) return;
-          close();
-        });
-      });
+		// Close when the trigger loses focus AND focus isn’t inside the tooltip
+		trigger.addEventListener("blur", () => {
+			// defer to allow tap inside tooltip (if you add links/buttons later)
+			queueMicrotask(() => {
+				const active = document.activeElement;
+				if (active && tip.contains(active)) return;
+				close();
+			});
+		});
 
-      // If you want the tooltip to be purely informational, you can prevent focus entering it:
-      // tip.addEventListener("beforetoggle", () => tip.focus({ preventScroll: true }));
-    }
+		// If you want the tooltip to be purely informational, you can prevent focus entering it:
+		// tip.addEventListener("beforetoggle", () => tip.focus({ preventScroll: true }));
+	}
 
-    // Ensure the tooltip never steals focus on open (keeps it tooltip-like)
-    tip.addEventListener("toggle", (e) => {
-      if (e.newState === "open") {
-        // Keep focus on trigger except when opened via hover (don't steal focus on hover)
-        if (lastOpenReason !== "hover") trigger.focus({ preventScroll: true });
-        syncPositionVars();
-      } else if (e.newState === "closed") {
-        // If the element is removed, stop observers/listeners
-        if (!tip.isConnected) cleanup();
-      }
-    });
-  });
+	// Ensure the tooltip never steals focus on open (keeps it tooltip-like)
+	tip.addEventListener("toggle", (e) => {
+		if (e.newState === "open") {
+			// Keep focus on trigger except when opened via hover (don't steal focus on hover)
+			if (lastOpenReason !== "hover") trigger.focus({ preventScroll: true });
+			syncPositionVars();
+		} else if (e.newState === "closed") {
+			// If the element is removed, stop observers/listeners
+			if (!tip.isConnected) cleanup();
+		}
+	});
+});
 </script>

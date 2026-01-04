@@ -2,151 +2,212 @@
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends HTMLAttributes<"div"> {
-  label?: string;                  // aria-label on tablist
-  verticalAt?: string;             // media query for vertical mode
-  classes?: string;                // wrapper hooks
-  buttonClasses?: string;          // default classes for auto-generated buttons
+	label?: string; // aria-label on tablist
+	verticalAt?: string; // media query for vertical mode
+	classes?: string; // wrapper hooks
+	buttonClasses?: string; // default classes for auto-generated buttons
 }
 const {
-  label = "Tabs",
-  verticalAt = "(max-width: 640px)",
-  classes = "",
-  buttonClasses = "inline-flex items-center gap-2 px-3 py-2 rounded-md",
-  ...rest
+	label = "Tabs",
+	verticalAt = "(max-width: 640px)",
+	classes = "",
+	buttonClasses = "inline-flex items-center gap-2 px-3 py-2 rounded-md",
+	...rest
 } = Astro.props;
 ---
 
 <div class={`tabs ${classes}`} {...rest}>
-  <!-- If you hand-author buttons here, Tabs will use them. Otherwise it will generate from panels. -->
-  <div role="tablist" aria-label={label} aria-orientation="horizontal" class="tabs__list flex gap-2 flex-wrap">
-    <slot name="tabs" />
-  </div>
+	<!-- If you hand-author buttons here, Tabs will use them. Otherwise it will generate from panels. -->
+	<div
+		role="tablist"
+		aria-label={label}
+		aria-orientation="horizontal"
+		class="tabs__list flex gap-2 flex-wrap"
+	>
+		<slot name="tabs" />
+	</div>
 
-  <!-- Author panels directly as children: <section id="…" data-label="…"> -->
-  <slot />
+	<!-- Author panels directly as children: <section id="…" data-label="…"> -->
+	<slot />
 
-  <script is:inline>
-    (() => {
-      const root = document.currentScript.closest('.tabs');
-      const tablist = root.querySelector('[role="tablist"]');
-      let tabs = [...tablist.querySelectorAll('[role="tab"]')];
-      const panels = [...root.querySelectorAll(':scope > section[id][data-label]')];
+	<script is:inline>
+	(() => {
+		const root = document.currentScript.closest(".tabs");
+		const tablist = root.querySelector('[role="tablist"]');
+		let tabs = [...tablist.querySelectorAll('[role="tab"]')];
+		const panels = [
+			...root.querySelectorAll(":scope > section[id][data-label]"),
+		];
 
-      if (panels.length === 0) return;
+		if (panels.length === 0) return;
 
-      // Ensure roles on panels
-      panels.forEach(p => p.setAttribute('role', 'tabpanel'));
+		// Ensure roles on panels
+		panels.forEach((p) => {
+			p.setAttribute("role", "tabpanel");
+		});
 
-      // Auto-generate buttons if none authored
-      if (tabs.length === 0) {
-        panels.forEach((panel, idx) => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.id = `t-${panel.id}`;
-          btn.setAttribute('role', 'tab');
-          btn.setAttribute('aria-controls', panel.id);
-          btn.className = `tabs__tab ${CSS.escape ? '${buttonClasses}' : buttonClasses}`;
-          btn.textContent = panel.dataset.label.trim();
-          tablist.appendChild(btn);
-        });
-        tabs = [...tablist.querySelectorAll('[role="tab"]')];
-      }
+		// Auto-generate buttons if none authored
+		if (tabs.length === 0) {
+			panels.forEach((panel) => {
+				const btn = document.createElement("button");
+				btn.type = "button";
+				btn.id = `t-${panel.id}`;
+				btn.setAttribute("role", "tab");
+				btn.setAttribute("aria-controls", panel.id);
+				btn.className = `tabs__tab ${buttonClasses}`;
+				btn.textContent = panel.dataset.label.trim();
+				tablist.appendChild(btn);
+			});
+			tabs = [...tablist.querySelectorAll('[role="tab"]')];
+		}
 
-      // Link tabs ↔ panels
-      tabs.forEach((t) => {
-        const panelId = t.getAttribute('aria-controls');
-        const panel = panelId && root.querySelector(`#${CSS.escape(panelId)}`);
-        if (panel) panel.setAttribute('aria-labelledby', t.id || (t.id = `t-${panelId}`));
-      });
+		// Link tabs ↔ panels
+		tabs.forEach((t) => {
+			const panelId = t.getAttribute("aria-controls");
+			const panel = panelId && root.querySelector(`#${CSS.escape(panelId)}`);
+			if (panel && panelId) {
+				const tabId = t.id || `t-${panelId}`;
+				t.id = tabId;
+				panel.setAttribute("aria-labelledby", tabId);
+			}
+		});
 
-      // Helpers
-      const dir = getComputedStyle(document.documentElement).direction || 'ltr';
-      const rtl = dir === 'rtl';
-      const panelsById = panels.reduce((m,p,i)=>(m[p.id]=i,m),{});
-      const next = (i) => (i + 1) % tabs.length;
-      const prev = (i) => (i - 1 + tabs.length) % tabs.length;
+		// Helpers
+		const dir = getComputedStyle(document.documentElement).direction || "ltr";
+		const rtl = dir === "rtl";
+		const panelsById = panels.reduce<Record<string, number>>(
+			(map, panel, index) => {
+				map[panel.id] = index;
+				return map;
+			},
+			{},
+		);
+		const next = (i) => (i + 1) % tabs.length;
+		const prev = (i) => (i - 1 + tabs.length) % tabs.length;
 
-      function setSelected(i, { focus = true, updateHash = true } = {}) {
-        tabs.forEach((t, j) => {
-          const sel = j === i;
-          t.setAttribute('aria-selected', String(sel));
-          t.tabIndex = sel ? 0 : -1;
-          panels[j].hidden = !sel;
-          // Mirror as data-selected for CSS if you prefer
-          t.dataset.selected = sel ? "true" : "false";
-        });
-        if (focus) tabs[i].focus();
-        if (updateHash) history.replaceState(null, '', '#' + panels[i].id);
-      }
+		function setSelected(i, { focus = true, updateHash = true } = {}) {
+			tabs.forEach((t, j) => {
+				const sel = j === i;
+				t.setAttribute("aria-selected", String(sel));
+				t.tabIndex = sel ? 0 : -1;
+				panels[j].hidden = !sel;
+				// Mirror as data-selected for CSS if you prefer
+				t.dataset.selected = sel ? "true" : "false";
+			});
+			if (focus) tabs[i].focus();
+			if (updateHash) history.replaceState(null, "", `#${panels[i].id}`);
+		}
 
-      // Initial state (hash wins)
-      const hashIdx = (location.hash && panelsById[location.hash.slice(1)]);
-      const initial = Number.isInteger(hashIdx) ? hashIdx : 0;
-      tabs.forEach((t, j) => {
-        const sel = j === initial;
-        t.setAttribute('aria-selected', String(sel));
-        t.tabIndex = sel ? 0 : -1;
-        panels[j].hidden = !sel;
-      });
+		// Initial state (hash wins)
+		const hashIdx = location.hash && panelsById[location.hash.slice(1)];
+		const initial = Number.isInteger(hashIdx) ? hashIdx : 0;
+		tabs.forEach((t, j) => {
+			const sel = j === initial;
+			t.setAttribute("aria-selected", String(sel));
+			t.tabIndex = sel ? 0 : -1;
+			panels[j].hidden = !sel;
+		});
 
-      // Click
-      tabs.forEach((t, i) => t.addEventListener('click', () => setSelected(i)));
+		// Click
+		tabs.forEach((t, i) => {
+			t.addEventListener("click", () => {
+				setSelected(i);
+			});
+		});
 
-      // Keys
-      tablist.addEventListener('keydown', (e) => {
-        const i = tabs.indexOf(document.activeElement);
-        if (i < 0) return;
-        switch (e.key) {
-          case 'ArrowRight': e.preventDefault(); setSelected(rtl ? prev(i) : next(i)); break;
-          case 'ArrowLeft':  e.preventDefault(); setSelected(rtl ? next(i) : prev(i)); break;
-          case 'ArrowDown':  e.preventDefault(); setSelected(next(i)); break; // vertical helpful
-          case 'ArrowUp':    e.preventDefault(); setSelected(prev(i)); break; // vertical helpful
-          case 'Home':       e.preventDefault(); setSelected(0); break;
-          case 'End':        e.preventDefault(); setSelected(tabs.length - 1); break;
-          default:
-            if (e.key.length === 1 && /\S/.test(e.key)) {
-              const q = e.key.toLowerCase();
-              const order = tabs.map((_,k)=>(k+i+1)%tabs.length);
-              const hit = order.find(k => tabs[k].textContent.trim().toLowerCase().startsWith(q));
-              if (hit != null) { e.preventDefault(); setSelected(hit); }
-            }
-        }
-      });
+		// Keys
+		tablist.addEventListener("keydown", (e) => {
+			const i = tabs.indexOf(document.activeElement);
+			if (i < 0) return;
+			switch (e.key) {
+				case "ArrowRight":
+					e.preventDefault();
+					setSelected(rtl ? prev(i) : next(i));
+					break;
+				case "ArrowLeft":
+					e.preventDefault();
+					setSelected(rtl ? next(i) : prev(i));
+					break;
+				case "ArrowDown":
+					e.preventDefault();
+					setSelected(next(i));
+					break; // vertical helpful
+				case "ArrowUp":
+					e.preventDefault();
+					setSelected(prev(i));
+					break; // vertical helpful
+				case "Home":
+					e.preventDefault();
+					setSelected(0);
+					break;
+				case "End":
+					e.preventDefault();
+					setSelected(tabs.length - 1);
+					break;
+				default:
+					if (e.key.length === 1 && /\S/.test(e.key)) {
+						const q = e.key.toLowerCase();
+						const order = tabs.map((_, k) => (k + i + 1) % tabs.length);
+						const hit = order.find((k) =>
+							tabs[k].textContent.trim().toLowerCase().startsWith(q),
+						);
+						if (hit != null) {
+							e.preventDefault();
+							setSelected(hit);
+						}
+					}
+			}
+		});
 
-      // Orientation toggle
-      const mql = window.matchMedia(`${{verticalAt}.toString ? `${verticalAt}` : verticalAt}`);
-      function applyOrientation() {
-        tablist.setAttribute('aria-orientation', mql.matches ? 'vertical' : 'horizontal');
-      }
-      applyOrientation();
-      mql.addEventListener?.('change', applyOrientation);
+		// Orientation toggle
+		const mql = window.matchMedia(String(verticalAt));
+		function applyOrientation() {
+			tablist.setAttribute(
+				"aria-orientation",
+				mql.matches ? "vertical" : "horizontal",
+			);
+		}
+		applyOrientation();
+		mql.addEventListener?.("change", applyOrientation);
 
-      // Hash navigation after load
-      window.addEventListener('hashchange', () => {
-        const id = location.hash.slice(1);
-        if (id in panelsById) setSelected(panelsById[id], { focus: false, updateHash: false });
-      });
-    })();
-  </script>
+		// Hash navigation after load
+		window.addEventListener("hashchange", () => {
+			const id = location.hash.slice(1);
+			if (id in panelsById)
+				setSelected(panelsById[id], { focus: false, updateHash: false });
+		});
+	})();
+	</script>
 
-  <style>
-  /* Focus visibility */
-  .tabs__tab:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
-  /* Panel spacing */
-  [role="tabpanel"] { /* @apply mt-4; */ }
+	<style>
+	/* Focus visibility */
+	.tabs__tab:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+	/* Panel spacing */
+	[role="tabpanel"] {
+		/* @apply mt-4; */
+	}
 
-  /* Small-screen stack is just CSS; semantics stay tabs */
-  @media ${verticalAt} {
-    .tabs__list { /* @apply flex-col; */ }
-  }
+	/* Small-screen stack is just CSS; semantics stay tabs */
+	@media (max-width: 640px) {
+		.tabs__list {
+			/* @apply flex-col; */
+		}
+	}
 
-  @media (prefers-reduced-motion: reduce) {
-    [role="tabpanel"] { transition: none !important; }
-  }
-  </style>
+	@media (prefers-reduced-motion: reduce) {
+		[role="tabpanel"] {
+			transition: none;
+		}
+	}
+	</style>
 
-  <noscript>
-    <!-- SEO/no-JS: show all content -->
-    <div class="space-y-6"><slot /></div>
-  </noscript>
+	<noscript>
+		<!-- SEO/no-JS: show all content -->
+		<div class="space-y-6">
+			<slot />
+		</div>
+	</noscript>
 </div>

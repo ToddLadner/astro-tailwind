@@ -1,174 +1,176 @@
 ---
-import { Icon } from 'astro-icon/components';
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
 
-interface Props extends HTMLAttributes<'input'> {
-  type: 'checkbox' | 'radio';
-  uid?: string;
-  label?: string;
-  name?: string;
-  disabled?: boolean;
-  icon?: string;
-  error?: string;
-  supportingText?: string;
-  size?: 'small' | 'large';
-  classes?: string;
+interface Props extends HTMLAttributes<"input"> {
+	type: "checkbox" | "radio";
+	uid?: string;
+	label?: string;
+	name?: string;
+	disabled?: boolean;
+	icon?: string;
+	error?: string;
+	supportingText?: string;
+	size?: "small" | "large";
+	classes?: string;
 }
 
 const {
-  type = 'checkbox',
-  uid,
-  label,
-  name,
-  icon,
-  error,
-  supportingText,
-  size,
-  classes,
-  disabled = false,
-  ...rest
+	type = "checkbox",
+	uid,
+	label,
+	name,
+	icon,
+	error,
+	supportingText,
+	size,
+	classes,
+	disabled = false,
+	...rest
 } = Astro.props;
 
 // generate a short random id if none provided - using cryptographically secure random
-const id = uid ?? `input-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, '0'), '')}`;
+const id =
+	uid ??
+	`input-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, "0"), "")}`;
 
-const describedBy = [
-  supportingText && `${id}-supporting`,
-  error && `${id}-error`,
-].filter(Boolean).join(' ') || undefined;
+const describedBy =
+	[supportingText && `${id}-supporting`, error && `${id}-error`]
+		.filter(Boolean)
+		.join(" ") || undefined;
 
-const classList = [
-  'checkable',
-  error && 'error',
-  classes,
-];
+const classList = ["checkable", error && "error", classes];
 
-const inputClassList = [
-  size,
-];
+const inputClassList = [size];
 ---
 
 <style>
-  @layer components {
-    .checkable {
-      --checkable-size: 1.125rem;
-      
-      align-items: center;
-      color: var(--color-text-1);
-      cursor: pointer;
-      display: inline-grid;
-      gap: 0 var(--spacing-xs);
-      grid-auto-columns: auto;
-      grid-auto-flow: column;
-      inline-size: fit-content;
-      line-height: 1.5;
+@layer components {
+	.checkable {
+		--checkable-size: 1.125rem;
 
-      /* Disabled */
-      &:has([disabled]) {
-        cursor: not-allowed;
-        opacity: 0.64;
-        user-select: none;
+		align-items: center;
+		color: var(--color-text-1);
+		cursor: pointer;
+		display: inline-grid;
+		gap: 0 var(--spacing-xs);
+		grid-auto-columns: auto;
+		grid-auto-flow: column;
+		inline-size: fit-content;
+		line-height: 1.5;
 
-        input {
-          cursor: not-allowed;
-        }
-      }
+		/* Input */
+		input {
+			aspect-ratio: 1;
+			block-size: var(--checkable-size);
+			cursor: pointer;
+			margin: 0;
+		}
 
-      /* Required dot */
-      &:has([required]) {
-        .label:after {
-          color: var(--color-red-5);
-          content: "*";
-          inset: 0 -1.25ex auto auto;
-          position: absolute;
-        }
-      }
+		/* Sizes */
+		input.small {
+			block-size: var(--spacing-xs);
+		}
+		input.large {
+			block-size: var(--spacing-sm);
+		}
 
-      /* Label */
-      .label {
-        grid-column: 2;
-        grid-row: 1;
-        position: relative;
-        display: inline-flex;
-        align-items: center;
+		/* Disabled */
+		&:has([disabled]) {
+			cursor: not-allowed;
+			opacity: 0.64;
+			user-select: none;
 
-        [data-icon] {
-          color: currentColor;
-          block-size: 0.7lh;
-          aspect-ratio: 1;
-        }
-      }
+			input {
+				cursor: not-allowed;
+			}
+		}
 
-      /* Supporting text */
-      .supporting-text {
-        color: var(--color-text-2);
-        font-size: var(--font-size-xs);
-        grid-column: 2;
-        grid-row: 2;
-        line-height: 1.5;
-        z-index: 1;
-      }
+		/* Required dot */
+		&:has([required]) {
+			.label:after {
+				color: var(--color-red-5);
+				content: "*";
+				inset: 0 -1.25ex auto auto;
+				position: absolute;
+			}
+		}
 
-      /* Input */
-      input {
-        aspect-ratio: 1;
-        block-size: var(--checkable-size);
-        cursor: pointer;
-        margin: 0;
-      }
+		/* Label */
+		.label {
+			grid-column: 2;
+			grid-row: 1;
+			position: relative;
+			display: inline-flex;
+			align-items: center;
 
-      /* Sizes */
-      input.small { block-size: var(--spacing-xs); }
-      input.large { block-size: var(--spacing-sm); }
+			[data-icon] {
+				color: currentColor;
+				block-size: 0.7lh;
+				aspect-ratio: 1;
+			}
+		}
 
-      /* Validation */
-      &.error {
-        input { 
-          accent-color: var(--color-red-5);
-        }
+		/* Supporting text */
+		.supporting-text {
+			color: var(--color-text-2);
+			font-size: var(--font-size-xs);
+			grid-column: 2;
+			grid-row: 2;
+			line-height: 1.5;
+			z-index: 1;
+		}
 
-        :where(.label, .supporting-text) {
-          color: var(--color-red-5);
-        }
-      }
+		/* Validation */
+		&.error {
+			input {
+				accent-color: var(--color-red-5);
+			}
 
-      .error-text {
-        color: var(--color-red-5);
-        font-size: var(--font-size-xs);
-        grid-column: 2;
-        grid-row: 3;
-        line-height: 1.5;
-      }
+			:where(.label, .supporting-text) {
+				color: var(--color-red-5);
+			}
+		}
 
-      /* Touch devices - increase size for easier interaction */
-      @media (pointer: coarse) {
-        input { block-size: var(--spacing-md); }
-      }
-    }
-  }
+		.error-text {
+			color: var(--color-red-5);
+			font-size: var(--font-size-xs);
+			grid-column: 2;
+			grid-row: 3;
+			line-height: 1.5;
+		}
+
+		/* Touch devices - increase size for easier interaction */
+		@media (pointer: coarse) {
+			input {
+				block-size: var(--spacing-md);
+			}
+		}
+	}
+}
 </style>
 
 <label for={id} class:list={classList}>
-  <input
-    id={id}
-    name={name}
-    type={type}
-    disabled={disabled}
-    aria-invalid={error ? "true" : undefined}
-    aria-describedby={describedBy}
-    class:list={inputClassList}
-    {...rest}
-  />
-  <span class="label">
-    {icon && <Icon name={icon} data-icon aria-hidden="true" />}
-    {label}
-  </span>
-  {supportingText && (
+	<input
+		id={id}
+		name={name}
+		type={type}
+		disabled={disabled}
+		aria-invalid={error ? "true" : undefined}
+		aria-describedby={describedBy}
+		class:list={inputClassList}
+		{...rest}
+	>
+	<span class="label">
+		{icon && <Icon name={icon} data-icon aria-hidden="true" />}
+		{label}
+	</span>
+	{supportingText && (
     <span id={`${id}-supporting`} class="supporting-text">
       {supportingText}
     </span>
   )}
-  {error && (
+	{error && (
     <span id={`${id}-error`} class="error-text" role="alert">
       {error}
     </span>

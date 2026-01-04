@@ -1,94 +1,79 @@
 ---
-import Layout from '@layouts/Layout.astro';
-import Dialog from '@components/Dialog.astro';
-import Button from '@components/Button.astro';
-import Dropdown from '@components/Dropdown.astro';
-import Tooltip from '@components/Tooltip.astro';
-import Avatar from '@components/Avatar.astro';
-import MenuItem from '@components/MenuItem.astro';
+import Avatar from "@components/Avatar.astro";
+import Button from "@components/Button.astro";
+import Dialog from "@components/Dialog.astro";
+import Dropdown from "@components/Dropdown.astro";
+import MenuItem from "@components/MenuItem.astro";
+import Tooltip from "@components/Tooltip.astro";
+import altUserAvatar from "@images/elp.jpg";
 
-import userAvatar from '@images/killer-mike.jpg';
-import altUserAvatar from '@images/elp.jpg';
+import userAvatar from "@images/killer-mike.jpg";
+import Layout from "@layouts/Layout.astro";
 
-const { 
+const {
 	title = "My Astro Blog",
 	description = "My musings about the Astro framework",
-	...rest 
+	...rest
 } = Astro.props;
 ---
 
-
 <Layout {title} {description}>
-  <main class="bg-surface-2 stack">
-    <!-- Header -->
+	<main class="bg-surface-2 stack">
+		<!-- Header -->
 
-    
-
-
-    
-
-    <article class="px-max py-lg stack-md">
-      <!-- Avatar & Dropdown -->
-       <Tooltip id="avatar-tip" for="avatar" mode='auto'>
-        This is an AVATAR tooltip.
-      </Tooltip>
-      <Dropdown
-        id="avatar"
-        classes=""
-        buttonProps={{ 
+		<article class="px-max py-lg stack-md">
+			<!-- Avatar & Dropdown -->
+			<Tooltip id="avatar-tip" for="avatar" mode="auto">
+				This is an AVATAR tooltip.
+			</Tooltip>
+			<Dropdown
+				id="avatar"
+				classes=""
+				buttonProps={{ 
           variant: "bare",
           shape: "circle",
           "aria-label": "Open user menu",
         }}
-      >
-        <Avatar 
-          src={userAvatar} 
-          label="User Avatar" 
-          size="md"
-          badge="success"
-          slot="trigger"
-        />
-        <MenuItem itemProps={{ text: "Profile1" }} />
-        <MenuItem itemProps={{ text: "Notifications1" }} />
-        <MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
-        <MenuItem href="/account" itemProps={{ text: "Account1", theme: "tonal" }} />
-      </Dropdown>
-    </article>
-    
+			>
+				<Avatar
+					src={userAvatar}
+					label="User Avatar"
+					size="md"
+					badge="success"
+					slot="trigger"
+				/>
+				<MenuItem itemProps={{ text: "Profile1" }} />
+				<MenuItem itemProps={{ text: "Notifications1" }} />
+				<MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
+				<MenuItem
+					href="/account"
+					itemProps={{ text: "Account1", theme: "tonal" }}
+				/>
+			</Dropdown>
+		</article>
 
-    <article class="px-max py-lg stack-md">
-      <button id="help-name" type="button">
-  What’s this?
-</button>
+		<article class="px-max py-lg stack-md">
+			<button id="help-name" type="button">What’s this?</button>
 
-<Tooltip
-  id="help-name-tip"
-  for="help-name"
-  mode="auto"
->
-  This name is shown to the other parent.
-</Tooltip>
-      <!-- Button & Tooltip -->
-      <Button 
-        id="new-dropdown" 
-        popovertarget="new-menu"
-        aria-controls="new-menu"
-        aria-haspopup="menu"
-        aria-expanded="false"
-        aria-label="Help menu"
-      >
-        ?
-      </Button>
-      <Tooltip id="tooltip-info" for="new-dropdown">
-        This is an informative tooltip.
-      </Tooltip>
+			<Tooltip id="help-name-tip" for="help-name" mode="auto">
+				This name is shown to the other parent.
+			</Tooltip>
+			<!-- Button & Tooltip -->
+			<Button
+				id="new-dropdown"
+				popovertarget="new-menu"
+				aria-controls="new-menu"
+				aria-haspopup="menu"
+				aria-expanded="false"
+				aria-label="Help menu"
+			>
+				?
+			</Button>
+			<Tooltip id="tooltip-info" for="new-dropdown">
+				This is an informative tooltip.
+			</Tooltip>
 
-      <!-- /Button & Tooltip -->
-    </article>
-
-
-
-
-
-  </main>
+			<!-- /Button & Tooltip -->
+		</article>
+	</main>
 </Layout>

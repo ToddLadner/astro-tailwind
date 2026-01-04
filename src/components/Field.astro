@@ -1,114 +1,119 @@
 ---
-import { Icon } from 'astro-icon/components';
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
 
-type Element = 'input' | 'textarea' | 'select';
+type Element = "input" | "textarea" | "select";
 
-interface Props extends HTMLAttributes<'input'> {
-  as?: Element;
-  id?: string;
-  uid?: string;
-  label?: string;
-  icon?: string;
-  error?: string;
-  classes?: string;
-  options?: { value: string; label: string }[];
+interface Props extends HTMLAttributes<"input"> {
+	as?: Element;
+	id?: string;
+	uid?: string;
+	label?: string;
+	icon?: string;
+	error?: string;
+	classes?: string;
+	options?: { value: string; label: string }[];
 }
 
 const props = Astro.props as Props & {
-  'aria-describedby'?: string;
-  'aria-invalid'?: string | boolean;
+	"aria-describedby"?: string;
+	"aria-invalid"?: string | boolean;
 };
 
 const {
-  as = 'input',
-  id: propId,
-  uid,
-  label,
-  icon,
-  error,
-  classes = '',
-  options = [],
-  'aria-describedby': ariaDescribedByProp,
-  'aria-invalid': ariaInvalidProp,
-  ...rest
+	as = "input",
+	id: propId,
+	uid,
+	label,
+	icon,
+	error,
+	classes = "",
+	options = [],
+	"aria-describedby": ariaDescribedByProp,
+	"aria-invalid": ariaInvalidProp,
+	...rest
 } = props;
 
 // Generate ID with secure random fallback
-const id = propId ?? uid ?? `field-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, '0'), '')}`;
+const id =
+	propId ??
+	uid ??
+	`field-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, "0"), "")}`;
 const describedBy = ariaDescribedByProp ?? (error ? `${id}-error` : undefined);
-const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
+const ariaInvalid = ariaInvalidProp ?? (error ? "true" : undefined);
 ---
+
 <style>
-  /* [1] Field */
-  .field {
-    background-color: var(--color-surface-0);
-    max-width: var(--measure-sm);
-    padding: var(--spacing-xs) var(--spacing-xs);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-inset-lg);
-    border: 1px solid var(--color-surface-3);
-    transition: border-color 0.2s, box-shadow 0.2s;
+/* [1] Field */
+.field {
+	background-color: var(--color-surface-0);
+	max-width: var(--measure-sm);
+	padding: var(--spacing-xs) var(--spacing-xs);
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-inset-lg);
+	border: 1px solid var(--color-surface-3);
+	transition:
+		border-color 0.2s,
+		box-shadow 0.2s;
 
-    &:focus-within {
-      border: 1px solid var(--color-brand);
-      box-shadow: 0px 0px 10px 4px oklch(from var(--color-brand) l c h / 23%);
+	&:focus-within {
+		border: 1px solid var(--color-brand);
+		box-shadow: 0px 0px 10px 4px oklch(from var(--color-brand) l c h / 23%);
 
-      .label {
-        color: var(--color-brand);
-      }
-    }
+		.label {
+			color: var(--color-brand);
+		}
+	}
 
-    /* Error state */
-    &[aria-invalid="true"] {
-      border-color: var(--color-red-5);
-      --error-color: var(--color-red-5);
-    }
-  }
-  
-  /* [2] Label */
-  .label {}
-  
-  /* [3] Input */
-  .control {
-    background-color: transparent;
-    width: 100%;
-    font-size: var(--text-md);
-    
-    &:focus { outline: none; }
-  }
-  input::placeholder,
-  textarea::placeholder,
-  select::placeholder {
-    color: var(--color-surface-4);
-  }
-  
-  /* [4] Validation */
-  .field:has(:is(input, textarea, select):user-valid) {
-    border-color: var(--color-green-5);
-  }
-  .field:has(:is(input, textarea, select):user-invalid),
-  .field[aria-invalid="true"] {
-    border-color: var(--color-red-5);
-  }
+	/* Error state */
+	&[aria-invalid="true"] {
+		border-color: var(--color-red-5);
+		--error-color: var(--color-red-5);
+	}
+}
 
-  /* [5] Error message */
-  .error-message {
-    color: var(--error-color, var(--color-red-5));
-    font-size: var(--font-size-xs);
-    margin-top: var(--spacing-2xs);
-  }
+/* [3] Input */
+.control {
+	background-color: transparent;
+	width: 100%;
+	font-size: var(--text-md);
+
+	&:focus {
+		outline: none;
+	}
+}
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+	color: var(--color-surface-4);
+}
+
+/* [4] Validation */
+.field:has(:is(input, textarea, select):user-valid) {
+	border-color: var(--color-green-5);
+}
+.field:has(:is(input, textarea, select):user-invalid),
+.field[aria-invalid="true"] {
+	border-color: var(--color-red-5);
+}
+
+/* [5] Error message */
+.error-message {
+	color: var(--error-color, var(--color-red-5));
+	font-size: var(--font-size-xs);
+	margin-top: var(--spacing-2xs);
+}
 </style>
 
 <label for={id} class="field grid gap-2xs" class:list={[classes]}>
-  {label && (
+	{label && (
     <span class="label flex items-center gap-xs">
       {icon && <Icon name={icon} />}
       <span class="text-xs ">{label}</span>
     </span>
   )}
 
-  {as === 'input' && (
+	{as === 'input' && (
     <input
       id={id}
       class="control"
@@ -118,7 +123,7 @@ const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
     />
   )}
 
-  {as === 'textarea' && (
+	{as === 'textarea' && (
     <textarea
       id={id}
       class="control resize-y"
@@ -128,7 +133,7 @@ const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
     />
   )}
 
-  {as === 'select' && (
+	{as === 'select' && (
     <select
       id={id}
       class="control"
@@ -140,7 +145,7 @@ const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
     </select>
   )}
 
-  {error && (
+	{error && (
     <span id={`${id}-error`} class="error-message" role="alert">
       {error}
     </span>

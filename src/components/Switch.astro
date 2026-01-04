@@ -1,298 +1,298 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 
-interface Props extends Omit<HTMLAttributes<'input'>, 'size'> {
-  uid?: string;
-  label?: string;
-  supportingText?: string;
-  text?: string;
-  error?: string;
-  stacked?: boolean;
-  size?: 'small' | 'sm' | 'large' | 'lg';
-  classes?: string;
-  labelProps?: HTMLAttributes<'label'>;
+interface Props extends Omit<HTMLAttributes<"input">, "size"> {
+	uid?: string;
+	label?: string;
+	supportingText?: string;
+	text?: string;
+	error?: string;
+	stacked?: boolean;
+	size?: "small" | "sm" | "large" | "lg";
+	classes?: string;
+	labelProps?: HTMLAttributes<"label">;
 }
 
 const props = Astro.props as Props & {
-  'aria-describedby'?: string;
-  'aria-invalid'?: string | boolean;
+	"aria-describedby"?: string;
+	"aria-invalid"?: string | boolean;
 };
 
 const {
-  id: propId,
-  uid,
-  label,
-  supportingText,
-  text,
-  error,
-  stacked = false,
-  size,
-  classes,
-  labelProps = {},
-  ...rawInputProps
+	id: propId,
+	uid,
+	label,
+	supportingText,
+	text,
+	error,
+	stacked = false,
+	size,
+	classes,
+	labelProps = {},
+	...rawInputProps
 } = props;
 
-const {
-  class: labelClass,
-  ...restLabelProps
-} = labelProps;
+const { class: labelClass, ...restLabelProps } = labelProps;
 
 const {
-  class: rootClass,
-  type: inputType = 'checkbox',
-  'aria-describedby': ariaDescribedByProp,
-  'aria-invalid': ariaInvalidProp,
-  ...inputAttributes
+	class: rootClass,
+	type: inputType = "checkbox",
+	"aria-describedby": ariaDescribedByProp,
+	"aria-invalid": ariaInvalidProp,
+	...inputAttributes
 } = rawInputProps;
 
-const fallbackId = `switch-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, '0'), '')}`;
+const fallbackId = `switch-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, "0"), "")}`;
 const id = propId ?? uid ?? fallbackId;
 
 const supporting = supportingText ?? text;
 const describedByIds = [
-  supporting && `${id}-supporting`,
-  error && `${id}-error`,
+	supporting && `${id}-supporting`,
+	error && `${id}-error`,
 ].filter(Boolean) as string[];
 const describedBy =
-  ariaDescribedByProp ?? (describedByIds.length ? describedByIds.join(' ') : undefined);
-const ariaInvalid = ariaInvalidProp ?? (error ? 'true' : undefined);
+	ariaDescribedByProp ??
+	(describedByIds.length ? describedByIds.join(" ") : undefined);
+const ariaInvalid = ariaInvalidProp ?? (error ? "true" : undefined);
 
 const normalizedSize =
-  size === 'sm' || size === 'small'
-    ? 'small'
-    : size === 'lg' || size === 'large'
-      ? 'large'
-      : size;
+	size === "sm" || size === "small"
+		? "small"
+		: size === "lg" || size === "large"
+			? "large"
+			: size;
 
 const labelClassList = [
-  normalizedSize,
-  stacked && 'stack',
-  error && 'error',
-  classes,
-  labelClass,
-  rootClass,
+	normalizedSize,
+	stacked && "stack",
+	error && "error",
+	classes,
+	labelClass,
+	rootClass,
 ];
 ---
 
 <style>
-  @layer components {
-    .switch {
-      --accent-color: var(--color-brand);
-      --accent-contrast: var(--color-gray-1);
+@layer components {
+	.switch {
+		--accent-color: var(--color-brand);
+		--accent-contrast: var(--color-gray-1);
 
-      --dot-bg-color: light-dark(var(--color-gray-11), var(--color-gray-14));
-      --dot-inset: var(--spacing-3xs) auto auto var(--spacing-3xs);
-      --dot-outline-size: 0;
-      --dot-size: var(--spacing-xs);
+		--dot-bg-color: light-dark(var(--color-gray-11), var(--color-gray-14));
+		--dot-inset: var(--spacing-3xs) auto auto var(--spacing-3xs);
+		--dot-outline-size: 0;
+		--dot-size: var(--spacing-xs);
 
-      --track-bg-color: light-dark(var(--color-gray-3), var(--color-gray-8));
-      --track-height: calc(var(--spacing-xs) + .6rem);
-      --track-width: var(--spacing-lg);
-      --transition-tf: var(--ease-4);
-      --transition-time: 0.2s;
+		--track-bg-color: light-dark(var(--color-gray-3), var(--color-gray-8));
+		--track-height: calc(var(--spacing-xs) + 0.6rem);
+		--track-width: var(--spacing-lg);
+		--transition-tf: var(--ease-4);
+		--transition-time: 0.2s;
 
-      align-items: center;
-      color: var(--color-text-1);
-      display: inline-grid;
-      gap: 0 var(--spacing-xs);
-      grid-auto-columns: auto;
-      grid-auto-flow: column;
-      inline-size: fit-content;
+		align-items: center;
+		color: var(--color-text-1);
+		display: inline-grid;
+		gap: 0 var(--spacing-xs);
+		grid-auto-columns: auto;
+		grid-auto-flow: column;
+		inline-size: fit-content;
 
-      input[type="checkbox"][role="switch"] {
-        appearance: none;
-        block-size: var(--track-height);
-        cursor: pointer;
-        inline-size: var(--track-width);
-        margin: 0;
-        position: relative;
+		input[type="checkbox"][role="switch"] {
+			appearance: none;
+			block-size: var(--track-height);
+			cursor: pointer;
+			inline-size: var(--track-width);
+			margin: 0;
+			position: relative;
 
-        /* Track */
-        &::before {
-          background-color: var(--track-bg-color);
-          block-size: var(--track-height);
-          border: 1px solid var(--dot-bg-color);
-          border-radius: var(--radius-ellipse);
-          content: "";
-          inline-size: var(--track-width);
-          inset: 0;
-          position: absolute;
-        }
+			/* Track */
+			&::before {
+				background-color: var(--track-bg-color);
+				block-size: var(--track-height);
+				border: 1px solid var(--dot-bg-color);
+				border-radius: var(--radius-ellipse);
+				content: "";
+				inline-size: var(--track-width);
+				inset: 0;
+				position: absolute;
+			}
 
-        /* Dot */
-        &::after {
-          background-color: var(--dot-bg-color);
-          block-size: var(--dot-size);
-          border-radius: var(--radius-ellipse);
-          content: "";
-          inline-size: var(--dot-size);
-          inset: var(--dot-inset);
-          outline-offset: -1px;
-          outline: var(--dot-outline-size) solid var(--dot-bg-color);
-          position: absolute;
-        }
+			/* Dot */
+			&::after {
+				background-color: var(--dot-bg-color);
+				block-size: var(--dot-size);
+				border-radius: var(--radius-ellipse);
+				content: "";
+				inline-size: var(--dot-size);
+				inset: var(--dot-inset);
+				outline-offset: -1px;
+				outline: var(--dot-outline-size) solid var(--dot-bg-color);
+				position: absolute;
+			}
 
-        /* Checked */
-        &:checked {
-          &::before {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-            transition:
-              background-color var(--transition-time) var(--transition-tf),
-              border-color var(--transition-time) var(--transition-tf);
-          }
+			/* Checked */
+			&:checked {
+				&::before {
+					background-color: var(--accent-color);
+					border-color: var(--accent-color);
+					transition:
+						background-color var(--transition-time) var(--transition-tf),
+						border-color var(--transition-time) var(--transition-tf);
+				}
 
-          /* Dot */
-          &::after {
-            --dot-bg-color: var(--accent-contrast);
-            --dot-outline-size: calc(var(--spacing-3xs) - 1px);
+				/* Dot */
+				&::after {
+					--dot-bg-color: var(--accent-contrast);
+					--dot-outline-size: calc(var(--spacing-3xs) - 1px);
 
-            inset-inline-start: calc(
-              var(--track-width) - var(--dot-size) - var(--spacing-3xs)
-            );
-          }
-        }
+					inset-inline-start: calc(
+						var(--track-width) -
+						var(--dot-size) -
+						var(--spacing-3xs)
+					);
+				}
+			}
 
-        /* Animation */
-        @media (prefers-reduced-motion: no-preference) {
-          /* Track */
-          &::before {
-            transition:
-              background-color var(--transition-time) var(--transition-tf),
-              border-color var(--transition-time) var(--transition-tf);
-          }
+			/* Animation */
+			@media (prefers-reduced-motion: no-preference) {
+				/* Track */
+				&::before {
+					transition:
+						background-color var(--transition-time) var(--transition-tf),
+						border-color var(--transition-time) var(--transition-tf);
+				}
 
-          /* Dot */
-          &::after {
-            transition: all var(--transition-time) var(--transition-tf);
-          }
+				/* Dot */
+				&::after {
+					transition: all var(--transition-time) var(--transition-tf);
+				}
 
-          &:active:after {
-            --dot-outline-size: calc(var(--spacing-3xs) + 1px);
-          }
+				&:active:after {
+					--dot-outline-size: calc(var(--spacing-3xs) + 1px);
+				}
 
-          &:checked {
-            &:active:after {
-              --dot-outline-size: calc(var(--spacing-3xs) + 1px);
-            }
-          }
-        }
-      }
+				&:checked {
+					&:active:after {
+						--dot-outline-size: calc(var(--spacing-3xs) + 1px);
+					}
+				}
+			}
+		}
 
-      /* Required dot */
-      &:has([required]) {
-        .label:after {
-          color: var(--color-red-5);
-          content: "*";
-          inset: 0 -0.25ex auto auto;
-          position: absolute;
-        }
-      }
+		/* Required dot */
+		&:has([required]) {
+			.label:after {
+				color: var(--color-red-5);
+				content: "*";
+				inset: 0 -0.25ex auto auto;
+				position: absolute;
+			}
+		}
 
-      /* Disabled */
-      &:has([disabled]) {
-        cursor: not-allowed;
-        opacity: 0.64;
-        user-select: none;
+		/* Disabled */
+		&:has([disabled]) {
+			cursor: not-allowed;
+			opacity: 0.64;
+			user-select: none;
 
-        input {
-          cursor: not-allowed;
-        }
-      }
+			input {
+				cursor: not-allowed;
+			}
+		}
 
-      /* Label */
-      .label {
-        grid-column: 2;
-        /* grid-row: 1; */
-        color: var(--color-text-1);
-        min-width: 0;
-        width: fit-content;
-        padding-inline: 0 1ex;
-        position: relative;
-        display: inline-flex;
-      }
+		/* Label */
+		.label {
+			grid-column: 2;
+			/* grid-row: 1; */
+			color: var(--color-text-1);
+			min-width: 0;
+			width: fit-content;
+			padding-inline: 0 1ex;
+			position: relative;
+			display: inline-flex;
+		}
 
-      /* Supporting text */
-      .supporting-text {
-        color: var(--color-text-2);
-        font-size: var(--font-size-xs);
-        grid-column: 2;
-        /* grid-row: 2; */
-        line-height: 1.5;
-        z-index: 1;
-      }
+		/* Supporting text */
+		.supporting-text {
+			color: var(--color-text-2);
+			font-size: var(--font-size-xs);
+			grid-column: 2;
+			/* grid-row: 2; */
+			line-height: 1.5;
+			z-index: 1;
+		}
 
-      .error-text {
-        color: var(--color-red-5);
-        font-size: var(--font-size-xs);
-        grid-column: 2;
-        /* grid-row: 3; */
-        line-height: 1.5;
-      }
+		.error-text {
+			color: var(--color-red-5);
+			font-size: var(--font-size-xs);
+			grid-column: 2;
+			/* grid-row: 3; */
+			line-height: 1.5;
+		}
 
-      /* Size */
-      &.small {
-        --dot-size: 0.75rem;
-        --track-height: var(--spacing-lg);
-        --track-width: 2.5rem;
-      }
+		/* Size */
+		&.small {
+			--dot-size: 0.75rem;
+			--track-height: var(--spacing-lg);
+			--track-width: 2.5rem;
+		}
 
-      &.large {
-        --dot-size: 1.15rem;
-        --track-height: calc(var(--spacing-sm) + 0.25rem);
-        --track-width: 3.25rem;
-      }
+		&.large {
+			--dot-size: 1.15rem;
+			--track-height: calc(var(--spacing-sm) + 0.25rem);
+			--track-width: 3.25rem;
+		}
 
-      /* Stacked layout */
-      &.stack {
-        justify-items: center;
-        grid-auto-columns: unset;
+		/* Stacked layout */
+		&.stack {
+			justify-items: center;
+			grid-auto-columns: unset;
 
-        .label {
-          grid-column: 1/-1;
-          grid-row: 2;
-          margin-block-start: var(--spacing-3xs);
-          padding-inline: 1ex;
-        }
+			.label {
+				grid-column: 1 / -1;
+				grid-row: 2;
+				margin-block-start: var(--spacing-3xs);
+				padding-inline: 1ex;
+			}
 
-        .supporting-text {
-          grid-column: 1/-1;
-          grid-row: 3;
-        }
+			.supporting-text {
+				grid-column: 1 / -1;
+				grid-row: 3;
+			}
 
-        .error-text {
-          grid-column: 1 / -1;
-          grid-row: 4;
-        }
-      }
+			.error-text {
+				grid-column: 1 / -1;
+				grid-row: 4;
+			}
+		}
 
-      /* Validation */
-      &.error {
-        .label,
-        .supporting-text {
-          color: var(--color-red-5);
-        }
-      }
-    }
-  }
+		/* Validation */
+		&.error {
+			.label,
+			.supporting-text {
+				color: var(--color-red-5);
+			}
+		}
+	}
+}
 </style>
 
 <label class="switch" class:list={labelClassList} {...restLabelProps}>
-  <input
-    id={id}
-    type={inputType}
-    role="switch"
-    aria-describedby={describedBy}
-    aria-invalid={ariaInvalid}
-    {...inputAttributes}
-  />
-  {label && <span class="label">{label}</span>}
-  {supporting && (
+	<input
+		id={id}
+		type={inputType}
+		role="switch"
+		aria-describedby={describedBy}
+		aria-invalid={ariaInvalid}
+		{...inputAttributes}
+	>
+	{label && <span class="label">{label}</span>}
+	{supporting && (
     <span id={`${id}-supporting`} class="supporting-text">
       {supporting}
     </span>
   )}
-  {error && (
+	{error && (
     <span id={`${id}-error`} class="error-text" role="alert">
       {error}
     </span>

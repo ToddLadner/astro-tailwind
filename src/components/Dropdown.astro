@@ -1,20 +1,25 @@
 ---
+import Button, { type PureButtonProps } from "@components/Button.astro";
 // Dropdown.astro (id is the trigger id)
 import type { HTMLAttributes } from "astro/types";
-import Button, { type PureButtonProps } from "@components/Button.astro";
 import dropdownScript from "../scripts/dropdown.ts?url";
 
 type Props = HTMLAttributes<"div"> & {
-  /** Trigger id (so Tooltip can target it directly) */
-  id: string;
+	/** Trigger id (so Tooltip can target it directly) */
+	id: string;
 
-  buttonProps?: PureButtonProps;
-  closeOnSelect?: boolean;
-  classes?: string;
+	buttonProps?: PureButtonProps;
+	closeOnSelect?: boolean;
+	classes?: string;
 };
 
-const { id, classes, buttonProps, closeOnSelect = true, ...rest } =
-  Astro.props as Props;
+const {
+	id,
+	classes,
+	buttonProps,
+	closeOnSelect = true,
+	...rest
+} = Astro.props as Props;
 
 // Now: id === trigger id
 const triggerId = id;
@@ -26,127 +31,117 @@ const menuId = `${id}--menu`;
 const triggerAnchor = `--${id}--trigger`;
 
 const ariaLabel =
-  buttonProps?.["aria-label"] ?? (buttonProps?.text ? undefined : "Open menu");
+	buttonProps?.["aria-label"] ?? (buttonProps?.text ? undefined : "Open menu");
 
 const mergedTriggerProps: PureButtonProps = {
-  type: "button",
-  "aria-haspopup": "menu",
-  "aria-controls": menuId,
-  ...(ariaLabel ? { "aria-label": ariaLabel } : {}),
-  ...(buttonProps ?? {}),
-  // MUST be in the spread so it lands on the real <button>/<a>
-  "data-dropdown-trigger": "",
+	type: "button",
+	"aria-haspopup": "menu",
+	"aria-controls": menuId,
+	...(ariaLabel ? { "aria-label": ariaLabel } : {}),
+	...(buttonProps ?? {}),
+	// MUST be in the spread so it lands on the real <button>/<a>
+	"data-dropdown-trigger": "",
 };
 ---
 
 <style define:vars={{ triggerAnchor }}>
-  @layer components {
-    .dropdown-trigger {
-      anchor-name: var(--triggerAnchor);
-      width: fit-content;
-    }
+@layer components {
+	.dropdown-trigger {
+		anchor-name: var(--triggerAnchor);
+		width: fit-content;
+	}
 
-    .dropdown-menu {
-      --d: var(--spacing-xs);
+	.dropdown-menu {
+		--d: var(--spacing-xs);
 
-      position: absolute;
-      overflow: visible;
-      inset: auto;
-      padding-inline: 0;
-      padding-block: 1ex;
-      z-index: var(--z);
+		position: absolute;
+		overflow: visible;
+		inset: auto;
+		padding-inline: 0;
+		padding-block: 1ex;
+		z-index: var(--z);
 
-      position-anchor: var(--triggerAnchor);
-      position-area: bottom;
-      position-try: flip-block;
+		position-anchor: var(--triggerAnchor);
+		position-area: bottom;
+		position-try: flip-block;
 
-      top: calc(var(--d));
-      margin-bottom: var(--d);
-      margin-inline: calc(var(--d) / 2);
+		top: calc(var(--d));
+		margin-bottom: var(--d);
+		margin-inline: calc(var(--d) / 2);
 
-      justify-self: anchor-center;
-      align-self: normal;
+		justify-self: anchor-center;
+		align-self: normal;
 
-      border-radius: var(--radius-md);
-      background: #0088ff;
-      color: #fff; 
-    }
+		border-radius: var(--radius-md);
+		background: #0088ff;
+		color: #fff;
+	}
 
-    /* Transition */
-    .dropdown-menu[popover] {
-      --duration: 1s;
-      --timing-function: var(--ease-spring-2);
+	/* Transition */
+	.dropdown-menu[popover] {
+		--duration: 1s;
+		--timing-function: var(--ease-spring-2);
 
-      transition:
-        display var(--duration) var(--timing-function),
-        transform var(--duration) var(--timing-function),
-        opacity var(--duration) var(--timing-function);
-      transition-behavior: allow-discrete;
-    }
+		transition:
+			display var(--duration) var(--timing-function),
+			transform var(--duration) var(--timing-function),
+			opacity var(--duration) var(--timing-function);
+		transition-behavior: allow-discrete;
+	}
 
-    .dropdown-menu[popover] {
-      transform: scale(0.9);
-      opacity: 0;
-    }
+	.dropdown-menu[popover] {
+		transform: scale(0.9);
+		opacity: 0;
+	}
 
-    .dropdown-menu[popover]:popover-open {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
+	.dropdown-menu[popover]:popover-open {
+		transform: translateY(0) scale(1);
+		opacity: 1;
+	}
 
-    @starting-style {
-      .dropdown-menu[popover]:popover-open {
-        transform: translateY(3rem);
-        opacity: 0;
-      }
-    }
+	@starting-style {
+		.dropdown-menu[popover]:popover-open {
+			transform: translateY(3rem);
+			opacity: 0;
+		}
+	}
 
-    .dropdown-menu[popover]:popover-open:focus-visible {
-      outline-offset: 1px;
-    }
-    /* “polyfill” for browsers without @starting-style */
-    @supports not (@starting-style) {
-      .dropdown-menu[popover]:popover-open {
-        animation: dropdown-in .3s var(--ease-spring-2);
-      }
-      @keyframes dropdown-in {
-        from { transform: translateY(3rem); opacity: 0; }
-        to   { transform: translateY(0) scale(1); opacity: 1; }
-      }
-    }
-  }
+	.dropdown-menu[popover]:popover-open:focus-visible {
+		outline-offset: 1px;
+	}
+}
 </style>
 
 <div
-  class:list={["dropdown w-fit h-fit", classes]}
-  style={`--triggerAnchor: ${triggerAnchor}`}
-  data-dropdown-root
-  data-close-on-select={closeOnSelect ? "true" : "false"}
-  {...rest}
+	class:list={["dropdown w-fit h-fit", classes]}
+	style={`--triggerAnchor: ${triggerAnchor}`}
+	data-dropdown-root
+	data-close-on-select={closeOnSelect ? "true" : "false"}
+	{...rest}
 >
-  <Button
-    id={triggerId}
-    classes="dropdown-trigger"
-    popovertarget={menuId}
-    popovertargetaction="toggle"
-    aria-expanded="false"
-    data-dropdown-anchor={triggerAnchor}
-    {...mergedTriggerProps}
-  >
-    <slot name="trigger" />
-  </Button>
+	<Button
+		id={triggerId}
+		classes="dropdown-trigger"
+		popovertarget={menuId}
+		popovertargetaction="toggle"
+		aria-expanded="false"
+		data-dropdown-anchor={triggerAnchor}
+		{...mergedTriggerProps}
+	>
+		<slot name="trigger" />
+	</Button>
 
-  <ul
-    id={menuId}
-    class="dropdown-menu list-none"
-    data-dropdown-menu
-    popover="auto"
-    role="menu"
-    aria-labelledby={triggerId}
-    tabindex="-1"
-  >
-    <slot />
-  </ul>
+	<ul
+		id={menuId}
+		class="dropdown-menu list-none"
+		data-dropdown-menu
+		popover="auto"
+		role="menu"
+		aria-labelledby={triggerId}
+		tabindex="-1"
+	>
+		<slot />
+	</ul>
 </div>
 
 <script type="module" src={dropdownScript}></script>

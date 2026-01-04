@@ -1,412 +1,412 @@
 ---
-import { Icon } from 'astro-icon/components';
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
 
 type BaseProps = {
-  theme?: "outlined" | "tonal" | "filled" | "custom";
-  size?: "sm" | "lg";
-  elevated?: "shadow-xs" | "shadow-sm" | "shadow-md" | "shadow-lg" | "shadow-xl" | "shadow-2xl";
-  shape?: "square" | "circle" | "pill" | "squircle" | "superellipse";
-  variant?: "icon-button" | "bare";
-  text?: string;
-  icon?: string;
-  classes?: string;
-  disabled?: boolean;
-  "aria-label"?: string;
+	theme?: "outlined" | "tonal" | "filled" | "custom";
+	size?: "sm" | "lg";
+	elevated?:
+		| "shadow-xs"
+		| "shadow-sm"
+		| "shadow-md"
+		| "shadow-lg"
+		| "shadow-xl"
+		| "shadow-2xl";
+	shape?: "square" | "circle" | "pill" | "squircle" | "superellipse";
+	variant?: "icon-button" | "bare";
+	text?: string;
+	icon?: string;
+	classes?: string;
+	disabled?: boolean;
+	"aria-label"?: string;
 };
 
 type AnchorProps = BaseProps &
-  Omit<HTMLAttributes<"a">, "href"> & {
-    href: string;
-  };
+	Omit<HTMLAttributes<"a">, "href"> & {
+		href: string;
+	};
 
 type ButtonProps = BaseProps &
-  Omit<HTMLAttributes<"button">, "type"> & {
-    href?: undefined;
-    type?: "button" | "submit" | "reset";
-  };
+	Omit<HTMLAttributes<"button">, "type"> & {
+		href?: undefined;
+		type?: "button" | "submit" | "reset";
+	};
 
 type Props = ButtonProps | AnchorProps;
 
 const {
-  type = "button",
-  theme,
-  size,
-  elevated,
-  variant,
-  shape,
-  text,
-  icon,
-  classes,
-  href,
-  disabled = false,
-  "aria-label": ariaLabel,
-  ...rest
+	type = "button",
+	theme,
+	size,
+	elevated,
+	variant,
+	shape,
+	text,
+	icon,
+	classes,
+	href,
+	disabled = false,
+	"aria-label": ariaLabel,
+	...rest
 } = Astro.props as Props;
 
 const isLink = "href" in (Astro.props as Props) && !!href;
 const safeHref = disabled ? undefined : href;
 
-const classList = [
-  "button",
-  size,
-  theme,
-  shape,
-  elevated,
-  variant,
-  classes,
-];
+const classList = ["button", size, theme, shape, elevated, variant, classes];
 
 // Export Props type for use in other components
 export type PureButtonProps = ButtonProps;
 ---
 
 <style>
-  @layer components {
-    /* General Button Styles */
-    :is(.button, [type=button], [type=submit], [type=reset]) {
-      /* Design tokens / props */
-      --bg-color: transparent;
-      --border-color: transparent;
-      --border-radius: var(--radius-md);
-      --font-size: initial;
-      --min-height: auto;
-      --text-color: light-dark(var(--color-purple-7), var(--color-purple-3));
-      --button-ripple-duration: 0.5s;
-      --button-ripple-size: 100%;
-      --icon-size: 1cap;
+@layer components {
+	/* General Button Styles */
+	:is(.button, [type="button"], [type="submit"], [type="reset"]) {
+		/* Design tokens / props */
+		--bg-color: transparent;
+		--border-color: transparent;
+		--border-radius: var(--radius-md);
+		--font-size: initial;
+		--min-height: auto;
+		--text-color: light-dark(var(--color-purple-7), var(--color-purple-3));
+		--button-ripple-duration: 0.5s;
+		--button-ripple-size: 100%;
+		--icon-size: 1cap;
 
-      /* Re-usable disabled colors (variants can override) */
-      --disabled-bg: color-mix(
-        in oklch,
-        var(--color-text-1) 8%,
-        var(--color-surface-3)
-      );
-      --disabled-text: color-mix(
-        in oklch,
-        var(--color-text-1) 70%,
-        var(--color-surface-3)
-      );
+		/* Re-usable disabled colors (variants can override) */
+		--disabled-bg: color-mix(
+			in oklch,
+			var(--color-text-1) 8%,
+			var(--color-surface-3)
+		);
+		--disabled-text: color-mix(
+			in oklch,
+			var(--color-text-1) 70%,
+			var(--color-surface-3)
+		);
 
-      /* Base button */
-      min-block-size: var(--min-height);
-      padding-block: 1.5ex;
-      padding-inline: 2ex;
+		/* Base button */
+		min-block-size: var(--min-height);
+		padding-block: 1.5ex;
+		padding-inline: 2ex;
 
-      font-size: var(--font-size);
-      font-weight: 600;
-      line-height: var(--leading-xs);
-      color: var(--text-color);
-      text-align: center;
-      
-      background: var(--bg-color) var(--ripple, none);
-      border-radius: var(--border-radius);
-      border: 1px solid var(--border-color);
-      display: inline-block;
-      
-      text-decoration: none;
-      user-select: none;
+		font-size: var(--font-size);
+		font-weight: 600;
+		line-height: var(--leading-xs);
+		color: var(--text-color);
+		text-align: center;
 
-      /* Disabled: shared behavior */
-      &:is([disabled], [aria-disabled="true"]) {
-        cursor: not-allowed;
-        opacity: 0.64;
-      }
+		background: var(--bg-color) var(--ripple, none);
+		border-radius: var(--border-radius);
+		border: 1px solid var(--border-color);
+		display: inline-block;
 
-      /* Non-disabled: shared behavior */
-      &:where(:not([disabled], [aria-disabled="true"])) {
-        cursor: pointer;
-      }
+		text-decoration: none;
+		user-select: none;
 
-      /* Motion-OK: color & ripple */
-      @media (prefers-reduced-motion: no-preference) {
-        transition:
-          background-color 0.2s var(--ease-out-3),
-          box-shadow 0.2s var(--ease-out-3),
-          border-color 0.2s var(--ease-out-3),
-          color 0.2s var(--ease-out-3),
-          outline-offset 0.05s var(--ease-1);
-          background-position: center;
+		/* Disabled: shared behavior */
+		&:is([disabled], [aria-disabled="true"]) {
+			cursor: not-allowed;
+			opacity: 0.64;
+		}
 
-        &:where(:not([disabled], [aria-disabled="true"])) {
-          /* Hover (ripple in) */
-          &:hover {
-            --ripple: radial-gradient(circle, transparent 1%, var(--bg-color) 1%)
-              center/15000%;
-            transition: background var(--button-ripple-duration);
-          }
+		/* Non-disabled: shared behavior */
+		&:where(:not([disabled], [aria-disabled="true"])) {
+			cursor: pointer;
+		}
 
-          /* Active (ripple out) */
-          &:active {
-            background-size: var(--button-ripple-size);
-            transition: background 0s;
-          }
-        }
-      }
+		/* Motion-OK: color & ripple */
+		@media (prefers-reduced-motion: no-preference) {
+			transition:
+				background-color 0.2s var(--ease-out-3),
+				box-shadow 0.2s var(--ease-out-3),
+				border-color 0.2s var(--ease-out-3),
+				color 0.2s var(--ease-out-3),
+				outline-offset 0.05s var(--ease-1);
+			background-position: center;
 
-      /* Motion-reduced: keep states but kill fancy ripple */
-      @media (prefers-reduced-motion: reduce) {
-        transition: none;
-        background-position: center;
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover (ripple in) */
+				&:hover {
+					--ripple:
+						radial-gradient(circle, transparent 1%, var(--bg-color) 1%) center /
+						15000%;
+					transition: background var(--button-ripple-duration);
+				}
 
-        &:where(:not([disabled], [aria-disabled="true"])) {
-          &:hover,
-          &:active {
-            --ripple: none;
-          }
-        }
-      }
+				/* Active (ripple out) */
+				&:active {
+					background-size: var(--button-ripple-size);
+					transition: background 0s;
+				}
+			}
+		}
 
-      /* Brand-based default hover / active backgrounds */
-      &:where(:not([disabled], [aria-disabled="true"])) {
-        /* Hover (not pressed) */
-        &:hover:not(:active) {
-          --bg-color: light-dark(
-            oklch(from var(--color-brand) l 0.01 h / 15%),
-            oklch(from var(--color-brand) l 0.01 h / 10%)
-          );
-        }
+		/* Motion-reduced: keep states but kill fancy ripple */
+		@media (prefers-reduced-motion: reduce) {
+			transition: none;
+			background-position: center;
 
-        /* Pressed */
-        &:active {
-          --bg-color: light-dark(
-            oklch(from var(--color-brand) l 0.06 h / 30%),
-            oklch(from var(--color-brand) l 0.06 h / 40%)
-          );
-        }
-      }
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				&:hover,
+				&:active {
+					--ripple: none;
+				}
+			}
+		}
 
-      /* Disabled text color (base) */
-      &:is([disabled], [aria-disabled="true"]) {
-        --text-color: color-mix(
-          in oklch,
-          var(--color-text-2) 90%,
-          var(--color-surface-1)
-        );
-      }
+		/* Brand-based default hover / active backgrounds */
+		&:where(:not([disabled], [aria-disabled="true"])) {
+			/* Hover (not pressed) */
+			&:hover:not(:active) {
+				--bg-color: light-dark(
+					oklch(from var(--color-brand) l 0.01 h / 15%),
+					oklch(from var(--color-brand) l 0.01 h / 10%)
+				);
+			}
 
-      /* Button with icon + text */
-      &:not(.icon-button) {
-        [data-icon] {
-          max-block-size: var(--icon-size);
-          max-inline-size: var(--icon-size);
-          color: currentColor;
-          margin-inline-end: 1ex;
-        }
-      }
+			/* Pressed */
+			&:active {
+				--bg-color: light-dark(
+					oklch(from var(--color-brand) l 0.06 h / 30%),
+					oklch(from var(--color-brand) l 0.06 h / 40%)
+				);
+			}
+		}
 
-      /* Size variants */
-      &.sm { font-size: var(--text-xs); }
-      &.lg { font-size: var(--text-lg); }
+		/* Disabled text color (base) */
+		&:is([disabled], [aria-disabled="true"]) {
+			--text-color: color-mix(
+				in oklch,
+				var(--color-text-2) 90%,
+				var(--color-surface-1)
+			);
+		}
 
-      /* Icon button variant */
-      &.icon-button {
-        padding: 1.35ex;
-        aspect-ratio: var(--aspect-square);
+		/* Button with icon + text */
+		&:not(.icon-button) {
+			[data-icon] {
+				max-block-size: var(--icon-size);
+				max-inline-size: var(--icon-size);
+				color: currentColor;
+				margin-inline-end: 1ex;
+			}
+		}
 
-        [data-icon] {
-          max-block-size: var(--icon-size);
-        }
-      }
+		/* Size variants */
+		&.sm {
+			font-size: var(--text-xs);
+		}
+		&.lg {
+			font-size: var(--text-lg);
+		}
 
-      /* =========================
+		/* Icon button variant */
+		&.icon-button {
+			padding: 1.35ex;
+			aspect-ratio: var(--aspect-square);
+
+			[data-icon] {
+				max-block-size: var(--icon-size);
+			}
+		}
+
+		/* =========================
         VARIANTS
         ========================= */
 
-      /* OUTLINED */
-      &.outlined {
-        --bg-color: var(--color-surface-1);
-        --border-color: var(--color-brand);
-        --text-color: var(--color-brand);
+		/* OUTLINED */
+		&.outlined {
+			--bg-color: var(--color-surface-1);
+			--border-color: var(--color-brand);
+			--text-color: var(--color-brand);
 
-        &:where(:not([disabled], [aria-disabled="true"])) {
-          /* Hover */
-          &:hover {
-            --bg-color: var(--color-brand);
-            --border-color: var(--color-brand);
-            --text-color: var(--color-gray-0);
-          }
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover */
+				&:hover {
+					--bg-color: var(--color-brand);
+					--border-color: var(--color-brand);
+					--text-color: var(--color-gray-0);
+				}
 
-          /* Active (pressed) */
-          &:active {
-            --bg-color: light-dark(
-              oklch(from var(--color-brand) calc(l + .1) c h / 100%),
-              oklch(from var(--color-brand) calc(l - .1) c h / 100%)
-            );
-            --border-color: light-dark(
-              oklch(from var(--color-brand) calc(l + .1) c h / 100%),
-              oklch(from var(--color-brand) calc(l - .1) c h / 100%)
-            );
-            --text-color: var(--color-gray-0);
-          }
-        }
+				/* Active (pressed) */
+				&:active {
+					--bg-color: light-dark(
+						oklch(from var(--color-brand) calc(l + 0.1) c h / 100%),
+						oklch(from var(--color-brand) calc(l - 0.1) c h / 100%)
+					);
+					--border-color: light-dark(
+						oklch(from var(--color-brand) calc(l + 0.1) c h / 100%),
+						oklch(from var(--color-brand) calc(l - 0.1) c h / 100%)
+					);
+					--text-color: var(--color-gray-0);
+				}
+			}
 
-        /* Outlined – disabled colors */
-        &:is([disabled], [aria-disabled="true"]) {
-          --bg-color: transparent;
-          --border-color: color-mix(
-            in oklch,
-            var(--color-text-1) 50%,
-            var(--color-purple-1)
-          );
-          --text-color: color-mix(
-            in oklch,
-            var(--color-text-1) 70%,
-            var(--color-surface-1)
-          );
-        }
-      }
+			/* Outlined – disabled colors */
+			&:is([disabled], [aria-disabled="true"]) {
+				--bg-color: transparent;
+				--border-color: color-mix(
+					in oklch,
+					var(--color-text-1) 50%,
+					var(--color-purple-1)
+				);
+				--text-color: color-mix(
+					in oklch,
+					var(--color-text-1) 70%,
+					var(--color-surface-1)
+				);
+			}
+		}
 
-      /* TONAL */
-      &.tonal {
-        --bg-color: light-dark(
-          oklch(from var(--color-brand) 80% .12 h / 100%),
-          oklch(from var(--color-brand) l c h / 100%)
-        );
-        --text-color: var(--color-purple-13);
+		/* TONAL */
+		&.tonal {
+			--bg-color: light-dark(
+				oklch(from var(--color-brand) 80% 0.12 h / 100%),
+				oklch(from var(--color-brand) l c h / 100%)
+			);
+			--text-color: var(--color-purple-13);
 
-        &:where(:not([disabled], [aria-disabled="true"])) {
-          /* Hover */
-          &:hover {
-            --bg-color: light-dark(
-              oklch(from var(--color-brand) 85% .12 h / 100%),
-              oklch(from var(--color-brand) 65% c h / 100%)
-            );
-            --border-color: light-dark(
-              oklch(from var(--color-brand) 85% .12 h / 100%),
-              oklch(from var(--color-brand) 65% c h / 100%)
-            );
-          }
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover */
+				&:hover {
+					--bg-color: light-dark(
+						oklch(from var(--color-brand) 85% 0.12 h / 100%),
+						oklch(from var(--color-brand) 65% c h / 100%)
+					);
+					--border-color: light-dark(
+						oklch(from var(--color-brand) 85% 0.12 h / 100%),
+						oklch(from var(--color-brand) 65% c h / 100%)
+					);
+				}
 
-          /* Active */
-          &:active {
-            --bg-color: light-dark(
-              oklch(from var(--color-brand) 90% .12 h / 100%),
-              oklch(from var(--color-brand) 70% c h / 100%)
-            );
-            --border-color: light-dark(
-              oklch(from var(--color-brand) 90% .12 h / 100%),
-              oklch(from var(--color-brand) 70% c h / 100%)
-            );
-          }
-        }
+				/* Active */
+				&:active {
+					--bg-color: light-dark(
+						oklch(from var(--color-brand) 90% 0.12 h / 100%),
+						oklch(from var(--color-brand) 70% c h / 100%)
+					);
+					--border-color: light-dark(
+						oklch(from var(--color-brand) 90% 0.12 h / 100%),
+						oklch(from var(--color-brand) 70% c h / 100%)
+					);
+				}
+			}
 
-        /* Tonal – disabled */
-        &:is([disabled], [aria-disabled="true"]) {
-          --bg-color: var(--disabled-bg);
-          --text-color: var(--disabled-text);
-        }
-      }
+			/* Tonal – disabled */
+			&:is([disabled], [aria-disabled="true"]) {
+				--bg-color: var(--disabled-bg);
+				--text-color: var(--disabled-text);
+			}
+		}
 
-      /* FILLED */
-      &.filled {
-        --bg-color: light-dark(var(--color-purple-7), var(--color-purple-3));
-        --text-color: var(--color-gray-1);
+		/* FILLED */
+		&.filled {
+			--bg-color: light-dark(var(--color-purple-7), var(--color-purple-3));
+			--text-color: var(--color-gray-1);
 
-        &:where(:not([disabled], [aria-disabled="true"])) {
-          /* Hover */
-          &:hover {
-            --bg-color: var(--color-purple-10);
-            --border-color: var(--color-purple-10);
-          }
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover */
+				&:hover {
+					--bg-color: var(--color-purple-10);
+					--border-color: var(--color-purple-10);
+				}
 
-          /* Active */
-          &:active {
-            --bg-color: var(--color-purple-9);
-            --border-color: var(--color-purple-9);
-          }
-        }
+				/* Active */
+				&:active {
+					--bg-color: var(--color-purple-9);
+					--border-color: var(--color-purple-9);
+				}
+			}
 
-        /* Filled – disabled */
-        &:is([disabled], [aria-disabled="true"]) {
-          --bg-color: color-mix(
-            in oklch,
-            var(--color-text-2) 20%,
-            var(--color-surface-2)
-          );
-          --text-color: color-mix(
-            in oklch,
-            var(--color-text-3) 85%,
-            var(--color-surface-2)
-          );
-        }
-      }
+			/* Filled – disabled */
+			&:is([disabled], [aria-disabled="true"]) {
+				--bg-color: color-mix(
+					in oklch,
+					var(--color-text-2) 20%,
+					var(--color-surface-2)
+				);
+				--text-color: color-mix(
+					in oklch,
+					var(--color-text-3) 85%,
+					var(--color-surface-2)
+				);
+			}
+		}
 
-      /* CUSTOM */
-      &.custom {
-        --bg-color: light-dark(
-          color-mix(in oklab, var(--color-brand) 20%, var(--color-gray-1)),
-          color-mix(in oklab, var(--color-brand) 10%, var(--color-gray-10))
-        );
-        --ripple-color: light-dark(
-          color-mix(in oklch, var(--color-gray-1) 80%, var(--color-purple-15)),
-          color-mix(in oklch, var(--color-gray-13) 80%, var(--color-purple-1))
-        );
-        --text-color: light-dark(var(--color-purple-9), var(--color-purple-2));
+		/* CUSTOM */
+		&.custom {
+			--bg-color: light-dark(
+				color-mix(in oklab, var(--color-brand) 20%, var(--color-gray-1)),
+				color-mix(in oklab, var(--color-brand) 10%, var(--color-gray-10))
+			);
+			--ripple-color: light-dark(
+				color-mix(in oklch, var(--color-gray-1) 80%, var(--color-purple-15)),
+				color-mix(in oklch, var(--color-gray-13) 80%, var(--color-purple-1))
+			);
+			--text-color: light-dark(var(--color-purple-9), var(--color-purple-2));
 
-        &:where(:not([disabled], [aria-disabled="true"])) {
-          /* Hover */
-          &:hover {
-            --ripple: radial-gradient(
-                circle,
-                transparent 1%,
-                var(--ripple-color) 1%
-              )
-              center/15000%;
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover */
+				&:hover {
+					--ripple:
+						radial-gradient(circle, transparent 1%, var(--ripple-color) 1%)
+						center / 15000%;
 
-            --bg-color: light-dark(
-              color-mix(in oklch, var(--color-gray-2) 93%, var(--color-purple-8)),
-              color-mix(in oklch, var(--color-gray-13) 93%, var(--color-purple-8))
-            );
-          }
+					--bg-color: light-dark(
+						color-mix(in oklch, var(--color-gray-2) 93%, var(--color-purple-8)),
+						color-mix(in oklch, var(--color-gray-13) 93%, var(--color-purple-8))
+					);
+				}
 
-          /* Active */
-          &:active {
-            --bg-color: light-dark(
-              color-mix(in oklch, var(--color-gray-2) 91%, var(--color-purple-8)),
-              color-mix(in oklch, var(--color-gray-13) 91%, var(--color-purple-8))
-            );
-          }
-        }
+				/* Active */
+				&:active {
+					--bg-color: light-dark(
+						color-mix(in oklch, var(--color-gray-2) 91%, var(--color-purple-8)),
+						color-mix(in oklch, var(--color-gray-13) 91%, var(--color-purple-8))
+					);
+				}
+			}
 
-        /* Custom – disabled */
-        &:is([disabled], [aria-disabled="true"]) {
-          --bg-color: var(--disabled-bg);
-          --text-color: var(--disabled-text);
-        }
-      }
+			/* Custom – disabled */
+			&:is([disabled], [aria-disabled="true"]) {
+				--bg-color: var(--disabled-bg);
+				--text-color: var(--disabled-text);
+			}
+		}
 
-      /* Bare */
-      &.bare {
-        --bg-color: transparent;
-        display: grid;
-        margin: 0;
-        padding: 0;
-      }
-    }
-  }
+		/* Bare */
+		&.bare {
+			--bg-color: transparent;
+			display: grid;
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
 
-  /* Spring interaction helper */
-  .spring {
-    transition:
-      transform 1s var(--ease-spring-5),
-      box-shadow 1s var(--ease-spring-5),
-      outline-offset 145ms var(--ease-4);
+/* Spring interaction helper */
+.spring {
+	transition:
+		transform 1s var(--ease-spring-5),
+		box-shadow 1s var(--ease-spring-5),
+		outline-offset 145ms var(--ease-4);
 
-    &:active {
-      transform: scale(.9);
-    }
-  }
+	&:active {
+		transform: scale(0.9);
+	}
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    .spring {
-      transition: none;
+@media (prefers-reduced-motion: reduce) {
+	.spring {
+		transition: none;
 
-      &:active {
-        transform: none;
-      }
-    }
-  }
+		&:active {
+			transform: none;
+		}
+	}
+}
 </style>
 
 {isLink ? (
