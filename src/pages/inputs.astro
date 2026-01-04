@@ -74,7 +74,7 @@ const {
 
 				<Field
 					as="input"
-					type="phone"
+					type="tel"
 					id="phone"
 					label="phone"
 					placeholder="Phone"
@@ -214,7 +214,7 @@ validation
 		{ rule: "required", errorMessage: "Email is required" },
 		{ rule: "email", errorMessage: "Enter a valid email" },
 	])
-	.onSuccess((_event) => {
+	.onSuccess((_event?: Event) => {
 		console.log("✅ validation passed");
 		// event.preventDefault() if you want to do an AJAX submit
 	});
