@@ -13,7 +13,12 @@ export default defineConfig({
 	vite: {
 		plugins: [tailwindcss()],
 	},
-	integrations: [mdx(), sitemap(), alpinejs(), icon()],
+	integrations: [
+		mdx(),
+		sitemap(),
+		alpinejs({ entrypoint: "/src/scripts/alpine-entry" }),
+		icon(),
+	],
 	image: {
 		// allow Astro to fetch & optimize images from GitHub’s avatar CDN
 		domains: ["avatars.githubusercontent.com"],
