@@ -12,6 +12,7 @@ type SharedProps = {
 	icon?: string;
 	error?: string;
 	classes?: string;
+	required?: boolean;
 };
 
 type InputProps = HTMLAttributes<"input"> &
@@ -36,6 +37,7 @@ const {
 	icon,
 	error,
 	classes = "",
+	required,
 	options = [],
 	"aria-describedby": ariaDescribedByProp,
 	"aria-invalid": ariaInvalidProp,
@@ -51,27 +53,50 @@ const id =
 // Determine aria attributes
 const describedBy = ariaDescribedByProp ?? (error ? `${id}-error` : undefined);
 const ariaInvalid = ariaInvalidProp ?? (error ? "true" : undefined);
+
+// Normalize required behavior:
+// - required present (or required={true}) => required
+// - required omitted or required={false} => optional
+const isRequired = required === true;
+const isOptional = !isRequired;
 ---
 
 <style>
 /* [1] Field */
 .field {
-	background-color: var(--color-surface-0);
+	background-color: var(--color-surface-1);
 	max-width: var(--measure-sm);
-	padding: var(--spacing-xs) var(--spacing-xs);
+	padding: var(--spacing-2xs) var(--spacing-2xs);
 	border-radius: var(--radius-md);
-	box-shadow: var(--shadow-inset-lg);
-	border: 1px solid var(--color-surface-3);
+	box-shadow: var(--shadow-inset-md);
+	border: 2px solid var(--color-surface-3);
 	transition:
 		border-color 0.2s,
 		box-shadow 0.2s;
 
 	&:focus-within {
-		border: 1px solid var(--color-brand);
+		border: 2px solid var(--color-brand);
 		box-shadow: 0px 0px 10px 4px oklch(from var(--color-brand) l c h / 23%);
+	}
 
-		.label {
-			color: var(--color-brand);
+	/* [2] Label */
+	.label {
+		font-size: var(--text-sm);
+	}
+
+	.optional {
+		color: var(--color-surface-4);
+		font-weight: normal;
+	}
+
+	/* [3] Input, Textarea, Select */
+	.control {
+		background-color: transparent;
+		width: 100%;
+		font-size: var(--text-md);
+
+		&:focus {
+			outline: none;
 		}
 	}
 
@@ -82,19 +107,7 @@ const ariaInvalid = ariaInvalidProp ?? (error ? "true" : undefined);
 	}
 }
 
-/* [3] Input */
-.control {
-	background-color: transparent;
-	width: 100%;
-	font-size: var(--text-md);
-
-	&:focus {
-		outline: none;
-	}
-}
-input::placeholder,
-textarea::placeholder,
-select::placeholder {
+:is(input, textarea, select)::placeholder {
 	color: var(--color-surface-4);
 }
 
@@ -119,7 +132,8 @@ select::placeholder {
 	{label && (
     <span class="label flex items-center gap-xs">
       {icon && <Icon name={icon} />}
-      <span class="text-xs ">{label}</span>
+      {label}
+			{isOptional && <span class="optional">(optional)</span>}
     </span>
   )}
 
@@ -129,6 +143,7 @@ select::placeholder {
       class="control"
       aria-describedby={describedBy}
       aria-invalid={ariaInvalid}
+      {...(isRequired ? { required: true } : {})}
       {...rest}
     />
   )}
@@ -139,6 +154,7 @@ select::placeholder {
       class="control resize-y"
       aria-describedby={describedBy}
       aria-invalid={ariaInvalid}
+      {...(isRequired ? { required: true } : {})}
       {...rest}
     />
   )}
@@ -149,6 +165,7 @@ select::placeholder {
       class="control"
       aria-describedby={describedBy}
       aria-invalid={ariaInvalid}
+      {...(isRequired ? { required: true } : {})}
       {...rest}
     >
       {options.map(o => <option value={o.value}>{o.label}</option>)}

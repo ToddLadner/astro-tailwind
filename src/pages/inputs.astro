@@ -1,4 +1,5 @@
 ---
+import Button from "@components/Button.astro";
 import Checkable from "@components/Checkable.astro";
 import Field from "@components/Field.astro";
 import Switch from "@components/Switch.astro";
@@ -189,9 +190,32 @@ const {
 			<hr>
 
 			<form id="signup-form" class="stack" novalidate>
-				<Field as="input" id="username" name="username" label="Username" />
-				<Field as="input" id="email" name="email" label="Email" type="email" />
-				<button type="submit" class="button">Submit</button>
+				<Field
+					as="input"
+					id="username"
+					name="username"
+					label="Username"
+					placeholder="Firstname Lastname"
+					required
+				/>
+				<Field
+					as="input"
+					id="mail"
+					name="mail"
+					label="Email"
+					type="email"
+					placeholder="Your email"
+				/>
+				<Field
+					as="input"
+					id="pw"
+					name="password"
+					label="Password"
+					type="password"
+					placeholder="Password"
+					required
+				/>
+				<Button type="submit" theme="filled">Submit</Button>
 			</form>
 		</article>
 	</main>
@@ -210,10 +234,7 @@ validation
 		{ rule: "required", errorMessage: "Username is required" },
 		{ rule: "minLength", value: 3, errorMessage: "At least 3 characters" },
 	])
-	.addField("#email", [
-		{ rule: "required", errorMessage: "Email is required" },
-		{ rule: "email", errorMessage: "Enter a valid email" },
-	])
+	.addField("#mail", [{ rule: "email", errorMessage: "Enter a valid email" }])
 	.onSuccess((_event?: Event) => {
 		console.log("✅ validation passed");
 		// event.preventDefault() if you want to do an AJAX submit
