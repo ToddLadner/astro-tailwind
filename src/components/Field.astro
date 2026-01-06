@@ -146,6 +146,7 @@ const isOptional = !isRequired;
       {...(isRequired ? { required: true } : {})}
       {...rest}
     />
+		<p class="text-xs text-secondary mt-3xs">Must be longer than 12 characters and contain at least one special symbol like @#$% etc.</p>
   )}
 
 	{as === 'textarea' && (
@@ -157,6 +158,7 @@ const isOptional = !isRequired;
       {...(isRequired ? { required: true } : {})}
       {...rest}
     />
+		<p class="text-xs text-secondary mt-3xs">Must be longer than 12 characters and contain at least one special symbol like @#$% etc.</p>
   )}
 
 	{as === 'select' && (
@@ -170,6 +172,7 @@ const isOptional = !isRequired;
     >
       {options.map(o => <option value={o.value}>{o.label}</option>)}
     </select>
+		<p class="text-xs text-secondary mt-3xs">Must be longer than 12 characters and contain at least one special symbol like @#$% etc.</p>
   )}
 
 	{error && (

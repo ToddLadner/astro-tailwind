@@ -77,12 +77,12 @@ export type PureButtonProps = ButtonProps;
 		/* Re-usable disabled colors (variants can override) */
 		--disabled-bg: color-mix(
 			in oklch,
-			var(--color-text-1) 8%,
+			var(--color-primary) 8%,
 			var(--color-surface-3)
 		);
 		--disabled-text: color-mix(
 			in oklch,
-			var(--color-text-1) 70%,
+			var(--color-primary) 70%,
 			var(--color-surface-3)
 		);
 
@@ -179,7 +179,7 @@ export type PureButtonProps = ButtonProps;
 		&:is([disabled], [aria-disabled="true"]) {
 			--text-color: color-mix(
 				in oklch,
-				var(--color-text-2) 90%,
+				var(--color-secondary) 90%,
 				var(--color-surface-1)
 			);
 		}
@@ -249,12 +249,12 @@ export type PureButtonProps = ButtonProps;
 				--bg-color: transparent;
 				--border-color: color-mix(
 					in oklch,
-					var(--color-text-1) 50%,
+					var(--color-primary) 50%,
 					var(--color-purple-1)
 				);
 				--text-color: color-mix(
 					in oklch,
-					var(--color-text-1) 70%,
+					var(--color-primary) 70%,
 					var(--color-surface-1)
 				);
 			}
@@ -324,7 +324,7 @@ export type PureButtonProps = ButtonProps;
 			&:is([disabled], [aria-disabled="true"]) {
 				--bg-color: color-mix(
 					in oklch,
-					var(--color-text-2) 20%,
+					var(--color-secondary) 20%,
 					var(--color-surface-2)
 				);
 				--text-color: color-mix(

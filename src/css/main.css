@@ -75,21 +75,21 @@
 	--color-surface-3: light-dark(var(--color-gray-2), var(--color-gray-10));
 	--color-surface-4: light-dark(var(--color-gray-3), var(--color-gray-9));
 
-	--color-text-1: light-dark(
-		var(--color-text-1-light),
-		var(--color-text-1-dark)
+	--color-primary: light-dark(
+		var(--color-primary-light),
+		var(--color-primary-dark)
 	);
-	--color-text-2: light-dark(
-		var(--color-text-2-light),
-		var(--color-text-2-dark)
+	--color-secondary: light-dark(
+		var(--color-secondary-light),
+		var(--color-secondary-dark)
 	);
-	--color-text-1-reverse: light-dark(
-		var(--color-text-1-dark),
-		var(--color-text-1-light)
+	--color-primary-reverse: light-dark(
+		var(--color-primary-dark),
+		var(--color-primary-light)
 	);
-	--color-text-2-reverse: light-dark(
-		var(--color-text-2-dark),
-		var(--color-text-2-light)
+	--color-secondary-reverse: light-dark(
+		var(--color-secondary-dark),
+		var(--color-secondary-light)
 	);
 
 	--color-danger: light-dark(var(--color-red-5), var(--color-red-3));
@@ -295,11 +295,11 @@
 	--aspect-golden: 1.618 / 1;
 
 	/* [**] Text Colors */
-	--color-text-1-light: oklch(0.35 0.0133 248.21);
-	--color-text-1-dark: oklch(0.91 0.007 247.9);
+	--color-primary-light: oklch(0.35 0.0133 248.21);
+	--color-primary-dark: oklch(0.91 0.007 247.9);
 
-	--color-text-2-light: oklch(0.43 0.0147 248.17);
-	--color-text-2-dark: oklch(0.77 0.0145 248.02);
+	--color-secondary-light: oklch(0.43 0.0147 248.17);
+	--color-secondary-dark: oklch(0.77 0.0145 248.02);
 
 	/* [15] Hues */
 	--hue-brand: 175;

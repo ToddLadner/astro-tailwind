@@ -68,7 +68,7 @@
 /* [04] HTML */
 html {
 	/* ↓ Theme */
-	color: var(--color-text-2);
+	color: var(--color-secondary);
 	background-color: var(--color-surface-1);
 }
 
@@ -163,7 +163,7 @@ h5,
 h6,
 dt,
 label {
-	color: var(--color-text-1);
+	color: var(--color-primary);
 }
 h1,
 h2,
