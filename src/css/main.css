@@ -69,11 +69,10 @@
 
 	--color-brand: light-dark(var(--color-purple-8), var(--color-purple-4));
 
-	--color-surface-0: light-dark(white, var(--color-gray-13));
-	--color-surface-1: light-dark(var(--color-gray-0), var(--color-gray-12));
-	--color-surface-2: light-dark(var(--color-gray-1), var(--color-gray-11));
-	--color-surface-3: light-dark(var(--color-gray-2), var(--color-gray-10));
-	--color-surface-4: light-dark(var(--color-gray-3), var(--color-gray-9));
+	--color-surface-1: light-dark(white, var(--color-slate-13));
+	--color-surface-2: light-dark(var(--color-slate-0), var(--color-slate-12));
+	--color-surface-3: light-dark(var(--color-slate-1), var(--color-slate-11));
+	--color-surface-4: light-dark(var(--color-slate-2), var(--color-slate-10));
 
 	--color-primary: light-dark(
 		var(--color-primary-light),
@@ -1134,8 +1133,8 @@
 
 /* [37] Ram Grid */
 @utility grid-ram {
-	--grid-col: auto-fit;
-	--col-min: 2rem;
+	--grid-col: auto-fill;
+	--col-min: 10rem;
 	--col-max: 1fr;
 
 	display: grid;

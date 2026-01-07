@@ -20,7 +20,7 @@ const { theme, classes, ...rest } = Astro.props;
 
 		background-color: var(--bg-color);
 		border-color: var(--border-color);
-		border-radius: var(--border-radius, 0.25rem);
+		border-radius: var(--radius-md);
 		border-style: solid;
 		border-width: var(--border-width);
 
@@ -40,6 +40,9 @@ const { theme, classes, ...rest } = Astro.props;
 		border-top-left-radius: inherit;
 		border-top-right-radius: inherit;
 	}
+	h3 {
+		--weight: 500;
+	}
 }
 </style>
 
@@ -52,7 +55,7 @@ const { theme, classes, ...rest } = Astro.props;
 	{...rest}
 >
 	<Image src={spaceWhale} alt="A bird sitting on a nest of eggs." />
-	<div class="stack p-sm">
+	<div class="stack py-md px-sm">
 		<slot />
 	</div>
 </article>
