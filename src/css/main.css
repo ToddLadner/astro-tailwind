@@ -74,6 +74,31 @@
 	--color-surface-3: light-dark(var(--color-slate-1), var(--color-slate-11));
 	--color-surface-4: light-dark(var(--color-slate-2), var(--color-slate-10));
 
+	--color-canvas-1: light-dark(oklch(100% 0 0), oklch(18.9% 0.0143 275));
+
+	--color-canvas-2: light-dark(
+		oklch(97.35% 0.0054 275),
+		oklch(25.63% 0.0058 275)
+	);
+
+	--color-canvas-3: light-dark(
+		oklch(92.63% 0.0137 275),
+		oklch(34.19% 0.0142 275)
+	);
+
+	--color-canvas-4: light-dark(
+		oklch(62.66% 0.0487 275),
+		oklch(68.17% 0.0208 275)
+	);
+
+	/*Text Colors */
+	--color-text-strong: light-dark(oklch(25.41% 0.0553275), oklch(99.11% 0 0));
+
+	--color-text-weak: light-dark(
+		oklch(49.08% 0.0439 275),
+		oklch(85.87% 0.0126 275)
+	);
+
 	--color-primary: light-dark(
 		var(--color-primary-light),
 		var(--color-primary-dark)
@@ -136,8 +161,7 @@
 	); /* 23.04px → 31.25px */
 	--text-2xl: clamp(
 		1.728rem,
-		1.4799rem +
-		1.2407vi,
+		1.4799rem +1.2407vi,
 		2.4414rem
 	); /* 27.648px → 39.0625px */
 	--text-3xl: clamp(
@@ -656,10 +680,7 @@
 		0 2px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
 		0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
 		0 9px 9px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
-		0 16px 16px -2px hsl(
-			var(--shadow-color) /
-			calc(var(--shadow-strength) + 6%)
-		);
+		0 16px 16px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%));
 
 	--shadow-xl:
 		0 -1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
