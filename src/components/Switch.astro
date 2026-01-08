@@ -46,30 +46,13 @@ const fallbackId = `switch-${crypto.getRandomValues(new Uint8Array(4)).reduce((s
 const id = propId ?? uid ?? fallbackId;
 
 const supporting = supportingText ?? text;
-const describedByIds = [
-	supporting && `${id}-supporting`,
-	error && `${id}-error`,
-].filter(Boolean) as string[];
-const describedBy =
-	ariaDescribedByProp ??
-	(describedByIds.length ? describedByIds.join(" ") : undefined);
+const describedByIds = [supporting && `${id}-supporting`, error && `${id}-error`].filter(Boolean) as string[];
+const describedBy = ariaDescribedByProp ?? (describedByIds.length ? describedByIds.join(" ") : undefined);
 const ariaInvalid = ariaInvalidProp ?? (error ? "true" : undefined);
 
-const normalizedSize =
-	size === "sm" || size === "small"
-		? "small"
-		: size === "lg" || size === "large"
-			? "large"
-			: size;
+const normalizedSize = size === "sm" || size === "small" ? "small" : size === "lg" || size === "large" ? "large" : size;
 
-const labelClassList = [
-	normalizedSize,
-	stacked && "stack",
-	error && "error",
-	classes,
-	labelClass,
-	rootClass,
-];
+const labelClassList = [normalizedSize, stacked && "stack", error && "error", classes, labelClass, rootClass];
 ---
 
 <style>
@@ -145,11 +128,7 @@ const labelClassList = [
 					--dot-bg-color: var(--accent-contrast);
 					--dot-outline-size: calc(var(--spacing-3xs) - 1px);
 
-					inset-inline-start: calc(
-						var(--track-width) -
-						var(--dot-size) -
-						var(--spacing-3xs)
-					);
+					inset-inline-start: calc(var(--track-width) - var(--dot-size) - var(--spacing-3xs));
 				}
 			}
 

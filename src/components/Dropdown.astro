@@ -13,13 +13,7 @@ type Props = HTMLAttributes<"div"> & {
 	classes?: string;
 };
 
-const {
-	id,
-	classes,
-	buttonProps,
-	closeOnSelect = true,
-	...rest
-} = Astro.props as Props;
+const { id, classes, buttonProps, closeOnSelect = true, ...rest } = Astro.props as Props;
 
 // Now: id === trigger id
 const triggerId = id;
@@ -30,8 +24,7 @@ const menuId = `${id}--menu`;
 // CSS Anchor (unique per instance)
 const triggerAnchor = `--${id}--trigger`;
 
-const ariaLabel =
-	buttonProps?.["aria-label"] ?? (buttonProps?.text ? undefined : "Open menu");
+const ariaLabel = buttonProps?.["aria-label"] ?? (buttonProps?.text ? undefined : "Open menu");
 
 const mergedTriggerProps: PureButtonProps = {
 	type: "button",

@@ -7,11 +7,7 @@ import Card from "@components/Card.astro";
 
 import userAvatar from "@images/killer-mike.jpg";
 
-const {
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest
-} = Astro.props;
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
 ---
 
 <Layout {title} {description}>
@@ -21,9 +17,8 @@ const {
 			<h1>Card</h1>
 
 			<p>
-				A minimally styled window overlaid on the main content. By design the
-				Dialog is minimal with zero content to allow for both modal and
-				non-modal use.
+				A minimally styled window overlaid on the main content. By design the Dialog is minimal with zero content to
+				allow for both modal and non-modal use.
 			</p>
 
 			<div class="grid-ram [--col-min:16rem] gap-xs">
@@ -31,12 +26,7 @@ const {
 					<h3 class="--weight">Card test title</h3>
 					<p>Discover fascinating unusual and adventurious things to do.</p>
 					<div class="flex items-center gap-xs mt-md">
-						<Avatar
-							src={userAvatar}
-							label="User Avatar"
-							size="sm"
-							badge="success"
-						/>
+						<Avatar src={userAvatar} label="User Avatar" size="sm" badge="success" />
 						<p class="leading-sm">
 							Michael Santiago Render
 							<br>
@@ -48,12 +38,7 @@ const {
 					<h3 class="--weight">Card test title</h3>
 					<p>Discover fascinating unusual and adventurious things to do.</p>
 					<div class="flex items-center gap-xs mt-md">
-						<Avatar
-							src={userAvatar}
-							label="User Avatar"
-							size="sm"
-							badge="success"
-						/>
+						<Avatar src={userAvatar} label="User Avatar" size="sm" badge="success" />
 						<p class="leading-sm">
 							Michael Santiago Render
 							<br>

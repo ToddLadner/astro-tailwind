@@ -5,13 +5,7 @@ import { Icon } from "astro-icon/components";
 type BaseProps = {
 	theme?: "outlined" | "tonal" | "filled" | "custom";
 	size?: "sm" | "lg";
-	elevated?:
-		| "shadow-xs"
-		| "shadow-sm"
-		| "shadow-md"
-		| "shadow-lg"
-		| "shadow-xl"
-		| "shadow-2xl";
+	elevated?: "shadow-xs" | "shadow-sm" | "shadow-md" | "shadow-lg" | "shadow-xl" | "shadow-2xl";
 	shape?: "square" | "circle" | "pill" | "squircle" | "superellipse";
 	variant?: "icon-button" | "bare";
 	text?: string;
@@ -75,16 +69,8 @@ export type PureButtonProps = ButtonProps;
 		--icon-size: 1cap;
 
 		/* Re-usable disabled colors (variants can override) */
-		--disabled-bg: color-mix(
-			in oklch,
-			var(--color-primary) 8%,
-			var(--color-surface-3)
-		);
-		--disabled-text: color-mix(
-			in oklch,
-			var(--color-primary) 70%,
-			var(--color-surface-3)
-		);
+		--disabled-bg: color-mix(in oklch, var(--color-primary) 8%, var(--color-surface-3));
+		--disabled-text: color-mix(in oklch, var(--color-primary) 70%, var(--color-surface-3));
 
 		/* Base button */
 		min-block-size: var(--min-height);
@@ -129,9 +115,7 @@ export type PureButtonProps = ButtonProps;
 			&:where(:not([disabled], [aria-disabled="true"])) {
 				/* Hover (ripple in) */
 				&:hover {
-					--ripple:
-						radial-gradient(circle, transparent 1%, var(--bg-color) 1%) center /
-						15000%;
+					--ripple: radial-gradient(circle, transparent 1%, var(--bg-color) 1%) center / 15000%;
 					transition: background var(--button-ripple-duration);
 				}
 
@@ -177,11 +161,7 @@ export type PureButtonProps = ButtonProps;
 
 		/* Disabled text color (base) */
 		&:is([disabled], [aria-disabled="true"]) {
-			--text-color: color-mix(
-				in oklch,
-				var(--color-secondary) 90%,
-				var(--color-surface-1)
-			);
+			--text-color: color-mix(in oklch, var(--color-secondary) 90%, var(--color-surface-1));
 		}
 
 		/* Button with icon + text */
@@ -247,16 +227,8 @@ export type PureButtonProps = ButtonProps;
 			/* Outlined – disabled colors */
 			&:is([disabled], [aria-disabled="true"]) {
 				--bg-color: transparent;
-				--border-color: color-mix(
-					in oklch,
-					var(--color-primary) 50%,
-					var(--color-purple-1)
-				);
-				--text-color: color-mix(
-					in oklch,
-					var(--color-primary) 70%,
-					var(--color-surface-1)
-				);
+				--border-color: color-mix(in oklch, var(--color-primary) 50%, var(--color-purple-1));
+				--text-color: color-mix(in oklch, var(--color-primary) 70%, var(--color-surface-1));
 			}
 		}
 
@@ -322,16 +294,8 @@ export type PureButtonProps = ButtonProps;
 
 			/* Filled – disabled */
 			&:is([disabled], [aria-disabled="true"]) {
-				--bg-color: color-mix(
-					in oklch,
-					var(--color-secondary) 20%,
-					var(--color-surface-2)
-				);
-				--text-color: color-mix(
-					in oklch,
-					var(--color-text-3) 85%,
-					var(--color-surface-2)
-				);
+				--bg-color: color-mix(in oklch, var(--color-secondary) 20%, var(--color-surface-2));
+				--text-color: color-mix(in oklch, var(--color-text-3) 85%, var(--color-surface-2));
 			}
 		}
 
@@ -350,9 +314,7 @@ export type PureButtonProps = ButtonProps;
 			&:where(:not([disabled], [aria-disabled="true"])) {
 				/* Hover */
 				&:hover {
-					--ripple:
-						radial-gradient(circle, transparent 1%, var(--ripple-color) 1%)
-						center / 15000%;
+					--ripple: radial-gradient(circle, transparent 1%, var(--ripple-color) 1%) center / 15000%;
 
 					--bg-color: light-dark(
 						color-mix(in oklch, var(--color-gray-2) 93%, var(--color-purple-8)),

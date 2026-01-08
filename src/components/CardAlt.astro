@@ -15,14 +15,7 @@ interface Props extends HTMLAttributes<"div"> {
 	classes?: string;
 }
 
-const {
-	bg = "transparent",
-	borderWidth = "0",
-	shadow = "none",
-	padding = "1rem",
-	classes = "",
-	...rest
-} = Astro.props;
+const { bg = "transparent", borderWidth = "0", shadow = "none", padding = "1rem", classes = "", ...rest } = Astro.props;
 ---
 
 <style define:vars={{ bg, borderWidth, shadow, padding }}>

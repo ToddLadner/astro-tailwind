@@ -7,11 +7,7 @@ import userAvatar from "@images/killer-mike.jpg";
 
 import Layout from "@layouts/Layout.astro";
 
-const {
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest
-} = Astro.props;
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
 ---
 
 <Layout {title} {description}>
@@ -20,10 +16,9 @@ const {
 		<article class="px-max py-2xl stack-md grid place-content-center">
 			<h1>Dropdown</h1>
 			<p class="text-md leading-lg">
-				The Popover API provides developers with a standard, consistent,
-				flexible mechanism for displaying popover content on top of other page
-				content. Popover content can be controlled either declaratively using
-				HTML attributes, or via JavaScript.
+				The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover
+				content on top of other page content. Popover content can be controlled either declaratively using HTML
+				attributes, or via JavaScript.
 			</p>
 			<div class="flex "></div>
 			<div class="flex gap-lg">
@@ -38,23 +33,14 @@ const {
 					<MenuItem itemProps={{ text: "Profile" }} />
 					<MenuItem itemProps={{ text: "Notifications" }} />
 					<MenuItem itemProps={{ text: "Sign out", disabled: true }} />
-					<MenuItem
-						href="/account"
-						itemProps={{ text: "Account", theme: "tonal" }}
-					/>
+					<MenuItem href="/account" itemProps={{ text: "Account", theme: "tonal" }} />
 				</Dropdown>
 
-				<Dropdown
-					id="test"
-					buttonProps={{ theme: "filled", variant: "icon-button", icon: "magnifying-glass-solid"  }}
-				>
+				<Dropdown id="test" buttonProps={{ theme: "filled", variant: "icon-button", icon: "magnifying-glass-solid"  }}>
 					<MenuItem itemProps={{ text: "Profile1" }} />
 					<MenuItem itemProps={{ text: "Notifications1" }} />
 					<MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
-					<MenuItem
-						href="/account"
-						itemProps={{ text: "Account1", theme: "tonal" }}
-					/>
+					<MenuItem href="/account" itemProps={{ text: "Account1", theme: "tonal" }} />
 				</Dropdown>
 
 				<Dropdown
@@ -66,20 +52,11 @@ const {
       "aria-label": "Open user menu",
     }}
 				>
-					<Avatar
-						src={userAvatar}
-						label="User Avatar"
-						size="md"
-						badge="success"
-						slot="trigger"
-					/>
+					<Avatar src={userAvatar} label="User Avatar" size="md" badge="success" slot="trigger" />
 					<MenuItem itemProps={{ text: "Profile1" }} />
 					<MenuItem itemProps={{ text: "Notifications1" }} />
 					<MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
-					<MenuItem
-						href="/account"
-						itemProps={{ text: "Account1", theme: "tonal" }}
-					/>
+					<MenuItem href="/account" itemProps={{ text: "Account1", theme: "tonal" }} />
 				</Dropdown>
 			</div>
 		</article>

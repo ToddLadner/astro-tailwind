@@ -35,26 +35,14 @@ function startResize(e, type) {
 	function doResize(ev) {
 		if (type === "width" || type === "both") {
 			let newW = startW + (ev.clientX - startX);
-			newW = Math.max(
-				newW,
-				parseInt(getComputedStyle(container).getPropertyValue("--min-w"), 10),
-			);
-			newW = Math.min(
-				newW,
-				parseInt(getComputedStyle(container).getPropertyValue("--max-w"), 10),
-			);
+			newW = Math.max(newW, parseInt(getComputedStyle(container).getPropertyValue("--min-w"), 10));
+			newW = Math.min(newW, parseInt(getComputedStyle(container).getPropertyValue("--max-w"), 10));
 			container.style.width = `${newW}px`;
 		}
 		if (type === "height" || type === "both") {
 			let newH = startH + (ev.clientY - startY);
-			newH = Math.max(
-				newH,
-				parseInt(getComputedStyle(container).getPropertyValue("--min-h"), 10),
-			);
-			newH = Math.min(
-				newH,
-				parseInt(getComputedStyle(container).getPropertyValue("--max-h"), 10),
-			);
+			newH = Math.max(newH, parseInt(getComputedStyle(container).getPropertyValue("--min-h"), 10));
+			newH = Math.min(newH, parseInt(getComputedStyle(container).getPropertyValue("--max-h"), 10));
 			container.style.height = `${newH}px`;
 		}
 	}

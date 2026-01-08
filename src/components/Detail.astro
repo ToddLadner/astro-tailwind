@@ -12,15 +12,7 @@ interface Props extends HTMLAttributes<"details"> {
 
 const props = Astro.props as Props;
 
-const {
-	title,
-	theme,
-	open = false,
-	name,
-	id: idProp,
-	class: className,
-	...rest
-} = props;
+const { title, theme, open = false, name, id: idProp, class: className, ...rest } = props;
 
 // generate a short, unique ID if none provided
 const id =
@@ -144,21 +136,11 @@ const id =
 </style>
 
 <details class:list={[theme, className]} open={open} name={name} {...rest}>
-	<summary
-		id={id}
-		aria-expanded={open ? 'true' : 'false'}
-		aria-controls={`${id}-content`}
-		class="font-bold"
-	>
+	<summary id={id} aria-expanded={open ? 'true' : 'false'} aria-controls={`${id}-content`} class="font-bold">
 		{title}
 		<Icon name="chevron-down-solid" class="icon" />
 	</summary>
-	<div
-		id={`${id}-content`}
-		class="content stack-md"
-		aria-labelledby={id}
-		role="region"
-	>
+	<div id={`${id}-content`} class="content stack-md" aria-labelledby={id} role="region">
 		<slot />
 	</div>
 </details>

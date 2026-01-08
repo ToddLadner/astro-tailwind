@@ -3,11 +3,7 @@ import Button from "@components/Button.astro";
 import Card from "@components/Card.astro";
 import Layout from "@layouts/Layout.astro";
 
-const {
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest
-} = Astro.props;
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
 ---
 
 <style>
@@ -26,14 +22,10 @@ a {
 			<p>Components</p>
 			<h1>Headers</h1>
 
-			<header
-				class="flex items-center justify-between px-lg py-sm bg-surface-0"
-			>
+			<header class="flex items-center justify-between px-lg py-sm bg-surface-0">
 				<a href="#" class="font-bold text-xl">LOGO</a>
 				<nav class="nav">
-					<button class="hidden" aria-expanded="false" type="button">
-						menu
-					</button>
+					<button class="hidden" aria-expanded="false" type="button">menu</button>
 					<ul role="list" class="flex gap-3xs m-[0] font-bold">
 						<li><a href="#" class="py-2xs px-sm">Home</a></li>
 						<li><a href="#" class="py-2xs px-sm">About</a></li>
@@ -54,9 +46,7 @@ a {
 			<header class="flex gap-md items-center px-lg py-sm bg-surface-0">
 				<a href="#" class="font-bold text-xl">LOGO</a>
 				<nav class="nav">
-					<button class="hidden" aria-expanded="false" type="button">
-						menu
-					</button>
+					<button class="hidden" aria-expanded="false" type="button">menu</button>
 					<ul role="list" class="flex gap-3xs m-[0] font-bold">
 						<li><a href="#" class="py-2xs px-sm">Home</a></li>
 						<li><a href="#" class="py-2xs px-sm">About</a></li>
@@ -83,9 +73,7 @@ a {
 				<a href="#" class="font-bold text-xl">LOGO</a>
 
 				<nav class="mx-auto">
-					<button class="hidden" aria-expanded="false" type="button">
-						menu
-					</button>
+					<button class="hidden" aria-expanded="false" type="button">menu</button>
 					<ul role="list" class="flex gap-3xs m-[0] font-bold">
 						<li><a href="#" class="py-2xs px-sm">Home</a></li>
 						<li><a href="#" class="py-2xs px-sm">About</a></li>
@@ -95,41 +83,25 @@ a {
 				</nav>
 
 				<div class="flex gap-3xs">
-					<Button
-						variant="icon-button"
-						icon="magnifying-glass-solid"
-						aria-label="search button"
-						style="color: black"
-					/>
+					<Button variant="icon-button" icon="magnifying-glass-solid" aria-label="search button" style="color: black" />
 					<Button
 						variant="icon-button"
 						icon="user-bounty-hunter-regular"
 						aria-label="user button"
 						style="color: black"
 					/>
-					<Button
-						variant="icon-button"
-						icon="cart-shopping-regular"
-						aria-label="cart button"
-						style="color: black"
-					/>
+					<Button variant="icon-button" icon="cart-shopping-regular" aria-label="cart button" style="color: black" />
 				</div>
 			</header>
 
-			<header
-				class="grid-pile items-center justify-items-center  px-lg py-sm bg-surface-0"
-			>
+			<header class="grid-pile items-center justify-items-center  px-lg py-sm bg-surface-0">
 				<nav class="">
-					<button class="hidden" aria-expanded="false" type="button">
-						menu
-					</button>
+					<button class="hidden" aria-expanded="false" type="button">menu</button>
 					<ul role="list" class="flex gap-3xs m-[0] font-bold items-center">
 						<li><a href="#" class="py-2xs px-sm">About</a></li>
 						<li><a href="#" class="py-2xs px-sm">Portfolio</a></li>
 
-						<li class="justify-self-center mx-lg">
-							<a href="#" class="font-bold text-xl">LOGO</a>
-						</li>
+						<li class="justify-self-center mx-lg"><a href="#" class="font-bold text-xl">LOGO</a></li>
 
 						<li><a href="#" class="py-2xs px-sm">Services</a></li>
 						<li><a href="#" class="py-2xs px-sm">Contact</a></li>
@@ -145,16 +117,9 @@ a {
 				</nav>
 			</header>
 
-			<header
-				class="flex items-center justify-between px-lg py-sm bg-surface-0"
-			>
+			<header class="flex items-center justify-between px-lg py-sm bg-surface-0">
 				<nav class="nav">
-					<Button
-						variant="icon-button"
-						icon="bars-regular"
-						aria-label="search button"
-						style="color: black"
-					/>
+					<Button variant="icon-button" icon="bars-regular" aria-label="search button" style="color: black" />
 					<ul role="list" class="flex gap-3xs m-[0] font-bold hidden">
 						<li><a href="#" class="py-2xs px-sm">Home</a></li>
 						<li><a href="#" class="py-2xs px-sm">About</a></li>
@@ -165,12 +130,7 @@ a {
 
 				<a href="#" class="font-bold text-xl">LOGO</a>
 
-				<Button
-					variant="icon-button"
-					icon="magnifying-glass-solid"
-					aria-label="search button"
-					style="color: black"
-				/>
+				<Button variant="icon-button" icon="magnifying-glass-solid" aria-label="search button" style="color: black" />
 			</header>
 
 			<header class="  bg-surface-0">
@@ -204,12 +164,7 @@ a {
 							aria-label="user button"
 							style="color: black"
 						/>
-						<Button
-							variant="icon-button"
-							icon="cart-shopping-regular"
-							aria-label="cart button"
-							style="color: black"
-						/>
+						<Button variant="icon-button" icon="cart-shopping-regular" aria-label="cart button" style="color: black" />
 					</div>
 				</div>
 
@@ -225,9 +180,7 @@ a {
 						<ul role="list" class="flex gap-3xs m-[0] font-bold">
 							<li><a href="#" class="py-2xs px-sm text-brand-0">Home</a></li>
 							<li><a href="#" class="py-2xs px-sm text-brand-0">About</a></li>
-							<li>
-								<a href="#" class="py-2xs px-sm text-brand-0">Services</a>
-							</li>
+							<li><a href="#" class="py-2xs px-sm text-brand-0">Services</a></li>
 							<li><a href="#" class="py-2xs px-sm text-brand-0">Contact</a></li>
 						</ul>
 					</nav>

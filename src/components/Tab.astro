@@ -18,12 +18,7 @@ const {
 
 <div class={`tabs ${classes}`} {...rest}>
 	<!-- If you hand-author buttons here, Tabs will use them. Otherwise it will generate from panels. -->
-	<div
-		role="tablist"
-		aria-label={label}
-		aria-orientation="horizontal"
-		class="tabs__list flex gap-2 flex-wrap"
-	>
+	<div role="tablist" aria-label={label} aria-orientation="horizontal" class="tabs__list flex gap-2 flex-wrap">
 		<slot name="tabs" />
 	</div>
 
@@ -35,9 +30,7 @@ const {
 		const root = document.currentScript.closest(".tabs");
 		const tablist = root.querySelector('[role="tablist"]');
 		let tabs = [...tablist.querySelectorAll('[role="tab"]')];
-		const panels = [
-			...root.querySelectorAll(":scope > section[id][data-label]"),
-		];
+		const panels = [...root.querySelectorAll(":scope > section[id][data-label]")];
 
 		if (panels.length === 0) return;
 
@@ -75,13 +68,10 @@ const {
 		// Helpers
 		const dir = getComputedStyle(document.documentElement).direction || "ltr";
 		const rtl = dir === "rtl";
-		const panelsById = panels.reduce<Record<string, number>>(
-			(map, panel, index) => {
-				map[panel.id] = index;
-				return map;
-			},
-			{},
-		);
+		const panelsById = panels.reduce<Record<string, number>>((map, panel, index) => {
+			map[panel.id] = index;
+			return map;
+		}, {});
 		const next = (i) => (i + 1) % tabs.length;
 		const prev = (i) => (i - 1 + tabs.length) % tabs.length;
 
@@ -148,9 +138,7 @@ const {
 					if (e.key.length === 1 && /\S/.test(e.key)) {
 						const q = e.key.toLowerCase();
 						const order = tabs.map((_, k) => (k + i + 1) % tabs.length);
-						const hit = order.find((k) =>
-							tabs[k].textContent.trim().toLowerCase().startsWith(q),
-						);
+						const hit = order.find((k) => tabs[k].textContent.trim().toLowerCase().startsWith(q));
 						if (hit != null) {
 							e.preventDefault();
 							setSelected(hit);
@@ -162,10 +150,7 @@ const {
 		// Orientation toggle
 		const mql = window.matchMedia(String(verticalAt));
 		function applyOrientation() {
-			tablist.setAttribute(
-				"aria-orientation",
-				mql.matches ? "vertical" : "horizontal",
-			);
+			tablist.setAttribute("aria-orientation", mql.matches ? "vertical" : "horizontal");
 		}
 		applyOrientation();
 		mql.addEventListener?.("change", applyOrientation);
@@ -173,8 +158,7 @@ const {
 		// Hash navigation after load
 		window.addEventListener("hashchange", () => {
 			const id = location.hash.slice(1);
-			if (id in panelsById)
-				setSelected(panelsById[id], { focus: false, updateHash: false });
+			if (id in panelsById) setSelected(panelsById[id], { focus: false, updateHash: false });
 		});
 	})();
 	</script>

@@ -223,47 +223,43 @@ if (typeof window !== "undefined") {
 		try {
 			const { createFocusTrap } = await import("focus-trap");
 
-			document
-				.querySelectorAll<HTMLDialogElement>(".modal")
-				.forEach((dialog) => {
-					addBaseDialogHandlers(dialog);
-					if (dialog.dataset.focusTrapReady === "true") return;
-					dialog.dataset.focusTrapReady = "true";
+			document.querySelectorAll<HTMLDialogElement>(".modal").forEach((dialog) => {
+				addBaseDialogHandlers(dialog);
+				if (dialog.dataset.focusTrapReady === "true") return;
+				dialog.dataset.focusTrapReady = "true";
 
-					const trap = createFocusTrap(dialog, {
-						clickOutsideDeactivates: true,
-						escapeDeactivates: true,
-						returnFocusOnDeactivate: true,
-						fallbackFocus: dialog,
-					});
-
-					const activateTrap = () => trap.activate();
-					const deactivateTrap = () => trap.deactivate();
-
-					// Override showModal to activate trap
-					const origShowModal = dialog.showModal.bind(dialog);
-					dialog.showModal = (() => {
-						origShowModal();
-						activateTrap();
-					}) as HTMLDialogElement["showModal"];
-
-					// Override show to activate trap
-					const origShow = dialog.show.bind(dialog);
-					dialog.show = (() => {
-						origShow();
-						activateTrap();
-					}) as HTMLDialogElement["show"];
-
-					// Deactivate on close
-					dialog.addEventListener("close", () => {
-						deactivateTrap();
-					});
+				const trap = createFocusTrap(dialog, {
+					clickOutsideDeactivates: true,
+					escapeDeactivates: true,
+					returnFocusOnDeactivate: true,
+					fallbackFocus: dialog,
 				});
+
+				const activateTrap = () => trap.activate();
+				const deactivateTrap = () => trap.deactivate();
+
+				// Override showModal to activate trap
+				const origShowModal = dialog.showModal.bind(dialog);
+				dialog.showModal = (() => {
+					origShowModal();
+					activateTrap();
+				}) as HTMLDialogElement["showModal"];
+
+				// Override show to activate trap
+				const origShow = dialog.show.bind(dialog);
+				dialog.show = (() => {
+					origShow();
+					activateTrap();
+				}) as HTMLDialogElement["show"];
+
+				// Deactivate on close
+				dialog.addEventListener("close", () => {
+					deactivateTrap();
+				});
+			});
 		} catch (err) {
 			console.error("Failed to initialize focus-trap:", err);
-			document
-				.querySelectorAll<HTMLDialogElement>(".modal")
-				.forEach(addBaseDialogHandlers);
+			document.querySelectorAll<HTMLDialogElement>(".modal").forEach(addBaseDialogHandlers);
 		}
 	};
 

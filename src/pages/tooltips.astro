@@ -10,11 +10,7 @@ import altUserAvatar from "@images/elp.jpg";
 import userAvatar from "@images/killer-mike.jpg";
 import Layout from "@layouts/Layout.astro";
 
-const {
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest
-} = Astro.props;
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
 ---
 
 <Layout {title} {description}>
@@ -23,9 +19,7 @@ const {
 
 		<article class="px-max py-lg stack-md">
 			<!-- Avatar & Dropdown -->
-			<Tooltip id="avatar-tip" for="avatar" mode="auto">
-				This is an AVATAR tooltip.
-			</Tooltip>
+			<Tooltip id="avatar-tip" for="avatar" mode="auto">This is an AVATAR tooltip.</Tooltip>
 			<Dropdown
 				id="avatar"
 				classes=""
@@ -35,29 +29,18 @@ const {
           "aria-label": "Open user menu",
         }}
 			>
-				<Avatar
-					src={userAvatar}
-					label="User Avatar"
-					size="md"
-					badge="success"
-					slot="trigger"
-				/>
+				<Avatar src={userAvatar} label="User Avatar" size="md" badge="success" slot="trigger" />
 				<MenuItem itemProps={{ text: "Profile1" }} />
 				<MenuItem itemProps={{ text: "Notifications1" }} />
 				<MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
-				<MenuItem
-					href="/account"
-					itemProps={{ text: "Account1", theme: "tonal" }}
-				/>
+				<MenuItem href="/account" itemProps={{ text: "Account1", theme: "tonal" }} />
 			</Dropdown>
 		</article>
 
 		<article class="px-max py-lg stack-md">
 			<button id="help-name" type="button">What’s this?</button>
 
-			<Tooltip id="help-name-tip" for="help-name" mode="auto">
-				This name is shown to the other parent.
-			</Tooltip>
+			<Tooltip id="help-name-tip" for="help-name" mode="auto">This name is shown to the other parent.</Tooltip>
 			<!-- Button & Tooltip -->
 			<Button
 				id="new-dropdown"
@@ -69,9 +52,7 @@ const {
 			>
 				?
 			</Button>
-			<Tooltip id="tooltip-info" for="new-dropdown">
-				This is an informative tooltip.
-			</Tooltip>
+			<Tooltip id="tooltip-info" for="new-dropdown">This is an informative tooltip.</Tooltip>
 
 			<!-- /Button & Tooltip -->
 		</article>

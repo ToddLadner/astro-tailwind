@@ -1,27 +1,17 @@
 ---
 import Layout from "@layouts/Layout.astro";
 
-const {
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest
-} = Astro.props;
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
 ---
 
 <Layout {title} {description}>
 	<main class="bg-surface-2">
 		<article class="px-max py-xl stack-xl">
 			<h1 class="text-3xl">Brand identity</h1>
-			<p class="text-md leading-lg mt-sm">
-				This color scheme and font represents your brand.
-			</p>
+			<p class="text-md leading-lg mt-sm">This color scheme and font represents your brand.</p>
 
 			<h2 class="text-md">Theme colors</h2>
-			<ul
-				role="list"
-				class="flex mt-sm gap-xs scroll-x-overflow"
-				style="--overflow-space: 0;"
-			>
+			<ul role="list" class="flex mt-sm gap-xs scroll-x-overflow" style="--overflow-space: 0;">
 				<li>
 					<span class="swatch bg-pink-bright"></span>
 					<code>--color-pink-bright</code>
@@ -39,20 +29,20 @@ const {
 			<h2 class="text-md">Surfaces</h2>
 			<ul role="list" class="flex gap-xs mt-sm">
 				<li>
-					<span class="swatch bg-canvas-1"></span>
-					<code>--color-canvas-1</code>
+					<span class="swatch bg-surface-1"></span>
+					<code>--color-surface-1</code>
 				</li>
 				<li>
-					<span class="swatch bg-canvas-2"></span>
-					<code>--color-canvas-2</code>
+					<span class="swatch bg-surface-2"></span>
+					<code>--color-surface-2</code>
 				</li>
 				<li>
-					<span class="swatch bg-canvas-3"></span>
-					<code>--color-canvas-3</code>
+					<span class="swatch bg-surface-3"></span>
+					<code>--color-surface-3</code>
 				</li>
 				<li>
-					<span class="swatch bg-canvas-4"></span>
-					<code>--color-canvas-4</code>
+					<span class="swatch bg-surface-4"></span>
+					<code>--color-surface-4</code>
 				</li>
 			</ul>
 
@@ -103,9 +93,7 @@ const {
 						<span>var(--color-surface-2)</span>
 						<div style="background-color: var(--color-surface-3)">
 							<span>var(--color-surface-3)</span>
-							<div style="background-color: var(--color-surface-4)">
-								<span>var(--color-surface-4)</span>
-							</div>
+							<div style="background-color: var(--color-surface-4)"><span>var(--color-surface-4)</span></div>
 						</div>
 					</div>
 				</div>
@@ -118,9 +106,7 @@ const {
 
 			<p class="text-3xl">Aa</p>
 			<p class="font-name mt-xs">Roboto Flex 400</p>
-			<p
-				class="mt-md grid-ram [--grid-col:18] [--col-min:2ch] [--col-max:2ch] gap-[1ch]"
-			>
+			<p class="mt-md grid-ram [--grid-col:18] [--col-min:2ch] [--col-max:2ch] gap-[1ch]">
 				<!-- <p class="grid-ram gap-sm" style="--grid-col: 18; --col-min: 2ch; --col-max: 2ch"> -->
 				<span>A</span><span>B</span><span>C</span><span>D</span>
 				<span>E</span><span>F</span><span>G</span><span>H</span>
@@ -144,10 +130,7 @@ const {
 
 			<p class="text-3xl bold">Aa</p>
 			<p class="font-name font-bold mt-xs">Roboto Flex 900</p>
-			<p
-				class="mt-md grid-ram font-bold"
-				style="--grid-col:18; --col-min: 2ch; --col-max: 3ch"
-			>
+			<p class="mt-md grid-ram font-bold" style="--grid-col:18; --col-min: 2ch; --col-max: 3ch">
 				<span>A</span><span>B</span><span>C</span><span>D</span>
 				<span>E</span><span>F</span><span>G</span><span>H</span>
 				<span>I</span><span>J</span><span>K</span><span>L</span>
@@ -169,48 +152,40 @@ const {
 			</p>
 
 			<code>--text-4xl</code>
-			<h1 class="text-4xl mt-sm">
-				Display Whereas a common understanding of these rights and freedoms is
-			</h1>
+			<h1 class="text-4xl mt-sm">Display Whereas a common understanding of these rights and freedoms is</h1>
 
 			<code>--text-3xl</code>
-			<h1 class="text-3xl mt-sm">
-				Display Whereas a common understanding of these rights and freedoms is
-			</h1>
+			<h1 class="text-3xl mt-sm">Display Whereas a common understanding of these rights and freedoms is</h1>
 
 			<code>--text-2xl</code>
 			<h1 class="text-2xl mt-sm">
-				No one shall be held in slavery or servitude; slavery and the slave
-				trade shall be prohibited in all their forms.
+				No one shall be held in slavery or servitude; slavery and the slave trade shall be prohibited in all their
+				forms.
 			</h1>
 
 			<code>--text-xl</code>
 			<h2 class="text-xl mt-sm">
-				Everyone has the right to an effective remedy by the competent national
-				tribunals for acts violating the fundamental rights granted him by the
-				constitution or by law.
+				Everyone has the right to an effective remedy by the competent national tribunals for acts violating the
+				fundamental rights granted him by the constitution or by law.
 			</h2>
 
 			<code>--text-md</code>
 			<h3 class="text-md mt-sm">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-				veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-				commodo consequat.
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+				magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat.
 			</h3>
 
 			<code>--text-sm</code>
 			<p class="text-sm measure-lg mt-sm">
-				Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-				dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+				sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 			</p>
 
 			<code>--text-xs</code>
 			<p class="text-xs measure-lg mt-sm">
-				Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-				dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+				sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 			</p>
 		</article>
 	</main>

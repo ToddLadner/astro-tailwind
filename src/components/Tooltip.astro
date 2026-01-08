@@ -24,14 +24,7 @@ type Props = HTMLAttributes<"dialog"> & {
 	hover?: boolean;
 };
 
-const {
-	id,
-	for: forId,
-	classes = "",
-	mode = "auto",
-	hover = true,
-	...rest
-} = Astro.props as Props;
+const { id, for: forId, classes = "", mode = "auto", hover = true, ...rest } = Astro.props as Props;
 
 const triggerId = forId;
 const tipId = id;
@@ -142,24 +135,17 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
 </dialog>
 
 <script type="module">
-const root =
-	document.currentScript?.closest("astro-island, body, html") ?? document;
+const root = document.currentScript?.closest("astro-island, body, html") ?? document;
 
-const tips = root.querySelectorAll(
-	'dialog[popover][role="tooltip"][data-tooltip-for]',
-);
+const tips = root.querySelectorAll('dialog[popover][role="tooltip"][data-tooltip-for]');
 
-const isCoarse = () =>
-	matchMedia("(pointer: coarse)").matches ||
-	matchMedia("(hover: none)").matches;
+const isCoarse = () => matchMedia("(pointer: coarse)").matches || matchMedia("(hover: none)").matches;
 
 tips.forEach((tip) => {
 	const triggerId = tip.getAttribute("data-tooltip-for");
 	if (!triggerId) return;
 
-	const trigger = root.getElementById
-		? root.getElementById(triggerId)
-		: document.getElementById(triggerId);
+	const trigger = root.getElementById ? root.getElementById(triggerId) : document.getElementById(triggerId);
 
 	if (!trigger) return;
 
@@ -188,9 +174,7 @@ tips.forEach((tip) => {
 	];
 
 	try {
-		existingSources.push(
-			getComputedStyle(trigger).getPropertyValue("anchor-name"),
-		);
+		existingSources.push(getComputedStyle(trigger).getPropertyValue("anchor-name"));
 	} catch {
 		/* no-op */
 	}
@@ -231,8 +215,7 @@ tips.forEach((tip) => {
 	const HOVER = tip.getAttribute("data-hover") ?? "true";
 
 	const useToggle = MODE === "toggle" || (MODE === "auto" && isCoarse());
-	const useHover =
-		!useToggle && (MODE === "hover" || (MODE === "auto" && HOVER !== "false"));
+	const useHover = !useToggle && (MODE === "hover" || (MODE === "auto" && HOVER !== "false"));
 
 	let hoverOpen = false;
 	let hoverCloseTimer = 0;

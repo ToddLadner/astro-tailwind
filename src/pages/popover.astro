@@ -9,11 +9,7 @@ import altUserAvatar from "@images/elp.jpg";
 import userAvatar from "@images/killer-mike.jpg";
 import Layout from "@layouts/Layout.astro";
 
-const {
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest
-} = Astro.props;
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
 ---
 
 <style>
@@ -28,8 +24,7 @@ const {
 	position-anchor: --my-tipanchor;
 	position-area: top;
 	/* position-try: flip-block, flip-inline;  */
-	position-try-fallbacks:
-		--bottom-center, --bottom-left, --top-center, --bottom-right;
+	position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
 }
 
 /* Avatar */
@@ -41,8 +36,7 @@ const {
 	position-area: bottom;
 	margin: 0.25rem;
 	/* position-try: flip-block, flip-inline; */
-	position-try-fallbacks:
-		--bottom-center, --bottom-left, --top-center, --bottom-right;
+	position-try-fallbacks: --bottom-center, --bottom-left, --top-center, --bottom-right;
 }
 @position-try --bottom-center {
 	position-area: bottom center;
@@ -135,18 +129,12 @@ const {
 	<main class="bg-surface-2 stack">
 		<!-- Header -->
 		<article class="px-max py-2xl stack-md">
-			<Button
-				theme="custom"
-				text="custom"
-				elevated
-				popovertarget="click-menu"
-			/>
+			<Button theme="custom" text="custom" elevated popovertarget="click-menu" />
 			<h1>Popover</h1>
 			<p class="text-md leading-lg">
-				The Popover API provides developers with a standard, consistent,
-				flexible mechanism for displaying popover content on top of other page
-				content. Popover content can be controlled either declaratively using
-				HTML attributes, or via JavaScript.
+				The Popover API provides developers with a standard, consistent, flexible mechanism for displaying popover
+				content on top of other page content. Popover content can be controlled either declaratively using HTML
+				attributes, or via JavaScript.
 			</p>
 		</article>
 
@@ -154,9 +142,8 @@ const {
 			<p>Components</p>
 			<h2>Dropdown</h2>
 			<p>
-				A minimally styled window overlaid on the Main Content. By design the
-				Dialog is minimal with zero content to allow for both modal and
-				non-modal use.
+				A minimally styled window overlaid on the Main Content. By design the Dialog is minimal with zero content to
+				allow for both modal and non-modal use.
 			</p>
 
 			<Button id="click-btn" popovertarget="click-menu">Click me</Button>
@@ -189,12 +176,7 @@ const {
 					variant="icon-button"
 					shape="circle"
 				>
-					<Avatar
-						src={userAvatar}
-						label="User Avatar"
-						size="md"
-						badge="success"
-					/>
+					<Avatar src={userAvatar} label="User Avatar" size="md" badge="success" />
 				</Button>
 				<Dropdown id="my-menu" labelledBy="my-dropdown">
 					<ul role="list" class="my-[0]">
@@ -228,9 +210,7 @@ const {
 			>
 				?
 			</Button>
-			<Tooltip id="tooltip-info" for="new-dropdown">
-				This is an informative tooltip.
-			</Tooltip>
+			<Tooltip id="tooltip-info" for="new-dropdown">This is an informative tooltip.</Tooltip>
 			<Dropdown id="new-menu" labelledBy="new-dropdown">
 				<ul role="list" class="my-[0]">
 					<li>
@@ -252,21 +232,8 @@ const {
 		</article>
 
 		<article class="px-max py-lg">
-			<button
-				id="anchor-pos-1"
-				popovertarget="target-pos-1"
-				class="p-sm anchor"
-			>
-				Anchor
-			</button>
-			<div
-				id="target-pos-1"
-				class="target p-sm"
-				popover
-				style="position-area: bottom center;"
-			>
-				Target
-			</div>
+			<button id="anchor-pos-1" popovertarget="target-pos-1" class="p-sm anchor">Anchor</button>
+			<div id="target-pos-1" class="target p-sm" popover style="position-area: bottom center;">Target</div>
 		</article>
 
 		<article class="px-max py-lg stack-md">
@@ -274,12 +241,8 @@ const {
 				<div class="placefiller-above-anchor"></div>
 				<div class="placefiller-before-anchor"></div>
 
-				<button id="my-anchor-try-tactics-2" class="p-2xs anchor">
-					position-try-fallbacks Anchor 2
-				</button>
-				<div id="my-target-try-tactics-2" class="p-2xs bg-red-7 target">
-					Target 2
-				</div>
+				<button id="my-anchor-try-tactics-2" class="p-2xs anchor">position-try-fallbacks Anchor 2</button>
+				<div id="my-target-try-tactics-2" class="p-2xs bg-red-7 target">Target 2</div>
 
 				<div class="placefiller-after-anchor"></div>
 			</div>

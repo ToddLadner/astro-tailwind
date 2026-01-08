@@ -31,13 +31,10 @@ const {
 
 // generate a short random id if none provided - using cryptographically secure random
 const id =
-	uid ??
-	`input-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, "0"), "")}`;
+	uid ?? `input-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, "0"), "")}`;
 
 const describedBy =
-	[supportingText && `${id}-supporting`, error && `${id}-error`]
-		.filter(Boolean)
-		.join(" ") || undefined;
+	[supportingText && `${id}-supporting`, error && `${id}-error`].filter(Boolean).join(" ") || undefined;
 
 const classList = ["checkable", error && "error", classes];
 

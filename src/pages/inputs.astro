@@ -7,11 +7,7 @@ import Layout from "@layouts/Layout.astro";
 
 const emailError = "Please enter a valid email address";
 
-const {
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest
-} = Astro.props;
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
 ---
 
 <style is:global>
@@ -26,9 +22,8 @@ const {
 		<article class="px-max py-2xl stack-md">
 			<h1>Inputs</h1>
 			<p class="text-md leading-lg">
-				Implicit labels—where the Input is integrated into the label rather than
-				rendered as a separate [label] tag—open up a world of stylistic
-				flexibility while increasing UX.
+				Implicit labels—where the Input is integrated into the label rather than rendered as a separate [label] tag—open
+				up a world of stylistic flexibility while increasing UX.
 			</p>
 		</article>
 
@@ -37,113 +32,29 @@ const {
 			<h1>Inputs</h1>
 
 			<div class="columns-2 stack">
-				<Field
-					as="input"
-					type="text"
-					id="text"
-					label="Text"
-					placeholder="Firstname Lastname"
-					required
-				/>
+				<Field as="input" type="text" id="text" label="Text" placeholder="Firstname Lastname" required />
 
-				<Field
-					as="input"
-					type="email"
-					id="email"
-					label="Email"
-					placeholder="you@example.com"
-					required
-				/>
+				<Field as="input" type="email" id="email" label="Email" placeholder="you@example.com" required />
 
-				<Field
-					as="input"
-					type="password"
-					id="password"
-					label="Password"
-					placeholder="••••••••••••••••••"
-					required
-				/>
+				<Field as="input" type="password" id="password" label="Password" placeholder="••••••••••••••••••" required />
 
-				<Field
-					as="input"
-					type="search"
-					id="search"
-					label="Search"
-					placeholder="Search"
-					required
-				/>
+				<Field as="input" type="search" id="search" label="Search" placeholder="Search" required />
 
-				<Field
-					as="input"
-					type="tel"
-					id="phone"
-					label="phone"
-					placeholder="Phone"
-					required
-				/>
+				<Field as="input" type="tel" id="phone" label="phone" placeholder="Phone" required />
 
-				<Field
-					as="input"
-					type="url"
-					id="url"
-					label="URL"
-					placeholder="url"
-					required
-				/>
+				<Field as="input" type="url" id="url" label="URL" placeholder="url" required />
 
-				<Field
-					as="input"
-					type="date"
-					id="date"
-					label="Date"
-					placeholder="date"
-					required
-				/>
+				<Field as="input" type="date" id="date" label="Date" placeholder="date" required />
 
-				<Field
-					as="input"
-					type="datetime-local"
-					id="datetime"
-					label="Datetime"
-					placeholder="datetime"
-					required
-				/>
+				<Field as="input" type="datetime-local" id="datetime" label="Datetime" placeholder="datetime" required />
 
-				<Field
-					as="input"
-					type="month"
-					id="month"
-					label="Month"
-					placeholder="month"
-					required
-				/>
+				<Field as="input" type="month" id="month" label="Month" placeholder="month" required />
 
-				<Field
-					as="input"
-					type="time"
-					id="time"
-					label="Time"
-					placeholder="time"
-					required
-				/>
+				<Field as="input" type="time" id="time" label="Time" placeholder="time" required />
 
-				<Field
-					as="input"
-					type="week"
-					id="week"
-					label="Week"
-					placeholder="week"
-					required
-				/>
+				<Field as="input" type="week" id="week" label="Week" placeholder="week" required />
 
-				<Field
-					as="input"
-					type="color"
-					id="color"
-					label="Color"
-					placeholder="color"
-					required
-				/>
+				<Field as="input" type="color" id="color" label="Color" placeholder="color" required />
 
 				<Field as="textarea" id="message" label="Message" rows="2" />
 
@@ -180,41 +91,15 @@ const {
 					required
 				/>
 
-				<Checkable
-					type="radio"
-					label="I agree to the terms and conditions"
-					required
-				/>
+				<Checkable type="radio" label="I agree to the terms and conditions" required />
 			</div>
 
 			<hr>
 
 			<form id="signup-form" class="stack" novalidate>
-				<Field
-					as="input"
-					id="username"
-					name="username"
-					label="Username"
-					placeholder="Firstname Lastname"
-					required
-				/>
-				<Field
-					as="input"
-					id="mail"
-					name="mail"
-					label="Email"
-					type="email"
-					placeholder="Your email"
-				/>
-				<Field
-					as="input"
-					id="pw"
-					name="password"
-					label="Password"
-					type="password"
-					placeholder="Password"
-					required
-				/>
+				<Field as="input" id="username" name="username" label="Username" placeholder="Firstname Lastname" required />
+				<Field as="input" id="mail" name="mail" label="Email" type="email" placeholder="Your email" />
+				<Field as="input" id="pw" name="password" label="Password" type="password" placeholder="Password" required />
 				<Button type="submit" theme="filled">Submit</Button>
 			</form>
 		</article>

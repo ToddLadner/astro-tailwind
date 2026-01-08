@@ -57,8 +57,7 @@
 	font-family: "Roboto Flex";
 	src:
 		local("Roboto Flex"),
-		url("/fonts/RobotoFlex.ttf") format("truetype-variations")
-		tech(color-COLRv1),
+		url("/fonts/RobotoFlex.ttf") format("truetype-variations") tech(color-COLRv1),
 		url("/fonts/RobotoFlex.ttf") format("truetype-variations"); /* Fallback for Safari and others */
 	font-weight: 100 1000;
 	font-stretch: 25% 150%;
@@ -237,10 +236,9 @@ main::before {
 	width: 100vw;
 	position: fixed;
 	background:
-		linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size))
-		calc(var(--size) * 0.36) 50% / var(--size) var(--size),
-		linear-gradient(var(--line) 1px, transparent 1px var(--size)) 0%
-		calc(var(--size) * 0.32) / var(--size) var(--size);
+		linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) calc(var(--size) * 0.36) 50% / var(--size)
+		var(--size),
+		linear-gradient(var(--line) 1px, transparent 1px var(--size)) 0% calc(var(--size) * 0.32) / var(--size) var(--size);
 	-webkit-mask: linear-gradient(-20deg, transparent 50%, white);
 	mask: linear-gradient(-20deg, transparent 50%, white);
 

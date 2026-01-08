@@ -5,8 +5,7 @@ export const initDropdown = (root: Element | null) => {
 
 	const trigger = root.querySelector("[data-dropdown-trigger]");
 	const menu = root.querySelector("[data-dropdown-menu]");
-	if (!(trigger instanceof HTMLElement) || !(menu instanceof HTMLElement))
-		return;
+	if (!(trigger instanceof HTMLElement) || !(menu instanceof HTMLElement)) return;
 
 	initialized.add(root);
 
@@ -19,10 +18,7 @@ export const initDropdown = (root: Element | null) => {
 		el.getAttribute("aria-disabled") !== "true" &&
 		!["none", "hidden"].includes(getComputedStyle(el).display);
 
-	const getItems = () =>
-		Array.from(menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')).filter(
-			isFocusable,
-		);
+	const getItems = () => Array.from(menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')).filter(isFocusable);
 
 	const focusItem = (idx: number) => {
 		const items = getItems();
@@ -74,17 +70,10 @@ export const initDropdown = (root: Element | null) => {
 					/* simple type-ahead */
 					const items = getItems();
 					const active = items.indexOf(document.activeElement as HTMLElement);
-					const ordered = [
-						...items.slice(active + 1),
-						...items.slice(0, active + 1),
-					];
+					const ordered = [...items.slice(active + 1), ...items.slice(0, active + 1)];
 					const textFor = (el: HTMLElement) =>
-						(el.getAttribute("aria-label") || el.textContent || "")
-							.trim()
-							.toLowerCase();
-					const match = ordered.find((el) =>
-						textFor(el).startsWith(e.key.toLowerCase()),
-					);
+						(el.getAttribute("aria-label") || el.textContent || "").trim().toLowerCase();
+					const match = ordered.find((el) => textFor(el).startsWith(e.key.toLowerCase()));
 					if (match) match.focus({ preventScroll: true });
 				}
 		}
@@ -93,9 +82,7 @@ export const initDropdown = (root: Element | null) => {
 	/* ---------- focus management after open ---------- */
 	menu.addEventListener("toggle", () => {
 		if (menu.matches(":popover-open")) {
-			requestAnimationFrame(() =>
-				menu.dataset.focusIntent === "last" ? focusLast() : focusFirst(),
-			);
+			requestAnimationFrame(() => (menu.dataset.focusIntent === "last" ? focusLast() : focusFirst()));
 			delete menu.dataset.focusIntent;
 		}
 	});
@@ -103,9 +90,7 @@ export const initDropdown = (root: Element | null) => {
 	/* ---------- optional close-on-select ---------- */
 	if (closeOnSelect) {
 		menu.addEventListener("click", (e) => {
-			const item = (e.target as Element | null)?.closest?.(
-				'[role^="menuitem"]',
-			);
+			const item = (e.target as Element | null)?.closest?.('[role^="menuitem"]');
 			if (isFocusable(item)) {
 				queueMicrotask(() => menu.hidePopover()); // close & browser returns focus
 			}
@@ -114,9 +99,7 @@ export const initDropdown = (root: Element | null) => {
 };
 
 export const initAllDropdowns = (scope?: ParentNode | Document) => {
-	const rootScope =
-		scope ??
-		(typeof document !== "undefined" ? (document as ParentNode) : undefined);
+	const rootScope = scope ?? (typeof document !== "undefined" ? (document as ParentNode) : undefined);
 	rootScope?.querySelectorAll("[data-dropdown-root]").forEach((root) => {
 		initDropdown(root);
 	});

@@ -26,14 +26,7 @@ type Props = HTMLAttributes<"li"> & {
 	classes?: string;
 };
 
-const {
-	href,
-	itemProps,
-	role = "menuitem",
-	label,
-	classes,
-	...rest
-} = Astro.props as Props;
+const { href, itemProps, role = "menuitem", label, classes, ...rest } = Astro.props as Props;
 
 const mergedItemProps = {
 	role,

@@ -3,11 +3,7 @@ import Button from "@components/Button.astro";
 import Card from "@components/Card.astro";
 import Layout from "@layouts/Layout.astro";
 
-const {
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest
-} = Astro.props;
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
 ---
 
 <Layout {title} {description}>

@@ -2,11 +2,7 @@
 import Button from "@components/Button.astro";
 import Layout from "../layouts/Layout.astro";
 
-const {
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest
-} = Astro.props;
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
 ---
 
 <style>
@@ -52,8 +48,7 @@ const {
 		<article class="px-max py-2xl stack-md">
 			<h1>Buttons</h1>
 			<p class="text-md leading-lg">
-				Easily create nice looking buttons, which come in different sizes,
-				shapes, and styles.
+				Easily create nice looking buttons, which come in different sizes, shapes, and styles.
 			</p>
 
 			<Button text="Default" />
@@ -76,48 +71,17 @@ const {
 
 			<h3>Icon Buttons</h3>
 
-			<Button
-				variant="icon-button"
-				icon="symbols-solid"
-				aria-label="default btn text"
-			/>
+			<Button variant="icon-button" icon="symbols-solid" aria-label="default btn text" />
 
-			<Button
-				theme="outlined"
-				variant="icon-button"
-				icon="symbols-solid"
-				aria-label="outlined btn text"
-			/>
+			<Button theme="outlined" variant="icon-button" icon="symbols-solid" aria-label="outlined btn text" />
 
-			<Button
-				theme="tonal"
-				variant="icon-button"
-				icon="symbols-solid"
-				aria-label="tonal btn text"
-			/>
+			<Button theme="tonal" variant="icon-button" icon="symbols-solid" aria-label="tonal btn text" />
 
-			<Button
-				theme="filled"
-				variant="icon-button"
-				icon="symbols-solid"
-				aria-label="filled btn text"
-			/>
+			<Button theme="filled" variant="icon-button" icon="symbols-solid" aria-label="filled btn text" />
 
-			<Button
-				theme="custom"
-				variant="icon-button"
-				icon="symbols-solid"
-				aria-label="custom btn text"
-				shape="circle"
-			/>
+			<Button theme="custom" variant="icon-button" icon="symbols-solid" aria-label="custom btn text" shape="circle" />
 
-			<Button
-				theme="custom"
-				variant="icon-button"
-				icon="symbols-solid"
-				aria-label="custom"
-				shape="circle"
-			/>
+			<Button theme="custom" variant="icon-button" icon="symbols-solid" aria-label="custom" shape="circle" />
 
 			<h3>With icons</h3>
 
