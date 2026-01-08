@@ -67,7 +67,7 @@
 /* [04] HTML */
 html {
 	/* ↓ Theme */
-	color: var(--color-secondary);
+	color: var(--color-weak);
 	background-color: var(--color-surface-1);
 }
 
@@ -162,7 +162,7 @@ h5,
 h6,
 dt,
 label {
-	color: var(--color-primary);
+	color: var(--color-strong);
 }
 h1,
 h2,

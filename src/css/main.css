@@ -68,20 +68,23 @@
 	--*: initial;
 
 	--color-brand: light-dark(var(--color-indigo-8), var(--color-purple-4));
-
+	
+	/* Surface colors */
 	--color-surface-1: light-dark(oklch(100% 0 0), oklch(18.9% 0.0143 var(--hue-indigo)));
 	--color-surface-2: light-dark(oklch(97% .005 var(--hue-indigo)), oklch(26% 0.0058 var(--hue-indigo)));
 	--color-surface-3: light-dark(oklch(92% .013 var(--hue-indigo)), oklch(34% 0.0142 var(--hue-indigo)));
 	--color-surface-4: light-dark(oklch(63% .048 var(--hue-indigo)), oklch(68% 0.0208 var(--hue-indigo)));
-
+	
 	/*Text Colors */
-	--color-text-strong: light-dark(oklch(25% 0.055 var(--hue-indigo)), oklch(99% 0 0));
-	--color-text-weak: light-dark(oklch(49% 0.043 var(--hue-indigo)), oklch(86% 0.012 var(--hue-indigo)));
+	--color-strong: light-dark(oklch(25% 0.055 var(--hue-indigo)), oklch(99% 0 0));
+	--color-weak: light-dark(oklch(49% 0.043 var(--hue-indigo)), oklch(86% 0.012 var(--hue-indigo)));
+	--color-strong-inverse: light-dark(oklch(99% 0 0), oklch(25% 0.055 var(--hue-indigo)));
+	--color-weak-inverse: light-dark(oklch(86% 0.012 var(--hue-indigo)), oklch(49% 0.043 var(--hue-indigo)));
 
-	--color-primary: light-dark(var(--color-primary-light), var(--color-primary-dark));
+	/* --color-primary: light-dark(var(--color-primary-light), var(--color-primary-dark));
 	--color-secondary: light-dark(var(--color-secondary-light), var(--color-secondary-dark));
 	--color-primary-reverse: light-dark(var(--color-primary-dark), var(--color-primary-light));
-	--color-secondary-reverse: light-dark(var(--color-secondary-dark), var(--color-secondary-light));
+	--color-secondary-reverse: light-dark(var(--color-secondary-dark), var(--color-secondary-light)); */
 
 	--color-danger: light-dark(var(--color-red-5), var(--color-red-3));
 	--color-warning: light-dark(var(--color-orange-5), var(--color-orange-3));
