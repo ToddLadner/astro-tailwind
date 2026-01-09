@@ -228,6 +228,8 @@ a:not(:is(:hover, :focus)) {
 main {
 	isolation: isolate;
 }
+
+/* Background grid pattern fade out */
 main::before {
 	--size: 45px;
 	--line: color-mix(in hsl, canvasText, transparent 85%);

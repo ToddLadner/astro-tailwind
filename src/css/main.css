@@ -70,23 +70,19 @@
 	--color-brand: light-dark(var(--color-indigo-8), var(--color-purple-4));
 
 	/* Surface colors */
-	--color-surface-1: light-dark(oklch(100% 0 0), oklch(18.9% 0.0143 var(--hue-indigo)));
-	--color-surface-2: light-dark(oklch(97% 0.005 var(--hue-indigo)), oklch(26% 0.0058 var(--hue-indigo)));
-	--color-surface-3: light-dark(oklch(92% 0.013 var(--hue-indigo)), oklch(34% 0.0142 var(--hue-indigo)));
-	--color-surface-4: light-dark(oklch(63% 0.048 var(--hue-indigo)), oklch(68% 0.0208 var(--hue-indigo)));
+	--color-surface-1: light-dark(oklch(100% 0 var(--hue-indigo)), oklch(18.9% 0.014 var(--hue-indigo)));
+	--color-surface-2: light-dark(oklch(97% 0.005 var(--hue-indigo)), oklch(26% 0.006 var(--hue-indigo)));
+	--color-surface-3: light-dark(oklch(92% 0.013 var(--hue-indigo)), oklch(34% 0.014 var(--hue-indigo)));
+	--color-surface-4: light-dark(oklch(63% 0.048 var(--hue-indigo)), oklch(68% 0.02 var(--hue-indigo)));
 
 	/*Text Colors */
-	--color-strong: light-dark(oklch(25% 0.055 var(--hue-indigo)), oklch(99% 0 0));
+	--color-strong: light-dark(oklch(25% 0.055 var(--hue-indigo)), oklch(99% 0 var(--hue-indigo)));
 	--color-weak: light-dark(oklch(49% 0.043 var(--hue-indigo)), oklch(86% 0.012 var(--hue-indigo)));
+	/* --color-muted: light-dark(white, black); */
 
 	/*Text Colors Inverse */
 	--color-strong-inverse: light-dark(oklch(99% 0 0), oklch(25% 0.055 var(--hue-indigo)));
 	--color-weak-inverse: light-dark(oklch(86% 0.012 var(--hue-indigo)), oklch(49% 0.043 var(--hue-indigo)));
-
-	/* --color-primary: light-dark(var(--color-primary-light), var(--color-primary-dark));
-	--color-secondary: light-dark(var(--color-secondary-light), var(--color-secondary-dark));
-	--color-primary-reverse: light-dark(var(--color-primary-dark), var(--color-primary-light));
-	--color-secondary-reverse: light-dark(var(--color-secondary-dark), var(--color-secondary-light)); */
 
 	--color-danger: light-dark(var(--color-red-5), var(--color-red-3));
 	--color-warning: light-dark(var(--color-orange-5), var(--color-orange-3));
@@ -105,9 +101,8 @@
 	/* [04] Font Families */
 	--font-sans: "Roboto Flex", Roboto, system-ui, -apple-system, Segoe UI, Ubuntu, Cantarell, Noto Sans, sans-serif;
 	--font-serif: ui-serif, serif;
-	--font-mono:
-		Dank Mono, Operator Mono, Inconsolata, Fira Mono, ui-monospace, SF Mono, Monaco, Droid Sans Mono, Source Code Pro,
-		monospace;
+	--font-mono: Dank Mono, Operator Mono, Inconsolata, Fira Mono, ui-monospace, SF Mono, Monaco, 
+	Droid Sans Mono, Source Code Pro, monospace;
 
 	/* [05] Text Sizes | Viewport */
 	--text-xs: clamp(0.6944rem, 0.6577rem + 0.1836vi, 0.8rem); /* 11.1111px → 12.8px */
@@ -215,11 +210,11 @@
 	--aspect-golden: 1.618 / 1;
 
 	/* [**] Text Colors */
-	--color-primary-light: oklch(0.35 0.0133 248.21);
-	--color-primary-dark: oklch(0.91 0.007 247.9);
+	--color-strong-light: oklch(0.35 0.0133 248.21);
+	--color-strong-dark: oklch(0.91 0.007 247.9);
 
-	--color-secondary-light: oklch(0.43 0.0147 248.17);
-	--color-secondary-dark: oklch(0.77 0.0145 248.02);
+	--color-weak-light: oklch(0.43 0.0147 248.17);
+	--color-weak-dark: oklch(0.77 0.0145 248.02);
 
 	/* [15] Hues */
 	--hue-brand: 175;

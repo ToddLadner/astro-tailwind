@@ -50,19 +50,19 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 			<ul role="list" class="flex gap-xs mt-sm">
 				<li>
 					<span class="swatch bg-strong"></span>
-					<code>--color-primary</code>
+					<code>--color-strong</code>
 				</li>
 				<li>
 					<span class="swatch bg-weak"></span>
-					<code>--color-secondary</code>
+					<code>--color-weak</code>
 				</li>
 				<li>
 					<span class="swatch bg-strong-inverse"></span>
-					<code>--color-primary-reverse</code>
+					<code>--color-strong-reverse</code>
 				</li>
 				<li>
 					<span class="swatch bg-weak-inverse"></span>
-					<code>--color-secondary-reverse</code>
+					<code>--color-weak-reverse</code>
 				</li>
 			</ul>
 
@@ -194,7 +194,7 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 <style>
 code {
 	display: inline-block;
-	background-color: light-dark(var(--color-surface-1), var(--color-surface-4));
+	background-color: light-dark(var(--color-surface-1), var(--color-surface-2));
 	border: 1px solid var(--color-surface-3);
 	padding: var(--spacing-3xs) var(--spacing-2xs);
 	border-radius: var(--radius-md);
