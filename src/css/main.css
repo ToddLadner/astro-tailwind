@@ -67,8 +67,20 @@
 	/* Reset Tailwind */
 	--*: initial;
 
-	--color-brand: light-dark(var(--color-indigo-8), var(--color-purple-4));
-
+	--color-brand: light-dark(var(--color-indigo-8), var(--color-indigo-4));
+	/* opacity only — no tone shift */
+	--color-brand-80: light-dark(
+		oklch(from var(--color-indigo-8) l c h / .8), 
+		oklch(from var(--color-indigo-4) l c h / .8)
+	);
+	--color-brand-20: light-dark(
+		oklch(from var(--color-indigo-8) l c h / .2), 
+		oklch(from var(--color-indigo-4) l c h / .2)
+	);
+	--color-brand-05: light-dark(
+		oklch(from var(--color-indigo-8) l c h / .05), 
+		oklch(from var(--color-indigo-4) l c h / .05)
+	);
 	/* Surface colors */
 	--color-surface-1: light-dark(oklch(100% 0 var(--hue-indigo)), oklch(18.9% 0.014 var(--hue-indigo)));
 	--color-surface-2: light-dark(oklch(97% 0.005 var(--hue-indigo)), oklch(26% 0.006 var(--hue-indigo)));
