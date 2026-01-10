@@ -95,7 +95,7 @@
 	--color-success-dark: var(--color-green-3);
 	--color-info-light: var(--color-purple-7);
 	--color-info-dark: var(--color-purple-3);
-
+	
 	/* [] Brand Primary */
 	--color-brand: light-dark(var(--color-brand-light), var(--color-brand-dark));
 
@@ -340,7 +340,7 @@
 	--hue-lime: 125;
 	--hue-yellow: 100;
 	--hue-orange: 75;
-
+ 
 	/* [16] Grays */
 	--color-white: oklch(1 0 0);
 	--color-black: oklch(0 0 0);

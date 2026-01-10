@@ -74,7 +74,7 @@ html {
 	-webkit-text-size-adjust: none;
 	text-size-adjust: none;
 }
-
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 /* [8] Body */
 body {
 	margin: 0;
