@@ -60,10 +60,11 @@ export type PureButtonProps = ButtonProps;
 		/* Design tokens / props */
 		--bg-color: transparent;
 		--border-color: transparent;
+		--border-width: 2px;
 		--border-radius: var(--radius-md);
 		--font-size: initial;
 		--min-height: auto;
-		--text-color: light-dark(var(--color-purple-7), var(--color-purple-3));
+		--text-color: var(--color-brand);
 		--button-ripple-duration: 0.5s;
 		--button-ripple-size: 100%;
 		--icon-size: 1cap;
@@ -79,13 +80,12 @@ export type PureButtonProps = ButtonProps;
 
 		font-size: var(--font-size);
 		font-weight: 600;
-		line-height: var(--leading-xs);
 		color: var(--text-color);
 		text-align: center;
 
 		background: var(--bg-color) var(--ripple, none);
 		border-radius: var(--border-radius);
-		border: 1px solid var(--border-color);
+		border: var(--border-width) solid var(--border-color);
 		display: inline-block;
 
 		text-decoration: none;
@@ -123,6 +123,8 @@ export type PureButtonProps = ButtonProps;
 				&:active {
 					background-size: var(--button-ripple-size);
 					transition: background 0s;
+					position: relative;
+					top: 1px;
 				}
 			}
 		}
@@ -153,8 +155,8 @@ export type PureButtonProps = ButtonProps;
 			/* Pressed */
 			&:active {
 				--bg-color: light-dark(
-					oklch(from var(--color-brand) l 0.06 h / 30%),
-					oklch(from var(--color-brand) l 0.06 h / 40%)
+					oklch(from var(--color-brand) l 0.06 h / 20%),
+					oklch(from var(--color-brand) l 0.06 h / 10%)
 				);
 			}
 		}
@@ -198,16 +200,16 @@ export type PureButtonProps = ButtonProps;
 
 		/* OUTLINED */
 		&.outlined {
-			--bg-color: var(--color-surface-1);
+			--bg-color: var(--color-surface-a04);
 			--border-color: var(--color-brand);
 			--text-color: var(--color-brand);
 
 			&:where(:not([disabled], [aria-disabled="true"])) {
 				/* Hover */
 				&:hover {
-					--bg-color: var(--color-brand);
-					--border-color: var(--color-brand);
-					--text-color: var(--color-gray-0);
+					--bg-color: var(--color-brand-7);
+					--border-color: var(--color-brand-7);
+					--text-color: var(--color-strong-dark);
 				}
 
 				/* Active (pressed) */
@@ -275,27 +277,27 @@ export type PureButtonProps = ButtonProps;
 
 		/* FILLED */
 		&.filled {
-			--bg-color: light-dark(var(--color-purple-7), var(--color-purple-3));
+			--bg-color: var(--color-brand);
 			--text-color: var(--color-gray-1);
 
 			&:where(:not([disabled], [aria-disabled="true"])) {
 				/* Hover */
 				&:hover {
-					--bg-color: var(--color-purple-10);
-					--border-color: var(--color-purple-10);
+					--bg-color: var(--color-brand-7);
+					--border-color: var(--color-brand-7);
 				}
 
 				/* Active */
 				&:active {
-					--bg-color: var(--color-purple-9);
-					--border-color: var(--color-purple-9);
+					--bg-color: var(--color-brand-9);
+					--border-color: var(--color-brand-9);
 				}
 			}
 
 			/* Filled – disabled */
 			&:is([disabled], [aria-disabled="true"]) {
 				--bg-color: color-mix(in oklch, var(--color-weak) 20%, var(--color-surface-2));
-				--text-color: color-mix(in oklch, var(--color-text-3) 85%, var(--color-surface-2));
+				--text-color: color-mix(in oklch, var(--color-weak) 85%, var(--color-surface-2));
 			}
 		}
 

@@ -74,7 +74,11 @@ html {
 	-webkit-text-size-adjust: none;
 	text-size-adjust: none;
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+}
 /* [8] Body */
 body {
 	margin: 0;
@@ -199,7 +203,7 @@ textarea:not([rows]) {
 }
 
 /* [22] Border styles are reset */
-:not(fieldset, progress, meter) {
+:not(fieldset, progress, meter, button) {
 	border-width: 0;
 	border-style: solid;
 	background-origin: border-box;

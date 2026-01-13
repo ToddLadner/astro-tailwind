@@ -95,7 +95,7 @@
 	--color-success-dark: var(--color-green-3);
 	--color-info-light: var(--color-purple-7);
 	--color-info-dark: var(--color-purple-3);
-	
+
 	/* [] Brand Primary */
 	--color-brand: light-dark(var(--color-brand-light), var(--color-brand-dark));
 
@@ -120,24 +120,24 @@
 	--color-surface-4: light-dark(oklch(63% 0.048 var(--hue-brand)), oklch(68% 0.02 var(--hue-brand)));
 	/* Surface colors — opacity only */
 	--color-surface-a90: light-dark(
-		oklch(from var(--color-surface-1) l c h / 0.9),
-		oklch(from var(--color-surface-1) l c h / 1)
+		oklch(from var(--color-surface-1-light) l c h / 0.9),
+		oklch(from var(--color-surface-1-dark) l c h / 1)
 	);
 	--color-surface-a60: light-dark(
-		oklch(from var(--color-surface-1) l c h / 0.6),
-		oklch(from var(--color-surface-1) l c h / 0.78)
+		oklch(from var(--color-surface-1-light) l c h / 0.6),
+		oklch(from var(--color-surface-1-dark) l c h / 0.78)
 	);
 	--color-surface-a45: light-dark(
-		oklch(from var(--color-surface-1) l c h / 0.45),
-		oklch(from var(--color-surface-1) l c h / 0.6)
+		oklch(from var(--color-surface-1-light) l c h / 0.45),
+		oklch(from var(--color-surface-1-dark) l c h / 0.6)
 	);
 	--color-surface-a10: light-dark(
-		oklch(from var(--color-surface-1) l c h / 0.1),
-		oklch(from var(--color-surface-1) l c h / 0.12)
+		oklch(from var(--color-surface-1-light) l c h / 0.1),
+		oklch(from var(--color-surface-1-dark) l c h / 0.12)
 	);
 	--color-surface-a04: light-dark(
-		oklch(from var(--color-surface-1) l c h / 0.04),
-		oklch(from var(--color-surface-1) l c h / 0.06)
+		oklch(from var(--color-surface-1-light) l c h / 0.04),
+		oklch(from var(--color-surface-1-dark) l c h / 0.06)
 	);
 
 	/* Text Colors */
@@ -340,7 +340,7 @@
 	--hue-lime: 125;
 	--hue-yellow: 100;
 	--hue-orange: 75;
- 
+
 	/* [16] Grays */
 	--color-white: oklch(1 0 0);
 	--color-black: oklch(0 0 0);

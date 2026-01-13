@@ -218,7 +218,7 @@ hr {
 	margin-block: var(--spacing-3xs);
 }
 
-a {
+a:not(.button) {
 	color: var(--color-brand);
 }
 a:not(:is(:hover, :focus)) {
