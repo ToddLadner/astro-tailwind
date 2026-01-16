@@ -68,7 +68,8 @@
 html {
 	/* ↓ Theme */
 	color: var(--color-weak);
-	background-color: var(--color-surface-1);
+	/* background-color: var(--color-surface-2); */
+	/* background-color: light-dark(var(--color-surface-2-light), var(--color-surface-1-dark)); */
 }
 
 /* [05] Body */

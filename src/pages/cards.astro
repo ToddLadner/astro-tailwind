@@ -11,7 +11,7 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 ---
 
 <Layout {title} {description}>
-	<main class="bg-surface-2">
+	<main>
 		<article class="px-max py-xl stack-md">
 			<p>Components</p>
 			<h1>Card</h1>
@@ -22,7 +22,7 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 			</p>
 
 			<div class="grid-ram [--col-min:16rem] gap-xs">
-				<Card theme="tonal" classes="shadow-sm">
+				<Card theme="tonal" classes="shadow-md">
 					<h3 class="text-lg-cq" style="--weight: 500">Card test title</h3>
 					<p>Discover fascinating unusual and adventurious things to do.</p>
 					<div class="flex items-center gap-xs mt-md">
@@ -34,7 +34,7 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 						</p>
 					</div>
 				</Card>
-				<Card theme="tonal" classes="shadow-sm">
+				<Card theme="tonal" classes="shadow-md">
 					<h3 style="--weight: 500">Card test title</h3>
 					<p>Discover fascinating unusual and adventurious things to do.</p>
 					<div class="flex items-center gap-xs mt-md">

@@ -80,13 +80,15 @@
 
 	/* [] Surface primitives */
 	--color-surface-1-light: oklch(100% 0 var(--hue-brand));
-	--color-surface-1-dark: oklch(18.9% 0.014 var(--hue-brand));
 	--color-surface-2-light: oklch(97% 0.005 var(--hue-brand));
-	--color-surface-2-dark: oklch(26% 0.006 var(--hue-brand));
 	--color-surface-3-light: oklch(92% 0.013 var(--hue-brand));
-	--color-surface-3-dark: oklch(34% 0.014 var(--hue-brand));
 	--color-surface-4-light: oklch(63% 0.048 var(--hue-brand));
+
+	--color-surface-1-dark: oklch(18.9% 0.014 var(--hue-brand));
+	--color-surface-2-dark: oklch(26% 0.006 var(--hue-brand));
+	--color-surface-3-dark: oklch(34% 0.014 var(--hue-brand));
 	--color-surface-4-dark: oklch(68% 0.02 var(--hue-brand));
+
 	--color-danger-light: var(--color-red-7);
 	--color-danger-dark: var(--color-red-3);
 	--color-warning-light: var(--color-orange-7);
