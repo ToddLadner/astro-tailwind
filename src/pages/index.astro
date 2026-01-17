@@ -114,10 +114,10 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 				</li>
 			</ul>
 
-			<div class="nested-palette p-xs shadow-lg">
-				<div class="shadow-md" style="background-color: var(--color-surface-1)">
+			<div class="nested-palette p-xs">
+				<div style="background-color: var(--color-surface-1)">
 					<span>var(--color-surface-1)</span>
-					<div class="shadow-sm" style="background-color: var(--color-surface-2)">
+					<div style="background-color: var(--color-surface-2)">
 						<span>var(--color-surface-2)</span>
 						<div style="background-color: var(--color-surface-3)">
 							<span>var(--color-surface-3)</span>
@@ -126,6 +126,26 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 					</div>
 				</div>
 			</div>
+
+			<h2 class="text-md">Shadows</h2>
+			<ul role="list" class="flex gap-xs mt-sm">
+				<li>
+					<span class="swatch bg-surface-1 shadow-sm"></span>
+					<code>--shadow-sm</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-1 shadow-md"></span>
+					<code>--shadow-md</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-1 shadow-lg"></span>
+					<code>--shadow-lg</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-1 shadow-xl"></span>
+					<code>--shadow-xl</code>
+				</li>
+			</ul>
 
 			<hgroup>
 				<h2>Fonts in use</h2>
@@ -236,8 +256,6 @@ code {
 	width: 12.5rem;
 	height: auto;
 	border-radius: var(--radius-md);
-	box-shadow: var(--shadow-md);
-	border: 1px solid var(--color-surface-2);
 }
 
 li {

@@ -660,8 +660,6 @@
 	--color-stone-15: oklch(10% var(--gray-warm-chroma) var(--gray-warm-hue));
 
 	/* [33] Shadows */
-	--shadow-xs: 0 1px 2px -1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
-
 	--shadow-sm:
 		0 3px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
 		0 7px 14px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%));
