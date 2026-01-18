@@ -116,6 +116,10 @@
 	);
 
 	/* Surface colors */
+	--color-main-surface: light-dark(
+		oklch(from var(--color-surface-1-light) calc(l - 0.02) calc(c + 0.00) h), 
+		oklch(from var(--color-surface-1-dark) calc(l - 0.04) calc(c - 0.0) h)
+	);
 	--color-surface-1: light-dark(var(--color-surface-1-light), var(--color-surface-1-dark));
 	--color-surface-2: light-dark(var(--color-surface-2-light), var(--color-surface-2-dark));
 	--color-surface-3: light-dark(var(--color-surface-3-light), var(--color-surface-3-dark));
@@ -229,7 +233,7 @@
 	--text-md: clamp(1rem, 0.913rem + 0.4348vi, 1.25rem); /* 16px → 20px */
 	--text-lg: clamp(1.2rem, 1.0739rem + 0.6304vi, 1.5625rem); /* 19.2px → 25px */
 	--text-xl: clamp(1.44rem, 1.2615rem + 0.8924vi, 1.9531rem); /* 23.04px → 31.25px */
-	--text-2xl: clamp(1.728rem, 1.4799rem +1.2407vi, 2.4414rem); /* 27.648px → 39.0625px */
+	--text-2xl: clamp(1.728rem, 1.4799rem + 1.2407vi, 2.4414rem); /* 27.648px → 39.0625px */
 	--text-3xl: clamp(2.0736rem, 1.7334rem + 1.7011vi, 3.0518rem); /* 33.1776px → 48.8281px */
 	--text-4xl: clamp(2.4883rem, 2.027rem + 2.3067vi, 3.8147rem); /* 39.8131px → 61.0352px */
 	--text-5xl: clamp(2.986rem, 2.366rem + 3.0998vi, 4.7684rem); /* 47.7757px → 76.2939px */
@@ -706,6 +710,11 @@
 		inset 0 2px 8px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 17%)), var(--inner-shadow-highlight);
 	--shadow-inset-xl:
 		inset 0 2px 14px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 17%)), var(--inner-shadow-highlight);
+
+		/* Gradients */
+		--gradient-space: ;
+		--brand-linear-gradient: linear-gradient(to bottom var(--gradient-space), var(--color-cyan-6), var(--color-violet-4));
+		
 
 	/* [**] Easing */
 	--ease-1: cubic-bezier(0.25, 0, 0.5, 1);

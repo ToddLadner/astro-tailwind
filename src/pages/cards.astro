@@ -11,7 +11,7 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 ---
 
 <Layout {title} {description}>
-	<main>
+	<main class="bg-main-surface">
 		<article class="px-max py-xl stack-md">
 			<p>Components</p>
 			<h1>Card</h1>
@@ -23,19 +23,45 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 
 			<div class="grid-ram [--col-min:16rem] gap-xs">
 				<Card theme="tonal" classes="shadow-md">
-					<h3 class="text-lg-cq" style="--weight: 500">Card test title</h3>
+					<h3>Card test title</h3>
 					<p>Discover fascinating unusual and adventurious things to do.</p>
 					<div class="flex items-center gap-xs mt-md">
 						<Avatar src={userAvatar} label="User Avatar" size="sm" badge="success" />
-						<p class="leading-sm">
-							Michael Santiago Render
+						<p class="leading-sm text-sm">
+							<b style="--weight: 600">Michael Santiago Render</b>
 							<br>
-							15 Feb 2026
+							<span>15 Feb 2026</span>
 						</p>
 					</div>
+					<div class="flex gap-xs mt-md">
+						<Button
+							shape="pill"
+							classes="text-danger bg-danger-alpha-3 border-danger-alpha-3"
+							size="sm"
+							icon="arrow-right-regular"
+							text="Label"
+						></Button>
+
+						<Button
+							shape="pill"
+							classes="text-warning bg-warning-alpha-3 border-warning-alpha-3"
+							size="sm"
+							icon="arrow-right-regular"
+							text="Label"
+						></Button>
+
+						<Button
+							shape="pill"
+							classes="text-success bg-success-alpha-3 border-success-alpha-3"
+							size="sm"
+							icon="arrow-right-regular"
+							text="Label"
+						></Button>
+					</div>
 				</Card>
+
 				<Card theme="tonal" classes="shadow-md">
-					<h3 style="--weight: 500">Card test title</h3>
+					<h3>Card test title</h3>
 					<p>Discover fascinating unusual and adventurious things to do.</p>
 					<div class="flex items-center gap-xs mt-md">
 						<Avatar src={userAvatar} label="User Avatar" size="sm" badge="success" />

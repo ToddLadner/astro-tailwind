@@ -18,27 +18,32 @@
 	--base-grade: 0;
 
 	/* [02] Shadows */
+	--shadow-color-light: 270 20% 26%;
+	--shadow-color-dark: 270 20% 2%;
+	--shadow-strength-light: 1%;
+	--shadow-strength-dark: 25%;
+	
 	/* color-scheme: light */
-	--shadow-color: 215 20% 28%;
-	--shadow-strength: 1%;
+	--shadow-color: var(--shadow-color-light);
+	--shadow-strength: var(--shadow-strength-light);
 	--inner-shadow-highlight: inset 0 -0.5px 0 0 #fff, inset 0 0.5px 0 0 #0001;
 	/* color-scheme: dark */
 	@media (prefers-color-scheme: dark) {
-		--shadow-color: 220 40% 2%;
-		--shadow-strength: 25%;
+		--shadow-color: var(--shadow-color-dark);
+		--shadow-strength: var(--shadow-strength-dark);
 		--inner-shadow-highlight: inset 0 -0.5px 0 0 #fff1, inset 0 0.5px 0 0 #0007;
 	}
 }
 /* User color-scheme: light */
 [color-scheme="light"] {
-	--shadow-color: 215 20% 28%;
-	--shadow-strength: 1%;
+	--shadow-color: var(--shadow-color-light);
+	--shadow-strength: var(--shadow-strength-light);
 	--inner-shadow-highlight: inset 0 -0.5px 0 0 #fff, inset 0 0.5px 0 0 #0001;
 }
 /* User color-scheme: dark */
 [color-scheme="dark"] {
-	--shadow-color: 220 40% 2%;
-	--shadow-strength: 25%;
+	--shadow-color: var(--shadow-color-dark);
+	--shadow-strength: var(--shadow-strength-dark);
 	--inner-shadow-highlight: inset 0 -0.5px 0 0 #fff1, inset 0 0.5px 0 0 #0007;
 }
 
@@ -65,16 +70,13 @@
 }
 
 /* [04] HTML */
-html {
-	/* ↓ Theme */
-	color: var(--color-weak);
-	/* background-color: var(--color-surface-2); */
-	/* background-color: light-dark(var(--color-surface-2-light), var(--color-surface-1-dark)); */
+html { 
+	color: var(--color-weak); /* ← Theme */ 
 }
 
 /* [05] Body */
 body {
-	font-size: var(--text-sm);
+	font-size: var(--text-md);
 	line-height: var(--leading-md);
 	font-family: var(--font-sans); /* ← Fallback font */
 }
@@ -228,6 +230,7 @@ a:not(:is(:hover, :focus)) {
 /**/
 main {
 	isolation: isolate;
+	background-color: var(--color-surface-2)
 }
 
 /* Background grid pattern fade out */
