@@ -4,6 +4,8 @@ import Layout from "@layouts/Layout.astro";
 import Avatar from "@components/Avatar.astro";
 import Button from "@components/Button.astro";
 import Card from "@components/Card.astro";
+import Dropdown from "@components/Dropdown.astro";
+import MenuItem from "@components/MenuItem.astro";
 
 import userAvatar from "@images/killer-mike.jpg";
 
@@ -22,13 +24,22 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 			</p>
 
 			<div class="grid-ram [--col-min:16rem] gap-xs">
-				<Card theme="tonal" classes="shadow-md">
+				<Card variant="tonal" classes="shadow-sm">
+					<header class="flex justify-between items-center px-sm py-xs" slot="header">
+						<h2 class="text-md tracking-md">Kitchen sink</h2>
+						<Dropdown id="test" buttonProps={{  variant: "icon-button", icon: "magnifying-glass-solid"  }}>
+							<MenuItem itemProps={{ text: "Profile1" }} />
+							<MenuItem itemProps={{ text: "Notifications1" }} />
+							<MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
+							<MenuItem href="/account" itemProps={{ text: "Account1", theme: "tonal" }} />
+						</Dropdown>
+					</header>
 					<h3>Card test title</h3>
 					<p>Discover fascinating unusual and adventurious things to do.</p>
 					<div class="flex items-center gap-xs mt-md">
 						<Avatar src={userAvatar} label="User Avatar" size="sm" badge="success" />
 						<p class="leading-sm text-sm">
-							<b style="--weight: 600">Michael Santiago Render</b>
+							<b class="text-strong" style="--weight: 500">Michael Santiago Render</b>
 							<br>
 							<span>15 Feb 2026</span>
 						</p>
@@ -60,7 +71,7 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 					</div>
 				</Card>
 
-				<Card theme="tonal" classes="shadow-md">
+				<Card variant="tonal" classes="shadow-sm">
 					<h3>Card test title</h3>
 					<p>Discover fascinating unusual and adventurious things to do.</p>
 					<div class="flex items-center gap-xs mt-md">

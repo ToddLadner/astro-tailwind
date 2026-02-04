@@ -16,7 +16,7 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 	width: var(--spacing-xl);
 	border-radius: var(--radius-md);
 	box-shadow: var(--shadow-md);
-	border: 1px solid var(--surface-2);
+	border-color: var(--surface-2);
 	text-align: center;
 }
 
@@ -37,11 +37,12 @@ span {
 	}
 }
 
-.swatches li {
-	color: oklch(from var(--color-brand-0) l c h);
-}
 .swatches li:nth-child(-n + 7) {
-	color: oklch(from var(--color-brand-13) l c h);
+	color: oklch(from var(--color-strong-light) l c h);
+}
+
+.swatches li {
+	color: oklch(from var(--color-brand-0) calc(l + 0.125) calc(c + 0.05) h);
 }
 
 .swatches li:last-child {

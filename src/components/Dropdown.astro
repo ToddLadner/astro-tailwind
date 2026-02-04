@@ -50,12 +50,12 @@ const mergedTriggerProps: PureButtonProps = {
 		position: absolute;
 		overflow: visible;
 		inset: auto;
-		padding-inline: 0;
+		padding-inline: 1ex;
 		padding-block: 1ex;
 		z-index: var(--z);
 
 		position-anchor: var(--triggerAnchor);
-		position-area: bottom;
+		position-area: bottom span-left;
 		position-try: flip-block;
 
 		top: calc(var(--d));
@@ -66,8 +66,11 @@ const mergedTriggerProps: PureButtonProps = {
 		align-self: normal;
 
 		border-radius: var(--radius-md);
-		background: #0088ff;
-		color: #fff;
+		background: light-dark(
+			oklch(from var(--color-surface-1-light) calc(l + 0.2) calc(c + 0) h),
+			oklch(from var(--color-surface-1-dark) calc(l + 0.03) calc(c + 0) h)
+		);
+		box-shadow: var(--shadow-md);
 	}
 
 	/* Transition */

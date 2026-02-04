@@ -2,13 +2,15 @@
 import { Image } from "astro:assets";
 import spaceWhale from "@images/space-whale.jpg";
 import type { HTMLAttributes } from "astro/types";
+import Dropdown from "./Dropdown.astro";
+import MenuItem from "./MenuItem.astro";
 
 interface Props extends HTMLAttributes<"article"> {
-	theme?: "outlined" | "tonal" | "filled";
+	variant?: "outlined" | "tonal" | "filled";
 	classes?: string;
 }
 
-const { theme, classes, ...rest } = Astro.props;
+const { variant, classes, ...rest } = Astro.props;
 ---
 
 <style>
@@ -19,10 +21,15 @@ const { theme, classes, ...rest } = Astro.props;
 		--border-width: 0;
 
 		background-color: var(--bg-color);
-		border-color: var(--border-color);
+		border-color: var(--color-surface-2);
 		border-radius: var(--radius-md);
 		border-style: solid;
 		border-width: var(--border-width);
+
+		header + :where(img, picture) {
+			border-start-start-radius: 0;
+			border-start-end-radius: 0;
+		}
 
 		/* Variants */
 		&.tonal {
@@ -46,14 +53,9 @@ const { theme, classes, ...rest } = Astro.props;
 }
 </style>
 
-<article
-	class:list={[
-    'card',
-    theme,
-    classes
-  ]}
-	{...rest}
->
+<article class:list={['card', variant, classes]} {...rest}>
+	<slot name="header" />
+
 	<Image src={spaceWhale} alt="A bird sitting on a nest of eggs." />
 	<div class="stack pt-md pb-sm px-sm">
 		<slot />
