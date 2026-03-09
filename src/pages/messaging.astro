@@ -1,0 +1,1282 @@
+---
+import "@styles/main.css";
+import Layout from "@layouts/LayoutClaude.astro";
+---
+
+<Layout title="Messaging | TalkingParents" description="TalkingParents messaging">
+	<a class="msg-skip" href="#main-content">Skip to main content</a>
+
+	<div class="grid">
+		<!-- ── Global header ──────────────────────────────────── -->
+		<header class="msg-header" aria-label="Global">
+			<a href="/" class="msg-logo-link" aria-label="TalkingParents home">
+				<svg width="150" height="36" viewBox="0 0 150 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M24 2C15.16 2 8 9.16 8 18c0 4.2 1.64 8.02 4.32 10.88L10 32l4.8-1.6C16.84 31.42 18.36 32 20 32c8.84 0 16-7.16 16-16S28.84 2 20 2z"
+						fill="#004739"
+					/>
+					<path
+						d="M34 10c6.63 0 12 5.37 12 12s-5.37 12-12 12c-1.4 0-2.74-.24-4-.68L25.2 35l-2-3.28C20.84 30.2 20 27.2 20 24c0-7.73 6.27-14 14-14z"
+						fill="#004739"
+					/>
+					<circle cx="17" cy="19" r="2" fill="#28b99a" />
+					<circle cx="23" cy="19" r="2" fill="#28b99a" />
+					<circle cx="29" cy="19" r="2" fill="#28b99a" />
+					<text x="50" y="24" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#004739">
+						TalkingParents
+					</text>
+				</svg>
+			</a>
+
+			<form class="msg-search" role="search" aria-label="Search messages">
+				<label for="site-search" class="sr-only">Search</label>
+				<svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none">
+					<circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5" />
+					<path d="M9.5 9.5L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+				</svg>
+				<input id="site-search" name="q" type="search" placeholder="Search messages">
+				<kbd aria-label="Keyboard shortcut Command K">&#8984;K</kbd>
+			</form>
+
+			<div class="msg-header-actions" aria-label="App actions">
+				<button type="button" class="msg-header-btn msg-header-btn--badge" aria-label="Notifications, 2 unread">
+					<svg aria-hidden="true" width="18" height="20" viewBox="0 0 18 20" fill="none">
+						<path
+							d="M9 1a6 6 0 00-6 6v5L1.5 14h15L15 12V7A6 6 0 009 1z"
+							stroke="currentColor"
+							stroke-width="1.4"
+							fill="none"
+						/>
+						<path d="M7 16a2 2 0 004 0" stroke="currentColor" stroke-width="1.4" fill="none" />
+					</svg>
+					<span class="msg-badge" aria-hidden="true">2</span>
+				</button>
+				<button type="button" class="msg-header-btn" aria-label="Download">
+					<svg aria-hidden="true" width="18" height="19" viewBox="0 0 18 19" fill="none">
+						<path
+							d="M9 1v12M5 9l4 5 4-5"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+						<path d="M1 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+					</svg>
+				</button>
+				<button type="button" class="msg-header-btn" aria-label="Upload">
+					<svg aria-hidden="true" width="16" height="19" viewBox="0 0 16 19" fill="none">
+						<path
+							d="M8 14V2M4 6l4-5 4 5"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+						<path d="M1 16h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+					</svg>
+				</button>
+			</div>
+		</header>
+
+		<!-- ── Sidebar ────────────────────────────────────────── -->
+		<aside class="msg-sidebar">
+			<nav aria-label="Primary navigation">
+				<ul class="msg-nav-list">
+					<li><a href="/dashboard" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" />
+								<rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" />
+								<rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" />
+								<rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" />
+							</svg>
+						</span>
+						Dashboard
+					</a></li>
+				</ul>
+
+				<h2 class="msg-nav-group" id="nav-primary">Primary</h2>
+				<ul class="msg-nav-list" aria-labelledby="nav-primary">
+					<li><a href="/messaging" class="msg-nav-link" aria-current="page">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<path
+									d="M14 1H2C1.45 1 1 1.45 1 2v9c0 .55.45 1 1 1h2v3l3.6-3H14c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1z"
+									fill="currentColor"
+								/>
+								<circle cx="5" cy="6.5" r="1" fill="white" />
+								<circle cx="8" cy="6.5" r="1" fill="white" />
+								<circle cx="11" cy="6.5" r="1" fill="white" />
+							</svg>
+						</span>
+						Messaging
+					</a></li>
+					<li><a href="/calling" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<path
+									d="M3.5 1C3.5 1 1 3.5 1 6.5C1 11.19 4.81 15 9.5 15C12.5 15 15 12.5 15 12.5L12.5 10L10.5 11.5C9 10.5 5.5 7 4.5 5.5L6 3.5L3.5 1Z"
+									fill="currentColor"
+								/>
+							</svg>
+						</span>
+						Calling
+					</a></li>
+					<li><a href="/calendar" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect
+									x="1"
+									y="3"
+									width="14"
+									height="12"
+									rx="1.5"
+									stroke="currentColor"
+									stroke-width="1.5"
+									fill="none"
+								/>
+								<path d="M1 7h14" stroke="currentColor" stroke-width="1.5" />
+								<path d="M5 1v4M11 1v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+							</svg>
+						</span>
+						Calendar
+					</a></li>
+					<li><a href="/payments" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect
+									x="1"
+									y="3"
+									width="14"
+									height="10"
+									rx="1.5"
+									stroke="currentColor"
+									stroke-width="1.5"
+									fill="none"
+								/>
+								<path d="M1 7h14" stroke="currentColor" stroke-width="1.5" />
+							</svg>
+						</span>
+						Payments
+					</a></li>
+					<li><a href="/info-library" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="2" y="1" width="9" height="13" rx="1" stroke="currentColor" stroke-width="1.4" fill="none" />
+								<path d="M5 5h5M5 8h5M5 11h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+								<path d="M11 4h2a1 1 0 011 1v8a1 1 0 01-1 1H5" stroke="currentColor" stroke-width="1.2" />
+							</svg>
+						</span>
+						Info Library
+					</a></li>
+					<li><a href="/records" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="3" y="3" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.4" fill="none" />
+								<rect x="1" y="1" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.2" fill="none" />
+								<path d="M4 6h5M4 8.5h5M4 11h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+							</svg>
+						</span>
+						Records
+					</a></li>
+					<li><a href="/journal" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="3" y="1" width="10" height="14" rx="1" stroke="currentColor" stroke-width="1.4" fill="none" />
+								<path d="M3 4H2a1 1 0 00-1 1v6a1 1 0 001 1h1" stroke="currentColor" stroke-width="1.2" />
+								<path d="M6 5h5M6 8h5M6 11h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+							</svg>
+						</span>
+						Journal
+					</a></li>
+					<li><a href="/vault" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="1" y="5" width="14" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4" fill="none" />
+								<path d="M5 5V4a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+								<circle cx="8" cy="9.5" r="1.8" stroke="currentColor" stroke-width="1.2" fill="none" />
+							</svg>
+						</span>
+						Vault
+					</a></li>
+				</ul>
+
+				<h2 class="msg-nav-group" id="nav-coaching">Coaching</h2>
+				<ul class="msg-nav-list" aria-labelledby="nav-coaching">
+					<li><a href="/ai-coach" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<path d="M8 1l1.5 4.5L14 7l-4.5 1.5L8 13l-1.5-4.5L2 7l4.5-1.5L8 1z" fill="currentColor" />
+							</svg>
+						</span>
+						AI Coach
+					</a></li>
+					<li><a href="/co-parents" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<circle cx="6" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.3" fill="none" />
+								<path
+									d="M1 14c0-2.76 2.24-5 5-5s5 2.24 5 5"
+									stroke="currentColor"
+									stroke-width="1.3"
+									stroke-linecap="round"
+									fill="none"
+								/>
+								<circle cx="12.5" cy="5" r="2" stroke="currentColor" stroke-width="1.2" fill="none" />
+								<path
+									d="M12.5 10c1.93 0 3.5 1.34 3.5 3"
+									stroke="currentColor"
+									stroke-width="1.2"
+									stroke-linecap="round"
+									fill="none"
+								/>
+							</svg>
+						</span>
+						Co-parents
+					</a></li>
+				</ul>
+			</nav>
+		</aside>
+
+		<!-- ── Main workspace ─────────────────────────────────── -->
+		<main id="main-content" class="msg-workspace">
+			<!-- ── Thread list ──────────────────────────────── -->
+			<section class="msg-threads-panel" aria-labelledby="threads-heading">
+				<div class="msg-threads-toolbar">
+					<h2 id="threads-heading" class="sr-only">Conversations</h2>
+					<a href="/messaging/new" class="msg-btn-new">
+						<svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none">
+							<path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+						</svg>
+						New Message
+					</a>
+					<button type="button" class="msg-toolbar-btn" aria-label="Filter conversations">
+						<svg aria-hidden="true" width="22" height="16" viewBox="0 0 22 16" fill="none">
+							<path d="M1 2h20M4 8h14M7 14h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+						</svg>
+					</button>
+				</div>
+
+				<ul class="msg-thread-list" aria-label="Conversation list">
+					<li class="msg-thread msg-thread--unread"><a href="/messaging/thread/1">
+						<span class="msg-thread-top">
+							<span class="msg-thread-name">Robert Freeman</span>
+							<time class="msg-thread-date" datetime="2026-03-07">Today</time>
+						</span>
+						<span class="msg-thread-bottom">
+							<span class="msg-unread-dot"><span class="sr-only">Unread — </span></span>
+							<span class="msg-thread-preview">New message received</span>
+						</span>
+					</a></li>
+
+					<li class="msg-thread msg-thread--unread"><a href="/messaging/thread/2">
+						<span class="msg-thread-top">
+							<span class="msg-thread-name">Robert Freeman</span>
+							<time class="msg-thread-date" datetime="2026-03-07">Today</time>
+						</span>
+						<span class="msg-thread-bottom">
+							<span class="msg-unread-dot"><span class="sr-only">Unread — </span></span>
+							<span class="msg-thread-preview">New message received</span>
+						</span>
+					</a></li>
+
+					<li class="msg-thread"><a href="/messaging/thread/3" aria-current="page">
+						<span class="msg-thread-top">
+							<span class="msg-thread-subject">School pickup time talk</span>
+							<time class="msg-thread-date" datetime="2026-03-06">Yesterday</time>
+						</span>
+						<span class="msg-thread-preview">I wanted to follow up on your last point. I...</span>
+					</a></li>
+
+					<li class="msg-thread"><a href="/messaging/thread/4">
+						<span class="msg-thread-top">
+							<span class="msg-thread-subject">Subject of the message</span>
+							<time class="msg-thread-date" datetime="2026-03-06">Yesterday</time>
+						</span>
+						<span class="msg-thread-preview">I wanted to follow up on your last point. I agree.</span>
+					</a></li>
+
+					<li class="msg-thread"><a href="/messaging/thread/5">
+						<span class="msg-thread-top">
+							<span class="msg-thread-subject">Grades are getting better but we...</span>
+							<time class="msg-thread-date" datetime="2026-02-25">2/25/26</time>
+						</span>
+						<span class="msg-thread-preview">Lets try and keep up this last point. wi...</span>
+					</a></li>
+
+					<li class="msg-thread"><a href="/messaging/thread/6">
+						<span class="msg-thread-top">
+							<span class="msg-thread-subject">What is the meaning of life</span>
+							<time class="msg-thread-date" datetime="2026-02-24">2/24/26</time>
+						</span>
+						<span class="msg-thread-preview">When do you think we can talk about t...</span>
+					</a></li>
+
+					<li class="msg-thread"><a href="/messaging/thread/7">
+						<span class="msg-thread-top">
+							<span class="msg-thread-subject">42 is the answer to everything</span>
+							<time class="msg-thread-date" datetime="2026-02-23">2/23/26</time>
+						</span>
+						<span class="msg-thread-preview">I wanted to follow up on your last point. I...</span>
+					</a></li>
+
+					<li class="msg-thread"><a href="/messaging/thread/8">
+						<span class="msg-thread-top">
+							<span class="msg-thread-subject">This is the next to last time</span>
+							<time class="msg-thread-date" datetime="2026-02-23">2/23/26</time>
+						</span>
+						<span class="msg-thread-preview">I wanted to follow up on your last point. I...</span>
+					</a></li>
+
+					<li class="msg-thread"><a href="/messaging/thread/9">
+						<span class="msg-thread-top">
+							<span class="msg-thread-subject">Lets talk about the movie time</span>
+							<time class="msg-thread-date" datetime="2026-02-22">2/22/26</time>
+						</span>
+						<span class="msg-thread-preview">I wanted to follow up on your last point. I...</span>
+					</a></li>
+				</ul>
+			</section>
+
+			<!-- ── Conversation ─────────────────────────────── -->
+			<section class="msg-conv" aria-labelledby="conv-heading">
+				<header class="msg-conv-header">
+					<button type="button" class="msg-conv-back" aria-label="Back to conversations">
+						<svg aria-hidden="true" width="11" height="16" viewBox="0 0 11 16" fill="none">
+							<path
+								d="M9 1.5L2 8l7 6.5"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</button>
+					<div class="msg-conv-avatar" aria-hidden="true">
+						<svg width="44" height="44" viewBox="0 0 44 44">
+							<circle cx="22" cy="22" r="22" fill="#c8dbd8" />
+							<circle cx="22" cy="18" r="7" fill="#8ab5b0" />
+							<ellipse cx="22" cy="37" rx="13" ry="9" fill="#8ab5b0" />
+						</svg>
+					</div>
+					<div class="msg-conv-meta">
+						<h2 id="conv-heading" class="msg-conv-name">Robert Freeman</h2>
+						<p class="msg-conv-subtitle">
+							Started: <time datetime="2026-03-07T12:32">Today at 12:32 PM</time>
+						</p>
+					</div>
+					<div class="msg-conv-actions" aria-label="Conversation actions">
+						<button type="button" class="msg-conv-btn" aria-label="Filter messages">
+							<svg aria-hidden="true" width="22" height="16" viewBox="0 0 22 16" fill="none">
+								<path d="M1 2h20M4 8h14M7 14h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+							</svg>
+						</button>
+						<button type="button" class="msg-conv-btn" aria-label="Notification settings">
+							<svg aria-hidden="true" width="18" height="20" viewBox="0 0 18 20" fill="none">
+								<path
+									d="M9 1a6 6 0 00-6 6v5L1.5 14h15L15 12V7A6 6 0 009 1z"
+									stroke="currentColor"
+									stroke-width="1.4"
+									fill="none"
+								/>
+								<path d="M7 16a2 2 0 004 0" stroke="currentColor" stroke-width="1.4" fill="none" />
+							</svg>
+						</button>
+						<button type="button" class="msg-conv-btn" aria-label="Bookmark conversation">
+							<svg aria-hidden="true" width="16" height="20" viewBox="0 0 16 20" fill="none">
+								<path
+									d="M2 1h12a1 1 0 011 1v16l-7-4-7 4V2a1 1 0 011-1z"
+									stroke="currentColor"
+									stroke-width="1.5"
+									fill="none"
+								/>
+							</svg>
+						</button>
+						<button type="button" class="msg-conv-btn" aria-label="More options">
+							<svg aria-hidden="true" width="18" height="5" viewBox="0 0 18 5" fill="none">
+								<circle cx="2" cy="2.5" r="2" fill="currentColor" />
+								<circle cx="9" cy="2.5" r="2" fill="currentColor" />
+								<circle cx="16" cy="2.5" r="2" fill="currentColor" />
+							</svg>
+						</button>
+					</div>
+				</header>
+
+				<div class="msg-conv-divider" role="separator"></div>
+
+				<ol class="msg-log" aria-label="Message history" aria-live="polite">
+					<li role="separator" class="msg-date-sep">
+						<time datetime="2026-03-06">Yesterday</time>
+					</li>
+
+					<li class="msg-message msg-message--in">
+						<article aria-labelledby="msg-1-author">
+							<h3 id="msg-1-author" class="sr-only">Robert Freeman</h3>
+							<div class="msg-bubble-body">
+								<p>I'll add everything to Shared Calendar for you.</p>
+								<a href="/attachments/pictures_of_the_kids.png" class="msg-attachment">
+									<svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none">
+										<path
+											d="M15.5 8.5L8 16a5 5 0 01-7-7l8-8a3 3 0 014 4L5 13a1 1 0 01-1-1l6-6"
+											stroke="currentColor"
+											stroke-width="1.5"
+											stroke-linecap="round"
+										/>
+									</svg>
+									<span>
+										<span class="msg-attachment-name">pictures_of_the_kids.png</span>
+										<time class="msg-attachment-date" datetime="2023-05-07T12:15">5/7/2023, 12:15 PM</time>
+									</span>
+								</a>
+							</div>
+							<footer>
+								<button type="button" class="msg-msg-menu" aria-label="Message options">
+									<svg aria-hidden="true" width="18" height="5" viewBox="0 0 18 5" fill="none">
+										<circle cx="2" cy="2.5" r="2" fill="currentColor" />
+										<circle cx="9" cy="2.5" r="2" fill="currentColor" />
+										<circle cx="16" cy="2.5" r="2" fill="currentColor" />
+									</svg>
+								</button>
+							</footer>
+						</article>
+					</li>
+
+					<li class="msg-message msg-message--in">
+						<article aria-labelledby="msg-2-author">
+							<h3 id="msg-2-author" class="sr-only">Robert Freeman — image</h3>
+							<div class="msg-bubble-body msg-bubble-body--image">
+								<svg aria-hidden="true" width="51" height="43" viewBox="0 0 51 43" fill="none">
+									<rect
+										x="1"
+										y="1"
+										width="49"
+										height="41"
+										rx="4"
+										stroke="currentColor"
+										stroke-width="1.5"
+										fill="none"
+									/>
+									<circle cx="16" cy="14" r="5" stroke="currentColor" stroke-width="1.5" fill="none" />
+									<path
+										d="M1 30l13-12 10 10 8-7 18 12"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linejoin="round"
+									/>
+								</svg>
+								<p>
+									<strong class="msg-image-label">Image sent by Robert</strong>
+									<br>
+									<span class="msg-image-sub">Click to view</span>
+								</p>
+							</div>
+						</article>
+					</li>
+
+					<li class="msg-read-receipt" role="note">
+						Read <time datetime="2026-03-06">Yesterday</time>
+					</li>
+
+					<li class="msg-message msg-message--out">
+						<article aria-labelledby="msg-3-author" aria-describedby="msg-3-meta">
+							<h3 id="msg-3-author" class="sr-only">You</h3>
+							<div class="msg-bubble-body">
+								<p>Have you had a chance to think about the plans for Timmy's upcoming birthday party?</p>
+							</div>
+							<footer>
+								<button type="button" class="msg-msg-menu" aria-label="Message options">
+									<svg aria-hidden="true" width="18" height="5" viewBox="0 0 18 5" fill="none">
+										<circle cx="2" cy="2.5" r="2" fill="currentColor" />
+										<circle cx="9" cy="2.5" r="2" fill="currentColor" />
+										<circle cx="16" cy="2.5" r="2" fill="currentColor" />
+									</svg>
+								</button>
+								<dl id="msg-3-meta" class="msg-sentiment">
+									<div>
+										<dt>Sent</dt>
+										<dd>
+											<time datetime="2024-01-16T12:18">Friday, Jan 16, 2024 at 12:18 PM</time>
+										</dd>
+									</div>
+									<div>
+										<dt>Read</dt>
+										<dd>
+											<time datetime="2024-01-16T12:21">Friday, Jan 16, 2024 at 12:21 PM</time> by Robert Freeman
+										</dd>
+									</div>
+									<div>
+										<dt>Tone</dt>
+										<dd>Positive</dd>
+									</div>
+								</dl>
+							</footer>
+						</article>
+					</li>
+
+					<li class="msg-message msg-message--out">
+						<article aria-labelledby="msg-4-author">
+							<h3 id="msg-4-author" class="sr-only">You</h3>
+							<div class="msg-bubble-body">
+								<p>It's just around the corner, and we need to start getting organized.</p>
+							</div>
+						</article>
+					</li>
+				</ol>
+
+				<!-- Composer -->
+				<form class="msg-composer" aria-labelledby="composer-label">
+					<h2 id="composer-label" class="sr-only">Compose message</h2>
+					<label for="message-body" class="sr-only">Message</label>
+					<textarea id="message-body" name="message" rows="3" placeholder="Type your message here"></textarea>
+					<div class="msg-composer-bar">
+						<div class="msg-composer-tools">
+							<button type="button" class="msg-tool-btn" aria-label="Attach file">
+								<svg aria-hidden="true" width="10" height="18" viewBox="0 0 10 18" fill="none">
+									<path
+										d="M9 5.5v8a4 4 0 01-8 0V4a2.5 2.5 0 015 0v9a1 1 0 01-2 0V5.5"
+										stroke="currentColor"
+										stroke-width="1.4"
+										stroke-linecap="round"
+									/>
+								</svg>
+							</button>
+							<button type="button" class="msg-tool-btn" aria-label="Open writing tools">
+								<svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+									<path
+										d="M14 2l4 4-10 10H4v-4L14 2z"
+										stroke="currentColor"
+										stroke-width="1.4"
+										stroke-linejoin="round"
+										fill="none"
+									/>
+									<circle cx="3.5" cy="3.5" r="2" fill="currentColor" />
+									<path d="M1.5 1.5l4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+								</svg>
+							</button>
+							<button type="button" class="msg-tool-btn" aria-label="Scan sentiment">
+								<svg aria-hidden="true" width="26" height="26" viewBox="0 0 26 26" fill="none">
+									<circle cx="10" cy="15" r="7" stroke="currentColor" stroke-width="1.4" fill="none" />
+									<path
+										d="M7.5 17c.6 1.2 1.5 2 2.5 2s1.9-.8 2.5-2"
+										stroke="currentColor"
+										stroke-width="1.2"
+										stroke-linecap="round"
+									/>
+									<circle cx="8.5" cy="14" r="1" fill="currentColor" />
+									<circle cx="11.5" cy="14" r="1" fill="currentColor" />
+									<path d="M20 1l1.2 3.6 3.6 1.2-3.6 1.2-1.2 3.6-1.2-3.6L15.2 6l3.6-1.2L20 1z" fill="currentColor" />
+								</svg>
+							</button>
+						</div>
+						<button type="submit" class="msg-send-btn" aria-label="Send message">
+							<svg aria-hidden="true" width="16" height="15" viewBox="0 0 16 15" fill="none">
+								<path d="M1 7.5L15 1 9 14 7 8.5 1 7.5z" fill="currentColor" />
+							</svg>
+						</button>
+					</div>
+				</form>
+			</section>
+		</main>
+	</div>
+
+	<style is:global>
+	/* ── Base ─────────────────────────────────────────────────── */
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+
+	:root {
+		--sidebar-min: 240px;
+		--sidebar-max: 280px;
+		--list-min: 320px;
+		--list-max: 600px;
+	}
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	/* ── Design tokens ────────────────────────────────────────── */
+	.grid {
+		--c-app: #e4f0ee;
+		--c-panel: #f2f7f6;
+		--c-white: #ffffff;
+		--c-teal: #11a78c;
+		--c-dark: #01261f;
+		--c-dark-green: #004739;
+		--c-body: #3d615a;
+		--c-muted: #6e7682;
+		--c-yellow: #f4b740;
+		--c-bubble-in: #e7efed;
+		--c-bubble-out: #e2f3f0;
+		--c-link: #24a086;
+		--c-border: rgba(0, 71, 57, 0.08);
+		--c-shadow: rgba(17, 167, 140, 0.12);
+
+		display: grid;
+		grid-template-columns:
+			minmax(var(--sidebar-min), var(--sidebar-max))
+			minmax(var(--list-min), var(--list-max))
+			1fr;
+		grid-template-rows: auto 1fr;
+		height: 100dvh;
+		gap: 24px;
+		overflow: hidden;
+		background: var(--c-app);
+		color: var(--c-body);
+	}
+
+	/* ── Skip link ────────────────────────────────────────────── */
+	.msg-skip {
+		position: absolute;
+		top: -100%;
+		left: 8px;
+		z-index: 100;
+		padding: 8px 16px;
+		background: var(--c-teal);
+		color: white;
+		border-radius: 0 0 6px 6px;
+		font-size: 14px;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.msg-skip:focus {
+		top: 0;
+	}
+
+	/* ── Header ───────────────────────────────────────────────── */
+	.msg-header {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns:
+			minmax(var(--sidebar-min), var(--sidebar-max)) /* aligns with aside */
+			1fr /* search stretches  */
+			auto; /* actions hugs      */
+		align-items: center;
+		height: 68px;
+		background: var(--c-panel);
+		border-bottom: 1px solid var(--c-border);
+		container-type: normal;
+	}
+
+	.msg-logo-link {
+		grid-column: 1;
+		display: flex;
+		align-items: center;
+		padding: 0 16px;
+		text-decoration: none;
+	}
+	.msg-logo-link svg {
+		display: block;
+	}
+
+	.msg-search {
+		grid-column: 2 / 3;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		height: 44px;
+		padding: 0 14px;
+		background: rgba(0, 71, 57, 0.06);
+		border: none;
+		border-radius: 8px;
+		color: var(--c-dark-green);
+	}
+	.msg-search input {
+		flex: 1;
+		border: none;
+		background: transparent;
+		font-size: 14px;
+		color: var(--c-dark);
+		outline: none;
+	}
+	.msg-search input::placeholder {
+		color: var(--c-body);
+		opacity: 0.55;
+	}
+	.msg-search kbd {
+		font-size: 12px;
+		font-weight: 500;
+		color: var(--c-dark-green);
+		opacity: 0.55;
+		flex-shrink: 0;
+	}
+
+	.msg-header-actions {
+		grid-column: 3;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		justify-content: flex-end;
+		padding-right: 16px;
+	}
+	.msg-header-btn {
+		position: relative;
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.75);
+		border: none;
+		border-radius: 6px;
+		color: var(--c-dark);
+		cursor: pointer;
+		transition: background 120ms;
+	}
+	.msg-header-btn:hover {
+		background: var(--c-white);
+	}
+
+	.msg-badge {
+		position: absolute;
+		top: -5px;
+		right: -5px;
+		min-width: 18px;
+		height: 18px;
+		padding: 0 4px;
+		background: var(--c-yellow);
+		border-radius: 9px;
+		font-size: 11px;
+		font-weight: 600;
+		color: var(--c-dark-green);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		pointer-events: none;
+	}
+
+	/* ── Sidebar ──────────────────────────────────────────────── */
+	.msg-sidebar {
+		background: var(--c-panel);
+		overflow-y: auto;
+		scrollbar-width: none;
+	}
+	.msg-sidebar::-webkit-scrollbar {
+		display: none;
+	}
+
+	.msg-sidebar nav {
+		padding: 12px 10px 24px;
+	}
+
+	.msg-nav-list {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 0;
+		margin: 0;
+	}
+
+	.msg-nav-group {
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--c-dark-green);
+		padding: 14px 8px 6px;
+	}
+
+	.msg-nav-link {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		height: 44px;
+		padding: 0 12px;
+		border-radius: 6px;
+		text-decoration: none;
+		color: var(--c-body);
+		font-size: 16px;
+		font-weight: 600;
+		transition: background 120ms;
+	}
+	.msg-nav-link:hover {
+		background: rgba(0, 71, 57, 0.05);
+	}
+	.msg-nav-link[aria-current="page"] {
+		background: var(--c-white);
+		color: var(--c-dark);
+		box-shadow:
+			0 0 0 1px rgba(0, 0, 0, 0.04),
+			0 3px 8px var(--c-shadow);
+	}
+
+	.msg-nav-icon {
+		width: 16px;
+		height: 16px;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.msg-nav-link[aria-current="page"] .msg-nav-icon {
+		color: var(--c-teal);
+	}
+
+	/* ── Workspace ────────────────────────────────────────────── */
+	.msg-workspace {
+		grid-column: 2 / -1;
+		grid-row: 2;
+		display: grid;
+		grid-template-columns: subgrid; /* inherits cols 2 & 3 */
+		container-type: normal;
+		overflow: hidden;
+		background-color: transparent;
+
+		&::before {
+			content: none;
+			background: transparent;
+		}
+	}
+
+	/* ── Thread list panel ────────────────────────────────────── */
+	.msg-threads-panel {
+		grid-column: 1;
+		display: flex;
+		flex-direction: column;
+		background: var(--c-panel);
+		overflow: hidden;
+	}
+
+	.msg-threads-toolbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 68px;
+		padding: 0 16px;
+		flex-shrink: 0;
+		border-bottom: 1px solid var(--c-border);
+	}
+
+	.msg-btn-new {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		height: 44px;
+		padding: 0 20px;
+		background: var(--c-teal);
+		color: white;
+		font-size: 16px;
+		font-weight: 700;
+		border: none;
+		border-radius: 6px;
+		text-decoration: none;
+		cursor: pointer;
+		transition: filter 120ms;
+	}
+	.msg-btn-new:hover {
+		filter: brightness(1.08);
+	}
+
+	.msg-toolbar-btn {
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.65);
+		border: none;
+		border-radius: 6px;
+		color: var(--c-dark);
+		cursor: pointer;
+	}
+
+	.msg-thread-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		flex: 1;
+		overflow-y: auto;
+		scrollbar-width: thin;
+		scrollbar-color: var(--c-border) transparent;
+	}
+
+	.msg-thread a {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 5px;
+		padding: 12px 18px;
+		min-height: 68px;
+		border-bottom: 1px solid var(--c-border);
+		text-decoration: none;
+		color: inherit;
+		transition: background 80ms;
+	}
+	.msg-thread a:hover {
+		background: rgba(255, 255, 255, 0.5);
+	}
+	.msg-thread a[aria-current="page"] {
+		background: var(--c-white);
+		box-shadow: 0 2px 8px var(--c-shadow);
+		min-height: 77px;
+	}
+
+	.msg-thread-top {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 8px;
+	}
+	.msg-thread-name {
+		font-size: 16px;
+		font-weight: 700;
+		color: var(--c-dark);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.msg-thread-subject {
+		font-size: 16px;
+		font-weight: 600;
+		color: var(--c-dark);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.msg-thread-date {
+		font-size: 14px;
+		color: var(--c-body);
+		flex-shrink: 0;
+	}
+	.msg-thread-bottom {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		min-width: 0;
+	}
+	.msg-thread-preview {
+		font-size: 16px;
+		color: var(--c-body);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		flex: 1;
+	}
+	.msg-unread-dot {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: var(--c-yellow);
+		flex-shrink: 0;
+		display: inline-block;
+	}
+
+	/* ── Conversation panel ───────────────────────────────────── */
+	.msg-conv {
+		grid-column: 2;
+		display: flex;
+		flex-direction: column;
+		background: var(--c-panel);
+		overflow: hidden;
+	}
+
+	.msg-conv-header {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		height: 68px;
+		padding: 0 14px 0 16px;
+		flex-shrink: 0;
+		border-bottom: 1px solid var(--c-border);
+	}
+
+	.msg-conv-back {
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(233, 245, 244, 0.1);
+		border: none;
+		border-radius: 6px;
+		color: var(--c-dark-green);
+		cursor: pointer;
+		flex-shrink: 0;
+	}
+	.msg-conv-avatar {
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		overflow: hidden;
+		flex-shrink: 0;
+	}
+	.msg-conv-avatar svg {
+		display: block;
+	}
+	.msg-conv-meta {
+		flex: 1;
+		min-width: 0;
+	}
+	.msg-conv-name {
+		font-size: 20px;
+		font-weight: 700;
+		color: var(--c-dark);
+		line-height: 1.2;
+	}
+	.msg-conv-subtitle {
+		font-size: 14px;
+		color: var(--c-body);
+	}
+	.msg-conv-actions {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.msg-conv-btn {
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.75);
+		border: none;
+		border-radius: 6px;
+		color: var(--c-body);
+		cursor: pointer;
+		transition: background 120ms;
+	}
+	.msg-conv-btn:hover {
+		background: var(--c-white);
+	}
+	.msg-conv-divider {
+		height: 1px;
+		background: var(--c-border);
+		flex-shrink: 0;
+	}
+
+	/* ── Message log ──────────────────────────────────────────── */
+	.msg-log {
+		list-style: none;
+		margin: 0;
+		flex: 1;
+		overflow-y: auto;
+		padding: 20px 22px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		scrollbar-width: thin;
+		scrollbar-color: var(--c-border) transparent;
+	}
+
+	.msg-date-sep {
+		text-align: center;
+		font-size: 14px;
+		color: var(--c-body);
+		opacity: 0.7;
+		padding: 6px 0;
+	}
+
+	.msg-message {
+		display: flex;
+	}
+	.msg-message article {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		max-width: 480px;
+	}
+	.msg-message footer {
+		display: flex;
+		align-items: flex-start;
+		gap: 6px;
+	}
+
+	.msg-message--in {
+		justify-content: flex-start;
+	}
+	.msg-message--out {
+		justify-content: flex-end;
+	}
+
+	.msg-bubble-body {
+		padding: 12px 16px;
+		border-radius: 12px;
+		font-size: 16px;
+		color: var(--c-body);
+		line-height: 1.5;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.msg-message--in .msg-bubble-body {
+		background: var(--c-bubble-in);
+	}
+	.msg-message--out .msg-bubble-body {
+		background: var(--c-bubble-out);
+	}
+	.msg-bubble-body--image {
+		flex-direction: row;
+		align-items: center;
+		gap: 14px;
+	}
+	.msg-image-label {
+		font-size: 14px;
+		font-weight: 700;
+		color: var(--c-dark);
+	}
+	.msg-image-sub {
+		font-size: 14px;
+		color: var(--c-dark-green);
+	}
+
+	.msg-attachment {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 8px 12px;
+		background: rgba(255, 255, 255, 0.45);
+		border-radius: 8px;
+		text-decoration: none;
+		color: var(--c-link);
+	}
+	.msg-attachment-name {
+		display: block;
+		font-size: 16px;
+		font-weight: 700;
+		color: var(--c-link);
+	}
+	.msg-attachment-date {
+		display: block;
+		font-size: 12px;
+		color: var(--c-muted);
+	}
+
+	.msg-msg-menu {
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.4);
+		border: none;
+		border-radius: 6px;
+		color: var(--c-body);
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity 120ms;
+		flex-shrink: 0;
+	}
+	.msg-message:hover .msg-msg-menu {
+		opacity: 1;
+	}
+
+	.msg-read-receipt {
+		font-size: 14px;
+		color: var(--c-body);
+		padding: 2px 4px;
+		align-self: flex-start;
+	}
+
+	/* Sentiment dl */
+	.msg-sentiment {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 10px 14px;
+		background: var(--c-bubble-out);
+		border-radius: 8px;
+		font-size: 14px;
+		color: #3d6161;
+	}
+	.msg-sentiment div {
+		display: flex;
+		gap: 6px;
+	}
+	.msg-sentiment dt {
+		font-weight: 600;
+		flex-shrink: 0;
+	}
+	.msg-sentiment dd {
+		line-height: 1.55;
+	}
+
+	/* ── Composer ─────────────────────────────────────────────── */
+	.msg-composer {
+		flex-shrink: 0;
+		margin: 0 14px 14px;
+		background: var(--c-white);
+		border-radius: 8px;
+		box-shadow:
+			0 -1px 0 var(--c-border),
+			0 2px 8px var(--c-shadow);
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+	.msg-composer textarea {
+		flex: 1;
+		border: none;
+		outline: none;
+		resize: none;
+		font-family: inherit;
+		font-size: 14px;
+		color: var(--c-body);
+		line-height: 1.5;
+		padding: 14px 16px 8px;
+		background: transparent;
+		min-height: 52px;
+	}
+	.msg-composer textarea::placeholder {
+		color: var(--c-body);
+		opacity: 0.45;
+	}
+
+	.msg-composer-bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8px 8px 8px 4px;
+		border-top: 1px solid var(--c-border);
+	}
+	.msg-composer-tools {
+		display: flex;
+		align-items: center;
+	}
+	.msg-tool-btn {
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: none;
+		border-radius: 6px;
+		color: var(--c-body);
+		cursor: pointer;
+		transition: background 120ms;
+	}
+	.msg-tool-btn:hover {
+		background: var(--c-panel);
+	}
+
+	.msg-send-btn {
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--c-teal);
+		border: none;
+		border-radius: 6px;
+		color: white;
+		cursor: pointer;
+		transition: filter 120ms;
+	}
+	.msg-send-btn:hover {
+		filter: brightness(1.08);
+	}
+	</style>
+</Layout>

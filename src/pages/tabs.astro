@@ -1,5 +1,5 @@
 ---
-import Tabs from "@components/Tab.astro";
+// import Tabs from "@components/Tab.astro";
 import Layout from "../layouts/Layout.astro";
 
 const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
@@ -11,9 +11,9 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 			<h1>Tabs</h1>
 			<Tabs label="Music" classes="block">
 				<div slot="tabs">
-					<TabButton id="t-recent" aria-controls="recent" selected classes="px-3 py-2 rounded-md">Recent</TabButton>
+					<!-- <TabButton id="t-recent" aria-controls="recent" selected classes="px-3 py-2 rounded-md">Recent</TabButton>
 					<TabButton id="t-loved" aria-controls="loved" classes="px-3 py-2 rounded-md">Loved</TabButton>
-					<TabButton id="t-follow" aria-controls="following" classes="px-3 py-2 rounded-md">Following</TabButton>
+					<TabButton id="t-follow" aria-controls="following" classes="px-3 py-2 rounded-md">Following</TabButton> -->
 				</div>
 
 				<section id="recent" data-label="Recent">…</section>

@@ -1,0 +1,341 @@
+---
+import Avatar from "@components/Avatar.astro";
+import altUserAvatar from "@images/elp.jpg";
+
+import userAvatar from "@images/killer-mike.jpg";
+import Layout from "../layouts/LayoutClaude.astro";
+
+const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
+---
+
+<style>
+:root {
+	--sidebar-min: 240px;
+	--sidebar-max: 300px;
+	--list-min: 320px;
+	--list-max: 500px;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns:
+		minmax(var(--sidebar-min), var(--sidebar-max))
+		minmax(var(--list-min), var(--list-max))
+		1fr;
+	grid-template-rows: auto 1fr;
+	height: 100dvh;
+	gap: 24px;
+	background-color: #ebf2f1;
+}
+
+header {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns:
+		minmax(var(--sidebar-min), var(--sidebar-max)) /* aligns with aside */
+		1fr /* search stretches */
+		auto; /* actions hugs content */
+	container-type: normal;
+	gap: 24px;
+	padding-block-start: 24px;
+}
+.msg-logo-link {
+	grid-column: 1;
+	display: flex;
+}
+.msg-search {
+	grid-column: 2 / 3;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 44px;
+	padding: 0 14px;
+	background: rgba(0, 71, 57, 0.06);
+	border: none;
+	border-radius: 8px;
+	color: #004739;
+}
+.msg-search input {
+	flex: 1;
+	border: none;
+	background: transparent;
+	font-size: 14px;
+	color: #01261f;
+	outline: none;
+}
+.msg-search input::placeholder {
+	color: #3d615a;
+	opacity: 0.55;
+}
+.msg-search kbd {
+	font-size: 12px;
+	font-weight: 500;
+	color: #004739;
+	opacity: 0.55;
+	flex-shrink: 0;
+}
+.msg-header-actions {
+	grid-column: 3;
+}
+aside {
+	background-color: #f5f7f8;
+}
+
+main {
+	grid-column: 2 / -1;
+	display: grid;
+	grid-template-columns: subgrid; /* inherits cols 2 & 3 */
+	container-type: normal;
+	background-color: transparent;
+
+	&::before {
+		content: none;
+		background: transparent;
+	}
+}
+
+.thread-list {
+	grid-column: 1;
+	background-color: #f5f7f8;
+}
+.thread-detail {
+	grid-column: 2;
+	background-color: #f5f7f8;
+}
+</style>
+
+<Layout {title} {description}>
+	<div class="grid">
+		<header aria-label="Global">
+			<a href="/" class="msg-logo-link" aria-label="TalkingParents home">
+				<svg width="150" height="36" viewBox="0 0 150 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M24 2C15.16 2 8 9.16 8 18c0 4.2 1.64 8.02 4.32 10.88L10 32l4.8-1.6C16.84 31.42 18.36 32 20 32c8.84 0 16-7.16 16-16S28.84 2 20 2z"
+						fill="#004739"
+					/>
+					<path
+						d="M34 10c6.63 0 12 5.37 12 12s-5.37 12-12 12c-1.4 0-2.74-.24-4-.68L25.2 35l-2-3.28C20.84 30.2 20 27.2 20 24c0-7.73 6.27-14 14-14z"
+						fill="#004739"
+					/>
+					<circle cx="17" cy="19" r="2" fill="#28b99a" />
+					<circle cx="23" cy="19" r="2" fill="#28b99a" />
+					<circle cx="29" cy="19" r="2" fill="#28b99a" />
+					<text x="50" y="24" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#004739">
+						TalkingParents
+					</text>
+				</svg>
+			</a>
+
+			<form class="msg-search" role="search" aria-label="Search messages">
+				<label for="site-search" class="sr-only">Search</label>
+				<svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none">
+					<circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5" />
+					<path d="M9.5 9.5L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+				</svg>
+				<input id="site-search" name="q" type="search" placeholder="Search messages">
+				<kbd aria-label="Keyboard shortcut Command K">&#8984;K</kbd>
+			</form>
+
+			<div class="msg-header-actions" aria-label="App actions">
+				<button type="button" class="msg-header-btn msg-header-btn--badge" aria-label="Notifications, 2 unread">
+					<svg aria-hidden="true" width="18" height="20" viewBox="0 0 18 20" fill="none">
+						<path
+							d="M9 1a6 6 0 00-6 6v5L1.5 14h15L15 12V7A6 6 0 009 1z"
+							stroke="currentColor"
+							stroke-width="1.4"
+							fill="none"
+						/>
+						<path d="M7 16a2 2 0 004 0" stroke="currentColor" stroke-width="1.4" fill="none" />
+					</svg>
+					<span class="msg-badge" aria-hidden="true">2</span>
+				</button>
+				<button type="button" class="msg-header-btn" aria-label="Download">
+					<svg aria-hidden="true" width="18" height="19" viewBox="0 0 18 19" fill="none">
+						<path
+							d="M9 1v12M5 9l4 5 4-5"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+						<path d="M1 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+					</svg>
+				</button>
+				<button type="button" class="msg-header-btn" aria-label="Upload">
+					<svg aria-hidden="true" width="16" height="19" viewBox="0 0 16 19" fill="none">
+						<path
+							d="M8 14V2M4 6l4-5 4 5"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+						<path d="M1 16h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+					</svg>
+				</button>
+			</div>
+		</header>
+		<aside>
+			<nav aria-label="Primary navigation">
+				<ul class="msg-nav-list">
+					<li><a href="/dashboard" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" />
+								<rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" />
+								<rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" />
+								<rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" />
+							</svg>
+						</span>
+						Dashboard
+					</a></li>
+				</ul>
+
+				<h2 class="msg-nav-group" id="nav-primary">Primary</h2>
+				<ul class="msg-nav-list" aria-labelledby="nav-primary">
+					<li><a href="/messaging" class="msg-nav-link" aria-current="page">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<path
+									d="M14 1H2C1.45 1 1 1.45 1 2v9c0 .55.45 1 1 1h2v3l3.6-3H14c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1z"
+									fill="currentColor"
+								/>
+								<circle cx="5" cy="6.5" r="1" fill="white" />
+								<circle cx="8" cy="6.5" r="1" fill="white" />
+								<circle cx="11" cy="6.5" r="1" fill="white" />
+							</svg>
+						</span>
+						Messaging
+					</a></li>
+					<li><a href="/calling" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<path
+									d="M3.5 1C3.5 1 1 3.5 1 6.5C1 11.19 4.81 15 9.5 15C12.5 15 15 12.5 15 12.5L12.5 10L10.5 11.5C9 10.5 5.5 7 4.5 5.5L6 3.5L3.5 1Z"
+									fill="currentColor"
+								/>
+							</svg>
+						</span>
+						Calling
+					</a></li>
+					<li><a href="/calendar" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect
+									x="1"
+									y="3"
+									width="14"
+									height="12"
+									rx="1.5"
+									stroke="currentColor"
+									stroke-width="1.5"
+									fill="none"
+								/>
+								<path d="M1 7h14" stroke="currentColor" stroke-width="1.5" />
+								<path d="M5 1v4M11 1v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+							</svg>
+						</span>
+						Calendar
+					</a></li>
+					<li><a href="/payments" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect
+									x="1"
+									y="3"
+									width="14"
+									height="10"
+									rx="1.5"
+									stroke="currentColor"
+									stroke-width="1.5"
+									fill="none"
+								/>
+								<path d="M1 7h14" stroke="currentColor" stroke-width="1.5" />
+							</svg>
+						</span>
+						Payments
+					</a></li>
+					<li><a href="/info-library" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="2" y="1" width="9" height="13" rx="1" stroke="currentColor" stroke-width="1.4" fill="none" />
+								<path d="M5 5h5M5 8h5M5 11h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+								<path d="M11 4h2a1 1 0 011 1v8a1 1 0 01-1 1H5" stroke="currentColor" stroke-width="1.2" />
+							</svg>
+						</span>
+						Info Library
+					</a></li>
+					<li><a href="/records" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="3" y="3" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.4" fill="none" />
+								<rect x="1" y="1" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.2" fill="none" />
+								<path d="M4 6h5M4 8.5h5M4 11h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+							</svg>
+						</span>
+						Records
+					</a></li>
+					<li><a href="/journal" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="3" y="1" width="10" height="14" rx="1" stroke="currentColor" stroke-width="1.4" fill="none" />
+								<path d="M3 4H2a1 1 0 00-1 1v6a1 1 0 001 1h1" stroke="currentColor" stroke-width="1.2" />
+								<path d="M6 5h5M6 8h5M6 11h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+							</svg>
+						</span>
+						Journal
+					</a></li>
+					<li><a href="/vault" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect x="1" y="5" width="14" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4" fill="none" />
+								<path d="M5 5V4a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+								<circle cx="8" cy="9.5" r="1.8" stroke="currentColor" stroke-width="1.2" fill="none" />
+							</svg>
+						</span>
+						Vault
+					</a></li>
+				</ul>
+
+				<h2 class="msg-nav-group" id="nav-coaching">Coaching</h2>
+				<ul class="msg-nav-list" aria-labelledby="nav-coaching">
+					<li><a href="/ai-coach" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<path d="M8 1l1.5 4.5L14 7l-4.5 1.5L8 13l-1.5-4.5L2 7l4.5-1.5L8 1z" fill="currentColor" />
+							</svg>
+						</span>
+						AI Coach
+					</a></li>
+					<li><a href="/co-parents" class="msg-nav-link">
+						<span class="msg-nav-icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<circle cx="6" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.3" fill="none" />
+								<path
+									d="M1 14c0-2.76 2.24-5 5-5s5 2.24 5 5"
+									stroke="currentColor"
+									stroke-width="1.3"
+									stroke-linecap="round"
+									fill="none"
+								/>
+								<circle cx="12.5" cy="5" r="2" stroke="currentColor" stroke-width="1.2" fill="none" />
+								<path
+									d="M12.5 10c1.93 0 3.5 1.34 3.5 3"
+									stroke="currentColor"
+									stroke-width="1.2"
+									stroke-linecap="round"
+									fill="none"
+								/>
+							</svg>
+						</span>
+						Co-parents
+					</a></li>
+				</ul>
+			</nav>
+		</aside>
+		<main>
+			<section class="thread-list" aria-label="List of threads">list</section>
+			<section class="thread-detail" aria-label="Thread details">messages</section>
+		</main>
+	</div>
+</Layout>
