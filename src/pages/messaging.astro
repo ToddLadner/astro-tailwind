@@ -6,7 +6,7 @@ import Layout from "@layouts/LayoutClaude.astro";
 <Layout title="Messaging | TalkingParents" description="TalkingParents messaging">
 	<a class="msg-skip" href="#main-content">Skip to main content</a>
 
-	<div class="grid">
+	<div class="grid" x-data="{ view: 'messaging', coachView: 'welcome', activeChat: null, mobilePanel: 'threads' }">
 		<!-- ── Global header ──────────────────────────────────── -->
 		<header class="msg-header" aria-label="Global">
 			<a href="/" class="msg-logo-link" aria-label="TalkingParents home">
@@ -79,7 +79,7 @@ import Layout from "@layouts/LayoutClaude.astro";
 		</header>
 
 		<!-- ── Sidebar ────────────────────────────────────────── -->
-		<aside class="msg-sidebar">
+		<aside class="msg-sidebar" :class="{ 'msg-mobile-active': mobilePanel === 'sidebar' }">
 			<nav aria-label="Primary navigation">
 				<ul class="msg-nav-list">
 					<li><a href="/dashboard" class="msg-nav-link">
@@ -97,7 +97,7 @@ import Layout from "@layouts/LayoutClaude.astro";
 
 				<h2 class="msg-nav-group" id="nav-primary">Primary</h2>
 				<ul class="msg-nav-list" aria-labelledby="nav-primary">
-					<li><a href="/messaging" class="msg-nav-link" aria-current="page">
+					<li><a href="/messaging" class="msg-nav-link" :aria-current="view === 'messaging' ? 'page' : undefined" @click.prevent="view = 'messaging'">
 						<span class="msg-nav-icon" aria-hidden="true">
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 								<path
@@ -203,7 +203,7 @@ import Layout from "@layouts/LayoutClaude.astro";
 
 				<h2 class="msg-nav-group" id="nav-coaching">Coaching</h2>
 				<ul class="msg-nav-list" aria-labelledby="nav-coaching">
-					<li><a href="/ai-coach" class="msg-nav-link">
+					<li><a href="/ai-coach" class="msg-nav-link" :aria-current="view === 'coach' ? 'page' : undefined" @click.prevent="view = 'coach'; coachView = coachView || 'welcome'">
 						<span class="msg-nav-icon" aria-hidden="true">
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 								<path d="M8 1l1.5 4.5L14 7l-4.5 1.5L8 13l-1.5-4.5L2 7l4.5-1.5L8 1z" fill="currentColor" />
@@ -238,10 +238,10 @@ import Layout from "@layouts/LayoutClaude.astro";
 			</nav>
 		</aside>
 
-		<!-- ── Main workspace ─────────────────────────────────── -->
-		<main id="main-content" class="msg-workspace">
+		<!-- ── Main workspace: Messaging ──────────────────────── -->
+		<main x-show="view === 'messaging'" id="main-content" class="msg-workspace">
 			<!-- ── Thread list ──────────────────────────────── -->
-			<section class="msg-threads-panel" aria-labelledby="threads-heading">
+			<section class="msg-threads-panel" :class="{ 'msg-mobile-active': mobilePanel === 'threads' }" aria-labelledby="threads-heading">
 				<div class="msg-threads-toolbar">
 					<h2 id="threads-heading" class="sr-only">Conversations</h2>
 					<a href="/messaging/new" class="msg-btn-new">
@@ -257,7 +257,7 @@ import Layout from "@layouts/LayoutClaude.astro";
 					</button>
 				</div>
 
-				<ul class="msg-thread-list" aria-label="Conversation list">
+				<ul class="msg-thread-list" aria-label="Conversation list" @click.prevent="mobilePanel = 'conv'">
 					<li class="msg-thread msg-thread--unread"><a href="/messaging/thread/1">
 						<span class="msg-thread-top">
 							<span class="msg-thread-name">Robert Freeman</span>
@@ -339,9 +339,9 @@ import Layout from "@layouts/LayoutClaude.astro";
 			</section>
 
 			<!-- ── Conversation ─────────────────────────────── -->
-			<section class="msg-conv" aria-labelledby="conv-heading">
+			<section class="msg-conv" :class="{ 'msg-mobile-active': mobilePanel === 'conv' }" aria-labelledby="conv-heading">
 				<header class="msg-conv-header">
-					<button type="button" class="msg-conv-back" aria-label="Back to conversations">
+					<button type="button" class="msg-conv-back" aria-label="Back to conversations" @click="mobilePanel = 'threads'">
 						<svg aria-hidden="true" width="11" height="16" viewBox="0 0 11 16" fill="none">
 							<path
 								d="M9 1.5L2 8l7 6.5"
@@ -577,6 +577,220 @@ import Layout from "@layouts/LayoutClaude.astro";
 				</form>
 			</section>
 		</main>
+
+		<!-- ── Main workspace: AI Coach ──────────────────────── -->
+		<section x-show="view === 'coach'" class="msg-coach-workspace" x-cloak>
+
+			<!-- Welcome / Chat list view -->
+			<div x-show="coachView === 'welcome'" class="msg-coach-welcome">
+				<div class="msg-coach-welcome-inner">
+					<div class="msg-coach-hero">
+						<div class="msg-coach-icon">
+							<svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+								<circle cx="24" cy="24" r="24" fill="#e2f3f0"/>
+								<path d="M24 12l2.5 7.5L34 22l-7.5 2.5L24 32l-2.5-7.5L14 22l7.5-2.5L24 12z" fill="#11a78c"/>
+								<circle cx="17" cy="32" r="2" fill="#11a78c" opacity="0.5"/>
+								<circle cx="34" cy="15" r="1.5" fill="#11a78c" opacity="0.4"/>
+							</svg>
+						</div>
+						<h2 class="msg-coach-title">Co-Parenting Coach</h2>
+						<p class="msg-coach-subtitle">AI-powered guidance for healthier co-parenting communication</p>
+					</div>
+
+					<div class="msg-coach-features">
+						<div class="msg-coach-feature">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none"/><path d="M5 8l2 2 4-4" stroke="#11a78c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							<span>Get help drafting difficult messages</span>
+						</div>
+						<div class="msg-coach-feature">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none"/><path d="M5 8l2 2 4-4" stroke="#11a78c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							<span>Tone guidance for co-parenting conversations</span>
+						</div>
+						<div class="msg-coach-feature">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none"/><path d="M5 8l2 2 4-4" stroke="#11a78c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							<span>Conflict resolution strategies and tips</span>
+						</div>
+						<div class="msg-coach-feature">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none"/><path d="M5 8l2 2 4-4" stroke="#11a78c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							<span>Your conversations stay private within TalkingParents</span>
+						</div>
+					</div>
+
+					<button type="button" class="msg-coach-new-btn" @click="coachView = 'chat'; activeChat = 'new'">
+						<svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none">
+							<path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+						</svg>
+						Create new chat
+					</button>
+
+					<p class="msg-coach-privacy">
+						<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M5 7l1.5 1.5L9 5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						Your data stays private within TalkingParents
+					</p>
+
+					<!-- Previous chats -->
+					<div class="msg-coach-history">
+						<h3 class="msg-coach-history-label">Previous chats</h3>
+						<ul class="msg-coach-chat-list">
+							<li>
+								<button type="button" class="msg-coach-chat-item" @click="coachView = 'chat'; activeChat = 'pickup'">
+									<span class="msg-coach-chat-topic">How to discuss schedule changes calmly</span>
+									<span class="msg-coach-chat-date">
+										<time datetime="2026-03-08">8 Mar</time>
+										<span>2:15 PM</span>
+									</span>
+								</button>
+							</li>
+							<li>
+								<button type="button" class="msg-coach-chat-item" @click="coachView = 'chat'; activeChat = 'boundaries'">
+									<span class="msg-coach-chat-topic">Setting boundaries without conflict</span>
+									<span class="msg-coach-chat-date">
+										<time datetime="2026-03-05">5 Mar</time>
+										<span>10:42 AM</span>
+									</span>
+								</button>
+							</li>
+							<li>
+								<button type="button" class="msg-coach-chat-item" @click="coachView = 'chat'; activeChat = 'holidays'">
+									<span class="msg-coach-chat-topic">Planning holidays cooperatively</span>
+									<span class="msg-coach-chat-date">
+										<time datetime="2026-02-28">28 Feb</time>
+										<span>4:30 PM</span>
+									</span>
+								</button>
+							</li>
+							<li>
+								<button type="button" class="msg-coach-chat-item" @click="coachView = 'chat'; activeChat = 'expenses'">
+									<span class="msg-coach-chat-topic">Talking about shared expenses</span>
+									<span class="msg-coach-chat-date">
+										<time datetime="2026-02-20">20 Feb</time>
+										<span>9:15 AM</span>
+									</span>
+								</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- Active chat view -->
+			<div x-show="coachView === 'chat'" class="msg-coach-chat">
+				<header class="msg-coach-chat-header">
+					<button type="button" class="msg-conv-back" aria-label="Back to coach home" @click="coachView = 'welcome'">
+						<svg aria-hidden="true" width="11" height="16" viewBox="0 0 11 16" fill="none">
+							<path d="M9 1.5L2 8l7 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</button>
+					<div class="msg-coach-chat-header-info">
+						<div class="msg-coach-avatar-sm">
+							<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+								<circle cx="18" cy="18" r="18" fill="#e2f3f0"/>
+								<path d="M18 9l2 6L26 17l-6 2-2 6-2-6-6-2 6-2 2-6z" fill="#11a78c"/>
+							</svg>
+						</div>
+						<div>
+							<h2 class="msg-coach-chat-name">Co-Parenting Coach</h2>
+							<span class="msg-coach-online">
+								<span class="msg-coach-online-dot"></span>
+								Online
+							</span>
+						</div>
+					</div>
+				</header>
+
+				<ol class="msg-coach-messages">
+					<li class="msg-coach-msg msg-coach-msg--bot">
+						<div class="msg-coach-msg-avatar">
+							<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+								<circle cx="14" cy="14" r="14" fill="#e2f3f0"/>
+								<path d="M14 7l1.5 4.5L20 13l-4.5 1.5L14 19l-1.5-4.5L8 13l4.5-1.5L14 7z" fill="#11a78c"/>
+							</svg>
+						</div>
+						<div class="msg-coach-msg-content">
+							<span class="msg-coach-msg-label">Coach</span>
+							<div class="msg-coach-msg-bubble">
+								Hi! I'm your co-parenting communication coach. Tell me what situation you're navigating, and I'll help you find the right words and approach.
+							</div>
+						</div>
+					</li>
+
+					<li class="msg-coach-msg msg-coach-msg--user">
+						<div class="msg-coach-msg-bubble">
+							I need to ask my co-parent about changing the pickup time for next week but last time we discussed schedule changes it turned into an argument.
+						</div>
+					</li>
+
+					<li class="msg-coach-msg msg-coach-msg--bot">
+						<div class="msg-coach-msg-avatar">
+							<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+								<circle cx="14" cy="14" r="14" fill="#e2f3f0"/>
+								<path d="M14 7l1.5 4.5L20 13l-4.5 1.5L14 19l-1.5-4.5L8 13l4.5-1.5L14 7z" fill="#11a78c"/>
+							</svg>
+						</div>
+						<div class="msg-coach-msg-content">
+							<span class="msg-coach-msg-label">Coach</span>
+							<div class="msg-coach-msg-bubble">
+								<p>That's a common challenge. Here are 3 strategies for requesting schedule changes constructively:</p>
+								<ol class="msg-coach-tips">
+									<li><strong>Lead with the child's needs</strong> — Frame the request around what benefits your child, not your own convenience.</li>
+									<li><strong>Offer flexibility</strong> — Suggest 2-3 alternative times so they feel included in the decision.</li>
+									<li><strong>Keep it brief and neutral</strong> — Avoid referencing past conflicts. Stick to the facts and the ask.</li>
+								</ol>
+								<p>Would you like me to help you draft a message?</p>
+							</div>
+						</div>
+					</li>
+
+					<li class="msg-coach-msg msg-coach-msg--user">
+						<div class="msg-coach-msg-bubble">
+							Yes please, I'd like help drafting it.
+						</div>
+					</li>
+
+					<li class="msg-coach-msg msg-coach-msg--bot">
+						<div class="msg-coach-msg-avatar">
+							<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+								<circle cx="14" cy="14" r="14" fill="#e2f3f0"/>
+								<path d="M14 7l1.5 4.5L20 13l-4.5 1.5L14 19l-1.5-4.5L8 13l4.5-1.5L14 7z" fill="#11a78c"/>
+							</svg>
+						</div>
+						<div class="msg-coach-msg-content">
+							<span class="msg-coach-msg-label">Coach</span>
+							<div class="msg-coach-msg-bubble">
+								<p>Here's a draft you can use:</p>
+								<blockquote class="msg-coach-draft">
+									"Hi, I wanted to check with you about next week's pickup. I have a work commitment that runs until 4:30 on Tuesday. Would it work to move pickup to 5:00, or would 5:30 be better for you? Happy to adjust on my end too if another time works. Thanks for being flexible."
+								</blockquote>
+								<p>This keeps the tone collaborative and gives options. Want me to adjust anything?</p>
+							</div>
+						</div>
+					</li>
+				</ol>
+
+				<!-- Topic suggestions -->
+				<div class="msg-coach-suggestions">
+					<span class="msg-coach-suggestions-label">Choose a topic</span>
+					<div class="msg-coach-suggestion-chips">
+						<button type="button" class="msg-coach-chip">Schedule changes</button>
+						<button type="button" class="msg-coach-chip">Shared expenses</button>
+						<button type="button" class="msg-coach-chip">Holiday planning</button>
+						<button type="button" class="msg-coach-chip">Setting boundaries</button>
+					</div>
+				</div>
+
+				<!-- Composer -->
+				<form class="msg-coach-composer" aria-label="Chat with coach">
+					<input type="text" class="msg-coach-input" placeholder="Write your request" aria-label="Message">
+					<button type="submit" class="msg-coach-send" aria-label="Send">
+						<svg aria-hidden="true" width="16" height="15" viewBox="0 0 16 15" fill="none">
+							<path d="M1 7.5L15 1 9 14 7 8.5 1 7.5z" fill="currentColor"/>
+						</svg>
+					</button>
+				</form>
+			</div>
+
+		</section>
+
 	</div>
 
 	<style is:global>
@@ -665,8 +879,7 @@ import Layout from "@layouts/LayoutClaude.astro";
 			auto; /* actions hugs      */
 		align-items: center;
 		height: 68px;
-		background: var(--c-panel);
-		border-bottom: 1px solid var(--c-border);
+		padding-top: 24px;
 		container-type: normal;
 	}
 
@@ -1277,6 +1490,631 @@ import Layout from "@layouts/LayoutClaude.astro";
 	}
 	.msg-send-btn:hover {
 		filter: brightness(1.08);
+	}
+
+	/* ── Alpine cloak ────────────────────────────────────────── */
+	[x-cloak] { display: none !important; }
+
+	/* ── AI Coach workspace ──────────────────────────────────── */
+	.msg-coach-workspace {
+		grid-column: 2 / -1;
+		grid-row: 2;
+		display: grid;
+		grid-template-columns: 1fr;
+		overflow: hidden;
+		background: var(--c-panel);
+	}
+
+	/* ── Welcome view ────────────────────────────────────────── */
+	.msg-coach-welcome {
+		overflow-y: auto;
+		scrollbar-width: thin;
+		scrollbar-color: var(--c-border) transparent;
+		background: linear-gradient(180deg, var(--c-panel) 0%, #e9f1ef 40%, #dfe8e5 100%);
+	}
+	.msg-coach-welcome-inner {
+		max-width: 520px;
+		margin: 0 auto;
+		padding: 48px 24px 40px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 24px;
+	}
+
+	.msg-coach-hero {
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 12px;
+	}
+	.msg-coach-icon {
+		width: 72px;
+		height: 72px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.msg-coach-title {
+		font-size: 24px;
+		font-weight: 700;
+		color: var(--c-dark);
+		line-height: 1.2;
+	}
+	.msg-coach-subtitle {
+		font-size: 15px;
+		color: var(--c-body);
+		line-height: 1.5;
+		max-width: 320px;
+	}
+
+	/* Features list */
+	.msg-coach-features {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		width: 100%;
+		padding: 20px 24px;
+		background: var(--c-white);
+		border-radius: 12px;
+		box-shadow: 0 2px 8px var(--c-shadow);
+	}
+	.msg-coach-feature {
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+		font-size: 14px;
+		color: var(--c-body);
+		line-height: 1.45;
+	}
+	.msg-coach-feature svg {
+		flex-shrink: 0;
+		margin-top: 1px;
+	}
+
+	/* New chat button */
+	.msg-coach-new-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		width: 100%;
+		max-width: 400px;
+		height: 52px;
+		padding: 0 24px;
+		background: var(--c-dark-green);
+		color: white;
+		font-size: 16px;
+		font-weight: 700;
+		border: none;
+		border-radius: 10px;
+		cursor: pointer;
+		transition: filter 120ms;
+	}
+	.msg-coach-new-btn:hover {
+		filter: brightness(1.15);
+	}
+
+	.msg-coach-privacy {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 13px;
+		color: var(--c-muted);
+	}
+
+	/* Chat history */
+	.msg-coach-history {
+		width: 100%;
+		margin-top: 8px;
+	}
+	.msg-coach-history-label {
+		font-size: 13px;
+		font-weight: 500;
+		color: var(--c-muted);
+		padding: 0 0 8px;
+	}
+	.msg-coach-chat-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+	.msg-coach-chat-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		width: 100%;
+		padding: 14px 16px;
+		background: var(--c-white);
+		border: 1px solid var(--c-border);
+		border-radius: 10px;
+		cursor: pointer;
+		text-align: left;
+		transition: box-shadow 120ms;
+	}
+	.msg-coach-chat-item:hover {
+		box-shadow: 0 2px 8px var(--c-shadow);
+	}
+	.msg-coach-chat-topic {
+		font-size: 15px;
+		font-weight: 600;
+		color: var(--c-dark);
+		line-height: 1.35;
+	}
+	.msg-coach-chat-date {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		font-size: 13px;
+		color: var(--c-muted);
+		flex-shrink: 0;
+		line-height: 1.4;
+	}
+
+	/* ── Chat view ───────────────────────────────────────────── */
+	.msg-coach-chat {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		height: 100%;
+	}
+
+	.msg-coach-chat-header {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		height: 68px;
+		padding: 0 16px;
+		flex-shrink: 0;
+		border-bottom: 1px solid var(--c-border);
+	}
+	.msg-coach-chat-header-info {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex: 1;
+	}
+	.msg-coach-avatar-sm {
+		width: 36px;
+		height: 36px;
+		flex-shrink: 0;
+	}
+	.msg-coach-chat-name {
+		font-size: 17px;
+		font-weight: 700;
+		color: var(--c-dark);
+		line-height: 1.2;
+	}
+	.msg-coach-online {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		font-size: 13px;
+		color: var(--c-teal);
+	}
+	.msg-coach-online-dot {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: var(--c-teal);
+	}
+
+	/* Messages */
+	.msg-coach-messages {
+		list-style: none;
+		padding: 20px 22px;
+		margin: 0;
+		flex: 1;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		scrollbar-width: thin;
+		scrollbar-color: var(--c-border) transparent;
+	}
+
+	.msg-coach-msg {
+		display: flex;
+		gap: 10px;
+	}
+	.msg-coach-msg--user {
+		justify-content: flex-end;
+	}
+	.msg-coach-msg-avatar {
+		flex-shrink: 0;
+		margin-top: 4px;
+	}
+	.msg-coach-msg-content {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		max-width: 520px;
+	}
+	.msg-coach-msg-label {
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--c-dark);
+		padding-left: 2px;
+	}
+
+	.msg-coach-msg-bubble {
+		padding: 14px 18px;
+		border-radius: 14px;
+		font-size: 15px;
+		line-height: 1.55;
+		color: var(--c-body);
+	}
+	.msg-coach-msg--bot .msg-coach-msg-bubble {
+		background: var(--c-white);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+	}
+	.msg-coach-msg--user .msg-coach-msg-bubble {
+		background: var(--c-bubble-out);
+		max-width: 420px;
+	}
+
+	.msg-coach-msg-bubble p + p {
+		margin-top: 10px;
+	}
+	.msg-coach-tips {
+		margin: 8px 0 4px;
+		padding-left: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+	.msg-coach-tips li {
+		line-height: 1.5;
+	}
+	.msg-coach-draft {
+		margin: 8px 0;
+		padding: 12px 16px;
+		background: #e8f5f2;
+		border-left: 3px solid var(--c-teal);
+		border-radius: 6px;
+		font-style: italic;
+		line-height: 1.55;
+	}
+
+	/* Topic suggestions */
+	.msg-coach-suggestions {
+		flex-shrink: 0;
+		padding: 12px 22px;
+		border-top: 1px solid var(--c-border);
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.msg-coach-suggestions-label {
+		font-size: 13px;
+		color: var(--c-muted);
+	}
+	.msg-coach-suggestion-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+	.msg-coach-chip {
+		padding: 8px 14px;
+		background: var(--c-white);
+		border: 1px solid var(--c-border);
+		border-radius: 20px;
+		font-size: 13px;
+		font-weight: 500;
+		color: var(--c-dark);
+		cursor: pointer;
+		transition: background 120ms, box-shadow 120ms;
+	}
+	.msg-coach-chip:hover {
+		background: #e8f5f2;
+		box-shadow: 0 1px 4px var(--c-shadow);
+	}
+
+	/* Composer */
+	.msg-coach-composer {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin: 0 14px 14px;
+		padding: 6px 6px 6px 16px;
+		background: var(--c-white);
+		border-radius: 28px;
+		box-shadow: 0 2px 8px var(--c-shadow);
+	}
+	.msg-coach-input {
+		flex: 1;
+		border: none;
+		outline: none;
+		font-family: inherit;
+		font-size: 15px;
+		color: var(--c-body);
+		background: transparent;
+		height: 44px;
+	}
+	.msg-coach-input::placeholder {
+		color: var(--c-body);
+		opacity: 0.45;
+	}
+	.msg-coach-send {
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--c-dark-green);
+		border: none;
+		border-radius: 50%;
+		color: white;
+		cursor: pointer;
+		flex-shrink: 0;
+		transition: filter 120ms;
+	}
+	.msg-coach-send:hover {
+		filter: brightness(1.15);
+	}
+
+	/* ── Tablet: 2-column (hide sidebar) ─────────────────────── */
+	@media (max-width: 1024px) {
+		.grid {
+			grid-template-columns:
+				minmax(var(--list-min), var(--list-max))
+				1fr;
+			gap: 0;
+		}
+		.msg-header {
+			grid-template-columns:
+				auto
+				1fr
+				auto;
+		}
+		.msg-sidebar {
+			display: none;
+		}
+		.msg-workspace {
+			grid-column: 1 / -1;
+		}
+		.msg-coach-workspace {
+			grid-column: 1 / -1;
+		}
+	}
+
+	/* ── Mobile: single panel ────────────────────────────────── */
+	@media (max-width: 640px) {
+		:root {
+			--sidebar-min: 100%;
+			--sidebar-max: 100%;
+			--list-min: 100%;
+			--list-max: 100%;
+		}
+
+		.grid {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto 1fr;
+			gap: 0;
+		}
+
+		/* Header */
+		.msg-header {
+			grid-column: 1;
+			grid-template-columns: 1fr auto;
+			height: 56px;
+			padding-top: 12px;
+			padding-left: 4px;
+			padding-right: 4px;
+		}
+		.msg-search {
+			display: none;
+		}
+		.msg-logo-link {
+			padding: 0 12px;
+		}
+		.msg-logo-link svg {
+			width: 120px;
+			height: auto;
+		}
+		.msg-header-actions {
+			padding-right: 8px;
+			gap: 2px;
+		}
+		.msg-header-btn {
+			width: 38px;
+			height: 38px;
+		}
+
+		/* Sidebar — hidden on mobile by default */
+		.msg-sidebar {
+			display: none;
+		}
+
+		/* Workspace becomes single-column stacked panels */
+		.msg-workspace {
+			grid-column: 1;
+			grid-row: 2;
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-template-rows: 1fr;
+		}
+
+		/* All panels stack in same cell, toggled via Alpine */
+		.msg-threads-panel,
+		.msg-conv {
+			grid-column: 1;
+			grid-row: 1;
+			display: none;
+		}
+		.msg-threads-panel.msg-mobile-active,
+		.msg-conv.msg-mobile-active {
+			display: flex;
+		}
+
+		/* Thread list adjustments */
+		.msg-threads-toolbar {
+			height: 56px;
+			padding: 0 12px;
+		}
+		.msg-btn-new {
+			height: 38px;
+			padding: 0 14px;
+			font-size: 14px;
+		}
+		.msg-toolbar-btn {
+			width: 38px;
+			height: 38px;
+		}
+		.msg-thread a {
+			padding: 10px 14px;
+			min-height: 60px;
+		}
+		.msg-thread a[aria-current="page"] {
+			min-height: 66px;
+		}
+
+		/* Conversation panel adjustments */
+		.msg-conv-header {
+			height: 56px;
+			padding: 0 8px;
+			gap: 8px;
+		}
+		.msg-conv-back {
+			width: 38px;
+			height: 38px;
+		}
+		.msg-conv-avatar {
+			width: 36px;
+			height: 36px;
+		}
+		.msg-conv-avatar svg {
+			width: 36px;
+			height: 36px;
+		}
+		.msg-conv-name {
+			font-size: 16px;
+		}
+		.msg-conv-subtitle {
+			font-size: 12px;
+		}
+		.msg-conv-actions {
+			gap: 2px;
+		}
+		.msg-conv-btn {
+			width: 36px;
+			height: 36px;
+		}
+
+		/* Messages */
+		.msg-log {
+			padding: 14px 12px;
+			gap: 8px;
+		}
+		.msg-message article {
+			max-width: 85%;
+		}
+		.msg-bubble-body {
+			padding: 10px 14px;
+			font-size: 15px;
+			border-radius: 10px;
+		}
+		.msg-msg-menu {
+			width: 36px;
+			height: 36px;
+			opacity: 1;
+		}
+		.msg-sentiment {
+			font-size: 12px;
+			padding: 8px 10px;
+		}
+
+		/* Composer */
+		.msg-composer {
+			margin: 0 8px 8px;
+		}
+		.msg-composer textarea {
+			font-size: 15px;
+			padding: 10px 12px 6px;
+			min-height: 44px;
+		}
+		.msg-composer-bar {
+			padding: 4px 4px 4px 0;
+		}
+		.msg-tool-btn {
+			width: 38px;
+			height: 38px;
+		}
+		.msg-send-btn {
+			width: 38px;
+			height: 38px;
+		}
+
+		/* ── AI Coach mobile ──────────────────────────────── */
+		.msg-coach-workspace {
+			grid-column: 1;
+			grid-row: 2;
+		}
+		.msg-coach-welcome-inner {
+			padding: 32px 16px 32px;
+		}
+		.msg-coach-title {
+			font-size: 20px;
+		}
+		.msg-coach-features {
+			padding: 16px 18px;
+		}
+		.msg-coach-new-btn {
+			height: 48px;
+			font-size: 15px;
+		}
+		.msg-coach-chat-header {
+			height: 56px;
+			padding: 0 10px;
+		}
+		.msg-coach-messages {
+			padding: 14px 12px;
+			gap: 12px;
+		}
+		.msg-coach-msg-content {
+			max-width: 85%;
+		}
+		.msg-coach-msg-bubble {
+			padding: 12px 14px;
+			font-size: 14px;
+			border-radius: 12px;
+		}
+		.msg-coach-msg--user .msg-coach-msg-bubble {
+			max-width: 100%;
+		}
+		.msg-coach-suggestions {
+			padding: 10px 12px;
+		}
+		.msg-coach-chip {
+			font-size: 12px;
+			padding: 6px 12px;
+		}
+		.msg-coach-composer {
+			margin: 0 8px 8px;
+			padding: 4px 4px 4px 14px;
+		}
+		.msg-coach-input {
+			font-size: 14px;
+			height: 38px;
+		}
+		.msg-coach-send {
+			width: 36px;
+			height: 36px;
+		}
+		.msg-coach-draft {
+			padding: 10px 12px;
+			font-size: 14px;
+		}
+		.msg-coach-tips {
+			padding-left: 16px;
+			font-size: 14px;
+		}
 	}
 	</style>
 </Layout>
