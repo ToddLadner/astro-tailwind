@@ -84,14 +84,14 @@ const uniqueId = `mask-${crypto.getRandomValues(new Uint8Array(6)).reduce((s, b)
 		</mask>
 		<g mask={`url(#${uniqueId})`}>
 			<image
-				x="0"
-				y="0"
-				height="100%"
-				preserveAspectRatio="xMidYMid slice"
-				width="100%"
-				xlink:href={image.src}
-				role="img"
-				aria-label={alt || label}
+			x="0"
+			y="0"
+			height="100%"
+			preserveAspectRatio="xMidYMid slice"
+			width="100%"
+			xlink:href={image.src}
+			role="img"
+			alt={alt || label}
 			></image>
 			<circle fill="none" cx="50%" cy="50%" r="50%" stroke="rgba(0,0,0,0.1)" stroke-width="1%" />
 		</g>
