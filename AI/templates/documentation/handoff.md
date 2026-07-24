@@ -1,5 +1,7 @@
 # Handoff
 
+Use this template to transfer verified task context to another agent or conversation.
+
 ## Goal
 
 ## Verified current state

@@ -1,5 +1,7 @@
 # CSS Rules
 
+Migration note: reusable CSS guidance from this file was preserved here for reference and should be promoted to knowledge or project rules when needed. Original guidance is preserved below.
+
 - Prefer existing design tokens and utilities.
 - Avoid magic values when a token exists.
 - Keep selectors shallow and component-scoped.

@@ -1,5 +1,7 @@
 # Context Control
 
+Migration note: reusable guidance from this file was consolidated into `AI/rules/02-context.md`. Original guidance is preserved below.
+
 - Read files on demand instead of loading the entire repository.
 - Limit each task to one feature, one bug, or one review goal.
 - For multi-file work, process files in dependency order.

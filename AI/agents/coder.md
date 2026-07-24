@@ -1,7 +1,7 @@
-# Frontend Engineer Agent
+# Coder Agent
 
 ## Role
-Implement one approved frontend step at a time.
+Implement one approved coding step at a time.
 
 ## Required behavior
 - Read defining components and types before editing consumers.

@@ -18,7 +18,7 @@ Shared AI workspace: $AI_HOME
 
 Start with:
 - $AI_HOME/agents/planner.md
-- $AI_HOME/core/operating-model.md
+- $AI_HOME/system/operating-model.md
 - $AI_HOME/rules/
 
 Project-specific context belongs in:
