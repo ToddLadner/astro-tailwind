@@ -58,7 +58,8 @@ done
 
 for file in \
   AI/agents/architect.md \
-  AI/agents/coder.md \
+  AI/agents/discovery.md \
+  AI/agents/engineer.md \
   AI/agents/css-specialist.md \
   AI/agents/documentation.md \
   AI/agents/orchestrator.md \

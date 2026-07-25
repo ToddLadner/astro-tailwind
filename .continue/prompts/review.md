@@ -17,4 +17,4 @@ Use relevant knowledge folders under `AI/knowledge/` only when they match the re
 Keep `.continue/rules/` active as the project-level rule source. Lead with findings and cite exact files or lines when available.
 Use `AI/projects/astro-tailwind/known-issues.md` only as a starting point and verify each relevant issue against source.
 
-Apply the selected review mode. Do not edit code. Blocking issues return the workflow to Engineer.
+Apply the selected review mode. Do not edit code. Blocking issues return the workflow to Engineer. Otherwise stop with Status `awaiting approval` before QA.

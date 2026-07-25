@@ -43,9 +43,20 @@ Reusable local-agent workspace for coding, UX, review, and documentation tasks.
 ## Recommended workflow
 
 1. Start with `/new-feature`.
-2. Approve Discovery, Planning, UX, Architecture, and the Engineer plan separately.
-3. Implement, review, and QA the approved scope.
-4. Finish with `/handoff`.
+2. Reply `Approved` at each gate; use the command for the next phase.
+3. Use `Return to <phase>` whenever an earlier decision needs revision.
+4. Finish with `/handoff` after QA is approved.
+
+The shortest daily path is:
+
+```text
+/new-feature <request>
+Approved → /plan → Approved → /ux-review → Approved → /architect
+Approved → /implement → Approved → /implement
+Approved → /review → Approved → /qa → Approved → /handoff
+```
+
+Each command loads only the orchestrator, one active role, applicable rules, and relevant project files. This keeps prompts practical for local-model context limits.
 
 Keep source-of-truth project files in the project repository. Keep reusable knowledge here.
 

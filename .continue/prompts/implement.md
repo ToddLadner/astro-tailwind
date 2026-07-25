@@ -1,12 +1,12 @@
 ---
 name: implement
-description: Implement one approved coding step using the coder agent.
+description: Plan or implement one approved engineering step.
 invokable: true
 ---
 
 Before answering, read the applicable files below if they are available in the workspace.
 
-Use `AI/agents/orchestrator.md` for phase state and `AI/agents/coder.md` as the active role contract.
+Use `AI/agents/orchestrator.md` for phase state and `AI/agents/engineer.md` as the active role contract.
 
 Reference shared rules from `AI/rules/01-general.md`, `AI/rules/02-context.md`, and `AI/rules/03-editing.md`.
 
@@ -18,3 +18,5 @@ Keep `.continue/rules/` active as the project-level rule source. Do not change a
 Read the applicable project context under `AI/projects/astro-tailwind/` and validate with the commands documented there.
 
 First produce the Engineer implementation plan and stop for explicit approval. Edit only when the conversation contains approval of both Architecture and the Engineer plan.
+
+After implementation and validation, stop with Status `awaiting approval` before Review.
