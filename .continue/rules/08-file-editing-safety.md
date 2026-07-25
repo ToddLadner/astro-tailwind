@@ -14,4 +14,5 @@ description: Safety rules for targeted file edits and post-edit verification.
 - Verify that only the requested lines and files changed.
 - Do not report success until the written file has been checked.
 - For broad changes, explain the intended files and approach before editing.
-- Run the relevant build, type-check, lint, or test command after implementation.
+- Run the relevant command from `AI/projects/astro-tailwind/commands.md` after implementation.
+- Do not use the writing `npm run lint:fix` command during a read-only review.

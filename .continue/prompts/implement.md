@@ -15,3 +15,4 @@ Use `AI/system/agent-contract.md` and `AI/system/operating-model.md` for executi
 Use `AI/templates/frontend/component.md`, `AI/templates/frontend/page.md`, or `AI/templates/frontend/refactor.md` only when they fit the task.
 
 Keep `.continue/rules/` active as the project-level rule source. Do not change application code outside the requested scope.
+Read the applicable project context under `AI/projects/astro-tailwind/` and validate with the commands documented there.

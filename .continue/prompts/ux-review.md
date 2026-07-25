@@ -15,3 +15,4 @@ Use `AI/templates/reviews/ux-review.md`, `AI/templates/ux/critique.md`, `AI/temp
 Use `AI/knowledge/ux/` for UX-specific guidance, including `AI/knowledge/ux/09-practical-ui.md` when relevant.
 
 Keep `.continue/rules/` active as the project-level rule source. Separate observed evidence from assumptions.
+Consult `AI/projects/astro-tailwind/design-system.md` when recommendations affect tokens, responsive behavior, or shared components.

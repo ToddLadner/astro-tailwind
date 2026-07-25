@@ -24,6 +24,23 @@ check_file() {
   fi
 }
 
+check_frontmatter() {
+  if [ "$(sed -n '1p' "$1")" = "---" ]; then
+    echo "OK frontmatter: $1"
+  else
+    echo "INVALID frontmatter: $1" >&2
+    status=1
+  fi
+}
+
+check_shell() {
+  if bash -n "$1"; then
+    echo "OK shell: $1"
+  else
+    status=1
+  fi
+}
+
 for dir in \
   AI/agents \
   AI/system \
@@ -52,6 +69,14 @@ for file in \
   AI/rules/03-editing.md \
   AI/rules/04-review.md \
   AI/rules/05-documentation.md \
+  AI/projects/astro-tailwind/project.md \
+  AI/projects/astro-tailwind/stack.md \
+  AI/projects/astro-tailwind/architecture.md \
+  AI/projects/astro-tailwind/design-system.md \
+  AI/projects/astro-tailwind/commands.md \
+  AI/projects/astro-tailwind/known-issues.md \
+  AI/projects/astro-tailwind/decisions.md \
+  AGENTS.md \
   .continue/prompts/architecture.md \
   .continue/prompts/css-review.md \
   .continue/prompts/document.md \
@@ -63,6 +88,32 @@ for file in \
 do
   check_file "$file"
 done
+
+for file in .continue/prompts/*.md .continue/rules/*.md; do
+  [ -e "$file" ] || continue
+  check_frontmatter "$file"
+done
+
+for file in AI/tools/*.sh; do
+  [ -e "$file" ] || continue
+  check_shell "$file"
+done
+
+referenced_paths="$(
+  rg -o --no-filename 'AI/[A-Za-z0-9_./-]+\.md' AI .continue AGENTS.md README.md 2>/dev/null |
+    sort -u
+)"
+while IFS= read -r file; do
+  [ -n "$file" ] || continue
+  check_file "$file"
+done <<< "$referenced_paths"
+
+if rg -n '^- $' AI/memory AI/projects/astro-tailwind >/dev/null 2>&1; then
+  echo "PLACEHOLDER entries found in active memory or project context" >&2
+  status=1
+else
+  echo "OK active context: no empty list placeholders"
+fi
 
 if command -v ruby >/dev/null 2>&1 && [ -f "$HOME/.continue/config.yaml" ]; then
   ruby -e 'require "yaml"; YAML.load_file(ARGV.fetch(0))' "$HOME/.continue/config.yaml"

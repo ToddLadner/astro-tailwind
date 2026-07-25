@@ -8,7 +8,8 @@
 		"preview": "astro preview",
 		"astro": "astro",
 		"test": "node --test",
-		"lint": "biome check --write"
+		"lint": "biome check",
+		"lint:fix": "biome check --write"
 	},
 	"dependencies": {
 		"@astrojs/alpinejs": "^0.4.9",

@@ -12,6 +12,6 @@ Reference shared rules from `AI/rules/01-general.md`, `AI/rules/02-context.md`, 
 
 Use `AI/templates/documentation/adr.md`, `AI/templates/documentation/changelog.md`, `AI/templates/documentation/handoff.md`, or `AI/templates/documentation/readme.md` where useful.
 
-Use relevant `AI/projects/` files when documenting project-specific verified facts.
+Use relevant `AI/projects/astro-tailwind/` files when documenting project-specific verified facts.
 
 Keep `.continue/rules/` active as the project-level rule source. Do not document planned behavior as implemented.

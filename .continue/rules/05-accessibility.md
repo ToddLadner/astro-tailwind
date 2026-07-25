@@ -1,6 +1,6 @@
 ---
 name: Accessibility Standards
-globs: ["**/*.astro", "**/*.html", "**/*.vue", "**/*.tsx", "**/*.jsx"]
+globs: ["**/*.astro", "**/*.html", "**/*.ts", "**/*.js"]
 alwaysApply: false
 description: Accessibility requirements for user-facing interface work.
 ---
@@ -18,5 +18,6 @@ description: Accessibility requirements for user-facing interface work.
 - Provide useful alternative text for meaningful images and empty alt text for decorative images.
 - Do not rely on color alone to communicate status or meaning.
 - Respect reduced-motion preferences.
+- Check light and dark color schemes, text zoom, forced colors, long content, and narrow viewports when relevant.
 - For dynamic updates, use live regions only when necessary and avoid excessive announcements.
 - When reviewing accessibility, identify the exact element, issue, impact, and recommended fix.

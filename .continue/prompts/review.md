@@ -15,3 +15,4 @@ Use `AI/templates/reviews/code-review.md` as the review structure.
 Use relevant knowledge folders under `AI/knowledge/` only when they match the reviewed technology or domain.
 
 Keep `.continue/rules/` active as the project-level rule source. Lead with findings and cite exact files or lines when available.
+Use `AI/projects/astro-tailwind/known-issues.md` only as a starting point and verify each relevant issue against source.

@@ -34,6 +34,7 @@ Reusable local-agent workspace for coding, UX, review, and documentation tasks.
 - `memory/` stores durable cross-project preferences, patterns, mistakes, decisions, and prompts.
 - `projects/` stores verified project-specific context only.
 - Do not record guesses or planned behavior as if they are facts.
+- This repository's verified context begins in `projects/astro-tailwind/project.md`.
 
 ## Recommended workflow
 
@@ -43,3 +44,7 @@ Reusable local-agent workspace for coding, UX, review, and documentation tasks.
 4. Create a handoff before the conversation becomes large.
 
 Keep source-of-truth project files in the project repository. Keep reusable knowledge here.
+
+## Verification
+
+Run `bash AI/tools/verify.sh .` from the repository root to check the expected workspace structure, Continue frontmatter, shell syntax, internal Markdown references, and active context placeholders.

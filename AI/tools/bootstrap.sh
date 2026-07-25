@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "Bootstrap placeholder: future setup steps should be explicit and non-destructive."
+echo "Not implemented: bootstrap steps must be defined for a specific installation target." >&2
+exit 2

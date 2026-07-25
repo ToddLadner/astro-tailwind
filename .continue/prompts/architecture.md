@@ -15,3 +15,4 @@ Use `AI/system/operating-model.md`, `AI/system/orchestration.md`, and `AI/system
 Use `AI/templates/architecture/feature-design.md`, `AI/templates/architecture/system-design.md`, and `AI/templates/documentation/adr.md` where useful.
 
 Keep `.continue/rules/` active as the project-level rule source. Base recommendations on verified repository evidence.
+Read the applicable files under `AI/projects/astro-tailwind/` before proposing project architecture.
