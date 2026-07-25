@@ -5,14 +5,16 @@ import Field from "@components/Field.astro";
 import Switch from "@components/Switch.astro";
 import Layout from "@layouts/Layout.astro";
 
-const emailError = "Please enter a valid email address";
-
 const { title = "Inputs | Astro Tailwind", description = "Form input component examples", ...rest } = Astro.props;
 ---
 
 <style is:global>
 .columns-2 > * {
 	break-inside: avoid-column;
+}
+
+.validation-message .is-invalid-label {
+	color: inherit;
 }
 </style>
 
@@ -22,8 +24,8 @@ const { title = "Inputs | Astro Tailwind", description = "Form input component e
 		<article class="px-max py-2xl stack-md">
 			<h1>Inputs</h1>
 			<p class="text-md leading-lg">
-				Implicit labels—where the Input is integrated into the label rather than rendered as a separate [label] tag—open
-				up a world of stylistic flexibility while increasing UX.
+				Each example keeps its label, editable control, and supporting messages visually distinct while preserving a
+				compact component layout.
 			</p>
 		</article>
 
@@ -43,7 +45,8 @@ const { title = "Inputs | Astro Tailwind", description = "Form input component e
 					label="Password"
 					placeholder="••••••••••••••••••"
 					required
-					supportingText="Must be longer than 12 characters and contain at least one special symbol like @#$% etc."
+					supportingText="Use at least 12 characters, including a symbol."
+					warning="Avoid reusing a password from another account."
 				/>
 
 				<Field as="input" type="search" id="search" label="Search" placeholder="Search" required />
@@ -64,18 +67,32 @@ const { title = "Inputs | Astro Tailwind", description = "Form input component e
 
 				<Field as="input" type="color" id="color" label="Color" placeholder="color" required />
 
-				<Field as="textarea" id="message" label="Message" rows="2" supportingText="Enter your message here..." />
+				<Field
+					as="textarea"
+					id="message"
+					label="Message"
+					rows="2"
+					supportingText="Include the details needed to help us respond."
+				/>
 
 				<Field
 					as="select"
 					id="country"
 					label="Country"
-					supportingText="Select your country from the list"
 					options={[
-            { value: '',    label: '–' },
+            { value: '',    label: 'Select a country' },
             { value: '1',   label: 'Option 1' },
             { value: '2',   label: 'Option 2' },
           ]}
+				/>
+
+				<Field
+					as="input"
+					type="email"
+					id="email-error-example"
+					label="Email with error"
+					value="invalid-address"
+					error="Enter an email address in the format name@example.com."
 				/>
 
 				<Switch
@@ -113,17 +130,10 @@ const { title = "Inputs | Astro Tailwind", description = "Form input component e
 					label="Username"
 					placeholder="Firstname Lastname"
 					required
-					supportingText="At least 3 characters"
+					supportingText="Use at least 3 characters."
+					validationMessage
 				/>
-				<Field
-					as="input"
-					id="mail"
-					name="mail"
-					label="Email"
-					type="email"
-					placeholder="Your email"
-					supportingText="We'll never share your email"
-				/>
+				<Field as="input" id="mail" name="mail" label="Email" type="email" placeholder="Your email" validationMessage />
 				<Field
 					as="input"
 					id="pw"
@@ -132,7 +142,8 @@ const { title = "Inputs | Astro Tailwind", description = "Form input component e
 					type="password"
 					placeholder="Password"
 					required
-					supportingText="Must contain at least 12 characters including special symbols"
+					supportingText="Use at least 12 characters, including a symbol."
+					validationMessage
 				/>
 				<Button type="submit" theme="filled">Submit</Button>
 			</form>
@@ -149,11 +160,35 @@ const validation = new JustValidate("#signup-form", {
 });
 
 validation
-	.addField("#username", [
-		{ rule: "required", errorMessage: "Username is required" },
-		{ rule: "minLength", value: 3, errorMessage: "At least 3 characters" },
-	])
-	.addField("#mail", [{ rule: "email", errorMessage: "Enter a valid email" }])
+	.addField(
+		"#username",
+		[
+			{ rule: "required", errorMessage: "Username is required" },
+			{ rule: "minLength", value: 3, errorMessage: "At least 3 characters" },
+		],
+		{ errorsContainer: "#username-validation" },
+	)
+	.addField("#mail", [{ rule: "email", errorMessage: "Enter an email address in the format name@example.com" }], {
+		errorsContainer: "#mail-validation",
+	})
+	.addField(
+		"#pw",
+		[
+			{ rule: "required", errorMessage: "Password is required" },
+			{ rule: "minLength", value: 12, errorMessage: "Use at least 12 characters" },
+			{ rule: "customRegexp", value: /[^A-Za-z0-9]/, errorMessage: "Include at least one symbol" },
+		],
+		{ errorsContainer: "#pw-validation" },
+	)
+	.onValidate(({ fields }) => {
+		Object.values(fields).forEach(({ elem, isValid }) => {
+			if (isValid === false) {
+				elem.setAttribute("aria-invalid", "true");
+			} else if (isValid === true) {
+				elem.removeAttribute("aria-invalid");
+			}
+		});
+	})
 	.onSuccess((_event?: Event) => {
 		console.log("✅ validation passed");
 		// event.preventDefault() if you want to do an AJAX submit

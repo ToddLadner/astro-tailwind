@@ -12,6 +12,8 @@ type SharedProps = {
 	icon?: string;
 	error?: string;
 	supportingText?: string;
+	warning?: string;
+	validationMessage?: boolean;
 	classes?: string;
 	required?: boolean;
 };
@@ -36,6 +38,8 @@ const {
 	icon,
 	error,
 	supportingText,
+	warning,
+	validationMessage = false,
 	classes = "",
 	required,
 	options = [],
@@ -52,7 +56,13 @@ const id =
 
 // Determine aria attributes
 const describedBy =
-	[ariaDescribedByProp, error ? `${id}-error` : undefined, supportingText ? `${id}-supporting` : undefined]
+	[
+		ariaDescribedByProp,
+		supportingText ? `${id}-supporting` : undefined,
+		warning ? `${id}-warning` : undefined,
+		error ? `${id}-error` : undefined,
+		validationMessage ? `${id}-validation` : undefined,
+	]
 		.filter(Boolean)
 		.join(" ") || undefined;
 const ariaInvalid = ariaInvalidProp ?? (error ? "true" : undefined);
@@ -65,10 +75,14 @@ const isOptional = !isRequired;
 ---
 
 <style>
-/* [1] Field */
+/* [1] Field group */
+.field-group {
+	max-width: var(--measure-sm);
+}
+
+/* [2] Wrapped label and control */
 .field {
 	background-color: var(--color-surface-1);
-	max-width: var(--measure-sm);
 	padding: var(--spacing-2xs) var(--spacing-2xs);
 	border-radius: var(--radius-md);
 	border: 2px solid var(--color-surface-3);
@@ -81,13 +95,16 @@ const isOptional = !isRequired;
 		box-shadow: 0px 0px 10px 4px oklch(from var(--color-brand) l c h / 23%);
 	}
 
-	/* [2] Label */
 	.label {
 		font-size: var(--text-sm);
 	}
 
+	.label-icon {
+		display: inline-flex;
+	}
+
 	.optional {
-		color: var(--color-surface-4);
+		color: var(--color-weak);
 		font-weight: normal;
 	}
 
@@ -102,10 +119,8 @@ const isOptional = !isRequired;
 		}
 	}
 
-	/* Error state */
-	&[aria-invalid="true"] {
-		border-color: var(--color-red-5);
-		--error-color: var(--color-red-5);
+	&:has(.control:disabled) {
+		opacity: 0.65;
 	}
 }
 
@@ -114,82 +129,96 @@ const isOptional = !isRequired;
 }
 
 /* [4] Validation */
-.field:has(:is(input, textarea, select):user-valid) {
-	border-color: var(--color-green-5);
-}
-.field:has(:is(input, textarea, select):user-invalid),
-.field[aria-invalid="true"] {
-	border-color: var(--color-red-5);
+.field:has(.control:user-invalid),
+.field:has(.control[aria-invalid="true"]),
+.field:has(.control.is-invalid-field) {
+	border-color: var(--color-danger);
 }
 
-/* [5] Supporting text */
-.supporting-text {
-	color: var(--color-surface-4);
-	font-size: var(--font-size-xs);
-	margin-top: var(--spacing-2xs);
+/* [5] Messages */
+.field-message {
+	color: var(--color-weak);
+	font-size: var(--text-xs);
 }
 
-/* [6] Error message */
+.warning-message {
+	color: var(--color-warning);
+}
+
 .error-message {
-	color: var(--error-color, var(--color-red-5));
-	font-size: var(--font-size-xs);
-	margin-top: var(--spacing-2xs);
+	color: var(--color-danger);
+}
+
+.validation-message:empty {
+	display: none;
 }
 </style>
 
-<label for={id} class="field grid gap-2xs" class:list={[classes]}>
-	{label && (
-    <span class="label flex items-center gap-xs">
-      {icon && <Icon name={icon} />}
-      {label}
-			{isOptional && <span class="optional">(optional)</span>}
-    </span>
-  )}
+<div class="field-group grid gap-2xs">
+	<label for={id} class="field grid gap-2xs" class:list={[classes]}>
+		{label && (
+	    <span class="label flex items-center gap-xs">
+	      {icon && <span class="label-icon" aria-hidden="true"><Icon name={icon} /></span>}
+	      {label}
+				{isOptional && <span class="optional">(optional)</span>}
+	    </span>
+	  )}
 
-	{as === 'input' && (
-    <input
-      id={id}
-      class="control"
-      aria-describedby={describedBy}
-      aria-invalid={ariaInvalid}
-      {...(isRequired ? { required: true } : {})}
-      {...rest}
-    />
-  )}
+		{as === 'input' && (
+	    <input
+	      id={id}
+	      class="control"
+	      aria-describedby={describedBy}
+	      aria-invalid={ariaInvalid}
+	      {...(isRequired ? { required: true } : {})}
+	      {...rest}
+	    />
+	  )}
 
-	{as === 'textarea' && (
-    <textarea
-      id={id}
-      class="control resize-y"
-      aria-describedby={describedBy}
-      aria-invalid={ariaInvalid}
-      {...(isRequired ? { required: true } : {})}
-      {...rest}
-    />
-  )}
+		{as === 'textarea' && (
+	    <textarea
+	      id={id}
+	      class="control resize-y"
+	      aria-describedby={describedBy}
+	      aria-invalid={ariaInvalid}
+	      {...(isRequired ? { required: true } : {})}
+	      {...rest}
+	    />
+	  )}
 
-	{as === 'select' && (
-    <select
-      id={id}
-      class="control"
-      aria-describedby={describedBy}
-      aria-invalid={ariaInvalid}
-      {...(isRequired ? { required: true } : {})}
-      {...rest}
-    >
-      {options.map(o => <option value={o.value}>{o.label}</option>)}
-    </select>
-  )}
+		{as === 'select' && (
+	    <select
+	      id={id}
+	      class="control"
+	      aria-describedby={describedBy}
+	      aria-invalid={ariaInvalid}
+	      {...(isRequired ? { required: true } : {})}
+	      {...rest}
+	    >
+	      {options.map(o => <option value={o.value}>{o.label}</option>)}
+	    </select>
+	  )}
+	</label>
 
 	{supportingText && (
-    <span id={`${id}-supporting`} class="supporting-text">
+    <span id={`${id}-supporting`} class="field-message supporting-text">
       {supportingText}
     </span>
   )}
 
+	{warning && (
+    <span id={`${id}-warning`} class="field-message warning-message">
+      <strong>Warning:</strong> {warning}
+    </span>
+  )}
+
 	{error && (
-    <span id={`${id}-error`} class="error-message" role="alert">
+    <span id={`${id}-error`} class="field-message error-message">
       {error}
     </span>
   )}
-</label>
+
+	{validationMessage && (
+    <span id={`${id}-validation`} class="field-message error-message validation-message" aria-live="polite"></span>
+  )}
+</div>
