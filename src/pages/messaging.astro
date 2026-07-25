@@ -97,20 +97,27 @@ import Layout from "@layouts/LayoutClaude.astro";
 
 				<h2 class="msg-nav-group" id="nav-primary">Primary</h2>
 				<ul class="msg-nav-list" aria-labelledby="nav-primary">
-					<li><a href="/messaging" class="msg-nav-link" :aria-current="view === 'messaging' ? 'page' : undefined" @click.prevent="view = 'messaging'">
-						<span class="msg-nav-icon" aria-hidden="true">
-							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-								<path
-									d="M14 1H2C1.45 1 1 1.45 1 2v9c0 .55.45 1 1 1h2v3l3.6-3H14c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1z"
-									fill="currentColor"
-								/>
-								<circle cx="5" cy="6.5" r="1" fill="white" />
-								<circle cx="8" cy="6.5" r="1" fill="white" />
-								<circle cx="11" cy="6.5" r="1" fill="white" />
-							</svg>
-						</span>
-						Messaging
-					</a></li>
+					<li>
+						<a
+							href="/messaging"
+							class="msg-nav-link"
+							:aria-current="view === 'messaging' ? 'page' : undefined"
+							@click.prevent="view = 'messaging'"
+						>
+							<span class="msg-nav-icon" aria-hidden="true">
+								<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+									<path
+										d="M14 1H2C1.45 1 1 1.45 1 2v9c0 .55.45 1 1 1h2v3l3.6-3H14c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1z"
+										fill="currentColor"
+									/>
+									<circle cx="5" cy="6.5" r="1" fill="white" />
+									<circle cx="8" cy="6.5" r="1" fill="white" />
+									<circle cx="11" cy="6.5" r="1" fill="white" />
+								</svg>
+							</span>
+							Messaging
+						</a>
+					</li>
 					<li><a href="/calling" class="msg-nav-link">
 						<span class="msg-nav-icon" aria-hidden="true">
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -203,14 +210,21 @@ import Layout from "@layouts/LayoutClaude.astro";
 
 				<h2 class="msg-nav-group" id="nav-coaching">Coaching</h2>
 				<ul class="msg-nav-list" aria-labelledby="nav-coaching">
-					<li><a href="/ai-coach" class="msg-nav-link" :aria-current="view === 'coach' ? 'page' : undefined" @click.prevent="view = 'coach'; coachView = coachView || 'welcome'">
-						<span class="msg-nav-icon" aria-hidden="true">
-							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-								<path d="M8 1l1.5 4.5L14 7l-4.5 1.5L8 13l-1.5-4.5L2 7l4.5-1.5L8 1z" fill="currentColor" />
-							</svg>
-						</span>
-						AI Coach
-					</a></li>
+					<li>
+						<a
+							href="/ai-coach"
+							class="msg-nav-link"
+							:aria-current="view === 'coach' ? 'page' : undefined"
+							@click.prevent="view = 'coach'; coachView = coachView || 'welcome'"
+						>
+							<span class="msg-nav-icon" aria-hidden="true">
+								<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+									<path d="M8 1l1.5 4.5L14 7l-4.5 1.5L8 13l-1.5-4.5L2 7l4.5-1.5L8 1z" fill="currentColor" />
+								</svg>
+							</span>
+							AI Coach
+						</a>
+					</li>
 					<li><a href="/co-parents" class="msg-nav-link">
 						<span class="msg-nav-icon" aria-hidden="true">
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -241,7 +255,11 @@ import Layout from "@layouts/LayoutClaude.astro";
 		<!-- ── Main workspace: Messaging ──────────────────────── -->
 		<main x-show="view === 'messaging'" id="main-content" class="msg-workspace">
 			<!-- ── Thread list ──────────────────────────────── -->
-			<section class="msg-threads-panel" :class="{ 'msg-mobile-active': mobilePanel === 'threads' }" aria-labelledby="threads-heading">
+			<section
+				class="msg-threads-panel"
+				:class="{ 'msg-mobile-active': mobilePanel === 'threads' }"
+				aria-labelledby="threads-heading"
+			>
 				<div class="msg-threads-toolbar">
 					<h2 id="threads-heading" class="sr-only">Conversations</h2>
 					<a href="/messaging/new" class="msg-btn-new">
@@ -341,7 +359,12 @@ import Layout from "@layouts/LayoutClaude.astro";
 			<!-- ── Conversation ─────────────────────────────── -->
 			<section class="msg-conv" :class="{ 'msg-mobile-active': mobilePanel === 'conv' }" aria-labelledby="conv-heading">
 				<header class="msg-conv-header">
-					<button type="button" class="msg-conv-back" aria-label="Back to conversations" @click="mobilePanel = 'threads'">
+					<button
+						type="button"
+						class="msg-conv-back"
+						aria-label="Back to conversations"
+						@click="mobilePanel = 'threads'"
+					>
 						<svg aria-hidden="true" width="11" height="16" viewBox="0 0 11 16" fill="none">
 							<path
 								d="M9 1.5L2 8l7 6.5"
@@ -580,17 +603,16 @@ import Layout from "@layouts/LayoutClaude.astro";
 
 		<!-- ── Main workspace: AI Coach ──────────────────────── -->
 		<section x-show="view === 'coach'" class="msg-coach-workspace" x-cloak>
-
 			<!-- Welcome / Chat list view -->
 			<div x-show="coachView === 'welcome'" class="msg-coach-welcome">
 				<div class="msg-coach-welcome-inner">
 					<div class="msg-coach-hero">
 						<div class="msg-coach-icon">
 							<svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-								<circle cx="24" cy="24" r="24" fill="#e2f3f0"/>
-								<path d="M24 12l2.5 7.5L34 22l-7.5 2.5L24 32l-2.5-7.5L14 22l7.5-2.5L24 12z" fill="#11a78c"/>
-								<circle cx="17" cy="32" r="2" fill="#11a78c" opacity="0.5"/>
-								<circle cx="34" cy="15" r="1.5" fill="#11a78c" opacity="0.4"/>
+								<circle cx="24" cy="24" r="24" fill="#e2f3f0" />
+								<path d="M24 12l2.5 7.5L34 22l-7.5 2.5L24 32l-2.5-7.5L14 22l7.5-2.5L24 12z" fill="#11a78c" />
+								<circle cx="17" cy="32" r="2" fill="#11a78c" opacity="0.5" />
+								<circle cx="34" cy="15" r="1.5" fill="#11a78c" opacity="0.4" />
 							</svg>
 						</div>
 						<h2 class="msg-coach-title">Co-Parenting Coach</h2>
@@ -599,32 +621,77 @@ import Layout from "@layouts/LayoutClaude.astro";
 
 					<div class="msg-coach-features">
 						<div class="msg-coach-feature">
-							<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none"/><path d="M5 8l2 2 4-4" stroke="#11a78c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none" />
+								<path
+									d="M5 8l2 2 4-4"
+									stroke="#11a78c"
+									stroke-width="1.4"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
 							<span>Get help drafting difficult messages</span>
 						</div>
 						<div class="msg-coach-feature">
-							<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none"/><path d="M5 8l2 2 4-4" stroke="#11a78c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none" />
+								<path
+									d="M5 8l2 2 4-4"
+									stroke="#11a78c"
+									stroke-width="1.4"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
 							<span>Tone guidance for co-parenting conversations</span>
 						</div>
 						<div class="msg-coach-feature">
-							<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none"/><path d="M5 8l2 2 4-4" stroke="#11a78c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none" />
+								<path
+									d="M5 8l2 2 4-4"
+									stroke="#11a78c"
+									stroke-width="1.4"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
 							<span>Conflict resolution strategies and tips</span>
 						</div>
 						<div class="msg-coach-feature">
-							<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none"/><path d="M5 8l2 2 4-4" stroke="#11a78c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<circle cx="8" cy="8" r="7" stroke="#11a78c" stroke-width="1.4" fill="none" />
+								<path
+									d="M5 8l2 2 4-4"
+									stroke="#11a78c"
+									stroke-width="1.4"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
 							<span>Your conversations stay private within TalkingParents</span>
 						</div>
 					</div>
 
 					<button type="button" class="msg-coach-new-btn" @click="coachView = 'chat'; activeChat = 'new'">
 						<svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none">
-							<path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+							<path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
 						</svg>
 						Create new chat
 					</button>
 
 					<p class="msg-coach-privacy">
-						<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M5 7l1.5 1.5L9 5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+							<circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2" fill="none" />
+							<path
+								d="M5 7l1.5 1.5L9 5.5"
+								stroke="currentColor"
+								stroke-width="1.2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
 						Your data stays private within TalkingParents
 					</p>
 
@@ -642,7 +709,11 @@ import Layout from "@layouts/LayoutClaude.astro";
 								</button>
 							</li>
 							<li>
-								<button type="button" class="msg-coach-chat-item" @click="coachView = 'chat'; activeChat = 'boundaries'">
+								<button
+									type="button"
+									class="msg-coach-chat-item"
+									@click="coachView = 'chat'; activeChat = 'boundaries'"
+								>
 									<span class="msg-coach-chat-topic">Setting boundaries without conflict</span>
 									<span class="msg-coach-chat-date">
 										<time datetime="2026-03-05">5 Mar</time>
@@ -678,14 +749,20 @@ import Layout from "@layouts/LayoutClaude.astro";
 				<header class="msg-coach-chat-header">
 					<button type="button" class="msg-conv-back" aria-label="Back to coach home" @click="coachView = 'welcome'">
 						<svg aria-hidden="true" width="11" height="16" viewBox="0 0 11 16" fill="none">
-							<path d="M9 1.5L2 8l7 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							<path
+								d="M9 1.5L2 8l7 6.5"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
 						</svg>
 					</button>
 					<div class="msg-coach-chat-header-info">
 						<div class="msg-coach-avatar-sm">
 							<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-								<circle cx="18" cy="18" r="18" fill="#e2f3f0"/>
-								<path d="M18 9l2 6L26 17l-6 2-2 6-2-6-6-2 6-2 2-6z" fill="#11a78c"/>
+								<circle cx="18" cy="18" r="18" fill="#e2f3f0" />
+								<path d="M18 9l2 6L26 17l-6 2-2 6-2-6-6-2 6-2 2-6z" fill="#11a78c" />
 							</svg>
 						</div>
 						<div>
@@ -702,29 +779,31 @@ import Layout from "@layouts/LayoutClaude.astro";
 					<li class="msg-coach-msg msg-coach-msg--bot">
 						<div class="msg-coach-msg-avatar">
 							<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-								<circle cx="14" cy="14" r="14" fill="#e2f3f0"/>
-								<path d="M14 7l1.5 4.5L20 13l-4.5 1.5L14 19l-1.5-4.5L8 13l4.5-1.5L14 7z" fill="#11a78c"/>
+								<circle cx="14" cy="14" r="14" fill="#e2f3f0" />
+								<path d="M14 7l1.5 4.5L20 13l-4.5 1.5L14 19l-1.5-4.5L8 13l4.5-1.5L14 7z" fill="#11a78c" />
 							</svg>
 						</div>
 						<div class="msg-coach-msg-content">
 							<span class="msg-coach-msg-label">Coach</span>
 							<div class="msg-coach-msg-bubble">
-								Hi! I'm your co-parenting communication coach. Tell me what situation you're navigating, and I'll help you find the right words and approach.
+								Hi! I'm your co-parenting communication coach. Tell me what situation you're navigating, and I'll help
+								you find the right words and approach.
 							</div>
 						</div>
 					</li>
 
 					<li class="msg-coach-msg msg-coach-msg--user">
 						<div class="msg-coach-msg-bubble">
-							I need to ask my co-parent about changing the pickup time for next week but last time we discussed schedule changes it turned into an argument.
+							I need to ask my co-parent about changing the pickup time for next week but last time we discussed
+							schedule changes it turned into an argument.
 						</div>
 					</li>
 
 					<li class="msg-coach-msg msg-coach-msg--bot">
 						<div class="msg-coach-msg-avatar">
 							<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-								<circle cx="14" cy="14" r="14" fill="#e2f3f0"/>
-								<path d="M14 7l1.5 4.5L20 13l-4.5 1.5L14 19l-1.5-4.5L8 13l4.5-1.5L14 7z" fill="#11a78c"/>
+								<circle cx="14" cy="14" r="14" fill="#e2f3f0" />
+								<path d="M14 7l1.5 4.5L20 13l-4.5 1.5L14 19l-1.5-4.5L8 13l4.5-1.5L14 7z" fill="#11a78c" />
 							</svg>
 						</div>
 						<div class="msg-coach-msg-content">
@@ -732,9 +811,18 @@ import Layout from "@layouts/LayoutClaude.astro";
 							<div class="msg-coach-msg-bubble">
 								<p>That's a common challenge. Here are 3 strategies for requesting schedule changes constructively:</p>
 								<ol class="msg-coach-tips">
-									<li><strong>Lead with the child's needs</strong> — Frame the request around what benefits your child, not your own convenience.</li>
-									<li><strong>Offer flexibility</strong> — Suggest 2-3 alternative times so they feel included in the decision.</li>
-									<li><strong>Keep it brief and neutral</strong> — Avoid referencing past conflicts. Stick to the facts and the ask.</li>
+									<li>
+										<strong>Lead with the child's needs</strong> — Frame the request around what benefits your child,
+										not your own convenience.
+									</li>
+									<li>
+										<strong>Offer flexibility</strong> — Suggest 2-3 alternative times so they feel included in the
+										decision.
+									</li>
+									<li>
+										<strong>Keep it brief and neutral</strong> — Avoid referencing past conflicts. Stick to the facts
+										and the ask.
+									</li>
 								</ol>
 								<p>Would you like me to help you draft a message?</p>
 							</div>
@@ -742,16 +830,14 @@ import Layout from "@layouts/LayoutClaude.astro";
 					</li>
 
 					<li class="msg-coach-msg msg-coach-msg--user">
-						<div class="msg-coach-msg-bubble">
-							Yes please, I'd like help drafting it.
-						</div>
+						<div class="msg-coach-msg-bubble">Yes please, I'd like help drafting it.</div>
 					</li>
 
 					<li class="msg-coach-msg msg-coach-msg--bot">
 						<div class="msg-coach-msg-avatar">
 							<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-								<circle cx="14" cy="14" r="14" fill="#e2f3f0"/>
-								<path d="M14 7l1.5 4.5L20 13l-4.5 1.5L14 19l-1.5-4.5L8 13l4.5-1.5L14 7z" fill="#11a78c"/>
+								<circle cx="14" cy="14" r="14" fill="#e2f3f0" />
+								<path d="M14 7l1.5 4.5L20 13l-4.5 1.5L14 19l-1.5-4.5L8 13l4.5-1.5L14 7z" fill="#11a78c" />
 							</svg>
 						</div>
 						<div class="msg-coach-msg-content">
@@ -759,7 +845,9 @@ import Layout from "@layouts/LayoutClaude.astro";
 							<div class="msg-coach-msg-bubble">
 								<p>Here's a draft you can use:</p>
 								<blockquote class="msg-coach-draft">
-									"Hi, I wanted to check with you about next week's pickup. I have a work commitment that runs until 4:30 on Tuesday. Would it work to move pickup to 5:00, or would 5:30 be better for you? Happy to adjust on my end too if another time works. Thanks for being flexible."
+									"Hi, I wanted to check with you about next week's pickup. I have a work commitment that runs until
+									4:30 on Tuesday. Would it work to move pickup to 5:00, or would 5:30 be better for you? Happy to
+									adjust on my end too if another time works. Thanks for being flexible."
 								</blockquote>
 								<p>This keeps the tone collaborative and gives options. Want me to adjust anything?</p>
 							</div>
@@ -783,14 +871,12 @@ import Layout from "@layouts/LayoutClaude.astro";
 					<input type="text" class="msg-coach-input" placeholder="Write your request" aria-label="Message">
 					<button type="submit" class="msg-coach-send" aria-label="Send">
 						<svg aria-hidden="true" width="16" height="15" viewBox="0 0 16 15" fill="none">
-							<path d="M1 7.5L15 1 9 14 7 8.5 1 7.5z" fill="currentColor"/>
+							<path d="M1 7.5L15 1 9 14 7 8.5 1 7.5z" fill="currentColor" />
 						</svg>
 					</button>
 				</form>
 			</div>
-
 		</section>
-
 	</div>
 
 	<style is:global>
@@ -1493,7 +1579,10 @@ import Layout from "@layouts/LayoutClaude.astro";
 	}
 
 	/* ── Alpine cloak ────────────────────────────────────────── */
-	[x-cloak] { display: none !important; }
+	[x-cloak] {
+		/* biome-ignore lint/complexity/noImportantStyles: Alpine cloak must override authored display styles until initialization. */
+		display: none !important;
+	}
 
 	/* ── AI Coach workspace ──────────────────────────────────── */
 	.msg-coach-workspace {
@@ -1808,7 +1897,9 @@ import Layout from "@layouts/LayoutClaude.astro";
 		font-weight: 500;
 		color: var(--c-dark);
 		cursor: pointer;
-		transition: background 120ms, box-shadow 120ms;
+		transition:
+			background 120ms,
+			box-shadow 120ms;
 	}
 	.msg-coach-chip:hover {
 		background: #e8f5f2;

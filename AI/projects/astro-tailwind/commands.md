@@ -9,8 +9,9 @@ Run commands from the repository root.
 | `npm test` | Run Node tests | No |
 | `npm run lint` | Check formatting and lint rules with Biome | No |
 | `npm run lint:fix` | Apply safe Biome formatting and lint fixes | Yes |
-| `npm run build` | Create an Astro production build | Only generated output |
+| `npm run build` | Create a local-origin Astro production build | Only generated output |
+| `SITE_URL=https://example.com npm run build` | Build with a production canonical origin | Only generated output |
 
 Choose the narrowest command that validates the changed behavior. Browser interaction, responsive layout, and accessibility still require focused browser or manual verification.
 
-`npm run lint` and `npm run build` currently report baseline failures recorded in `known-issues.md`. Do not claim clean results until those are resolved.
+Set `SITE_URL` in deployment environments so sitemap and canonical metadata use the production origin.

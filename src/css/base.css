@@ -121,12 +121,10 @@ body {
 ::marker {
 	color: var(--color-brand-bright);
 }
-:is(
-		::-webkit-calendar-picker-indicator,
-		::-webkit-clear-button,
-		::-webkit-inner-spin-button,
-		::-webkit-outer-spin-button
-	) {
+::-webkit-calendar-picker-indicator,
+::-webkit-clear-button,
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
 	color: var(--color-brand-bright);
 }
 

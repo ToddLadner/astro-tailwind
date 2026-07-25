@@ -51,4 +51,10 @@ Repository-specific agent guidance starts in `AGENTS.md`. Reusable roles and tem
 
 ## Deployment
 
-`astro.config.mjs` currently contains a placeholder site URL. Replace it with the real production origin before relying on generated sitemap or canonical deployment metadata.
+Set `SITE_URL` to the production origin when building for deployment:
+
+```sh
+SITE_URL=https://example.com npm run build
+```
+
+Local builds default to `http://localhost:4321`.

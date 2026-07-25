@@ -29,4 +29,4 @@ Use `npm run lint:fix` only when formatting or lint fixes are part of the reques
 - Preserve semantic design tokens and check their consumers before changing primitives.
 - Prefer Astro and native browser behavior. Alpine is available, but its configured entrypoint is currently inactive.
 - Do not treat experimental pages or components as established public APIs without verifying their use.
-- The placeholder deployment URL in `astro.config.mjs` is not a verified production URL.
+- Production builds must receive the canonical origin through `SITE_URL`; local builds use `http://localhost:4321`.

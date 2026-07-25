@@ -1,24 +1,10 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import { pokemon } from "../../data/pokemon";
 import type { GetStaticPaths } from "astro";
 
-type Pokeymon = {
-	name: string;
-	url: string;
-};
-
-export type PokeymonRes = {
-	count: number;
-	next: string;
-	previous: string;
-	results: Pokeymon[];
-};
-
 export const getStaticPaths = (async () => {
-	const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
-	const data: PokeymonRes = await res.json();
-
-	return data.results.map((p) => ({
+	return pokemon.map((p) => ({
 		params: { slug: p.name },
 		props: {
 			...p,

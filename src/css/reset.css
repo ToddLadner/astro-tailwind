@@ -36,17 +36,28 @@
 /* [3] User preference color-scheme */
 
 /* color-scheme: light / dark*/
-[color-scheme="light"] { color-scheme: light }
-[color-scheme="dark"] { color-scheme: dark }
+[color-scheme="light"] {
+	color-scheme: light;
+}
+[color-scheme="dark"] {
+	color-scheme: dark;
+}
 
 /* [4] View Transition */
-@view-transition { navigation: auto }
+@view-transition {
+	navigation: auto;
+}
 
 /* [5] Box sizing */
-*,*::before,*::after { box-sizing: border-box }
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
 
 /* [6] Isolation */
-body, #app {
+body,
+#app {
 	isolation: isolate;
 }
 
@@ -54,12 +65,12 @@ body, #app {
 html {
 	height: 100%;
 	scrollbar-gutter: stable;
-	
+
 	/* ↓ Prevent font size inflation */
 	-moz-text-size-adjust: none;
 	-webkit-text-size-adjust: none;
 	text-size-adjust: none;
-	
+
 	/* ↓ Smooth scroll */
 	@media (prefers-reduced-motion: no-preference) {
 		scroll-behavior: smooth;
@@ -73,7 +84,15 @@ body {
 }
 
 /* [9] Remove default margin in favour of better control in authored CSS */
-h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
 	margin-block: 0;
 }
 
