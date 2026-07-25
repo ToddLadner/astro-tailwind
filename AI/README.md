@@ -18,7 +18,7 @@ Reusable local-agent workspace for coding, UX, review, and documentation tasks.
 - `/discover` — run or revisit Discovery.
 - `/plan` — run the Planner phase.
 - `/ux-review` — run the UX Critic phase.
-- `/architect` — run the Architecture phase.
+- `/architecture` — run the Architecture phase.
 - `/implement` — create an Engineer plan, wait for approval, then implement.
 - `/review` — use the reviewer agent and code review template.
 - `/qa` — run the QA phase.
@@ -51,7 +51,7 @@ The shortest daily path is:
 
 ```text
 /new-feature <request>
-Approved → /plan → Approved → /ux-review → Approved → /architect
+Approved → /plan → Approved → /ux-review → Approved → /architecture
 Approved → /implement → Approved → /implement
 Approved → /review → Approved → /qa → Approved → /handoff
 ```

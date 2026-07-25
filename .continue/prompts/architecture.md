@@ -1,5 +1,5 @@
 ---
-name: architect
+name: architecture
 description: Run the approval-gated Architecture phase.
 invokable: true
 ---

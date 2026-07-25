@@ -86,7 +86,7 @@ for file in \
   AI/templates/bug-investigation.md \
   AI/templates/architecture-proposal.md \
   AI/templates/ux-research.md \
-  .continue/prompts/architect.md \
+  .continue/prompts/architecture.md \
   .continue/prompts/css-review.md \
   .continue/prompts/discover.md \
   .continue/prompts/document.md \
