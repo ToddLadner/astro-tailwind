@@ -11,6 +11,7 @@ type SharedProps = {
 	label?: string;
 	icon?: string;
 	error?: string;
+	supportingText?: string;
 	classes?: string;
 	required?: boolean;
 };
@@ -34,6 +35,7 @@ const {
 	label,
 	icon,
 	error,
+	supportingText,
 	classes = "",
 	required,
 	options = [],
@@ -49,7 +51,10 @@ const id =
 	`field-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, "0"), "")}`;
 
 // Determine aria attributes
-const describedBy = ariaDescribedByProp ?? (error ? `${id}-error` : undefined);
+const describedBy =
+	[ariaDescribedByProp, error ? `${id}-error` : undefined, supportingText ? `${id}-supporting` : undefined]
+		.filter(Boolean)
+		.join(" ") || undefined;
 const ariaInvalid = ariaInvalidProp ?? (error ? "true" : undefined);
 
 // Normalize required behavior:
@@ -117,7 +122,14 @@ const isOptional = !isRequired;
 	border-color: var(--color-red-5);
 }
 
-/* [5] Error message */
+/* [5] Supporting text */
+.supporting-text {
+	color: var(--color-surface-4);
+	font-size: var(--font-size-xs);
+	margin-top: var(--spacing-2xs);
+}
+
+/* [6] Error message */
 .error-message {
 	color: var(--error-color, var(--color-red-5));
 	font-size: var(--font-size-xs);
@@ -143,7 +155,6 @@ const isOptional = !isRequired;
       {...(isRequired ? { required: true } : {})}
       {...rest}
     />
-		<p class="text-xs text-secondary mt-3xs">Must be longer than 12 characters and contain at least one special symbol like @#$% etc.</p>
   )}
 
 	{as === 'textarea' && (
@@ -155,7 +166,6 @@ const isOptional = !isRequired;
       {...(isRequired ? { required: true } : {})}
       {...rest}
     />
-		<p class="text-xs text-secondary mt-3xs">Must be longer than 12 characters and contain at least one special symbol like @#$% etc.</p>
   )}
 
 	{as === 'select' && (
@@ -169,7 +179,12 @@ const isOptional = !isRequired;
     >
       {options.map(o => <option value={o.value}>{o.label}</option>)}
     </select>
-		<p class="text-xs text-secondary mt-3xs">Must be longer than 12 characters and contain at least one special symbol like @#$% etc.</p>
+  )}
+
+	{supportingText && (
+    <span id={`${id}-supporting`} class="supporting-text">
+      {supportingText}
+    </span>
   )}
 
 	{error && (

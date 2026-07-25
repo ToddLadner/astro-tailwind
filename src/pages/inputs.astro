@@ -36,11 +36,19 @@ const { title = "Inputs | Astro Tailwind", description = "Form input component e
 
 				<Field as="input" type="email" id="email" label="Email" placeholder="you@example.com" required />
 
-				<Field as="input" type="password" id="password" label="Password" placeholder="••••••••••••••••••" required />
+				<Field
+					as="input"
+					type="password"
+					id="password"
+					label="Password"
+					placeholder="••••••••••••••••••"
+					required
+					supportingText="Must be longer than 12 characters and contain at least one special symbol like @#$% etc."
+				/>
 
 				<Field as="input" type="search" id="search" label="Search" placeholder="Search" required />
 
-				<Field as="input" type="tel" id="phone" label="phone" placeholder="Phone" required />
+				<Field as="input" type="tel" id="phone" label="Phone" placeholder="Phone" required />
 
 				<Field as="input" type="url" id="url" label="URL" placeholder="url" required />
 
@@ -56,12 +64,13 @@ const { title = "Inputs | Astro Tailwind", description = "Form input component e
 
 				<Field as="input" type="color" id="color" label="Color" placeholder="color" required />
 
-				<Field as="textarea" id="message" label="Message" rows="2" />
+				<Field as="textarea" id="message" label="Message" rows="2" supportingText="Enter your message here..." />
 
 				<Field
 					as="select"
 					id="country"
 					label="Country"
+					supportingText="Select your country from the list"
 					options={[
             { value: '',    label: '–' },
             { value: '1',   label: 'Option 1' },
@@ -87,7 +96,7 @@ const { title = "Inputs | Astro Tailwind", description = "Form input component e
 				<Checkable
 					type="checkbox"
 					label="I agree to the terms and conditions"
-					supportingText="Supporting text"
+					supportingText="Supporting text for checkbox"
 					required
 				/>
 
@@ -97,9 +106,34 @@ const { title = "Inputs | Astro Tailwind", description = "Form input component e
 			<hr>
 
 			<form id="signup-form" class="stack" novalidate>
-				<Field as="input" id="username" name="username" label="Username" placeholder="Firstname Lastname" required />
-				<Field as="input" id="mail" name="mail" label="Email" type="email" placeholder="Your email" />
-				<Field as="input" id="pw" name="password" label="Password" type="password" placeholder="Password" required />
+				<Field
+					as="input"
+					id="username"
+					name="username"
+					label="Username"
+					placeholder="Firstname Lastname"
+					required
+					supportingText="At least 3 characters"
+				/>
+				<Field
+					as="input"
+					id="mail"
+					name="mail"
+					label="Email"
+					type="email"
+					placeholder="Your email"
+					supportingText="We'll never share your email"
+				/>
+				<Field
+					as="input"
+					id="pw"
+					name="password"
+					label="Password"
+					type="password"
+					placeholder="Password"
+					required
+					supportingText="Must contain at least 12 characters including special symbols"
+				/>
 				<Button type="submit" theme="filled">Submit</Button>
 			</form>
 		</article>
