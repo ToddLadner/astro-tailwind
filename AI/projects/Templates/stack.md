@@ -1,9 +1,18 @@
 # Templates Stack
 
-This file records verified technology choices for the Templates project.
+## Runtime And Formats
 
-## Runtime
+Record verified runtimes, document formats, schemas, and compatibility targets.
 
-## Libraries
+## Libraries And Services
 
-## Tooling
+List tools that materially shape generation, rendering, or validation.
+
+## Tooling And Version Policy
+
+Record package management, validation tools, and how upgrades are determined.
+
+## Last Verified
+
+- Date:
+- Source:

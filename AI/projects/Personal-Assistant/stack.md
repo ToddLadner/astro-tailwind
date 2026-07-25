@@ -1,9 +1,18 @@
 # Personal Assistant Stack
 
-This file records verified technology choices for the Personal Assistant project.
+## Runtime And Frameworks
 
-## Runtime
+Record verified runtimes, environments, frameworks, and versions.
 
-## Libraries
+## Libraries, Storage, And Services
 
-## Tooling
+List architecture-shaping libraries and verified databases, APIs, models, queues, or services.
+
+## Tooling And Version Policy
+
+Record package management, validation tools, and how upgrades are determined.
+
+## Last Verified
+
+- Date:
+- Source:

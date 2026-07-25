@@ -1,9 +1,20 @@
 # Marketing Known Issues
 
-This file records verified known issues for the Marketing project.
+Record only reproduced or source-verified issues.
 
-## Issues
+## Active Issues
 
-## Workarounds
+For each issue, record:
 
-## Follow-Up
+- Summary
+- Evidence and reproduction
+- User or system impact
+- Affected scope
+- Workaround
+- Owner and status
+- Follow-up
+- Last verified date
+
+## Resolved Issues
+
+Move resolved entries here or link to the resolving change. Do not leave fixed issues listed as active.

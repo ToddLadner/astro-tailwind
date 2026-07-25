@@ -1,9 +1,22 @@
 # Personal Assistant Architecture
 
-This file records verified architecture notes for the Personal Assistant project.
+## System Context And Structure
 
-## Structure
+Describe the verified role, external boundaries, modules, services, and responsibilities.
 
-## Integrations
+## Data Flow
 
-## Open Questions
+Describe verified inputs, transformations, storage, outputs, and sensitive-data boundaries.
+
+## Integrations And Deployment
+
+Record external systems, ownership, failure behavior, environments, and release flow.
+
+## Risks And Open Questions
+
+Record known architectural risks and unresolved questions.
+
+## Last Verified
+
+- Date:
+- Source:

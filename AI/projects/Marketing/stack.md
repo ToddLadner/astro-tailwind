@@ -1,9 +1,26 @@
 # Marketing Stack
 
-This file records verified technology choices for the Marketing project.
+## Runtime And Frameworks
 
-## Runtime
+Record verified runtimes, execution environments, frameworks, and versions.
 
 ## Libraries
 
+List only libraries that materially shape architecture or implementation.
+
+## Storage And Services
+
+Record verified databases, APIs, queues, and external services.
+
 ## Tooling
+
+Record package management, linting, formatting, testing, and build tools.
+
+## Version Policy
+
+Explain how supported versions and upgrades are determined.
+
+## Last Verified
+
+- Date:
+- Source:

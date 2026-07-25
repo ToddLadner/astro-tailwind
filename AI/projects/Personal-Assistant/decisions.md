@@ -1,9 +1,13 @@
 # Personal Assistant Decisions
 
-This file records durable decisions for the Personal Assistant project.
-
 ## Active Decisions
+
+For each decision, record its date, context, decision, rationale, consequences, source or owner, and review trigger.
 
 ## Superseded Decisions
 
-## Review Notes
+Preserve the superseded date, replacement decision, and reason for replacement.
+
+## Open Decisions
+
+Record unresolved choices without presenting them as established behavior.

@@ -1,9 +1,11 @@
 # Templates Known Issues
 
-This file records verified known issues for the Templates project.
+Record only reproduced or source-verified issues.
 
-## Issues
+## Active Issues
 
-## Workarounds
+For each issue, record summary, evidence, reproduction, impact, affected formats, workaround, owner, status, follow-up, and last verified date.
 
-## Follow-Up
+## Resolved Issues
+
+Move resolved entries here or link to the resolving change.
