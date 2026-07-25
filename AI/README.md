@@ -14,14 +14,18 @@ Reusable local-agent workspace for coding, UX, review, and documentation tasks.
 
 ## Continue Commands
 
-- `/plan` — use the planner agent and planning templates before implementation.
-- `/implement` — use the coder agent for one approved coding step.
+- `/new-feature` — begin the approval-gated workflow at Discovery.
+- `/discover` — run or revisit Discovery.
+- `/plan` — run the Planner phase.
+- `/ux-review` — run the UX Critic phase.
+- `/architect` — run the Architecture phase.
+- `/implement` — create an Engineer plan, wait for approval, then implement.
 - `/review` — use the reviewer agent and code review template.
-- `/ux-review` — use the UX critic agent and UX templates.
+- `/qa` — run the QA phase.
+- `/handoff` — produce the final documentation and handoff.
+- `/status` — summarize the compact phase ledger.
 - `/css-review` — use the CSS specialist agent and CSS review template.
-- `/architecture` — use the architect agent and architecture templates.
 - `/document` — use the documentation agent and documentation templates.
-- `/handoff` — summarize verified context with the handoff template.
 
 ## Rules
 
@@ -38,10 +42,10 @@ Reusable local-agent workspace for coding, UX, review, and documentation tasks.
 
 ## Recommended workflow
 
-1. Start with `/plan` or `agents/planner.md`.
-2. Implement one bounded step with `/implement` or the relevant agent.
-3. Run the matching reviewer.
-4. Create a handoff before the conversation becomes large.
+1. Start with `/new-feature`.
+2. Approve Discovery, Planning, UX, Architecture, and the Engineer plan separately.
+3. Implement, review, and QA the approved scope.
+4. Finish with `/handoff`.
 
 Keep source-of-truth project files in the project repository. Keep reusable knowledge here.
 

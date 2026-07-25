@@ -15,3 +15,5 @@ Use `AI/system/context-strategy.md`, `AI/system/memory.md`, and `AI/system/orche
 Use relevant `AI/agents/` and `AI/projects/astro-tailwind/` files only when they match the current work.
 
 Keep `.continue/rules/` active as the project-level rule source. Include only verified facts, changed files, validation, risks, and next steps.
+
+Use `AI/agents/documentation.md` for the final handoff fields. Mark the workflow complete only after Reviewer and QA status are recorded.

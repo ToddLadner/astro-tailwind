@@ -61,7 +61,9 @@ for file in \
   AI/agents/coder.md \
   AI/agents/css-specialist.md \
   AI/agents/documentation.md \
+  AI/agents/orchestrator.md \
   AI/agents/planner.md \
+  AI/agents/qa.md \
   AI/agents/reviewer.md \
   AI/agents/ux-critic.md \
   AI/rules/01-general.md \
@@ -77,13 +79,23 @@ for file in \
   AI/projects/astro-tailwind/known-issues.md \
   AI/projects/astro-tailwind/decisions.md \
   AGENTS.md \
-  .continue/prompts/architecture.md \
+  AI/templates/feature-request.md \
+  AI/templates/start-feature.md \
+  AI/templates/design-review.md \
+  AI/templates/bug-investigation.md \
+  AI/templates/architecture-proposal.md \
+  AI/templates/ux-research.md \
+  .continue/prompts/architect.md \
   .continue/prompts/css-review.md \
+  .continue/prompts/discover.md \
   .continue/prompts/document.md \
   .continue/prompts/handoff.md \
   .continue/prompts/implement.md \
+  .continue/prompts/new-feature.md \
   .continue/prompts/plan.md \
+  .continue/prompts/qa.md \
   .continue/prompts/review.md \
+  .continue/prompts/status.md \
   .continue/prompts/ux-review.md
 do
   check_file "$file"

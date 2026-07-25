@@ -1,12 +1,12 @@
 ---
-name: architecture
-description: Analyze or propose architecture using the architect agent.
+name: architect
+description: Run the approval-gated Architecture phase.
 invokable: true
 ---
 
 Before answering, read the applicable files below if they are available in the workspace.
 
-Use `AI/agents/architect.md` as the role contract.
+Use `AI/agents/orchestrator.md` for phase state and `AI/agents/architect.md` as the active role contract.
 
 Reference shared rules from `AI/rules/01-general.md`, `AI/rules/02-context.md`, and `AI/rules/05-documentation.md`.
 
@@ -16,3 +16,5 @@ Use `AI/templates/architecture/feature-design.md`, `AI/templates/architecture/sy
 
 Keep `.continue/rules/` active as the project-level rule source. Base recommendations on verified repository evidence.
 Read the applicable files under `AI/projects/astro-tailwind/` before proposing project architecture.
+
+Do not write production code. Stop with Status `awaiting approval`.
