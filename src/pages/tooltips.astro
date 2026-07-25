@@ -10,7 +10,11 @@ import altUserAvatar from "@images/elp.jpg";
 import userAvatar from "@images/killer-mike.jpg";
 import Layout from "@layouts/Layout.astro";
 
-const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
+const {
+	title = "Tooltips | Astro Tailwind",
+	description = "Accessible tooltip and toggletip examples",
+	...rest
+} = Astro.props;
 ---
 
 <Layout {title} {description}>
@@ -42,16 +46,7 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 
 			<Tooltip id="help-name-tip" for="help-name" mode="auto">This name is shown to the other parent.</Tooltip>
 			<!-- Button & Tooltip -->
-			<Button
-				id="new-dropdown"
-				popovertarget="new-menu"
-				aria-controls="new-menu"
-				aria-haspopup="menu"
-				aria-expanded="false"
-				aria-label="Help menu"
-			>
-				?
-			</Button>
+			<Button id="new-dropdown" aria-label="More information">?</Button>
 			<Tooltip id="tooltip-info" for="new-dropdown">This is an informative tooltip.</Tooltip>
 
 			<!-- /Button & Tooltip -->

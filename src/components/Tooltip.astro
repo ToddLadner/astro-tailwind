@@ -127,6 +127,8 @@ const triggerAnchor = `--tt-${tipId}-trigger`;
 	popover="hint"
 	role="tooltip"
 	data-tooltip-for={triggerId}
+	data-mode={mode}
+	data-hover={hover ? "true" : "false"}
 	class:list={[classes]}
 	tabindex="-1"
 	{...rest}
@@ -142,6 +144,9 @@ const tips = root.querySelectorAll('dialog[popover][role="tooltip"][data-tooltip
 const isCoarse = () => matchMedia("(pointer: coarse)").matches || matchMedia("(hover: none)").matches;
 
 tips.forEach((tip) => {
+	if (tip.dataset.tooltipReady === "true") return;
+	tip.dataset.tooltipReady = "true";
+
 	const triggerId = tip.getAttribute("data-tooltip-for");
 	if (!triggerId) return;
 
@@ -210,6 +215,7 @@ tips.forEach((tip) => {
 		resizeObserver.disconnect();
 		window.removeEventListener("resize", syncPositionVars);
 	};
+	document.addEventListener("astro:before-swap", cleanup, { once: true });
 
 	const MODE = tip.getAttribute("data-mode") ?? "auto";
 	const HOVER = tip.getAttribute("data-hover") ?? "true";

@@ -3,7 +3,11 @@ import Layout from "../layouts/Layout.astro";
 
 const colors = Array.from({ length: 17 }, (_, i) => i);
 const grays = Array.from({ length: 16 }, (_, i) => i);
-const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
+const {
+	title = "Colors | Astro Tailwind",
+	description = "Design-system color tokens and swatches",
+	...rest
+} = Astro.props;
 ---
 
 <style>

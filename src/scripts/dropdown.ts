@@ -81,7 +81,9 @@ export const initDropdown = (root: Element | null) => {
 
 	/* ---------- focus management after open ---------- */
 	menu.addEventListener("toggle", () => {
-		if (menu.matches(":popover-open")) {
+		const isOpen = menu.matches(":popover-open");
+		trigger.setAttribute("aria-expanded", String(isOpen));
+		if (isOpen) {
 			requestAnimationFrame(() => (menu.dataset.focusIntent === "last" ? focusLast() : focusFirst()));
 			delete menu.dataset.focusIntent;
 		}

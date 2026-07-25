@@ -9,7 +9,11 @@ import altUserAvatar from "@images/elp.jpg";
 import userAvatar from "@images/killer-mike.jpg";
 import Layout from "@layouts/Layout.astro";
 
-const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
+const {
+	title = "Popovers | Astro Tailwind",
+	description = "Popover, menu, and anchor-positioning examples",
+	...rest
+} = Astro.props;
 ---
 
 <style>
@@ -146,88 +150,73 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 				allow for both modal and non-modal use.
 			</p>
 
-			<Button id="click-btn" popovertarget="click-menu">Click me</Button>
-			<Dropdown id="click-menu" labelledBy="click-btn">
-				<ul role="list" class="my-[0]" style="tabindex: 0;">
-					<li>
-						<Button role="menuitem">Profile</Button>
-					</li>
-					<li>
-						<Button role="menuitem">Settings</Button>
-					</li>
-					<li>
-						<Button role="menuitem">Log out</Button>
-					</li>
-					<hr>
-					<li>
-						<Button role="menuitem">Log out</Button>
-					</li>
-				</ul>
+			<Dropdown id="click-menu" buttonProps={{ text: "Click me" }}>
+				<li role="none">
+					<Button role="menuitem">Profile</Button>
+				</li>
+				<li role="none">
+					<Button role="menuitem">Settings</Button>
+				</li>
+				<li role="none">
+					<Button role="menuitem">Log out</Button>
+				</li>
+				<li role="separator"></li>
+				<li role="none">
+					<Button role="menuitem">Delete account</Button>
+				</li>
 			</Dropdown>
 
 			<div class="py-md bg-surface-3 flex justify-center">
-				<Button
+				<Dropdown
 					id="my-dropdown"
-					popovertarget="my-menu"
-					aria-controls="my-menu"
-					aria-haspopup="menu"
-					aria-expanded="false"
-					aria-label="Help menu"
-					variant="icon-button"
-					shape="circle"
+					buttonProps={{
+						"aria-label": "Open user menu",
+						variant: "icon-button",
+						shape: "circle",
+					}}
 				>
-					<Avatar src={userAvatar} label="User Avatar" size="md" badge="success" />
-				</Button>
-				<Dropdown id="my-menu" labelledBy="my-dropdown">
-					<ul role="list" class="my-[0]">
-						<li>
-							<Button role="menuitem">Profile</Button>
-						</li>
-						<li>
-							<Button role="menuitem">Settings</Button>
-						</li>
-						<li>
-							<Button role="menuitem">Log out</Button>
-						</li>
-						<hr>
-						<li>
-							<Button role="menuitem">Log out</Button>
-						</li>
-					</ul>
+					<Avatar src={userAvatar} label="User Avatar" size="md" badge="success" slot="trigger" />
+					<li role="none">
+						<Button role="menuitem">Profile</Button>
+					</li>
+					<li role="none">
+						<Button role="menuitem">Settings</Button>
+					</li>
+					<li role="none">
+						<Button role="menuitem">Log out</Button>
+					</li>
+					<li role="separator"></li>
+					<li role="none">
+						<Button role="menuitem">Delete account</Button>
+					</li>
 				</Dropdown>
 			</div>
 		</article>
 
 		<article class="px-max py-lg stack-md">
 			<!-- Button & Tooltip -->
-			<Button
+			<Dropdown
 				id="new-dropdown"
-				popovertarget="new-menu"
-				aria-controls="new-menu"
-				aria-haspopup="menu"
-				aria-expanded="false"
-				aria-label="Help menu"
+				buttonProps={{
+					"aria-label": "Open help menu",
+					text: "?",
+				}}
 			>
-				?
-			</Button>
-			<Tooltip id="tooltip-info" for="new-dropdown">This is an informative tooltip.</Tooltip>
-			<Dropdown id="new-menu" labelledBy="new-dropdown">
-				<ul role="list" class="my-[0]">
-					<li>
-						<Button role="menuitem">Profile</Button>
-					</li>
-					<li>
-						<Button role="menuitem">Settings</Button>
-					</li>
-					<li>
-						<Button role="menuitem">Log out</Button>
-					</li>
-					<hr>
-					<li>
-						<Button role="menuitem">Log out</Button>
-					</li>
-				</ul>
+				<li role="none">
+					<Button role="menuitem">Profile</Button>
+				</li>
+				<li role="none">
+					<Button role="menuitem">Settings</Button>
+				</li>
+				<li role="none">
+					<Button role="menuitem">Log out</Button>
+				</li>
+				<li role="separator"></li>
+				<li role="none">
+					<Button role="menuitem">Delete account</Button>
+				</li>
 			</Dropdown>
+			<Tooltip id="tooltip-info" for="new-dropdown">This is an informative tooltip.</Tooltip>
 			<!-- /Button & Tooltip -->
 		</article>
 

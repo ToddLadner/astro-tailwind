@@ -2,12 +2,16 @@
 import Button from "@components/Button.astro";
 import Layout from "../layouts/Layout.astro";
 
-const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
+const {
+	title = "Buttons | Astro Tailwind",
+	description = "Button component variants and states",
+	...rest
+} = Astro.props;
 ---
 
 <style>
 [data-icon="skull"] {
-	mask: url(./favicon.svg) center / contain no-repeat;
+	mask: url(/favicon.svg) center / contain no-repeat;
 }
 [data-icon] {
 	background: conic-gradient(
@@ -25,8 +29,8 @@ const { title = "My Astro Blog", description = "My musings about the Astro frame
 }
 
 [data-icon="skull-mask"] {
-	mask: url(./favicon.svg) center / contain no-repeat;
-	-webkit-mask: url(./favicon.svg) center / contain no-repeat;
+	mask: url(/favicon.svg) center / contain no-repeat;
+	-webkit-mask: url(/favicon.svg) center / contain no-repeat;
 }
 </style>
 

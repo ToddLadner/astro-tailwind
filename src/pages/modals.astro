@@ -7,7 +7,11 @@ import dialogRoles from "@images/dialog-roles.webp";
 import popoverRoles from "@images/popover-roles.webp";
 import Layout from "@layouts/Layout.astro";
 
-const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
+const {
+	title = "Dialogs | Astro Tailwind",
+	description = "Modal and non-modal dialog examples",
+	...rest
+} = Astro.props;
 ---
 
 <Layout {title} {description}>

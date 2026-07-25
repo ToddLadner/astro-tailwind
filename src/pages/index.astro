@@ -1,7 +1,11 @@
 ---
 import Layout from "@layouts/Layout.astro";
 
-const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
+const {
+	title = "Components | Astro Tailwind",
+	description = "Astro component and design-system playground",
+	...rest
+} = Astro.props;
 ---
 
 <Layout {title} {description}>

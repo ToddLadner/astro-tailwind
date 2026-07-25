@@ -1,5 +1,6 @@
 ---
 // src/components/DarkModeToggle.astro
+const maskId = `moon-mask-${crypto.randomUUID()}`;
 ---
 
 <style>
@@ -121,13 +122,13 @@
 }
 </style>
 
-<button id="theme-toggle" aria-label="Toggle theme" class="theme-toggle">
+<button type="button" aria-label="Toggle theme" class="theme-toggle" data-theme-toggle>
 	<svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
-		<mask class="moon" id="moon-mask">
+		<mask class="moon" id={maskId}>
 			<rect x="0" y="0" width="100%" height="100%" fill="white" />
 			<circle cx="24" cy="10" r="6" fill="black" />
 		</mask>
-		<circle class="sun" cx="12" cy="12" r="6" mask="url(#moon-mask)" fill="currentColor" />
+		<circle class="sun" cx="12" cy="12" r="6" mask={`url(#${maskId})`} fill="currentColor" />
 		<g class="sun-beams" stroke="currentColor">
 			<line x1="12" y1="1" x2="12" y2="3" />
 			<line x1="12" y1="21" x2="12" y2="23" />
@@ -143,7 +144,11 @@
 
 <script is:inline>
 const root = document.documentElement;
-const btn = document.getElementById("theme-toggle");
+const btn = document.currentScript?.previousElementSibling;
+
+if (!(btn instanceof HTMLButtonElement) || !btn.matches("[data-theme-toggle]")) {
+	throw new Error("Theme toggle button not found");
+}
 
 // Apply the right class to the button and the html attr
 function setTheme(isDark) {

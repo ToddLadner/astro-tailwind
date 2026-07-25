@@ -16,7 +16,7 @@ const {
 } = Astro.props;
 ---
 
-<div class={`tabs ${classes}`} {...rest}>
+<div class={`tabs ${classes}`} data-tabs data-button-classes={buttonClasses} data-vertical-at={verticalAt} {...rest}>
 	<!-- If you hand-author buttons here, Tabs will use them. Otherwise it will generate from panels. -->
 	<div role="tablist" aria-label={label} aria-orientation="horizontal" class="tabs__list flex gap-2 flex-wrap">
 		<slot name="tabs" />
@@ -28,7 +28,12 @@ const {
 	<script is:inline>
 	(() => {
 		const root = document.currentScript.closest(".tabs");
+		if (!root || root.dataset.tabsReady === "true") return;
+		root.dataset.tabsReady = "true";
 		const tablist = root.querySelector('[role="tablist"]');
+		if (!tablist) return;
+		const buttonClasses = root.dataset.buttonClasses || "";
+		const verticalAt = root.dataset.verticalAt || "(max-width: 640px)";
 		let tabs = [...tablist.querySelectorAll('[role="tab"]')];
 		const panels = [...root.querySelectorAll(":scope > section[id][data-label]")];
 
@@ -68,7 +73,7 @@ const {
 		// Helpers
 		const dir = getComputedStyle(document.documentElement).direction || "ltr";
 		const rtl = dir === "rtl";
-		const panelsById = panels.reduce<Record<string, number>>((map, panel, index) => {
+		const panelsById = panels.reduce((map, panel, index) => {
 			map[panel.id] = index;
 			return map;
 		}, {});
@@ -156,10 +161,19 @@ const {
 		mql.addEventListener?.("change", applyOrientation);
 
 		// Hash navigation after load
-		window.addEventListener("hashchange", () => {
+		const handleHashChange = () => {
 			const id = location.hash.slice(1);
 			if (id in panelsById) setSelected(panelsById[id], { focus: false, updateHash: false });
-		});
+		};
+		window.addEventListener("hashchange", handleHashChange);
+		document.addEventListener(
+			"astro:before-swap",
+			() => {
+				mql.removeEventListener?.("change", applyOrientation);
+				window.removeEventListener("hashchange", handleHashChange);
+			},
+			{ once: true },
+		);
 	})();
 	</script>
 

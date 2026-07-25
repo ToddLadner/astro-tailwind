@@ -7,7 +7,11 @@ import userAvatar from "@images/killer-mike.jpg";
 
 import Layout from "@layouts/Layout.astro";
 
-const { title = "My Astro Blog", description = "My musings about the Astro framework", ...rest } = Astro.props;
+const {
+	title = "Dropdowns | Astro Tailwind",
+	description = "Dropdown menu and positioning examples",
+	...rest
+} = Astro.props;
 ---
 
 <Layout {title} {description}>
