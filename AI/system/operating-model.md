@@ -17,4 +17,4 @@ Use a plan → implement → verify → handoff loop.
 - Target input context per step: 8K–12K tokens.
 - Avoid broad repository dumps.
 - Start a fresh conversation after a major milestone or when context becomes noisy.
-- Use `templates/handoff.md` to carry forward only verified facts.
+- Use `AI/templates/documentation/handoff.md` to carry forward only verified facts.

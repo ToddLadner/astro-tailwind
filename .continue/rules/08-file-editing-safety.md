@@ -1,3 +1,9 @@
+---
+name: File Editing Safety
+alwaysApply: true
+description: Safety rules for targeted file edits and post-edit verification.
+---
+
 # File editing safety
 
 - Prefer targeted search-and-replace operations over full-file rewrites.

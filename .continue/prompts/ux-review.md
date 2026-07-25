@@ -4,6 +4,8 @@ description: Review a flow, page, or component using the UX critic agent.
 invokable: true
 ---
 
+Before answering, read the applicable files below if they are available in the workspace.
+
 Use `AI/agents/ux-critic.md` as the role contract.
 
 Reference shared rules from `AI/rules/01-general.md`, `AI/rules/02-context.md`, and `AI/rules/04-review.md`.

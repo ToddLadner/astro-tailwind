@@ -4,6 +4,8 @@ description: Produce a concise task handoff from verified facts.
 invokable: true
 ---
 
+Before answering, read the applicable files below if they are available in the workspace.
+
 Use `AI/templates/documentation/handoff.md` as the output structure.
 
 Reference shared rules from `AI/rules/02-context.md` and `AI/rules/05-documentation.md`.

@@ -4,6 +4,8 @@ description: Implement one approved coding step using the coder agent.
 invokable: true
 ---
 
+Before answering, read the applicable files below if they are available in the workspace.
+
 Use `AI/agents/coder.md` as the role contract.
 
 Reference shared rules from `AI/rules/01-general.md`, `AI/rules/02-context.md`, and `AI/rules/03-editing.md`.
