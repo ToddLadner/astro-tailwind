@@ -93,6 +93,7 @@ for file in \
   .continue/prompts/handoff.md \
   .continue/prompts/implement.md \
   .continue/prompts/new-feature.md \
+  .continue/prompts/next.md \
   .continue/prompts/plan.md \
   .continue/prompts/qa.md \
   .continue/prompts/review.md \

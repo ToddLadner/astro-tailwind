@@ -15,6 +15,7 @@ Reusable local-agent workspace for coding, UX, review, and documentation tasks.
 ## Continue Commands
 
 - `/new-feature` — begin the approval-gated workflow at Discovery.
+- `/next` — run one next phase after the current gate is explicitly approved.
 - `/discover` — run or revisit Discovery.
 - `/plan` — run the Planner phase.
 - `/ux-review` — run the UX Critic phase.
@@ -51,12 +52,15 @@ The shortest daily path is:
 
 ```text
 /new-feature <request>
-Approved → /plan → Approved → /ux-review → Approved → /architecture
-Approved → /implement → Approved → /implement
-Approved → /review → Approved → /qa → Approved → /handoff
+Approved → /next
+Approved → /next
+Approved → /next
+...
 ```
 
 Each command loads only the orchestrator, one active role, applicable rules, and relevant project files. This keeps prompts practical for local-model context limits.
+
+`/next` never counts as approval and runs only one phase. Use the named phase commands to revisit or invoke a specific role directly.
 
 Keep source-of-truth project files in the project repository. Keep reusable knowledge here.
 
