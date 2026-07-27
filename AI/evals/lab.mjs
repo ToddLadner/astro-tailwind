@@ -61,8 +61,12 @@ function parseCase(content, filename) {
 			.map((match) => [match[1], match[2]]),
 	);
 	const section = (heading) => {
-		const match = content.match(new RegExp(`^## ${heading}\\n\\n([\\s\\S]*?)(?=\\n## |$)`, "m"));
-		return match?.[1].trim() ?? "";
+		const marker = `## ${heading}\n\n`;
+		const start = content.indexOf(marker);
+		if (start < 0) return "";
+		const remainder = content.slice(start + marker.length);
+		const nextHeading = remainder.indexOf("\n## ");
+		return (nextHeading < 0 ? remainder : remainder.slice(0, nextHeading)).trim();
 	};
 	const assertions = (heading, kind) =>
 		section(heading)
@@ -601,7 +605,9 @@ async function main() {
 		console.log(
 			`Ready to ${options.calibrate ? "calibrate the judge" : `evaluate ${testCases.length} case(s)`} in ${privacyMode} mode (agent: ${options.provider}, judge: ${judgeProvider}).`,
 		);
-		if (!options.calibrate) console.log(testCases.map((item) => item.id).join(", "));
+		if (!options.calibrate) {
+			console.log(testCases.map((item) => `${item.id} (${item.assertions.length})`).join(", "));
+		}
 		return;
 	}
 
