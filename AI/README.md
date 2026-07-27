@@ -11,6 +11,7 @@ Reusable local-agent workspace for coding, UX, review, and documentation tasks.
 - `rules/` — enforceable behavior and implementation constraints.
 - `templates/` — repeatable task, plan, review, and handoff formats.
 - `tools/` — setup scripts and integrations.
+- `evals/` — behavioral cases and reviewed result records for detecting instruction regressions.
 
 ## Continue Commands
 
@@ -66,4 +67,9 @@ Keep source-of-truth project files in the project repository. Keep reusable know
 
 ## Verification
 
-Run `bash AI/tools/verify.sh .` from the repository root to check the expected workspace structure, Continue frontmatter, shell syntax, internal Markdown references, and active context placeholders.
+Run `npm run verify:ai` from the repository root to check the expected workspace structure, complete Continue
+frontmatter, shell syntax, internal Markdown links, project context, baseline claims, and behavioral evaluation
+schemas.
+
+Run `npm run eval:ai` when editing roles, rules, prompts, or evaluation cases. Model responses are reviewed and
+recorded separately; CI intentionally performs only deterministic checks.

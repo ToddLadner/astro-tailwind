@@ -18,7 +18,9 @@ Use the narrowest applicable command:
 - `npm run lint` for a non-writing Biome check.
 - `npm run build` for an Astro production build.
 
-The repository currently has documented baseline lint and build failures. Report them accurately and distinguish them from regressions introduced by the current change.
+The test, lint, and build baselines were all passing when last verified on 2026-07-27. Check
+`AI/projects/astro-tailwind/known-issues.md` before treating a failure as pre-existing, and report every new
+failure accurately.
 
 Use `npm run lint:fix` only when formatting or lint fixes are part of the requested edit.
 

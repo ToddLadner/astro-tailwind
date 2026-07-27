@@ -9,7 +9,9 @@
 		"astro": "astro",
 		"test": "node --test",
 		"lint": "biome check",
-		"lint:fix": "biome check --write"
+		"lint:fix": "biome check --write",
+		"verify:ai": "bash AI/tools/verify.sh .",
+		"eval:ai": "bash AI/evals/run.sh check"
 	},
 	"dependencies": {
 		"@astrojs/alpinejs": "^0.4.9",

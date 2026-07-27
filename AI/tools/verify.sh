@@ -49,6 +49,9 @@ for dir in \
   AI/projects \
   AI/rules \
   AI/templates \
+  AI/evals \
+  AI/evals/cases \
+  AI/evals/results \
   AI/tools \
   .continue/rules \
   .continue/prompts
@@ -85,6 +88,10 @@ for file in \
   AI/templates/design-review.md \
   AI/templates/bug-investigation.md \
   AI/templates/architecture-proposal.md \
+  AI/evals/README.md \
+  AI/evals/run.sh \
+  AI/evals/results/README.md \
+  AI/tools/verify-content.mjs \
   AI/templates/ux-research.md \
   .continue/prompts/architecture.md \
   .continue/prompts/css-review.md \
@@ -112,6 +119,20 @@ for file in AI/tools/*.sh; do
   [ -e "$file" ] || continue
   check_shell "$file"
 done
+
+check_shell AI/evals/run.sh
+
+if node AI/tools/verify-content.mjs; then
+  echo "OK content: links, frontmatter, baseline, and evaluation schemas"
+else
+  status=1
+fi
+
+if bash AI/evals/run.sh check; then
+  echo "OK evals: deterministic behavioral case checks"
+else
+  status=1
+fi
 
 referenced_paths="$(
   rg -o --no-filename 'AI/[A-Za-z0-9_./-]+\.md' AI .continue AGENTS.md README.md 2>/dev/null |
