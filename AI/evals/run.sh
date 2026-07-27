@@ -14,30 +14,30 @@ check_cases() {
     [ -e "$file" ] || continue
     count=$((count + 1))
 
-    if ! sed -n '2,/^---$/p' "$file" | rg -q '^id: [a-z0-9-]+$'; then
+    if ! sed -n '2,/^---$/p' "$file" | grep -Eq '^id: [a-z0-9-]+$'; then
       echo "INVALID eval: missing or invalid id in $file" >&2
       status=1
     fi
-    if ! sed -n '2,/^---$/p' "$file" | rg -q '^role: .+$'; then
+    if ! sed -n '2,/^---$/p' "$file" | grep -Eq '^role: .+$'; then
       echo "INVALID eval: missing role in $file" >&2
       status=1
     fi
-    if ! sed -n '2,/^---$/p' "$file" | rg -q '^severity: (critical|standard)$'; then
+    if ! sed -n '2,/^---$/p' "$file" | grep -Eq '^severity: (critical|standard)$'; then
       echo "INVALID eval: missing or invalid severity in $file" >&2
       status=1
     fi
-    if sed -n '2,/^---$/p' "$file" | rg -q '^mode: implementation$' &&
-      ! sed -n '2,/^---$/p' "$file" | rg -q '^validation_command: .+$'; then
+    if sed -n '2,/^---$/p' "$file" | grep -Eq '^mode: implementation$' &&
+      ! sed -n '2,/^---$/p' "$file" | grep -Eq '^validation_command: .+$'; then
       echo "INVALID eval: implementation case requires validation_command in $file" >&2
       status=1
     fi
     for heading in "## Scenario" "## Required behavior" "## Prohibited behavior" "## Evidence"; do
-      if ! rg -q "^${heading}$" "$file"; then
+      if ! grep -Eq "^${heading}$" "$file"; then
         echo "INVALID eval: missing '$heading' in $file" >&2
         status=1
       fi
     done
-    if ! rg -q '^- \[[ x]\] .+' "$file"; then
+    if ! grep -Eq '^- \[[ x]\] .+' "$file"; then
       echo "INVALID eval: no observable checklist assertions in $file" >&2
       status=1
     fi
