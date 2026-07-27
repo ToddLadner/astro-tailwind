@@ -11,7 +11,10 @@
 		"lint": "biome check",
 		"lint:fix": "biome check --write",
 		"verify:ai": "bash AI/tools/verify.sh .",
-		"eval:ai": "bash AI/evals/run.sh check"
+		"eval:ai": "node AI/evals/lab.mjs",
+		"ai:calibrate": "node AI/evals/lab.mjs --calibrate",
+		"ai:doctor": "node AI/tools/doctor.mjs",
+		"ai:dashboard": "node AI/evals/dashboard.mjs"
 	},
 	"dependencies": {
 		"@astrojs/alpinejs": "^0.4.9",

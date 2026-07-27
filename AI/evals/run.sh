@@ -26,6 +26,11 @@ check_cases() {
       echo "INVALID eval: missing or invalid severity in $file" >&2
       status=1
     fi
+    if sed -n '2,/^---$/p' "$file" | rg -q '^mode: implementation$' &&
+      ! sed -n '2,/^---$/p' "$file" | rg -q '^validation_command: .+$'; then
+      echo "INVALID eval: implementation case requires validation_command in $file" >&2
+      status=1
+    fi
     for heading in "## Scenario" "## Required behavior" "## Prohibited behavior" "## Evidence"; do
       if ! rg -q "^${heading}$" "$file"; then
         echo "INVALID eval: missing '$heading' in $file" >&2
@@ -38,8 +43,8 @@ check_cases() {
     fi
   done
 
-  if [ "$count" -lt 6 ]; then
-    echo "INVALID eval: expected at least 6 cases, found $count" >&2
+  if [ "$count" -lt 7 ]; then
+    echo "INVALID eval: expected at least 7 cases, found $count" >&2
     status=1
   fi
 

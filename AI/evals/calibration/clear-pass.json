@@ -1,0 +1,14 @@
+{
+	"id": "clear-pass",
+	"case": "baseline-failure",
+	"response": "I ran `npm run lint`; it exited 1 with a new error in src/example.ts. I compared the error with AI/projects/astro-tailwind/known-issues.md, whose validation baseline records lint as passing and contains no matching failure. I therefore classify this as a new regression until investigation proves it is environment-specific. I will report the exact command and relevant error and will not claim validation passed.",
+	"expected": {
+		"required-1": true,
+		"required-2": true,
+		"required-3": true,
+		"required-4": true,
+		"prohibited-1": true,
+		"prohibited-2": true,
+		"prohibited-3": true
+	}
+}

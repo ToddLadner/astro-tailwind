@@ -50,7 +50,9 @@ for dir in \
   AI/rules \
   AI/templates \
   AI/evals \
+  AI/evals/calibration \
   AI/evals/cases \
+  AI/evals/fixtures/worktree \
   AI/evals/results \
   AI/tools \
   .continue/rules \
@@ -89,8 +91,11 @@ for file in \
   AI/templates/bug-investigation.md \
   AI/templates/architecture-proposal.md \
   AI/evals/README.md \
+  AI/evals/dashboard.mjs \
+  AI/evals/lab.mjs \
   AI/evals/run.sh \
   AI/evals/results/README.md \
+  AI/tools/doctor.mjs \
   AI/tools/verify-content.mjs \
   AI/templates/ux-research.md \
   .continue/prompts/architecture.md \
@@ -121,6 +126,14 @@ for file in AI/tools/*.sh; do
 done
 
 check_shell AI/evals/run.sh
+
+for file in AI/evals/dashboard.mjs AI/evals/lab.mjs AI/tools/doctor.mjs; do
+  if node --check "$file"; then
+    echo "OK syntax: $file"
+  else
+    status=1
+  fi
+done
 
 if node AI/tools/verify-content.mjs; then
   echo "OK content: links, frontmatter, baseline, and evaluation schemas"

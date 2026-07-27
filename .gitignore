@@ -20,5 +20,10 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# local AI evaluation runs
+AI/evals/results/runs/
+AI/evals/results/calibration-latest.json
+AI/evals/results/dashboard.html
+
 # jetbrains setting folder
 .idea/

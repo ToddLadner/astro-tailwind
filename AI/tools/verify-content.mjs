@@ -82,6 +82,17 @@ for (const file of walk(join(root, ".continue/rules")).filter((path) => extname(
 	}
 }
 
+for (const file of walk(join(root, "AI/evals/calibration")).filter((path) => extname(path) === ".json")) {
+	try {
+		const golden = JSON.parse(readFileSync(file, "utf8"));
+		if (!golden.id || !golden.case || !golden.response || !golden.expected) {
+			report(`${file.slice(root.length + 1)} is missing calibration fields`);
+		}
+	} catch (error) {
+		report(`${file.slice(root.length + 1)} contains invalid JSON: ${error.message}`);
+	}
+}
+
 for (const script of walk(join(root, "AI/tools")).filter((path) => extname(path) === ".sh")) {
 	const content = readFileSync(script, "utf8");
 	if (content.includes("Not implemented:")) {
