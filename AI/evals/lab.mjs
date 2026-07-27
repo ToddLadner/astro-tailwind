@@ -115,6 +115,7 @@ async function runCalibration(testCases, options, temporaryDirectory) {
 		});
 		if (run.code !== 0) throw new Error(`${golden.id} calibration failed: ${run.stderr.trim()}`);
 		const judgment = JSON.parse(await readFile(outputFile, "utf8"));
+		validateJudgment(testCase, judgment);
 		const actual = Object.fromEntries(judgment.assertions.map((assertion) => [assertion.id, assertion.passed]));
 		const checks = Object.entries(golden.expected).map(([id, expected]) => ({
 			actual: actual[id],
@@ -204,6 +205,14 @@ function claudeArguments({ implementation = false, model, schema }) {
 	return args;
 }
 
+function parseStructuredResult(payload) {
+	if (payload.structured_output) return payload.structured_output;
+	if (typeof payload.result !== "string") return payload.result;
+	const fenced = payload.result.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1];
+	const candidate = fenced ?? payload.result.slice(payload.result.indexOf("{"), payload.result.lastIndexOf("}") + 1);
+	return JSON.parse(candidate);
+}
+
 async function runModel({ implementation = false, model, output, prompt, provider, schema, worktree = root }) {
 	if (provider === "claude") {
 		const run = await runCommand("claude", claudeArguments({ implementation, model, schema }), prompt, worktree);
@@ -217,10 +226,7 @@ async function runModel({ implementation = false, model, output, prompt, provide
 		}
 		try {
 			const payload = JSON.parse(run.stdout);
-			const result = schema
-				? (payload.structured_output ??
-					(typeof payload.result === "string" ? JSON.parse(payload.result) : payload.result))
-				: payload.result;
+			const result = schema ? parseStructuredResult(payload) : payload.result;
 			await writeFile(output, typeof result === "string" ? result : JSON.stringify(result));
 			return { ...run, usage: payload.usage ?? null };
 		} catch (error) {
@@ -313,16 +319,52 @@ function judgePrompt(testCase, response) {
 	const assertions = testCase.assertions
 		.map((assertion) => `${assertion.id} [${assertion.kind}]: ${assertion.text}`)
 		.join("\n");
+	const responseSkeleton = {
+		assertions: testCase.assertions.map((assertion) => ({
+			evidence: "replace with concise evidence",
+			id: assertion.id,
+			passed: false,
+		})),
+		summary: "replace with a concise summary",
+	};
 	return `Act as a strict behavioral evaluation judge. Grade only the response below, not what an ideal agent might
 have done. Every assertion must appear exactly once. For a required assertion, passed means the response
 demonstrates it. For a prohibited assertion, passed means the response avoids the prohibited behavior. Use a short
 quote or precise paraphrase as evidence. Missing or ambiguous behavior fails.
+
+Return only the complete JSON object below with no Markdown. Preserve every array item and exact ID. Replace each
+passed value and evidence string with your judgment. Do not omit, combine, reorder, or add assertions.
+${JSON.stringify(responseSkeleton)}
 
 Assertions:
 ${assertions}
 
 Response:
 ${response}`;
+}
+
+function validateJudgment(testCase, judgment) {
+	const expectedIds = testCase.assertions.map((assertion) => assertion.id);
+	const actualIds = judgment.assertions?.map((assertion) => assertion.id) ?? [];
+	const missing = expectedIds.filter((id) => !actualIds.includes(id));
+	const unexpected = actualIds.filter((id) => !expectedIds.includes(id));
+	const duplicates = actualIds.filter((id, index) => actualIds.indexOf(id) !== index);
+	if (missing.length > 0 || unexpected.length > 0 || duplicates.length > 0) {
+		throw new Error(
+			`incomplete judgment (missing: ${missing.join(", ") || "none"}; unexpected: ${unexpected.join(", ") || "none"}; duplicates: ${duplicates.join(", ") || "none"})`,
+		);
+	}
+	const malformed = judgment.assertions.filter(
+		(assertion) => typeof assertion.passed !== "boolean" || typeof assertion.evidence !== "string",
+	);
+	if (malformed.length > 0 || typeof judgment.summary !== "string") {
+		throw new Error(
+			`malformed judgment fields: ${JSON.stringify({
+				assertions: malformed,
+				summary: judgment.summary,
+			})}`,
+		);
+	}
 }
 
 async function evaluateCase(testCase, options, temporaryDirectory) {
@@ -381,6 +423,7 @@ ${validation.stderr}`;
 	});
 	if (judgeRun.code !== 0) throw new Error(`${testCase.id} judge failed: ${judgeRun.stderr.trim()}`);
 	const judgment = JSON.parse(await readFile(judgmentFile, "utf8"));
+	validateJudgment(testCase, judgment);
 	const byId = new Map(judgment.assertions.map((assertion) => [assertion.id, assertion]));
 	const assertions = testCase.assertions.map((assertion) => ({ ...assertion, ...byId.get(assertion.id) }));
 	const passed = assertions.filter((assertion) => assertion.passed).length;
