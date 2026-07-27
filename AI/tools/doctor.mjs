@@ -134,21 +134,28 @@ async function main() {
 		});
 	}
 	if (providers.includes("codex")) {
-		if (options.connectivity) {
-			const login = await command("codex", ["login", "status"]);
-			checks.push({
-				detail: login.code === 0 ? login.stdout.trim() : (login.error ?? login.stderr.trim()),
-				name: "Codex authentication",
-				passed: login.code === 0,
-			});
-		}
-	}
-	if (providers.includes("claude") && options.connectivity) {
-		const auth = await command("claude", ["auth", "status"]);
+		const login = await command("codex", ["login", "status"]);
 		checks.push({
-			detail: auth.code === 0 ? auth.stdout.trim() : (auth.error ?? auth.stderr.trim()),
+			detail: login.code === 0 ? login.stdout.trim() : (login.error ?? login.stderr.trim()),
+			name: "Codex authentication",
+			passed: login.code === 0,
+		});
+	}
+	if (providers.includes("claude")) {
+		const auth = await command("claude", ["auth", "status"]);
+		let detail = auth.stdout.trim() || auth.stderr.trim();
+		try {
+			const payload = JSON.parse(auth.stdout);
+			detail = payload.loggedIn
+				? `${payload.authMethod} via ${payload.apiProvider}`
+				: "not logged in; run claude auth login";
+		} catch {
+			// Preserve the CLI diagnostic when it is not JSON.
+		}
+		checks.push({
+			detail: auth.error ?? detail,
 			name: "Claude authentication",
-			passed: auth.code === 0,
+			passed: auth.code === 0 && !detail.startsWith("not logged in"),
 		});
 	}
 	for (const provider of providers.filter((provider) => provider !== "codex" && provider !== "claude")) {

@@ -207,7 +207,14 @@ function claudeArguments({ implementation = false, model, schema }) {
 async function runModel({ implementation = false, model, output, prompt, provider, schema, worktree = root }) {
 	if (provider === "claude") {
 		const run = await runCommand("claude", claudeArguments({ implementation, model, schema }), prompt, worktree);
-		if (run.code !== 0) return run;
+		if (run.code !== 0) {
+			try {
+				const payload = JSON.parse(run.stdout);
+				return { ...run, stderr: payload.result || run.stderr || "Claude Code failed without a diagnostic." };
+			} catch {
+				return { ...run, stderr: run.stderr || run.stdout || "Claude Code failed without a diagnostic." };
+			}
+		}
 		try {
 			const payload = JSON.parse(run.stdout);
 			const result = schema
