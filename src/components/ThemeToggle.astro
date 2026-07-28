@@ -1,169 +1,156 @@
----
-// src/components/DarkModeToggle.astro
-const maskId = `moon-mask-${crypto.randomUUID()}`;
----
-
 <style>
-.theme-toggle {
-	--size: var(--spacing-xl);
-	--icon-fill: var(--color-strong);
-	--icon-fill-hover: var(--color-weak);
+.theme-picker {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	min-inline-size: 0;
+}
 
-	background: none;
-	padding: 0.75rem;
+.theme-picker__options {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 2px;
+	padding: 3px;
+	border: 1px solid var(--color-surface-4);
+	border-radius: var(--radius-md);
+	background: var(--color-surface-2);
+	box-shadow: var(--shadow-xs);
+}
 
-	display: inline-flex;
-	inline-size: var(--size);
-	block-size: var(--size);
-	aspect-ratio: var(--aspect-square);
-	border-radius: var(--radius-ellipse);
-	border: 1px solid var(--icon-fill);
-
+.theme-picker__option {
+	position: relative;
+	display: grid;
+	place-items: center;
+	min-inline-size: 2.75rem;
+	min-block-size: 2.75rem;
+	padding: var(--spacing-2xs);
+	border-radius: calc(var(--radius-md) - 3px);
+	color: var(--color-weak);
 	cursor: pointer;
-	touch-action: manipulation;
 	-webkit-tap-highlight-color: transparent;
 
-	outline-offset: 5px;
-
-	& > svg {
-		inline-size: 100%;
-		block-size: 100%;
-		stroke-linecap: round;
+	&:hover {
+		color: var(--color-strong);
+		background: var(--color-surface-3);
 	}
 
-	[color-scheme="dark"] & {
-		--icon-fill: var(--color-strong);
-		--icon-fill-hover: var(--color-weak);
+	&:has(input:checked) {
+		color: var(--color-strong);
+		background: var(--color-surface-1);
+		box-shadow: var(--shadow-sm);
 	}
 
-	@media (hover: none) {
-		--size: 48px;
+	&:has(input:focus-visible) {
+		outline: 2px solid var(--color-brand);
+		outline-offset: 2px;
 	}
 }
 
-.sun-and-moon {
-	& > :is(.moon, .sun, .sun-beams) {
-		transform-origin: center center;
-	}
+.theme-picker__option input {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	opacity: 0;
+	pointer-events: none;
+}
 
-	& > :is(.moon, .sun) {
-		fill: var(--icon-fill);
+.theme-picker__option svg {
+	inline-size: 1.25rem;
+	block-size: 1.25rem;
+	fill: none;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+}
 
-		.theme-toggle:is(:hover, :focus-visible) > & {
-			fill: var(--icon-fill-hover);
-		}
-	}
+.sr-only {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
 
-	& > .sun-beams {
-		stroke: var(--icon-fill);
-		stroke-width: 2px;
-
-		.theme-toggle:is(:hover, :focus-visible) & {
-			stroke: var(--icon-fill-hover);
-		}
-	}
-
-	[color-scheme="dark"] & {
-		& > .sun {
-			transform: scale(1.75);
-		}
-
-		& > .sun-beams {
-			opacity: 0;
-		}
-
-		& > .moon > circle {
-			transform: translateX(-7px);
-
-			@supports (cx: 1px) {
-				transform: translateX(0);
-				cx: 17px;
-			}
-		}
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		& > .sun {
-			transition: transform 0.5s var(--ease-elastic-3);
-		}
-
-		& > .sun-beams {
-			transition:
-				transform 0.5s var(--ease-elastic-4),
-				opacity 0.5s var(--ease-3);
-		}
-
-		& .moon > circle {
-			transition: transform 0.25s var(--ease-out-5);
-
-			@supports (cx: 1px) {
-				transition: cx 0.25s var(--ease-out-5);
-			}
-		}
-
-		[color-scheme="dark"] & {
-			& > .sun {
-				transform: scale(1.75);
-				transition-timing-function: var(--ease-3);
-				transition-duration: 0.25s;
-			}
-
-			& > .sun-beams {
-				transform: rotateZ(-25deg);
-				transition-duration: 0.15s;
-			}
-
-			& > .moon > circle {
-				transition-delay: 0.25s;
-				transition-duration: 0.5s;
-			}
-		}
+@media (prefers-reduced-motion: no-preference) {
+	.theme-picker__option {
+		transition:
+			color 150ms ease,
+			background-color 150ms ease,
+			box-shadow 150ms ease;
 	}
 }
 </style>
 
-<button type="button" aria-label="Toggle theme" class="theme-toggle" data-theme-toggle>
-	<svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
-		<mask class="moon" id={maskId}>
-			<rect x="0" y="0" width="100%" height="100%" fill="white" />
-			<circle cx="24" cy="10" r="6" fill="black" />
-		</mask>
-		<circle class="sun" cx="12" cy="12" r="6" mask={`url(#${maskId})`} fill="currentColor" />
-		<g class="sun-beams" stroke="currentColor">
-			<line x1="12" y1="1" x2="12" y2="3" />
-			<line x1="12" y1="21" x2="12" y2="23" />
-			<line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-			<line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-			<line x1="1" y1="12" x2="3" y2="12" />
-			<line x1="21" y1="12" x2="23" y2="12" />
-			<line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-			<line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-		</g>
-	</svg>
-</button>
+<fieldset class="theme-picker" data-theme-picker>
+	<legend class="sr-only">Color theme</legend>
+	<div class="theme-picker__options">
+		<label class="theme-picker__option" title="Light theme">
+			<input type="radio" name="theme" value="light">
+			<span class="sr-only">Light</span>
+			<svg aria-hidden="true" viewBox="0 0 24 24">
+				<circle cx="12" cy="12" r="4"></circle>
+				<path
+					d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"
+				></path>
+			</svg>
+		</label>
+
+		<label class="theme-picker__option" title="Use system theme">
+			<input type="radio" name="theme" value="system">
+			<span class="sr-only">System</span>
+			<svg aria-hidden="true" viewBox="0 0 24 24">
+				<rect x="3" y="4" width="18" height="13" rx="2"></rect>
+				<path d="M8 21h8M12 17v4"></path>
+			</svg>
+		</label>
+
+		<label class="theme-picker__option" title="Dark theme">
+			<input type="radio" name="theme" value="dark">
+			<span class="sr-only">Dark</span>
+			<svg aria-hidden="true" viewBox="0 0 24 24">
+				<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"></path>
+			</svg>
+		</label>
+	</div>
+</fieldset>
 
 <script is:inline>
 const root = document.documentElement;
-const btn = document.currentScript?.previousElementSibling;
+const picker = document.currentScript?.previousElementSibling;
 
-if (!(btn instanceof HTMLButtonElement) || !btn.matches("[data-theme-toggle]")) {
-	throw new Error("Theme toggle button not found");
+if (!(picker instanceof HTMLFieldSetElement) || !picker.matches("[data-theme-picker]")) {
+	throw new Error("Theme picker not found");
 }
 
-// Apply the right class to the button and the html attr
-function setTheme(isDark) {
-	btn.classList.toggle("dark-theme", isDark);
-	btn.classList.toggle("light-theme", !isDark);
-	root.setAttribute("color-scheme", isDark ? "dark" : "light");
-	localStorage.theme = isDark ? "dark" : "light";
+const media = window.matchMedia("(prefers-color-scheme: dark)");
+const choices = [...picker.querySelectorAll('input[name="theme"]')];
+
+function isThemePreference(value) {
+	return value === "light" || value === "dark" || value === "system";
 }
 
-// initialize from saved or system preference
-let isDark = root.getAttribute("color-scheme") === "dark";
-setTheme(isDark);
+function applyTheme(preference, persist = true) {
+	const choice = isThemePreference(preference) ? preference : "system";
+	const resolved = choice === "system" ? (media.matches ? "dark" : "light") : choice;
 
-btn.addEventListener("click", () => {
-	isDark = !isDark;
-	setTheme(isDark);
+	root.dataset.themePreference = choice;
+	root.setAttribute("color-scheme", resolved);
+	for (const input of choices) input.checked = input.value === choice;
+	if (persist) localStorage.theme = choice;
+}
+
+applyTheme(root.dataset.themePreference || localStorage.theme, false);
+
+picker.addEventListener("change", (event) => {
+	if (event.target instanceof HTMLInputElement) applyTheme(event.target.value);
+});
+
+media.addEventListener("change", () => {
+	if (root.dataset.themePreference === "system") applyTheme("system", false);
 });
 </script>
