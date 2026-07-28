@@ -24,6 +24,7 @@ pnpm-debug.log*
 AI/evals/results/runs/
 AI/evals/results/calibration-latest.json
 AI/evals/results/dashboard.html
+AI/workflows/runs/
 
 # jetbrains setting folder
 .idea/

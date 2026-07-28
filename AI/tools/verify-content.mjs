@@ -93,6 +93,31 @@ for (const file of walk(join(root, "AI/evals/calibration")).filter((path) => ext
 	}
 }
 
+for (const file of walk(join(root, "AI/config")).filter((path) => extname(path) === ".json")) {
+	try {
+		JSON.parse(readFileSync(file, "utf8"));
+	} catch (error) {
+		report(`${file.slice(root.length + 1)} contains invalid JSON: ${error.message}`);
+	}
+}
+
+const balancedProfile = JSON.parse(readFileSync(join(root, "AI/config/profiles/balanced-power.json"), "utf8"));
+for (const field of [
+	"worker",
+	"localJudge",
+	"supervisor",
+	"independentReviewer",
+	"scoreThreshold",
+	"maxCodexCalls",
+	"maxClaudeCalls",
+	"maxRemoteContextBytes",
+]) {
+	if (balancedProfile[field] === undefined) report(`balanced-power profile is missing ${field}`);
+}
+if (balancedProfile.requireApprovalBeforeRemote !== true) {
+	report("balanced-power profile must require approval before remote calls");
+}
+
 for (const script of walk(join(root, "AI/tools")).filter((path) => extname(path) === ".sh")) {
 	const content = readFileSync(script, "utf8");
 	if (content.includes("Not implemented:")) {

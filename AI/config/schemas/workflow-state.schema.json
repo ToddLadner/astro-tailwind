@@ -1,0 +1,18 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"type": "object",
+	"required": ["id", "request", "phaseIndex", "status", "profile", "events", "approvals", "callCounts"],
+	"properties": {
+		"id": { "type": "string" },
+		"request": { "type": "string", "minLength": 1 },
+		"phaseIndex": { "type": "integer", "minimum": 0 },
+		"status": {
+			"enum": ["ready", "working", "awaiting-approval", "awaiting-remote-approval", "stopped", "complete", "blocked"]
+		},
+		"profile": { "type": "string" },
+		"events": { "type": "array" },
+		"approvals": { "type": "object" },
+		"callCounts": { "type": "object" }
+	},
+	"additionalProperties": true
+}

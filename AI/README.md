@@ -12,6 +12,7 @@ Reusable local-agent workspace for coding, UX, review, and documentation tasks.
 - `templates/` — repeatable task, plan, review, and handoff formats.
 - `tools/` — setup scripts and integrations.
 - `evals/` — behavioral cases and reviewed result records for detecting instruction regressions.
+- `workflows/` — resumable local-first feature orchestration with LM Studio workers and bounded frontier escalation.
 
 ## Continue Commands
 

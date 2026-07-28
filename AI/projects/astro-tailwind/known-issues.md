@@ -13,8 +13,8 @@ Last reproduced on 2026-07-27 from the repository root:
 
 | Command | Result | Evidence |
 | --- | --- | --- |
-| `npm test` | Pass | 5 tests passed |
-| `npm run lint` | Pass | 75 files checked with no fixes required |
+| `npm test` | Pass | 13 tests passed |
+| `npm run lint` | Pass | 87 files checked with no fixes required |
 | `npm run build` | Pass | 117 pages built; Vite reported a non-failing unused-import warning from Astro dependencies |
 
 There are no documented baseline command failures. A nonzero result from any command above must be investigated as

@@ -14,6 +14,9 @@ Run commands from the repository root.
 | `npm run ai:calibrate` | Measure judge agreement against human-scored golden responses | Only ignored calibration results |
 | `npm run ai:doctor` | Check provider, privacy, evaluation, worktree, and reporting readiness | No |
 | `npm run ai:dashboard` | Serve the local evaluation-history dashboard | Only an ignored generated dashboard |
+| `npm run ai:feature -- start "<request>"` | Start a resumable balanced-power feature workflow | Only ignored workflow state |
+| `npm run ai:feature -- next` | Run exactly one current workflow phase | Only ignored workflow state or worktree files |
+| `npm run ai:feature -- approve` | Approve a completed phase and advance the ledger | Only ignored workflow state |
 | `npm run build` | Create a local-origin Astro production build | Only generated output |
 | `SITE_URL=https://example.com npm run build` | Build with a production canonical origin | Only generated output |
 

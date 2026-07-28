@@ -118,6 +118,16 @@ async function main() {
 		checks.push({ detail: error.message, name: "Report directory", passed: false });
 	}
 	try {
+		const profile = JSON.parse(await readFile(join(root, "AI/config/profiles/balanced-power.json"), "utf8"));
+		checks.push({
+			detail: `${profile.name}: ${profile.worker} worker, ${profile.supervisor} supervisor, ${profile.independentReviewer} independent reviewer`,
+			name: "Feature workflow",
+			passed: profile.requireApprovalBeforeRemote === true,
+		});
+	} catch (error) {
+		checks.push({ detail: error.message, name: "Feature workflow", passed: false });
+	}
+	try {
 		const calibration = JSON.parse(await readFile(join(results, "calibration-latest.json"), "utf8"));
 		checks.push({
 			detail: `${calibration.agreement}% agreement from ${calibration.createdAt}`,

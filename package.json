@@ -14,7 +14,9 @@
 		"eval:ai": "node AI/evals/lab.mjs",
 		"ai:calibrate": "node AI/evals/lab.mjs --calibrate",
 		"ai:doctor": "node AI/tools/doctor.mjs",
-		"ai:dashboard": "node AI/evals/dashboard.mjs"
+		"ai:dashboard": "node AI/evals/dashboard.mjs",
+		"ai:feature": "node AI/workflows/feature.mjs",
+		"ai:feature:status": "node AI/workflows/feature.mjs status"
 	},
 	"dependencies": {
 		"@astrojs/alpinejs": "^0.4.9",

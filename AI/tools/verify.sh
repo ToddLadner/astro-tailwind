@@ -54,7 +54,10 @@ for dir in \
   AI/evals/cases \
   AI/evals/fixtures/worktree \
   AI/evals/results \
+  AI/config/profiles \
+  AI/config/schemas \
   AI/tools \
+  AI/workflows \
   .continue/rules \
   .continue/prompts
 do
@@ -95,6 +98,18 @@ for file in \
   AI/evals/lab.mjs \
   AI/evals/run.sh \
   AI/evals/results/README.md \
+  AI/config/profiles/balanced-power.json \
+  AI/config/schemas/phase-result.schema.json \
+  AI/config/schemas/review-result.schema.json \
+  AI/config/schemas/workflow-state.schema.json \
+  AI/workflows/README.md \
+  AI/workflows/context.mjs \
+  AI/workflows/escalation.mjs \
+  AI/workflows/feature.mjs \
+  AI/workflows/phases.mjs \
+  AI/workflows/providers.mjs \
+  AI/workflows/state.mjs \
+  AI/workflows/validation.mjs \
   AI/tools/doctor.mjs \
   AI/tools/verify-content.mjs \
   AI/templates/ux-research.md \
@@ -127,7 +142,7 @@ done
 
 check_shell AI/evals/run.sh
 
-for file in AI/evals/dashboard.mjs AI/evals/lab.mjs AI/tools/doctor.mjs; do
+for file in AI/evals/dashboard.mjs AI/evals/lab.mjs AI/tools/doctor.mjs AI/workflows/*.mjs; do
   if node --check "$file"; then
     echo "OK syntax: $file"
   else

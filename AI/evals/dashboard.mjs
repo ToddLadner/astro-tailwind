@@ -7,6 +7,7 @@ import process from "node:process";
 const root = resolve(import.meta.dirname, "../..");
 const resultsDirectory = join(root, "AI/evals/results");
 const runsDirectory = join(resultsDirectory, "runs");
+const workflowRunsDirectory = join(root, "AI/workflows/runs");
 
 function escapeHtml(value) {
 	return String(value)
@@ -34,7 +35,28 @@ async function loadRuns() {
 	}
 }
 
-function dashboard(runs) {
+async function loadWorkflows() {
+	try {
+		const directories = (await readdir(workflowRunsDirectory, { withFileTypes: true }))
+			.filter((entry) => entry.isDirectory())
+			.map((entry) => entry.name)
+			.sort()
+			.reverse();
+		const workflows = [];
+		for (const directory of directories) {
+			try {
+				workflows.push(JSON.parse(await readFile(join(workflowRunsDirectory, directory, "state.json"), "utf8")));
+			} catch {
+				// Ignore incomplete workflows.
+			}
+		}
+		return workflows;
+	} catch {
+		return [];
+	}
+}
+
+function dashboard(runs, workflows) {
 	const latest = runs[0];
 	const caseIds = [...new Set(runs.flatMap((run) => run.results.map((result) => result.id)))];
 	const trend = runs
@@ -62,6 +84,18 @@ ${failures.length === 0 ? "<p class=pass>All expectations passed.</p>" : `<ul>${
 </article>`;
 		})
 		.join("");
+	const workflowCards = workflows
+		.map((workflow) => {
+			const phase = workflow.phaseData ? Object.keys(workflow.phaseData).at(-1) : "discovery";
+			const calls = Object.entries(workflow.callCounts ?? {})
+				.map(([provider, count]) => `${provider} ${count}`)
+				.join(" · ");
+			const escalation = workflow.pendingEscalation?.reasons?.join("; ");
+			return `<article><header><div><small>${escapeHtml(workflow.profile)}</small><h2>${escapeHtml(workflow.request)}</h2></div>
+<strong>${escapeHtml(workflow.status)}</strong></header><p>Current: ${escapeHtml(phase ?? "discovery")}</p>
+<p>${escapeHtml(calls)}</p>${escalation ? `<ul><li>${escapeHtml(escalation)}</li></ul>` : ""}</article>`;
+		})
+		.join("");
 	return `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title>Local AI Dashboard</title><style>
 :root{color-scheme:dark;background:#08090b;color:#f4f4f5;font:15px/1.45 system-ui;--muted:#9ca3af;--line:#27272a}
@@ -77,15 +111,18 @@ article h2{margin:.15em 0}article strong{font-size:2rem;text-align:right}article
 </style><body><section class="hero"><div><small>LOCAL AI HISTORY · ${runs.length} RUNS</small><h1>Your agents,<br>getting better.</h1>
 <p>${latest ? `${escapeHtml(latest.provider)} · ${escapeHtml(latest.privacyMode)} · ${escapeHtml(latest.createdAt)}` : "Run npm run eval:ai to create the first baseline."}</p></div>
 <strong>${latest?.score ?? "—"}%</strong></section>
+${workflows.length > 0 ? `<h2>Feature workflows</h2><section class="grid">${workflowCards}</section>` : ""}
+<h2>Evaluation history</h2>
 ${runs.length > 0 ? `<section class="trend">${trend}</section><main class="grid">${cases}</main>` : '<div class="empty">No evaluation runs yet.</div>'}
 </body></html>`;
 }
 
 async function buildDashboard() {
 	const runs = await loadRuns();
+	const workflows = await loadWorkflows();
 	const output = join(resultsDirectory, "dashboard.html");
-	await writeFile(output, dashboard(runs));
-	return { output, runs };
+	await writeFile(output, dashboard(runs, workflows));
+	return { output, runs, workflows };
 }
 
 function contentType(path) {
@@ -103,9 +140,9 @@ async function main() {
 	const portIndex = process.argv.indexOf("--port");
 	const port = portIndex >= 0 ? Number(process.argv[portIndex + 1]) : 4177;
 	if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error("--port must be a valid port");
-	const { output, runs } = await buildDashboard();
+	const { output, runs, workflows } = await buildDashboard();
 	if (buildOnly) {
-		console.log(`Built dashboard for ${runs.length} run(s): ${output}`);
+		console.log(`Built dashboard for ${runs.length} evaluation(s) and ${workflows.length} workflow(s): ${output}`);
 		return;
 	}
 	const server = createServer((request, response) => {
