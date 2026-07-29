@@ -83,6 +83,31 @@
 			background-color 150ms ease,
 			box-shadow 150ms ease;
 	}
+
+	:root.theme-transition::view-transition-old(root),
+	:root.theme-transition::view-transition-new(root) {
+		animation: none;
+		mix-blend-mode: normal;
+	}
+
+	:root.theme-transition::view-transition-old(root) {
+		z-index: 1;
+	}
+
+	:root.theme-transition::view-transition-new(root) {
+		z-index: 2;
+		animation: theme-reveal 350ms ease-out;
+	}
+}
+
+@keyframes theme-reveal {
+	from {
+		clip-path: circle(0 at var(--theme-reveal-x) var(--theme-reveal-y));
+	}
+
+	to {
+		clip-path: circle(var(--theme-reveal-radius) at var(--theme-reveal-x) var(--theme-reveal-y));
+	}
 }
 </style>
 
@@ -129,28 +154,92 @@ if (!(picker instanceof HTMLFieldSetElement) || !picker.matches("[data-theme-pic
 
 const media = window.matchMedia("(prefers-color-scheme: dark)");
 const choices = [...picker.querySelectorAll('input[name="theme"]')];
+let activeTransition = null;
 
 function isThemePreference(value) {
 	return value === "light" || value === "dark" || value === "system";
 }
 
-function applyTheme(preference, persist = true) {
-	const choice = isThemePreference(preference) ? preference : "system";
-	const resolved = choice === "system" ? (media.matches ? "dark" : "light") : choice;
+function resolveTheme(choice) {
+	return choice === "system" ? (media.matches ? "dark" : "light") : choice;
+}
 
+function commitTheme(choice, resolved, persist) {
 	root.dataset.themePreference = choice;
 	root.setAttribute("color-scheme", resolved);
 	for (const input of choices) input.checked = input.value === choice;
 	if (persist) localStorage.theme = choice;
 }
 
-applyTheme(root.dataset.themePreference || localStorage.theme, false);
+function clearTransitionStyles() {
+	root.classList.remove("theme-transition");
+	root.style.removeProperty("--theme-reveal-x");
+	root.style.removeProperty("--theme-reveal-y");
+	root.style.removeProperty("--theme-reveal-radius");
+}
+
+function applyTheme(preference, { animate = false, persist = true, source } = {}) {
+	const choice = isThemePreference(preference) ? preference : "system";
+	const resolved = resolveTheme(choice);
+	const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+	const canTransition =
+		animate &&
+		root.getAttribute("color-scheme") !== resolved &&
+		!reducedMotion &&
+		typeof document.startViewTransition === "function" &&
+		source instanceof HTMLElement;
+
+	if (!canTransition) {
+		activeTransition?.skipTransition();
+		commitTheme(choice, resolved, persist);
+		return;
+	}
+
+	const rect = source.getBoundingClientRect();
+	const x = rect.left + rect.width / 2;
+	const y = rect.top + rect.height / 2;
+	const radius = Math.max(
+		Math.hypot(x, y),
+		Math.hypot(window.innerWidth - x, y),
+		Math.hypot(x, window.innerHeight - y),
+		Math.hypot(window.innerWidth - x, window.innerHeight - y),
+	);
+
+	activeTransition?.skipTransition();
+	clearTransitionStyles();
+	root.style.setProperty("--theme-reveal-x", `${x}px`);
+	root.style.setProperty("--theme-reveal-y", `${y}px`);
+	root.style.setProperty("--theme-reveal-radius", `${radius}px`);
+	root.classList.add("theme-transition");
+
+	try {
+		const transition = document.startViewTransition(() => commitTheme(choice, resolved, persist));
+		activeTransition = transition;
+		transition.finished
+			.catch(() => {})
+			.finally(() => {
+				if (activeTransition !== transition) return;
+				activeTransition = null;
+				clearTransitionStyles();
+			});
+	} catch {
+		activeTransition = null;
+		clearTransitionStyles();
+		commitTheme(choice, resolved, persist);
+	}
+}
+
+applyTheme(root.dataset.themePreference || localStorage.theme, { persist: false });
 
 picker.addEventListener("change", (event) => {
-	if (event.target instanceof HTMLInputElement) applyTheme(event.target.value);
+	if (!(event.target instanceof HTMLInputElement)) return;
+	applyTheme(event.target.value, {
+		animate: true,
+		source: event.target.closest(".theme-picker__option"),
+	});
 });
 
 media.addEventListener("change", () => {
-	if (root.dataset.themePreference === "system") applyTheme("system", false);
+	if (root.dataset.themePreference === "system") applyTheme("system", { persist: false });
 });
 </script>

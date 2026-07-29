@@ -32,7 +32,11 @@ export async function ensureWorktreeDependencies(root, worktree) {
 }
 
 export async function collectDiff(worktree) {
-	const untracked = await runCommand("git", ["ls-files", "--others", "--exclude-standard", "-z"], { cwd: worktree });
+	const untracked = await runCommand(
+		"git",
+		["ls-files", "--others", "--exclude-standard", "-z", "--", ".", ":(exclude)node_modules"],
+		{ cwd: worktree },
+	);
 	const untrackedFiles = untracked.stdout.split("\0").filter(Boolean);
 	if (untrackedFiles.length > 0) {
 		const intent = await runCommand("git", ["add", "--intent-to-add", "--", ...untrackedFiles], { cwd: worktree });
