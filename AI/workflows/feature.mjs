@@ -11,6 +11,7 @@ import {
 	applyPatch,
 	collectDiff,
 	createImplementationWorktree,
+	ensureWorktreeDependencies,
 	removeImplementationWorktree,
 	savePatch,
 	validateWorktree,
@@ -170,8 +171,11 @@ async function executeNext(runDirectory, state, profile) {
 		state.pendingEscalation = {
 			bundle: context.bundle,
 			manifest: context.manifest,
-			mode: "review",
-			reasons: [`configured supervisor gate: ${phase.id}`],
+			mode: state.pendingEscalation?.mode ?? "review",
+			reasons:
+				state.pendingEscalation?.reasons?.length > 0
+					? state.pendingEscalation.reasons
+					: [`configured supervisor gate: ${phase.id}`],
 		};
 		state.status = "awaiting-remote-approval";
 		event(state, "remote-approval-requested", { bytes: context.manifest.totalBytes });
@@ -198,6 +202,7 @@ async function executeNext(runDirectory, state, profile) {
 	}
 	if (phase.implementation && !state.mock) {
 		if (!state.worktree) state.worktree = await createImplementationWorktree(root, state.id);
+		else await ensureWorktreeDependencies(root, state.worktree.path);
 		cwd = state.worktree.path;
 		writable = true;
 	}
@@ -238,6 +243,18 @@ async function executeNext(runDirectory, state, profile) {
 		await writeFile(join(runDirectory, "artifacts", "validation.json"), JSON.stringify(phaseData.validation, null, 2));
 	}
 	state.phaseData[phase.id] = phaseData;
+	if (phase.implementation && !state.mock && !phaseData.diff.diff.trim()) {
+		delete state.phaseData[phase.id];
+		state.pendingEscalation = null;
+		state.status = "ready";
+		event(state, "revise", {
+			note: "The previous implementation produced no file changes. Edit the feature files and leave a non-empty diff.",
+			reason: "empty implementation patch",
+		});
+		await persist(runDirectory, state);
+		console.log("Implementation produced no file changes and was rejected. Run next to retry locally.");
+		return;
+	}
 	const copiedPhase = needsSupervisor ? null : findCopiedApprovedPhase(state, phase, run.result);
 	const localAttempts = localPhaseAttempts(state, phase);
 	const assessment = assessEscalation({
@@ -247,13 +264,13 @@ async function executeNext(runDirectory, state, profile) {
 		result: run.result,
 		validationFailures: phaseData.validation?.passed === false ? 1 : 0,
 	});
-	if (copiedPhase && localAttempts >= profile.maxLocalRepairAttempts) {
+	if (copiedPhase && (phase.supervisorGate || localAttempts >= profile.maxLocalRepairAttempts)) {
 		assessment.required = true;
 		assessment.reasons.push(`local result duplicates approved ${copiedPhase} output after ${localAttempts} attempts`);
 	}
 	if (phase.supervisorGate && !needsSupervisor) {
 		state.status = "ready";
-		state.pendingEscalation = { mode: "review", reasons: assessment.reasons };
+		state.pendingEscalation = { mode: copiedPhase ? "repair" : "review", reasons: assessment.reasons };
 		console.log(`Local ${phase.id} complete; supervisor review is required.`);
 	} else if (assessment.required && !needsSupervisor) {
 		const context = await createContextBundle({
@@ -371,6 +388,7 @@ async function main() {
 	}
 	if (command === "validate") {
 		if (!state.worktree) throw new Error("No implementation worktree exists");
+		await ensureWorktreeDependencies(root, state.worktree.path);
 		const result = await validateWorktree(state.worktree.path, profile.validationCommands);
 		console.log(JSON.stringify(result, null, 2));
 		if (!result.passed) process.exitCode = 1;

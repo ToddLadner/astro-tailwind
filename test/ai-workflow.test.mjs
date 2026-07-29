@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readlink, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -14,7 +14,7 @@ import { promptFor } from "../AI/workflows/feature.mjs";
 import { phases, transition } from "../AI/workflows/phases.mjs";
 import { runCommand, runProvider } from "../AI/workflows/providers.mjs";
 import { createState, loadActive, saveState } from "../AI/workflows/state.mjs";
-import { collectDiff } from "../AI/workflows/validation.mjs";
+import { collectDiff, ensureWorktreeDependencies } from "../AI/workflows/validation.mjs";
 
 const profile = {
 	maxClaudeCalls: 1,
@@ -178,6 +178,21 @@ test("implementation patches include newly created files", async () => {
 		const evidence = await collectDiff(directory);
 		assert.match(evidence.diff, /new-file\.txt/);
 		assert.match(evidence.diff, /new file mode/);
+	} finally {
+		await rm(directory, { force: true, recursive: true });
+	}
+});
+
+test("implementation worktrees reuse installed dependencies", async () => {
+	const directory = await mkdtemp(join(tmpdir(), "ai-worktree-dependencies-"));
+	const root = join(directory, "root");
+	const worktree = join(directory, "worktree");
+	try {
+		await mkdir(join(root, "node_modules"), { recursive: true });
+		await mkdir(worktree);
+		assert.equal(await ensureWorktreeDependencies(root, worktree), true);
+		assert.equal(await readlink(join(worktree, "node_modules")), join(root, "node_modules"));
+		assert.equal(await ensureWorktreeDependencies(root, worktree), true);
 	} finally {
 		await rm(directory, { force: true, recursive: true });
 	}
