@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -90,6 +90,13 @@ test("repair supervisor prompts replace bad phase output using the phase schema"
 	assert.match(prompt, /Replace it with a correct/);
 	assert.match(prompt, /"status":"complete"/);
 	assert.doesNotMatch(prompt, /"decision":"pass"/);
+});
+
+test("structured output schemas require every declared property", async () => {
+	for (const filename of ["phase-result.schema.json", "review-result.schema.json"]) {
+		const schema = JSON.parse(await readFile(join(process.cwd(), "AI", "config", "schemas", filename), "utf8"));
+		assert.deepEqual([...schema.required].sort(), Object.keys(schema.properties).sort());
+	}
 });
 
 test("next approval cannot bypass a pending remote transmission", () => {

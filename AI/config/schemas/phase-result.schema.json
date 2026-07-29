@@ -9,7 +9,8 @@
 		"decisions",
 		"openQuestions",
 		"risks",
-		"requestedEscalation"
+		"requestedEscalation",
+		"summary"
 	],
 	"properties": {
 		"status": { "enum": ["complete", "blocked"] },
