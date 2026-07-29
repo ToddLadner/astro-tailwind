@@ -1,8 +1,9 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import process from "node:process";
+import { pathToFileURL } from "node:url";
 import { createContextBundle } from "./context.mjs";
-import { assessEscalation, assertCallBudget } from "./escalation.mjs";
+import { assessEscalation, assertCallBudget, findCopiedApprovedPhase, localPhaseAttempts } from "./escalation.mjs";
 import { currentPhase, phases, transition } from "./phases.mjs";
 import { runCommand, runProvider } from "./providers.mjs";
 import { createState, loadActive, saveState } from "./state.mjs";
@@ -34,20 +35,58 @@ function providerFor(profile, phase) {
 	return profile[phase.provider] ?? profile.worker;
 }
 
-function promptFor(state, phase, localArtifact = "") {
-	const outputContract =
-		phase.id === "review" || phase.id === "final-review"
-			? `Return JSON with score (0-100), decision (pass, revise, or escalate), findings, and reason.`
-			: `Return JSON with status, confidence (0-100), claims, evidence, decisions, openQuestions, risks,
-requestedEscalation, and summary.`;
+function approvedPhaseContext(state) {
+	const approved = phases.flatMap((approvedPhase) => {
+		if (!state.approvals[approvedPhase.id]) return [];
+		const data = state.phaseData?.[approvedPhase.id];
+		const result = data?.supervisorResult ?? data?.localResult;
+		return result ? [{ phase: approvedPhase.id, result }] : [];
+	});
+	return approved.length ? JSON.stringify(approved, null, 2) : "(none)";
+}
+
+function latestRevisionNote(state, phase) {
+	return (
+		state.events
+			?.toReversed()
+			.find((item) => item.type === "revise" && item.phase === phase.id && typeof item.note === "string")?.note ??
+		"(none)"
+	);
+}
+
+export function promptFor(state, phase, localArtifact = "", supervisorMode = "") {
+	const reviewOutput =
+		phase.id === "review" || phase.id === "final-review" || (localArtifact && supervisorMode !== "repair");
+	const outputContract = reviewOutput
+		? `Return ONLY one JSON object with this exact shape:
+{"score":0,"decision":"pass","findings":[],"reason":""}
+decision must be pass, revise, or escalate.`
+		: `Return ONLY one JSON object with this exact shape:
+{"status":"complete","confidence":0,"claims":[],"evidence":[],"decisions":[],"openQuestions":[],"risks":[],"requestedEscalation":false,"summary":""}
+Do not wrap the JSON in Markdown fences and do not include text before or after it.`;
+	const repairInstruction =
+		supervisorMode === "repair"
+			? "The local candidate copied or failed its phase. Replace it with a correct, evidence-based phase result; do not merely review it."
+			: "";
 	return `You are the ${phase.role} for phase ${phase.id} in a local-first feature workflow.
 Read AGENTS.md and the narrowly relevant project guidance available in the current directory.
-Do not perform work from a later phase. ${phase.implementation ? "Implement the approved request in this disposable worktree and run narrow validation." : "Do not edit repository files."}
+Stay strictly within the ${phase.id} phase. ${
+		phase.implementation
+			? "Implement the approved request in this disposable worktree and run narrow validation."
+			: `Do not edit repository files and do not claim that implementation has occurred. Complete only ${phase.id} work.`
+	}
+${repairInstruction}
 
 Feature request:
 ${state.request}
 
-Approved phase artifact to review, when present:
+Approved earlier phase results:
+${approvedPhaseContext(state)}
+
+Revision request for this phase:
+${latestRevisionNote(state, phase)}
+
+Supervisor artifact to review, when present:
 ${localArtifact || "(none)"}
 
 ${outputContract}`;
@@ -131,6 +170,7 @@ async function executeNext(runDirectory, state, profile) {
 		state.pendingEscalation = {
 			bundle: context.bundle,
 			manifest: context.manifest,
+			mode: "review",
 			reasons: [`configured supervisor gate: ${phase.id}`],
 		};
 		state.status = "awaiting-remote-approval";
@@ -143,8 +183,11 @@ async function executeNext(runDirectory, state, profile) {
 
 	let provider = providerFor(profile, phase);
 	let cwd = root;
+	const supervisorMode = needsSupervisor ? (state.pendingEscalation?.mode ?? "review") : "";
 	const schemaPath =
-		phase.id === "review" || phase.id === "final-review" || needsSupervisor ? reviewSchema : phaseSchema;
+		phase.id === "review" || phase.id === "final-review" || (needsSupervisor && supervisorMode !== "repair")
+			? reviewSchema
+			: phaseSchema;
 	let localArtifact = "";
 	let writable = false;
 	if (needsSupervisor) {
@@ -166,7 +209,7 @@ async function executeNext(runDirectory, state, profile) {
 		mock: state.mock,
 		outputDirectory: join(runDirectory, "artifacts"),
 		phase,
-		prompt: promptFor(state, phase, localArtifact),
+		prompt: promptFor(state, phase, localArtifact, supervisorMode),
 		provider,
 		schemaPath,
 		writable,
@@ -195,6 +238,8 @@ async function executeNext(runDirectory, state, profile) {
 		await writeFile(join(runDirectory, "artifacts", "validation.json"), JSON.stringify(phaseData.validation, null, 2));
 	}
 	state.phaseData[phase.id] = phaseData;
+	const copiedPhase = needsSupervisor ? null : findCopiedApprovedPhase(state, phase, run.result);
+	const localAttempts = localPhaseAttempts(state, phase);
 	const assessment = assessEscalation({
 		phase: needsSupervisor ? { ...phase, supervisorGate: false } : phase,
 		profile,
@@ -202,9 +247,13 @@ async function executeNext(runDirectory, state, profile) {
 		result: run.result,
 		validationFailures: phaseData.validation?.passed === false ? 1 : 0,
 	});
+	if (copiedPhase && localAttempts >= profile.maxLocalRepairAttempts) {
+		assessment.required = true;
+		assessment.reasons.push(`local result duplicates approved ${copiedPhase} output after ${localAttempts} attempts`);
+	}
 	if (phase.supervisorGate && !needsSupervisor) {
 		state.status = "ready";
-		state.pendingEscalation = { reasons: assessment.reasons };
+		state.pendingEscalation = { mode: "review", reasons: assessment.reasons };
 		console.log(`Local ${phase.id} complete; supervisor review is required.`);
 	} else if (assessment.required && !needsSupervisor) {
 		const context = await createContextBundle({
@@ -214,7 +263,12 @@ async function executeNext(runDirectory, state, profile) {
 			runDirectory,
 			state,
 		});
-		state.pendingEscalation = { bundle: context.bundle, manifest: context.manifest, reasons: assessment.reasons };
+		state.pendingEscalation = {
+			bundle: context.bundle,
+			manifest: context.manifest,
+			mode: copiedPhase ? "repair" : "review",
+			reasons: assessment.reasons,
+		};
 		state.status = "awaiting-remote-approval";
 		console.log(`Escalation required: ${assessment.reasons.join("; ")}`);
 	} else {
@@ -257,6 +311,7 @@ async function main() {
 		state.pendingEscalation = {
 			bundle: context.bundle,
 			manifest: context.manifest,
+			mode: "review",
 			provider: profile.independentReviewer,
 			reasons: ["user requested independent frontier review"],
 		};
@@ -264,6 +319,36 @@ async function main() {
 		event(state, "independent-review-requested", { provider: profile.independentReviewer });
 		await persist(runDirectory, state);
 		console.log(`Claude review bundle prepared: ${join(context.bundle, "manifest.json")}`);
+		console.log("Inspect it, then run: npm run ai:feature -- approve-remote");
+		return;
+	}
+	if (command === "request-codex") {
+		const phase = currentPhase(state);
+		if (state.status !== "awaiting-approval" || !state.phaseData?.[phase.id]?.localResult) {
+			throw new Error("A completed local phase must be awaiting approval before requesting Codex repair");
+		}
+		assertCallBudget(state, profile, profile.supervisor);
+		const context = await createContextBundle({
+			maxBytes: profile.maxRemoteContextBytes,
+			phase,
+			root,
+			runDirectory,
+			state,
+		});
+		const copiedPhase = findCopiedApprovedPhase(state, phase, state.phaseData[phase.id].localResult);
+		state.pendingEscalation = {
+			bundle: context.bundle,
+			manifest: context.manifest,
+			mode: "repair",
+			provider: profile.supervisor,
+			reasons: [
+				copiedPhase ? `local result duplicates approved ${copiedPhase} output` : "user requested frontier repair",
+			],
+		};
+		state.status = "awaiting-remote-approval";
+		event(state, "frontier-repair-requested", { provider: profile.supervisor });
+		await persist(runDirectory, state);
+		console.log(`Codex repair bundle prepared: ${join(context.bundle, "manifest.json")}`);
 		console.log("Inspect it, then run: npm run ai:feature -- approve-remote");
 		return;
 	}
@@ -312,7 +397,9 @@ async function main() {
 	throw new Error(`Unknown command: ${command}`);
 }
 
-main().catch((error) => {
-	console.error(`AI feature workflow failed: ${error.message}`);
-	process.exitCode = 1;
-});
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+	main().catch((error) => {
+		console.error(`AI feature workflow failed: ${error.message}`);
+		process.exitCode = 1;
+	});
+}

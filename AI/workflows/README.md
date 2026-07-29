@@ -38,6 +38,9 @@ Use `discard` to remove the implementation worktree without applying its patch.
 Use `resume` after an interrupted provider call. Use `request-claude` after a local result when an independent
 frontier opinion is valuable; it still stops for remote-bundle approval before calling Claude.
 
+Use `request-codex` when a completed local phase needs frontier repair. Copied output is detected automatically
+after the configured local repair limit. Both paths prepare a bounded bundle and stop before remote transmission.
+
 ## Deterministic Test Mode
 
 After committing the workflow engine, exercise transitions without model calls:
