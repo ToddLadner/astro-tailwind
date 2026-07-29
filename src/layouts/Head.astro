@@ -20,9 +20,16 @@ import "@styles/main.css";
 	<script is:inline>
 	(() => {
 		const stored = localStorage.theme;
-		const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches;
-		const theme = stored || (prefers ? "dark" : "light");
-		document.documentElement.setAttribute("color-scheme", theme);
+		const preference = stored === "light" || stored === "dark" ? stored : "system";
+		const resolved =
+			preference === "system"
+				? window.matchMedia("(prefers-color-scheme: dark)").matches
+					? "dark"
+					: "light"
+				: preference;
+
+		document.documentElement.dataset.themePreference = preference;
+		document.documentElement.setAttribute("color-scheme", resolved);
 	})();
 	</script>
 

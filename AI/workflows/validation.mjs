@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { access, lstat, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { runCommand } from "./providers.mjs";
@@ -8,11 +8,35 @@ export async function createImplementationWorktree(root, workflowId) {
 	const path = join(parent, workflowId);
 	const run = await runCommand("git", ["worktree", "add", "--detach", path, "HEAD"], { cwd: root });
 	if (run.code !== 0) throw new Error(`Worktree setup failed: ${run.stderr}`);
+	await ensureWorktreeDependencies(root, path);
 	return { parent, path };
 }
 
+export async function ensureWorktreeDependencies(root, worktree) {
+	const source = join(root, "node_modules");
+	const destination = join(worktree, "node_modules");
+	try {
+		await access(source);
+	} catch (error) {
+		if (error.code === "ENOENT") return false;
+		throw error;
+	}
+	try {
+		await lstat(destination);
+		return true;
+	} catch (error) {
+		if (error.code !== "ENOENT") throw error;
+	}
+	await symlink(source, destination, "dir");
+	return true;
+}
+
 export async function collectDiff(worktree) {
-	const untracked = await runCommand("git", ["ls-files", "--others", "--exclude-standard", "-z"], { cwd: worktree });
+	const untracked = await runCommand(
+		"git",
+		["ls-files", "--others", "--exclude-standard", "-z", "--", ".", ":(exclude)node_modules"],
+		{ cwd: worktree },
+	);
 	const untrackedFiles = untracked.stdout.split("\0").filter(Boolean);
 	if (untrackedFiles.length > 0) {
 		const intent = await runCommand("git", ["add", "--intent-to-add", "--", ...untrackedFiles], { cwd: worktree });

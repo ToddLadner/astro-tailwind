@@ -1,14 +1,20 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readlink, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { assessEscalation, assertCallBudget } from "../AI/workflows/escalation.mjs";
+import {
+	assessEscalation,
+	assertCallBudget,
+	findCopiedApprovedPhase,
+	localPhaseAttempts,
+} from "../AI/workflows/escalation.mjs";
 import { createContextBundle } from "../AI/workflows/context.mjs";
+import { promptFor } from "../AI/workflows/feature.mjs";
 import { phases, transition } from "../AI/workflows/phases.mjs";
 import { runCommand, runProvider } from "../AI/workflows/providers.mjs";
 import { createState, loadActive, saveState } from "../AI/workflows/state.mjs";
-import { collectDiff } from "../AI/workflows/validation.mjs";
+import { collectDiff, ensureWorktreeDependencies } from "../AI/workflows/validation.mjs";
 
 const profile = {
 	maxClaudeCalls: 1,
@@ -39,6 +45,58 @@ test("approval advances exactly one phase", () => {
 	assert.equal(approved.status, "ready");
 	assert.equal(approved.approvals.discovery, true);
 	assert.equal(phases[approved.phaseIndex].id, "planning");
+});
+
+test("phase prompts include approved results, revision notes, and strict boundaries", () => {
+	const state = {
+		approvals: { discovery: true },
+		events: [{ note: "Return an ordered plan.", phase: "planning", type: "revise" }],
+		phaseData: {
+			discovery: {
+				localResult: { confidence: 95, summary: "Confirmed requirements." },
+			},
+		},
+		request: "Add theme polish",
+	};
+	const prompt = promptFor(state, phases[1]);
+	assert.match(prompt, /Confirmed requirements/);
+	assert.match(prompt, /Return an ordered plan/);
+	assert.match(prompt, /do not claim that implementation has occurred/);
+	assert.match(prompt, /Return ONLY one JSON object/);
+});
+
+test("quality gate detects copied phase output and counts local attempts", () => {
+	const copied = { claims: ["same"], decisions: [], evidence: [], openQuestions: [], risks: [], summary: "same" };
+	const state = {
+		approvals: { discovery: true },
+		events: [
+			{ phase: "planning", provider: "lmstudio", type: "phase-started" },
+			{ phase: "planning", provider: "lmstudio", type: "phase-started" },
+		],
+		phaseData: { discovery: { localResult: copied } },
+	};
+	assert.equal(findCopiedApprovedPhase(state, phases[1], copied), "discovery");
+	assert.equal(localPhaseAttempts(state, phases[1]), 2);
+});
+
+test("repair supervisor prompts replace bad phase output using the phase schema", () => {
+	const state = {
+		approvals: { discovery: true },
+		events: [],
+		phaseData: { discovery: { localResult: { summary: "requirements" } } },
+		request: "Add theme polish",
+	};
+	const prompt = promptFor(state, phases[1], '{"summary":"copied"}', "repair");
+	assert.match(prompt, /Replace it with a correct/);
+	assert.match(prompt, /"status":"complete"/);
+	assert.doesNotMatch(prompt, /"decision":"pass"/);
+});
+
+test("structured output schemas require every declared property", async () => {
+	for (const filename of ["phase-result.schema.json", "review-result.schema.json"]) {
+		const schema = JSON.parse(await readFile(join(process.cwd(), "AI", "config", "schemas", filename), "utf8"));
+		assert.deepEqual([...schema.required].sort(), Object.keys(schema.properties).sort());
+	}
 });
 
 test("next approval cannot bypass a pending remote transmission", () => {
@@ -120,6 +178,21 @@ test("implementation patches include newly created files", async () => {
 		const evidence = await collectDiff(directory);
 		assert.match(evidence.diff, /new-file\.txt/);
 		assert.match(evidence.diff, /new file mode/);
+	} finally {
+		await rm(directory, { force: true, recursive: true });
+	}
+});
+
+test("implementation worktrees reuse installed dependencies", async () => {
+	const directory = await mkdtemp(join(tmpdir(), "ai-worktree-dependencies-"));
+	const root = join(directory, "root");
+	const worktree = join(directory, "worktree");
+	try {
+		await mkdir(join(root, "node_modules"), { recursive: true });
+		await mkdir(worktree);
+		assert.equal(await ensureWorktreeDependencies(root, worktree), true);
+		assert.equal(await readlink(join(worktree, "node_modules")), join(root, "node_modules"));
+		assert.equal(await ensureWorktreeDependencies(root, worktree), true);
 	} finally {
 		await rm(directory, { force: true, recursive: true });
 	}
