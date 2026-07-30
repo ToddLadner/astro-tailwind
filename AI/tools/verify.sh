@@ -163,7 +163,7 @@ else
 fi
 
 referenced_paths="$(
-  rg -o --no-filename 'AI/[A-Za-z0-9_./-]+\.md' AI .continue AGENTS.md README.md 2>/dev/null |
+  grep -Eroh 'AI/[A-Za-z0-9_./-]+\.md' AI .continue AGENTS.md README.md 2>/dev/null |
     sort -u
 )"
 while IFS= read -r file; do
@@ -171,7 +171,7 @@ while IFS= read -r file; do
   check_file "$file"
 done <<< "$referenced_paths"
 
-if rg -n '^- $' AI/memory AI/projects/astro-tailwind >/dev/null 2>&1; then
+if grep -REn '^- $' AI/memory AI/projects/astro-tailwind >/dev/null 2>&1; then
   echo "PLACEHOLDER entries found in active memory or project context" >&2
   status=1
 else
