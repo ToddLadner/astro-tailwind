@@ -1,28 +1,89 @@
 ---
-import Layout from '@layouts/Layout.astro';
-import Button from '@components/Button.astro';
-import Card from '@components/Card.astro';
+import Layout from "@layouts/Layout.astro";
 
-const { 
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest 
-} = Astro.props;
+import Avatar from "@components/Avatar.astro";
+import Button from "@components/Button.astro";
+import Card from "@components/Card.astro";
+import Dropdown from "@components/Dropdown.astro";
+import MenuItem from "@components/MenuItem.astro";
+
+import userAvatar from "@images/killer-mike.jpg";
+
+const { title = "Cards | Astro Tailwind", description = "Card component examples", ...rest } = Astro.props;
 ---
 
 <Layout {title} {description}>
-  <main class="bg-surface-2">
-    <article class="px-max py-xl stack-md">
-      <p>Components</p>
-      <h1>Card</h1>
-    
-      <p>A minimally styled window overlaid on the main content. By design the Dialog is minimal with zero content to allow for both modal and non-modal use.</p>
-      <Card 
-        theme='tonal' 
-        classes='shadow-lg'
-      >
-      <h3>card test title</h3>
-      </Card>
-    </article>
-  </main>
+	<main class="bg-main-surface">
+		<article class="px-max py-xl stack-md">
+			<p>Components</p>
+			<h1>Card</h1>
+
+			<p>
+				A minimally styled window overlaid on the main content. By design the Dialog is minimal with zero content to
+				allow for both modal and non-modal use.
+			</p>
+
+			<div class="grid-ram [--col-min:16rem] gap-xs">
+				<Card variant="tonal" classes="shadow-sm">
+					<header class="flex justify-between items-center px-sm py-xs" slot="header">
+						<h2 class="text-md tracking-md">Kitchen sink</h2>
+						<Dropdown id="test" buttonProps={{  variant: "icon-button", icon: "magnifying-glass-solid"  }}>
+							<MenuItem itemProps={{ text: "Profile1" }} />
+							<MenuItem itemProps={{ text: "Notifications1" }} />
+							<MenuItem itemProps={{ text: "Sign out1", disabled: true }} />
+							<MenuItem href="/account" itemProps={{ text: "Account1", theme: "tonal" }} />
+						</Dropdown>
+					</header>
+					<h3>Card test title</h3>
+					<p>Discover fascinating unusual and adventurious things to do.</p>
+					<div class="flex items-center gap-xs mt-md">
+						<Avatar src={userAvatar} label="User Avatar" size="sm" badge="success" />
+						<p class="leading-sm text-sm">
+							<b class="text-strong" style="--weight: 500">Michael Santiago Render</b>
+							<br>
+							<span>15 Feb 2026</span>
+						</p>
+					</div>
+					<div class="flex gap-xs mt-md">
+						<Button
+							shape="pill"
+							classes="text-danger bg-danger-alpha-3 border-danger-alpha-3"
+							size="sm"
+							icon="arrow-right-regular"
+							text="Label"
+						></Button>
+
+						<Button
+							shape="pill"
+							classes="text-warning bg-warning-alpha-3 border-warning-alpha-3"
+							size="sm"
+							icon="arrow-right-regular"
+							text="Label"
+						></Button>
+
+						<Button
+							shape="pill"
+							classes="text-success bg-success-alpha-3 border-success-alpha-3"
+							size="sm"
+							icon="arrow-right-regular"
+							text="Label"
+						></Button>
+					</div>
+				</Card>
+
+				<Card variant="tonal" classes="shadow-sm">
+					<h3>Card test title</h3>
+					<p>Discover fascinating unusual and adventurious things to do.</p>
+					<div class="flex items-center gap-xs mt-md">
+						<Avatar src={userAvatar} label="User Avatar" size="sm" badge="success" />
+						<p class="leading-sm">
+							Michael Santiago Render
+							<br>
+							15 Feb 2026
+						</p>
+					</div>
+				</Card>
+			</div>
+		</article>
+	</main>
 </Layout>

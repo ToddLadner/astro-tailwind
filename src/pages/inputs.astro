@@ -1,211 +1,196 @@
 ---
-import Layout from '@layouts/Layout.astro';
-import Checkable from '@components/Checkable.astro';
-import Field from '@components/Field.astro';
-import Switch from '@components/Switch.astro'
+import Button from "@components/Button.astro";
+import Checkable from "@components/Checkable.astro";
+import Field from "@components/Field.astro";
+import Switch from "@components/Switch.astro";
+import Layout from "@layouts/Layout.astro";
 
-const emailError = 'Please enter a valid email address';
-
-const { 
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest 
-} = Astro.props;
+const { title = "Inputs | Astro Tailwind", description = "Form input component examples", ...rest } = Astro.props;
 ---
 
 <style is:global>
-  .columns-2 > * {  break-inside: avoid-column; }
+.columns-2 > * {
+	break-inside: avoid-column;
+}
+
+.validation-message .is-invalid-label {
+	color: inherit;
+}
 </style>
 
 <Layout {title} {description}>
-  <main class="bg-surface-2">
-    <!-- Header -->
-    <article class="px-max py-2xl stack-md">
-      <h1>Inputs</h1>
-      <p class="text-md leading-lg">Implicit labels—where the Input is integrated into the label rather than rendered as a separate [label] tag—open up a world of stylistic flexibility while increasing UX.</p>
-    </article>
-    
-    <article class="px-max py-lg stack-md">
-      <p>Components</p>
-      <h1>Inputs</h1>
-      
-      <div class="columns-2 stack">    
-        <Field 
-          as="input" 
-          type="Text"
-          id="text"    
-          label="Text"    
-          placeholder="Firstname Lastname"
-          required  
-        />
-        
-        <Field 
-          as="input" 
-          type="email"
-          id="email"    
-          label="Email"     
-          placeholder="you@example.com"
-          required  
-        />
+	<main class="bg-surface-2">
+		<!-- Header -->
+		<article class="px-max py-2xl stack-md">
+			<h1>Inputs</h1>
+			<p class="text-md leading-lg">
+				Each example keeps its label, editable control, and supporting messages visually distinct while preserving a
+				compact component layout.
+			</p>
+		</article>
 
-        <Field 
-          as="input" 
-          type="password"
-          id="password"    
-          label="Password"   
-          placeholder="••••••••••••••••••"
-          required  
-        />
+		<article class="px-max py-lg stack-md">
+			<p>Components</p>
+			<h1>Inputs</h1>
 
-        <Field 
-          as="input" 
-          type="search"
-          id="search"    
-          label="Search"   
-          placeholder="Search"
-          required  
-        />
+			<div class="columns-2 stack">
+				<Field as="input" type="text" id="text" label="Text" placeholder="Firstname Lastname" required />
 
-        <Field 
-          as="input" 
-          type="phone"
-          id="phone"    
-          label="phone"   
-          placeholder="Phone"
-          required  
-        />
+				<Field as="input" type="email" id="email" label="Email" placeholder="you@example.com" required />
 
-        <Field 
-          as="input" 
-          type="url"
-          id="url"    
-          label="URL"   
-          placeholder="url"
-          required  
-        />
+				<Field
+					as="input"
+					type="password"
+					id="password"
+					label="Password"
+					placeholder="••••••••••••••••••"
+					required
+					supportingText="Use at least 12 characters, including a symbol."
+					warning="Avoid reusing a password from another account."
+				/>
 
-        <Field 
-          as="input" 
-          type="date"
-          id="date"    
-          label="Date"   
-          placeholder="date"
-          required  
-        />
+				<Field as="input" type="search" id="search" label="Search" placeholder="Search" required />
 
-        <Field 
-          as="input" 
-          type="datetime-local"
-          id="datetime"    
-          label="Datetime"   
-          placeholder="datetime"
-          required  
-        />
+				<Field as="input" type="tel" id="phone" label="Phone" placeholder="Phone" required />
 
+				<Field as="input" type="url" id="url" label="URL" placeholder="url" required />
 
-        <Field 
-          as="input" 
-          type="month"
-          id="month"    
-          label="Month"   
-          placeholder="month"
-          required  
-        />
+				<Field as="input" type="date" id="date" label="Date" placeholder="date" required />
 
+				<Field as="input" type="datetime-local" id="datetime" label="Datetime" placeholder="datetime" required />
 
-        <Field 
-          as="input" 
-          type="time"
-          id="time"    
-          label="Time"   
-          placeholder="time"
-          required  
-        />
+				<Field as="input" type="month" id="month" label="Month" placeholder="month" required />
 
+				<Field as="input" type="time" id="time" label="Time" placeholder="time" required />
 
-        <Field 
-          as="input" 
-          type="week"
-          id="week"    
-          label="Week"   
-          placeholder="week"
-          required  
-        />
+				<Field as="input" type="week" id="week" label="Week" placeholder="week" required />
 
-        <Field 
-          as="input" 
-          type="color"
-          id="color"    
-          label="Color"   
-          placeholder="color"
-          required  
-        />
-        
-        <Field 
-          as="textarea" 
-          id="message"  
-          label="Message"  
-          rows="4" 
-        />
-        
-        <Field 
-          as="select"   
-          id="country"  
-          label="Country"  
-          options={[
-            { value: '',    label: '–' },
+				<Field as="input" type="color" id="color" label="Color" placeholder="color" required />
+
+				<Field
+					as="textarea"
+					id="message"
+					label="Message"
+					rows="2"
+					supportingText="Include the details needed to help us respond."
+				/>
+
+				<Field
+					as="select"
+					id="country"
+					label="Country"
+					options={[
+            { value: '',    label: 'Select a country' },
             { value: '1',   label: 'Option 1' },
             { value: '2',   label: 'Option 2' },
-          ]} 
-        />
+          ]}
+				/>
 
-      <Switch label="Switch label"/>
+				<Field
+					as="input"
+					type="email"
+					id="email-error-example"
+					label="Email with error"
+					value="invalid-address"
+					error="Enter an email address in the format name@example.com."
+				/>
 
-      <Checkable 
-        type="checkbox" 
-        label="I agree to the terms and conditions" 
-        required
-        classes="block"
-      />
-      
-      <Checkable 
-        type="radio" 
-        label="I agree to the terms and conditions" 
-        required
-        classes="block"
-      />
-      </div>
+				<Switch
+					label="Push notifications"
+					supportingText="Send me occasional product updates"
+					name="notifications"
+					stacked
+				/>
 
-      <hr>
-      
-      <form id="signup-form" class="stack" novalidate>
-        <Field as="input" id="username" name="username" label="Username" />
-        <Field as="input" id="email"    name="email"    label="Email" type="email" />
-        <button type="submit" class="button">Submit</button>
-      </form>
-    </article>
-  </main>
+				<Switch
+					label="Terms consent"
+					supportingText="I agree to receive marketing emails"
+					name="marketing"
+					required
+					error="Consent is required"
+				/>
+
+				<Checkable
+					type="checkbox"
+					label="I agree to the terms and conditions"
+					supportingText="Supporting text for checkbox"
+					required
+				/>
+
+				<Checkable type="radio" label="I agree to the terms and conditions" required />
+			</div>
+
+			<hr>
+
+			<form id="signup-form" class="stack" novalidate>
+				<Field
+					as="input"
+					id="username"
+					name="username"
+					label="Username"
+					placeholder="Firstname Lastname"
+					required
+					supportingText="Use at least 3 characters."
+					validationMessage
+				/>
+				<Field as="input" id="mail" name="mail" label="Email" type="email" placeholder="Your email" validationMessage />
+				<Field
+					as="input"
+					id="pw"
+					name="password"
+					label="Password"
+					type="password"
+					placeholder="Password"
+					required
+					supportingText="Use at least 12 characters, including a symbol."
+					validationMessage
+				/>
+				<Button type="submit" theme="filled">Submit</Button>
+			</form>
+		</article>
+	</main>
 </Layout>
 
 <script>
-  import JustValidate from 'just-validate';
+import JustValidate from "just-validate";
 
-  const validation = new JustValidate('#signup-form', {
-    errorFieldCssClass: 'is-invalid-field',
-    errorLabelCssClass: 'is-invalid-label',
-  });
+const validation = new JustValidate("#signup-form", {
+	errorFieldCssClass: "is-invalid-field",
+	errorLabelCssClass: "is-invalid-label",
+});
 
-  validation
-    .addField('#username', [
-      { rule: 'required',   errorMessage: 'Username is required' },
-      { rule: 'minLength', value: 3, errorMessage: 'At least 3 characters' },
-    ])
-    .addField('#email', [
-      { rule: 'required', errorMessage: 'Email is required' },
-      { rule: 'email',    errorMessage: 'Enter a valid email' },
-    ])
-    .onSuccess((event) => {
-      console.log('✅ validation passed');
-      // event.preventDefault() if you want to do an AJAX submit
-    });
+validation
+	.addField(
+		"#username",
+		[
+			{ rule: "required", errorMessage: "Username is required" },
+			{ rule: "minLength", value: 3, errorMessage: "At least 3 characters" },
+		],
+		{ errorsContainer: "#username-validation" },
+	)
+	.addField("#mail", [{ rule: "email", errorMessage: "Enter an email address in the format name@example.com" }], {
+		errorsContainer: "#mail-validation",
+	})
+	.addField(
+		"#pw",
+		[
+			{ rule: "required", errorMessage: "Password is required" },
+			{ rule: "minLength", value: 12, errorMessage: "Use at least 12 characters" },
+			{ rule: "customRegexp", value: /[^A-Za-z0-9]/, errorMessage: "Include at least one symbol" },
+		],
+		{ errorsContainer: "#pw-validation" },
+	)
+	.onValidate(({ fields }) => {
+		Object.values(fields).forEach(({ elem, isValid }) => {
+			if (isValid === false) {
+				elem.setAttribute("aria-invalid", "true");
+			} else if (isValid === true) {
+				elem.removeAttribute("aria-invalid");
+			}
+		});
+	})
+	.onSuccess((_event?: Event) => {
+		console.log("✅ validation passed");
+		// event.preventDefault() if you want to do an AJAX submit
+	});
 </script>

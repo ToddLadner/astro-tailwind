@@ -1,0 +1,29 @@
+---
+import Tabs from "@components/Tab.astro";
+import Layout from "../layouts/Layout.astro";
+
+const {
+	title = "Tabs | Astro Tailwind",
+	description = "Keyboard-accessible tab component example",
+	...rest
+} = Astro.props;
+---
+
+<Layout {title} {description}>
+	<main class="bg-surface-2">
+		<article class="px-max py-2xl stack-md">
+			<h1>Tabs</h1>
+			<Tabs label="Music" classes="block">
+				<div slot="tabs">
+					<!-- <TabButton id="t-recent" aria-controls="recent" selected classes="px-3 py-2 rounded-md">Recent</TabButton>
+					<TabButton id="t-loved" aria-controls="loved" classes="px-3 py-2 rounded-md">Loved</TabButton>
+					<TabButton id="t-follow" aria-controls="following" classes="px-3 py-2 rounded-md">Following</TabButton> -->
+				</div>
+
+				<section id="recent" data-label="Recent">…</section>
+				<section id="loved" data-label="Loved">…</section>
+				<section id="following" data-label="Following">…</section>
+			</Tabs>
+		</article>
+	</main>
+</Layout>

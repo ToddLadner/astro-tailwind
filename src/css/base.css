@@ -13,172 +13,240 @@
 ─────────────────────────────── */
 
 :root {
-  /* [01] Adaptive typography */
-  --base-weight: 400;
-  --base-grade: 0; 
+	/* [01] Adaptive typography */
+	--base-weight: 400;
+	--base-grade: 0;
 
-  /* [02] Shadows */
-  /* color-scheme: light */
-  --shadow-color: 220 3% 15%;
-  --shadow-strength: 1%;
-  --inner-shadow-highlight: inset 0 -0.5px 0 0 #fff, inset 0 0.5px 0 0 #0001;
-  /* color-scheme: dark */
-  @media (prefers-color-scheme: dark) {
-    --shadow-color: 220 40% 2%;
-    --shadow-strength: 25%;
-    --inner-shadow-highlight: inset 0 -0.5px 0 0 #fff1, inset 0 0.5px 0 0 #0007;
-  }
+	/* [02] Shadows */
+	--shadow-color-light: 270 20% 26%;
+	--shadow-color-dark: 270 20% 2%;
+	--shadow-strength-light: 1%;
+	--shadow-strength-dark: 25%;
+
+	/* color-scheme: light */
+	--shadow-color: var(--shadow-color-light);
+	--shadow-strength: var(--shadow-strength-light);
+	--inner-shadow-highlight: inset 0 -0.5px 0 0 #fff, inset 0 0.5px 0 0 #0001;
+	/* color-scheme: dark */
+	@media (prefers-color-scheme: dark) {
+		--shadow-color: var(--shadow-color-dark);
+		--shadow-strength: var(--shadow-strength-dark);
+		--inner-shadow-highlight: inset 0 -0.5px 0 0 #fff1, inset 0 0.5px 0 0 #0007;
+	}
 }
 /* User color-scheme: light */
-[color-scheme='light'] {
-  --shadow-color: 220 3% 15%;
-  --shadow-strength: 1%;
-  --inner-shadow-highlight: inset 0 -0.5px 0 0 #fff, inset 0 0.5px 0 0 #0001;
+[color-scheme="light"] {
+	--shadow-color: var(--shadow-color-light);
+	--shadow-strength: var(--shadow-strength-light);
+	--inner-shadow-highlight: inset 0 -0.5px 0 0 #fff, inset 0 0.5px 0 0 #0001;
 }
 /* User color-scheme: dark */
-[color-scheme='dark'] {
-  --shadow-color: 220 40% 2%;
-  --shadow-strength: 25%;
-  --inner-shadow-highlight: inset 0 -0.5px 0 0 #fff1, inset 0 0.5px 0 0 #0007;
+[color-scheme="dark"] {
+	--shadow-color: var(--shadow-color-dark);
+	--shadow-strength: var(--shadow-strength-dark);
+	--inner-shadow-highlight: inset 0 -0.5px 0 0 #fff1, inset 0 0.5px 0 0 #0007;
 }
 
 /* [03] Custom Font */
 /* Regular */
 @font-face {
-  font-family: 'Roboto';
-  src: local('Roboto'), url('/fonts/static/Roboto-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-display: swap;
+	font-family: "Roboto";
+	src:
+		local("Roboto"),
+		url("/fonts/static/Roboto-Regular.ttf") format("truetype");
+	font-weight: 400;
+	font-display: swap;
 }
 /* Variable */
 @font-face {
-  font-family: 'Roboto Flex';
-  src: 
-    local('Roboto Flex'), 
-    url('/fonts/RobotoFlex.ttf') format('truetype-variations') tech(color-COLRv1),
-    url('/fonts/RobotoFlex.ttf') format('truetype-variations'); /* Fallback for Safari and others */
-  font-weight: 100 1000;
-  font-stretch: 25% 150%;
-  font-display: swap;
+	font-family: "Roboto Flex";
+	src:
+		local("Roboto Flex"),
+		url("/fonts/RobotoFlex.ttf") format("truetype-variations") tech(color-COLRv1),
+		url("/fonts/RobotoFlex.ttf") format("truetype-variations"); /* Fallback for Safari and others */
+	font-weight: 100 1000;
+	font-stretch: 25% 150%;
+	font-display: swap;
 }
 
 /* [04] HTML */
 html {
-  /* ↓ Theme */
-  color: var(--color-text-2);
-  background-color: var(--color-surface-1);
+	color: var(--color-weak); /* ← Theme */
 }
 
 /* [05] Body */
 body {
-  font-size: var(--text-sm);
-  line-height: var(--leading-md);
-  font-family: var(--font-sans);  /* ← Fallback font */
+	font-size: var(--text-sm);
+	line-height: var(--leading-md);
+	font-family: var(--font-sans); /* ← Fallback font */
 }
 
 @supports (font-variation-settings: normal) {
-  body {
-    font-family: var(--font-sans); /* ← Variable font */
-    
-    font-variation-settings: 
-      "wght" var(--base-weight, 0),
-      "GRAD" var(--base-grade);
-    
-    /* When the preference is for high contrast */
-    @media (prefers-contrast: more) { --base-weight: 700; }
-    
-    /* When the preference is for low contrast */
-    @media (prefers-contrast: less) { --base-weight: 200; }
-    
-    /* When the preference is for dark mode */
-    @media (prefers-color-scheme: dark) { --base-grade: -25; }
-  }
+	body {
+		font-family: var(--font-sans); /* ← Variable font */
+
+		font-variation-settings:
+			"wght" var(--base-weight, 0),
+			"GRAD" var(--base-grade);
+
+		/* When the preference is for high contrast */
+		@media (prefers-contrast: more) {
+			--base-weight: 700;
+		}
+
+		/* When the preference is for low contrast */
+		@media (prefers-contrast: less) {
+			--base-weight: 200;
+		}
+
+		/* When the preference is for dark mode */
+		@media (prefers-color-scheme: dark) {
+			--base-grade: -25;
+		}
+	}
 }
 
 /* [06] Branded accents */
-:root { 
-  scrollbar-color: var(--color-pink-bright) Canvas;
-  accent-color: var(--color-pink-bright);
-  caret-color: var(--color-pink-bright);
- }
-:focus-visible { outline-color: var(--color-pink-bright); }
-::selection { background-color: oklch(from var(--color-pink-bright) l c h / 20%); }
-::marker { color: var(--color-pink-bright); }
-:is(
-  ::-webkit-calendar-picker-indicator,
-  ::-webkit-clear-button,
-  ::-webkit-inner-spin-button, 
-  ::-webkit-outer-spin-button
-) {
-  color: var(--color-pink-bright);
+:root {
+	scrollbar-color: var(--color-brand-bright) Canvas;
+	accent-color: var(--color-brand-bright);
+	caret-color: var(--color-brand-bright);
+}
+:focus-visible {
+	outline-color: var(--color-brand-bright);
+}
+::selection {
+	background-color: oklch(from var(--color-brand-bright) l c h / 20%);
+}
+::marker {
+	color: var(--color-brand-bright);
+}
+::-webkit-calendar-picker-indicator,
+::-webkit-clear-button,
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+	color: var(--color-brand-bright);
 }
 
 /* [07] Font Sizes */
-h1 { font-size: var(--text-size, var(--text-2xl)) }
-h2 { font-size: var(--text-size, var(--text-xl)) }
-h3 { font-size: var(--text-size, var(--text-lg)) }
-h4 { font-size: var(--text-size, var(--text-md)) }
-h5 { font-size: var(--text-size, var(--text-sm)) }
-h6 { font-size: var(--text-size, var(--text-xs)) }
-
+h1 {
+	font-size: var(--text-size, var(--text-2xl));
+}
+h2 {
+	font-size: var(--text-size, var(--text-xl));
+}
+h3 {
+	font-size: var(--text-size, var(--text-lg));
+}
+h4 {
+	font-size: var(--text-size, var(--text-md));
+}
+h5 {
+	font-size: var(--text-size, var(--text-sm));
+}
+h6 {
+	font-size: var(--text-size, var(--text-xs));
+}
 
 /* [08] Typography */
 :where(h1, h2, h3, h4) {
-  font-variation-settings: "wght" var(--weight, 600);
-  line-height: var(--leading-xs);
-  max-inline-size: var(--measure-md);
+	font-variation-settings: "wght" var(--weight, 600);
+	line-height: var(--leading-xs);
+	max-inline-size: var(--measure-md);
 }
 
-h1, h2, h3, h4, h5, h6, dt, label { color: var(--color-text-1) }
-h1, h2, h3, h4 { text-wrap: balance; }
-h1, p, button { text-box: trim-both cap alphabetic }
-p:only-child { margin-block: 0; }
-p { max-width: var(--measure-lg); }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+dt,
+label {
+	color: var(--color-strong);
+}
+h1,
+h2,
+h3,
+h4 {
+	text-wrap: balance;
+}
 
-i, em { font-variation-settings: "ital" 1 }
-strong, b { font-variation-settings: "wght" var(--weight, 800) }
+p:only-of-type {
+	margin-block: 0;
+}
+p {
+	max-width: var(--measure-lg);
+}
+
+/* Weights & Italic */
+i,
+em {
+	font-variation-settings: "ital" 1;
+}
+strong,
+b {
+	font-variation-settings: "wght" var(--weight, 800);
+}
+
+/* Text Box Trim */
+h1,
+p,
+button:not(:has(:not(svg, span, i, img))),
+a {
+	text-box: trim-both cap alphabetic;
+}
 
 /* [09] Focus */
 @media (prefers-reduced-motion: no-preference) {
-  :focus-visible { 
-    transition: outline-offset 75ms ease-out, 
-    box-shadow 75ms ease;  
-  }
-  :not(:active):focus-visible { 
-    transition-duration: .25s
-  }
+	:focus-visible {
+		border-radius: inherit;
+		transition:
+			outline-offset 75ms ease-out,
+			box-shadow 75ms ease;
+	}
+	:not(:active):focus-visible {
+		transition-duration: 0.25s;
+	}
 }
-:not(:active):focus-visible { outline-offset: .5rem }
+:not(:active):focus-visible {
+	outline-offset: 0.5rem;
+}
 
 /* [10] Elements */
 hr {
-  border-top: 1px solid var(--color-surface-3);
-  margin-block:var(--spacing-3xs);
+	border-top: 1px solid var(--color-surface-3);
+	margin-block: var(--spacing-3xs);
 }
 
-a { color: var(--color-brand) }
+a:not(.button) {
+	color: var(--color-brand);
+}
 a:not(:is(:hover, :focus)) {
-  text-decoration-color: 
-    color-mix(in srgb, currentColor, transparent 75%);
+	text-decoration-color: color-mix(in srgb, currentColor, transparent 75%);
 }
 /**/
-	main { isolation: isolate; }
-	main::before {
-    --size: 45px;
-    --line:  color-mix(in hsl, canvasText, transparent 85%);
-    content: '';
-    height: 100vh;
-    width: 100vw;
-    position: fixed;
-    background: 
-			linear-gradient(90deg, var(--line) 1px, 
-			transparent 1px var(--size)) calc(var(--size) * 0.36) 50% / var(--size) var(--size), 
-			linear-gradient(var(--line) 1px,
-			transparent 1px var(--size)) 0% calc(var(--size) * 0.32) / var(--size) var(--size);
-    -webkit-mask: linear-gradient(-20deg, transparent 50%, white);
-    mask: linear-gradient(-20deg, transparent 50%, white);
+main {
+	isolation: isolate;
+	background-color: var(--color-surface-2);
+}
 
-    transform-style: flat;
-    pointer-events: none;
-		z-index: -1;
+/* Background grid pattern fade out */
+main::before {
+	--size: 45px;
+	--line: color-mix(in hsl, canvasText, transparent 85%);
+	content: "";
+	height: 100vh;
+	width: 100vw;
+	position: fixed;
+	background:
+		linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) calc(var(--size) * 0.36) 50% / var(--size)
+		var(--size),
+		linear-gradient(var(--line) 1px, transparent 1px var(--size)) 0% calc(var(--size) * 0.32) / var(--size) var(--size);
+	-webkit-mask: linear-gradient(-20deg, transparent 50%, white);
+	mask: linear-gradient(-20deg, transparent 50%, white);
+
+	transform-style: flat;
+	pointer-events: none;
+	z-index: -1;
 }

@@ -1,71 +1,73 @@
 ---
-import Layout from '@layouts/Layout.astro';
-import Button from '@components/Button.astro';
-import Card from '@components/Card.astro';
+import Button from "@components/Button.astro";
+import Card from "@components/Card.astro";
+import Layout from "@layouts/Layout.astro";
 
-const { 
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest 
-} = Astro.props;
+const { title = "Blank | Astro Tailwind", description = "Blank layout example", ...rest } = Astro.props;
 ---
 
 <Layout {title} {description}>
-  <main class=" bg-surface-2 stack">
-    <article class="px-max">
-      <figure class="table-container">
-        <table>
-      <thead>
-      <tr>
-      <th>Precedence Order (low to high)</th>
-      <th>Origin</th>
-      <th>Importance</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-      <td>1</td>
-      <td>user-agent (browser)</td>
-      <td>normal</td>
-      </tr>
-      <tr>
-      <td>2</td>
-      <td>user</td>
-      <td>normal</td>
-      </tr>
-      <tr>
-      <td>3</td>
-      <td>author (developer)</td>
-      <td>normal</td>
-      </tr>
-      <tr>
-      <td>4</td>
-      <td>CSS keyframe animations</td>
-      <td></td>
-      </tr>
-      <tr>
-      <td>5</td>
-      <td>author (developer)</td>
-      <td><code>!important</code></td>
-      </tr>
-      <tr>
-      <td>6</td>
-      <td>user</td>
-      <td><code>!important</code></td>
-      </tr>
-      <tr>
-      <td>7</td>
-      <td>user-agent (browser)</td>
-      <td><code>!important</code></td>
-      </tr>
-      <tr>
-      <td>8</td>
-      <td>CSS transitions</td>
-      <td></td>
-      </tr>
-      </tbody>
-        </table>
-      </figure>
-    </article>
-  </main>
+	<main class=" bg-surface-2 stack">
+		<article class="px-max">
+			<figure class="table-container">
+				<table>
+					<thead>
+						<tr>
+							<th>Precedence Order (low to high)</th>
+							<th>Origin</th>
+							<th>Importance</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>user-agent (browser)</td>
+							<td>normal</td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>user</td>
+							<td>normal</td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>author (developer)</td>
+							<td>normal</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>CSS keyframe animations</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>5</td>
+							<td>author (developer)</td>
+							<td>
+								<code>!important</code>
+							</td>
+						</tr>
+						<tr>
+							<td>6</td>
+							<td>user</td>
+							<td>
+								<code>!important</code>
+							</td>
+						</tr>
+						<tr>
+							<td>7</td>
+							<td>user-agent (browser)</td>
+							<td>
+								<code>!important</code>
+							</td>
+						</tr>
+						<tr>
+							<td>8</td>
+							<td>CSS transitions</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</figure>
+		</article>
+	</main>
 </Layout>

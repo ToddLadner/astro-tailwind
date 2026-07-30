@@ -1,26 +1,18 @@
 ---
-import type { GetStaticPaths } from "astro";
 import Layout from "@layouts/Layout.astro";
-import type { PokeymonRes } from "./[slug].astro";
+import { pokemon } from "../../data/pokemon";
 
-
-const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100');
-const data: PokeymonRes = await res.json();
-
-const { 
-	title,
-	description,
-} = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <Layout {title} {description}>
-  <main>
-      <ul>
-        {data.results.map((p) => (
+	<main>
+		<ul>
+			{pokemon.map((p) => (
           <li>
             <a href={`/pokeymon/${p.name}`}>{p.name}</a>
           </li>
         ))}
-      </ul>
-  </main>
+		</ul>
+	</main>
 </Layout>

@@ -1,163 +1,175 @@
 ---
-import { Icon } from 'astro-icon/components';
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
 
-interface Props extends HTMLAttributes<'input'> {
-  type: 'checkbox' | 'radio';
-  uid?: string;
-  label?: string;
-  name?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  icon?: string;
-  error?: string;
-  classes?: string;
+interface Props extends HTMLAttributes<"input"> {
+	type: "checkbox" | "radio";
+	uid?: string;
+	label?: string;
+	name?: string;
+	disabled?: boolean;
+	icon?: string;
+	error?: string;
+	supportingText?: string;
+	size?: "small" | "large";
+	classes?: string;
 }
 
 const {
-  type  = 'checkbox',
-  uid,
-  label,
-  name,
-  placeholder,
-  icon,
-  error,
-  classes,
-  disabled  = false,
-  ...rest
+	type = "checkbox",
+	uid,
+	label,
+	name,
+	icon,
+	error,
+	supportingText,
+	size,
+	classes,
+	disabled = false,
+	...rest
 } = Astro.props;
 
-// generate a short random id if none provided
-const id = uid ?? `input-${Math.random().toString(36).slice(2, 8)}`;
+// generate a short random id if none provided - using cryptographically secure random
+const id =
+	uid ?? `input-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, "0"), "")}`;
+
+const describedBy =
+	[supportingText && `${id}-supporting`, error && `${id}-error`].filter(Boolean).join(" ") || undefined;
+
+const classList = ["checkable", error && "error", classes];
+
+const inputClassList = [size];
 ---
 
 <style>
-  @layer components {
-    label:is(.checkbox, .radio) {
-      align-items: center;
-      color: var(--text-color-1);
-      cursor: pointer;
-      display: inline-grid;
-      gap: 0 var(--size-2);
-      grid-auto-columns: auto;
-      grid-auto-flow: column;
-      inline-size: fit-content;
-      line-height: 1.5;
-      transform: translateZ(0);
-      user-select: none;
+@layer components {
+	.checkable {
+		--checkable-size: 1.125rem;
 
-      /* Disabled */
-      &:has([disabled]) {
-        cursor: not-allowed;
-        opacity: 0.64;
-        user-select: none;
+		align-items: center;
+		color: var(--color-strong);
+		cursor: pointer;
+		display: inline-grid;
+		gap: 0 var(--spacing-xs);
+		grid-auto-columns: auto;
+		grid-auto-flow: column;
+		inline-size: fit-content;
+		line-height: 1.5;
 
-        input {
-          cursor: not-allowed;
-        }
-      }
+		/* Input */
+		input {
+			aspect-ratio: 1;
+			block-size: var(--checkable-size);
+			cursor: pointer;
+			margin: 0;
+		}
 
-      /* Required dot */
-      &:has([required]:not([type="checkbox"]:checked)) {
-        .label:after {
-          color: var(--red);
-          content: "*";
-          inset: 0 -0.25ex auto auto;
-          position: absolute;
-        }
-      }
+		/* Sizes */
+		input.small {
+			block-size: var(--spacing-xs);
+		}
+		input.large {
+			block-size: var(--spacing-sm);
+		}
 
-      /* Label */
-      .label {
-        grid-column: 2;
-        grid-row: 1;
-        position: relative;
-        padding-inline: 0 1ex;
-      }
+		/* Disabled */
+		&:has([disabled]) {
+			cursor: not-allowed;
+			opacity: 0.64;
+			user-select: none;
 
-      /* Supporting text */
-      .supporting-text {
-        color: var(--text-color-2);
-        font-size: var(--font-size-xs);
-        grid-column: 2;
-        grid-row: 2;
-        line-height: 1.5;
-        z-index: 1;
-      }
+			input {
+				cursor: not-allowed;
+			}
+		}
 
-      /* Stacked layout */
-      &.stack {
-        justify-items: center;
-        grid-auto-columns: unset;
+		/* Required dot */
+		&:has([required]) {
+			.label:after {
+				color: var(--color-red-5);
+				content: "*";
+				inset: 0 -1.25ex auto auto;
+				position: absolute;
+			}
+		}
 
-        .label {
-          grid-column: 1/-1;
-          grid-row: 2;
-          margin-block-start: var(--size-1);
-          padding-inline: 1ex;
+		/* Label */
+		.label {
+			grid-column: 2;
+			grid-row: 1;
+			position: relative;
+			display: inline-flex;
+			align-items: center;
 
-          /* Required dot */
-          &::after {
-            inset: 0 -0.25ex auto auto;
-          }
-        }
+			[data-icon] {
+				color: currentColor;
+				block-size: 0.7lh;
+				aspect-ratio: 1;
+			}
+		}
 
-        .supporting-text {
-          grid-column: 1/-1;
-          grid-row: 3;
-        }
-      }
+		/* Supporting text */
+		.supporting-text {
+			color: var(--color-weak);
+			font-size: var(--font-size-xs);
+			grid-column: 2;
+			grid-row: 2;
+			line-height: 1.5;
+			z-index: 1;
+		}
 
-      /* Input */
-      input {
-        aspect-ratio: 1;
-        block-size: 1.125rem;
-        cursor: pointer;
-        inline-size: 1.125rem;
+		/* Validation */
+		&.error {
+			input {
+				accent-color: var(--color-red-5);
+			}
 
-        &::before {
-          --highlight-size: 175%;
-        }
-      }
+			:where(.label, .supporting-text) {
+				color: var(--color-red-5);
+			}
+		}
 
-      /* Sizes */
-      &.small {
-        input {
-          block-size: var(--size-3);
-          inline-size: var(--size-3);
-        }
-      }
+		.error-text {
+			color: var(--color-red-5);
+			font-size: var(--font-size-xs);
+			grid-column: 2;
+			grid-row: 3;
+			line-height: 1.5;
+		}
 
-      &.large {
-        input {
-          block-size: var(--size-4);
-          inline-size: var(--size-4);
-        }
-      }
-
-      /* Validation */
-      &.error {
-        input[type="checkbox"] {
-          accent-color: var(--color-9);
-
-          & ~ :where(.label, .supporting-text) {
-            color: var(--color-9);
-          }
-        }
-      }
-
-      /* Touch devices */
-      @media (pointer: coarse) {
-        input {
-          block-size: var(--size-4);
-          inline-size: var(--size-4);
-        }
-      }
-    }
-  }
+		/* Touch devices - increase size for easier interaction */
+		@media (pointer: coarse) {
+			input {
+				block-size: var(--spacing-md);
+			}
+		}
+	}
+}
 </style>
 
-<label for={id} class:list={[classes]} {...rest}>
-  <input id={id} name={name} type={type} />
-  <span class="label">{label}</span>
+<label for={id} class:list={classList}>
+	<input
+		id={id}
+		name={name}
+		type={type}
+		disabled={disabled}
+		aria-invalid={error ? "true" : undefined}
+		aria-describedby={describedBy}
+		class:list={inputClassList}
+		{...rest}
+	>
+	<span class="label">
+		{icon && <Icon name={icon} data-icon aria-hidden="true" />}
+		{label}
+	</span>
+	{supportingText && (
+    <span id={`${id}-supporting`} class="supporting-text">
+      {supportingText}
+    </span>
+  )}
+	{error && (
+    <span id={`${id}-error`} class="error-text" role="alert">
+      {error}
+    </span>
+  )}
 </label>

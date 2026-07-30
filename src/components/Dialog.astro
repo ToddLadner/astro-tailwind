@@ -1,172 +1,177 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
-import { Icon } from 'astro-icon/components';
-import Button from '@components/Button.astro';
-
+import Button from "@components/Button.astro";
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
 
 interface Props extends HTMLAttributes<"dialog"> {
-  id: string;
-  role?: "alertdialog" | "dialog";
-  showHeader?: boolean;
-  showFooter?: boolean;
-  heading: string;
-  overline?: string;
-  icon?: string;
-  theme?: "outlined" | "tonal" | "filled" | "elevated";
-  classes?: string;
+	id: string;
+	role?: "alertdialog" | "dialog";
+	showHeader?: boolean;
+	showFooter?: boolean;
+	heading: string;
+	overline?: string;
+	icon?: string;
 }
 
 const {
-  id,
-  role = 'dialog',
-  showHeader = true,
-  showFooter = true,
-  heading,
-  overline,
-  icon,
-  theme,
-  classes = '',
-  ...rest
+	id,
+	role = "dialog",
+	showHeader = true,
+	showFooter = true,
+	heading,
+	overline,
+	icon,
+	class: className,
+	"aria-label": ariaLabel,
+	"aria-describedby": ariaDescribedby,
+	...rest
 } = Astro.props;
+
+const headingId = `${id}-heading`;
+const contentId = `${id}-content`;
 ---
 
 <style>
-  @layer components {
-    dialog {
-      --bg-color: var(--color-surface-1);
-      --border-color: transparent;
-      --border-width: 0;
-      --shadow: var(--shadow-lg);
+@layer components {
+	dialog {
+		--bg-color: var(--color-surface-1);
+		--border-color: transparent;
+		--border-width: 0;
+		--shadow: var(--shadow-lg);
 
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      max-height: 75dvh;
-      border-radius: var(--radius-md);
-      pointer-events: none;
-      padding: 0;
-      inset: 0;
-      box-shadow: var(--shadow);
-      width: min(100%, var(--measure-lg));
-      overflow: hidden;
-      max-width: none;
-      
-      &:not([open]) { display: none }
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		max-height: 75dvh;
+		border-radius: var(--radius-md);
+		pointer-events: none;
+		padding: 0;
+		inset: 0;
+		box-shadow: var(--shadow);
+		width: min(100%, var(--measure-lg));
+		overflow: hidden;
+		max-width: none;
 
-      &[open] { pointer-events: all }
-      
-      :is(header, .content, footer) { 
-        padding-inline: var(--spacing-sm) 
-      }
-      :is(header, footer) { 
-        padding-block: var(--spacing-sm); 
-        background-color: var(--color-surface-2); 
-      }
-      .content {
-        overflow-y: auto;
-        padding-block: var(--spacing-md);
-      }
-    }
+		&:not([open]) {
+			display: none;
+		}
 
-    html:has(dialog[open]:not([role="alertdialog"])) {
-      overflow: hidden;
-    }
-    
-    /* Transition */
-    dialog, 
-    dialog::backdrop {
-      --duration: 1s;
-      --delay: .25s;
-      --timing-function: var(--ease-spring-2);
+		&[open] {
+			pointer-events: all;
+		}
 
-      /* Interpolate sizes keywords */
-      transition: 
-        display var(--duration) var(--timing-function), 
-        overlay var(--duration) var(--timing-function),
-        transform var(--duration) var(--timing-function), 
-        opacity var(--duration) var(--timing-function);
-        transition-behavior: allow-discrete; /* Note: be sure to write this after the shorthand */
-    }
+		:is(header, .content, footer) {
+			padding-inline: var(--spacing-sm);
+		}
+		:is(header, footer) {
+			padding-block: var(--spacing-sm);
+			background-color: var(--color-surface-2);
+		}
+		.content {
+			overflow-y: auto;
+			padding-block: var(--spacing-md);
+		}
+	}
 
-    /* Ending | Off Stage  */
-    dialog {
-      transform:  scale(.9);
-    }
+	html:has(dialog[open]:not([role="alertdialog"])) {
+		overflow: hidden;
+	}
 
-    dialog, dialog::backdrop { 
-      opacity: 0;
-    }
+	/* Transition */
+	dialog,
+	dialog::backdrop {
+		--duration: 1s;
+		--delay: 0.25s;
+		--timing-function: var(--ease-spring-2);
 
-    /* On Stage */
-    dialog[open]::backdrop {
-      opacity: 1;
-    }
+		/* Interpolate sizes keywords */
+		transition:
+			display var(--duration) var(--timing-function),
+			overlay var(--duration) var(--timing-function),
+			transform var(--duration) var(--timing-function),
+			opacity var(--duration) var(--timing-function);
+		transition-behavior: allow-discrete; /* Note: be sure to write this after the shorthand */
+	}
 
-    dialog[open] {
-      opacity: 1;
-      transform: translateY(0);
-    }
+	/* Ending | Off Stage  */
+	dialog {
+		transform: scale(0.9);
+	}
 
-    /* Starting | Off Stage */
-    @starting-style {
-      dialog[open]{
-        opacity: 0;
-        transform: translateY(20%);
-      }
-      
-      dialog[open]::backdrop {
-        opacity: 0;
-      }
-    }
+	dialog,
+	dialog::backdrop {
+		opacity: 0;
+	}
 
-    /* Backdrop */
-    dialog::backdrop {
-      --glass-lightness: 100%;
+	/* On Stage */
+	dialog[open]::backdrop {
+		opacity: 1;
+	}
 
-      background: hsl(0 0% var(--glass-lightness) / 50%);
-      backdrop-filter: blur(6px);
+	dialog[open] {
+		opacity: 1;
+		transform: translateY(0);
+	}
 
-      @media (prefers-color-scheme: dark) {
-        --glass-lightness: 0;
-      }
-    }
-  }
+	/* Starting | Off Stage */
+	@starting-style {
+		dialog[open] {
+			opacity: 0;
+			transform: translateY(20%);
+		}
 
-  dialog[role="alertdialog"] {
-    margin-bottom: 10vh;
-    position: fixed;
-  }
+		dialog[open]::backdrop {
+			opacity: 0;
+		}
+	}
+
+	/* Backdrop */
+	dialog::backdrop {
+		--glass-lightness: 100%;
+
+		background: hsl(0 0% var(--glass-lightness) / 50%);
+		backdrop-filter: blur(6px);
+
+		@media (prefers-color-scheme: dark) {
+			--glass-lightness: 0;
+		}
+	}
+}
+
+dialog[role="alertdialog"] {
+	margin-bottom: 10vh;
+	position: fixed;
+}
 </style>
 <style is:global>
-  [color-scheme='light'] ::backdrop {
-    background: hsl(0 0% var(--glass-lightness) / 50%);
-  }
-  [color-scheme='dark'] ::backdrop {
-    --glass-lightness: 0;
-  }
+[color-scheme="light"] ::backdrop {
+	background: hsl(0 0% var(--glass-lightness) / 50%);
+}
+[color-scheme="dark"] ::backdrop {
+	--glass-lightness: 0;
+}
 </style>
 
 <dialog
-  id={id}
-  role={role}
-  class="modal"
-  class:list={[classes]}
-  aria-modal="true"
-  aria-describedby="dialog-content"
-  {...(showHeader
-    ? { 'aria-labelledby': 'dialog-heading' }
-    : { 'aria-label': heading })
-  }
-  {...rest}
+	id={id}
+	role={role}
+	class="modal"
+	class:list={[className]}
+	aria-modal="true"
+	aria-describedby={ariaDescribedby ?? contentId}
+	{...(showHeader
+    ? { 'aria-labelledby': headingId }
+    : { 'aria-label': ariaLabel ?? heading })}
+	{...rest}
 >
-  <!-- Header | If showHeader is true -->
-  {showHeader && (
+	<!-- Header | If showHeader is true -->
+	{showHeader && (
     <header class="flex items-center gap-xs">
       <!-- Icon -->
       {icon && <Icon name={icon} class="icon" />}
       <!-- Heading -->
       <hgroup class="flex flex-col stack-3xs">
         {overline && <p class="text-xs">{overline}</p>}  
-        <h2 id="dialog-heading" class="text-lg">{heading}</h2>
+        <h2 id={headingId} class="text-lg">{heading}</h2>
       </hgroup>
       <!-- Close Button -->
       <Button
@@ -175,16 +180,17 @@ const {
         variant='icon-button'
         icon='xmark-large-solid' 
         aria-label='close dialog'
+        aria-controls={contentId}
         classes="ml-[auto]"
       />
     </header>
   )}
-  <!-- Content -->
-  <article id="dialog-content" class="content stack-md">
-    <slot/>
-  </article>
-  <!-- Footer -->
-  {showFooter && (
+	<!-- Content -->
+	<article id={contentId} class="content stack-md">
+		<slot />
+	</article>
+	<!-- Footer -->
+	{showFooter && (
     <footer class="actions flex justify-end gap-xs">
       <slot name="dialog-footer" />
     </footer>
@@ -192,26 +198,76 @@ const {
 </dialog>
 
 <script>
-  import { createFocusTrap } from 'focus-trap';
+if (typeof window !== "undefined") {
+	const addBaseDialogHandlers = (dialog: HTMLDialogElement) => {
+		if (dialog.dataset.dialogHydrated === "true") return;
+		dialog.dataset.dialogHydrated = "true";
 
-  document.querySelectorAll('.modal').forEach(dialog => {
-    const trap = createFocusTrap(dialog, {
-      clickOutsideDeactivates: true,
-      escapeDeactivates:       true,
-      onDeactivate:            () => dialog.close(),
-      fallbackFocus:           dialog,
-    });
+		const handleCancel = (event: Event) => {
+			event.preventDefault();
+			dialog.close();
+		};
 
-    // Open → showModal() + activate trap
-    const origShow = dialog.showModal;
-    dialog.showModal = function() {
-      origShow.call(dialog);
-      trap.activate();
-    };
+		const handleBackdropClick = (event: MouseEvent) => {
+			if (event.target === dialog) {
+				dialog.close();
+			}
+		};
 
-    // Teardown on close/cancel/backdrop
-    dialog.addEventListener('close',  () => trap.deactivate());
-    dialog.addEventListener('cancel', () => dialog.close());
-    dialog.addEventListener('click', e => e.target === dialog && dialog.close());
-  });
+		dialog.addEventListener("cancel", handleCancel);
+		dialog.addEventListener("click", handleBackdropClick);
+	};
+
+	// Initialize focus trap when DOM is ready
+	const initializeFocusTrap = async () => {
+		try {
+			const { createFocusTrap } = await import("focus-trap");
+
+			document.querySelectorAll<HTMLDialogElement>(".modal").forEach((dialog) => {
+				addBaseDialogHandlers(dialog);
+				if (dialog.dataset.focusTrapReady === "true") return;
+				dialog.dataset.focusTrapReady = "true";
+
+				const trap = createFocusTrap(dialog, {
+					clickOutsideDeactivates: true,
+					escapeDeactivates: true,
+					returnFocusOnDeactivate: true,
+					fallbackFocus: dialog,
+				});
+
+				const activateTrap = () => trap.activate();
+				const deactivateTrap = () => trap.deactivate();
+
+				// Override showModal to activate trap
+				const origShowModal = dialog.showModal.bind(dialog);
+				dialog.showModal = (() => {
+					origShowModal();
+					activateTrap();
+				}) as HTMLDialogElement["showModal"];
+
+				// Override show to activate trap
+				const origShow = dialog.show.bind(dialog);
+				dialog.show = (() => {
+					origShow();
+					activateTrap();
+				}) as HTMLDialogElement["show"];
+
+				// Deactivate on close
+				dialog.addEventListener("close", () => {
+					deactivateTrap();
+				});
+			});
+		} catch (err) {
+			console.error("Failed to initialize focus-trap:", err);
+			document.querySelectorAll<HTMLDialogElement>(".modal").forEach(addBaseDialogHandlers);
+		}
+	};
+
+	// Run when DOM is ready
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initializeFocusTrap);
+	} else {
+		initializeFocusTrap();
+	}
+}
 </script>

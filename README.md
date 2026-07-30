@@ -1,49 +1,60 @@
-# Astro Starter Kit: Basics
+# Astro Tailwind
+
+An Astro 5 playground for building interface components, interaction patterns, and a CSS-first Tailwind 4 design system.
+
+## Stack
+
+- Astro 5
+- Tailwind CSS 4 through the Vite integration
+- Alpine.js for optional client behavior
+- TypeScript
+- Biome
+- Node’s built-in test runner
+
+## Development
 
 ```sh
-npm create astro@latest -- --template basics
+npm install
+npm run dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+The development server uses Astro’s default local address.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Validation
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+```sh
+npm test
+npm run lint
+npm run build
+```
 
-## 🚀 Project Structure
+Use `npm run lint:fix` when you intentionally want Biome to rewrite files.
+The repository currently has pre-existing Biome and production-build failures; see `AI/projects/astro-tailwind/known-issues.md`.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Project Structure
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+├── components/  Astro UI components and experiments
+├── css/         Tailwind theme, tokens, global styles, and utilities
+├── layouts/     Shared document and page layouts
+├── lib/         Server-safe helpers
+├── pages/       Routes and component demonstration pages
+└── scripts/     Browser-side modules and integration entrypoints
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+Tailwind is configured in `src/css/main.css` with the Tailwind 4 `@theme` directive. Global styles enter through `src/layouts/Head.astro`.
 
-## 🧞 Commands
+## AI Workspace
 
-All commands are run from the root of the project, from a terminal:
+Repository-specific agent guidance starts in `AGENTS.md`. Reusable roles and templates live under `AI/`, project context lives in `AI/projects/astro-tailwind/`, and Continue-specific prompts and rules live under `.continue/`.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm test`                | Run the project tests                            |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Deployment
 
-## 👀 Want to learn more?
+Set `SITE_URL` to the production origin when building for deployment:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```sh
+SITE_URL=https://example.com npm run build
+```
+
+Local builds default to `http://localhost:4321`.

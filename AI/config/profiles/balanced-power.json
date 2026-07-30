@@ -1,0 +1,16 @@
+{
+	"name": "balanced-power",
+	"worker": "lmstudio",
+	"localJudge": "lmstudio",
+	"supervisor": "codex",
+	"independentReviewer": "claude",
+	"scoreThreshold": 90,
+	"maxLocalRepairAttempts": 2,
+	"maxCodexCalls": 2,
+	"maxClaudeCalls": 1,
+	"maxRemoteContextBytes": 50000,
+	"requireApprovalBeforeRemote": true,
+	"retainRemoteBundles": false,
+	"supervisorGates": ["architecture", "final-review"],
+	"validationCommands": ["npm test", "npm run lint", "SITE_URL=https://example.com npm run build"]
+}

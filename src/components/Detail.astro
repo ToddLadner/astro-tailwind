@@ -1,156 +1,146 @@
 ---
-import { Icon } from 'astro-icon/components';
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
 
 interface Props extends HTMLAttributes<"details"> {
-  title: string;
-  theme?: "outlined" | "tonal" | "filled" | "elevated";
-  open?: boolean;
-  name?: string;
-  id?: string;
-  classes?: string;
+	title: string;
+	theme?: "text" | "outlined" | "tonal" | "elevated";
+	open?: boolean;
+	name?: string;
+	id?: string;
 }
 
-const {
-  title,
-  theme,
-  open = false,
-  name,
-  id: idProp,
-  classes = '',
-  ...rest
-} = Astro.props;
+const props = Astro.props as Props;
 
-// generate a short, unique-ish ID if none provided
-const id = idProp ?? `disclosure-${Math.random().toString(36).slice(2, 9)}`;
+const { title, theme, open = false, name, id: idProp, class: className, ...rest } = props;
+
+// generate a short, unique ID if none provided
+const id =
+	idProp ??
+	`disclosure-${crypto.getRandomValues(new Uint8Array(4)).reduce((acc, byte) => acc + `0${byte.toString(16)}`.slice(-2), "")}`;
 ---
 
 <style>
-  @layer components {
-    /* General Detail Styles */
-    details {
-      /* Props */
-      --accordion-transition-time: 0.2s;
-      --bg-color: transparent;
-      --padding-inline: var(--spacing-sm);
-      --shadow: none;
-      
-      background-color: var(--bg-color);
-      box-shadow: var(--shadow);
-      max-width: var(--measure-lg);
-      border-radius: var(--radius-md);
-      display: block;
-      transition: 
-        content-visibility, 
-        opacity, 
-        block-size 
-        var(--accordion-transition-time) ease-out;
-      
-      /* Content Closed */
-      &::details-content {
-        block-size: 0;
-        opacity: 0;
-        overflow-y: clip;
-        transition:
-          content-visibility var(--accordion-transition-time) allow-discrete,
-          opacity, block-size var(--accordion-transition-time) ease-out;
-      }
-      
-      /* Content Open */
-      &[open]::details-content {
-        block-size: auto;
-        opacity: 1;
-      }
-      
-      /* Summary */
-      & > summary {
-        background-color: inherit;
-        cursor: pointer;
-        padding-block: var(--spacing-sm);
-        user-select: none;
-        background-color: inherit;
-      }
+@layer components {
+	/* General Detail Styles */
+	details {
+		/* Props */
+		--accordion-transition-time: 0.2s;
+		--bg-color: transparent;
+		--padding-inline: var(--spacing-sm);
+		--shadow: none;
 
-      /* Custom Arrow */
-      summary {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
-        list-style: none;
+		background-color: var(--bg-color);
+		box-shadow: var(--shadow);
+		max-width: var(--measure-lg);
+		border-radius: var(--radius-md);
+		display: block;
+		transition:
+			content-visibility,
+			opacity,
+			block-size var(--accordion-transition-time) ease-out;
 
-        &::marker,
-        &::-webkit-details-marker {
-          display: none;
-        }
+		/* Content Container | Closed */
+		&::details-content {
+			margin-block-start: 0;
+			block-size: 0;
+			opacity: 0;
+			overflow-y: clip;
+			transition:
+				content-visibility var(--accordion-transition-time) allow-discrete,
+				opacity,
+				block-size var(--accordion-transition-time) ease-out;
+		}
 
-        svg {
-          transition: rotate 0.2s ease-out;
-        }
-      }
-      /* Rotate Arrow */
-      &[open] > summary svg {
-        rotate: 180deg;
-      }
-      
-      /* Content Container */
-      & > .content {
-        margin-block-start: 0;
-        padding-block: var(--spacing-2xs) var(--spacing-sm);
-      }
+		/* Content Container | Open */
+		&[open]::details-content {
+			padding-block: var(--spacing-2xs) var(--spacing-sm);
+			block-size: auto;
+			opacity: 1;
+		}
 
-      /* Variants */
-      &.text {
-        --bg-color: transparent;
-        --padding-inline: var(--size-1);
-      }
+		/* Summary */
+		& > summary {
+			background-color: inherit;
+			border-radius: inherit;
+			cursor: pointer;
+			padding-block: var(--spacing-sm);
+			padding-inline: var(--spacing-sm);
+			user-select: none;
+		}
 
-      &.elevated {
-        --bg-color: var(--color-surface-1);
-        --padding-inline: 0;
-        --shadow: var(--shadow-md);
-      }
+		/* Custom Arrow */
+		summary {
+			align-items: center;
+			display: flex;
+			justify-content: space-between;
+			list-style: none;
 
-      &.outlined {
-        --bg-color: var(--color-surface-2);
-        --padding-inline: 0;
-        border: 1px solid var(--color-surface-3);
-      }
+			&::marker,
+			&::-webkit-details-marker {
+				display: none;
+			}
 
-      &.tonal {
-        --bg-color: var(--color-brand-0);
-        --padding-inline: 0;
-      }
+			svg {
+				transition: rotate 0.2s ease-out;
+			}
+		}
+		/* Rotate Arrow */
+		&[open] > summary svg {
+			rotate: 180deg;
+		}
 
-      /* Inline padding for styles */
-      &:is(.elevated, .outlined, .tonal) > * {
-        padding-inline: var(--spacing-sm);
-      }
-    }
-  }
+		/* Variants */
+		&.text {
+			--bg-color: transparent;
+			--padding-inline: var(--size-1);
+		}
+
+		&.elevated {
+			--bg-color: var(--color-surface-1);
+			--padding-inline: 0;
+			--shadow: var(--shadow-md);
+		}
+
+		&.outlined {
+			--bg-color: var(--color-surface-2);
+			--padding-inline: 0;
+			border: 1px solid var(--color-surface-3);
+		}
+
+		&.tonal {
+			--bg-color: var(--color-brand-0);
+			--padding-inline: 0;
+		}
+
+		/* Inline padding for styles */
+		&:is(.elevated, .outlined, .tonal) > * {
+			padding-inline: var(--spacing-sm);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		details {
+			transition: none;
+		}
+
+		details::details-content {
+			transition: none;
+		}
+
+		details summary svg {
+			transition: none;
+		}
+	}
+}
 </style>
 
-<details 
- 
-  class:list={[theme, classes]}
-  open={open}
-  name={name} 
-  {...rest}
->
-  <summary 
-    id={id}
-    aria-controls={`${id}-content`}
-    aria-expanded={open}
-    class="font-bold"
-  >
-    {title} 
-    <Icon name="chevron-down-solid" class="icon" />
-  </summary>
-  <div 
-    id={`${id}-content`} 
-    class="content stack-md"
-    aria-labelledby={id}
-    role="region" 
-  >
-    <slot />
-  </div>
+<details class:list={[theme, className]} open={open} name={name} {...rest}>
+	<summary id={id} aria-controls={`${id}-content`} class="font-bold">
+		{title}
+		<Icon name="chevron-down-solid" class="icon" />
+	</summary>
+	<div id={`${id}-content`} class="content stack-md" aria-labelledby={id} role="region">
+		<slot />
+	</div>
 </details>

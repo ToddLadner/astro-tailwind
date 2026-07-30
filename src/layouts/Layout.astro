@@ -1,46 +1,27 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
-import Head from '@layouts/Head.astro';
-import TheHeader from '@layouts/TheHeader.astro';
-import TheNavigation from '@layouts/TheNavigation.astro';
+import Head from "@layouts/Head.astro";
+import TheHeader from "@layouts/TheHeader.astro";
+import type { HTMLAttributes } from "astro/types";
 
 interface Props extends HTMLAttributes<"html"> {
 	title: string;
 	description: string;
 }
 
-const { 
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest 
-} = Astro.props;
+const { title = "Astro Tailwind", description = "Astro component and design-system playground", ...rest } = Astro.props;
 ---
 
 <style>
-	.grid { grid-template-columns: auto 1fr; }
+.grid {
+	grid-template-columns: auto 1fr;
+	min-block-size: 100svh;
+}
 </style>
 
-<!doctype html>
-<html lang="en">
-	<Head {title} {description}/>
+<html lang="en" {...rest}>
+	<Head {title} {description} />
 	<body id="app" class="grid">
 		<TheHeader />
 		<slot />
 	</body>
-	<!-- Global JS -->
-  <script is:inline>
-    // this won’t run until the page is hydrated / DOM is ready
-    document.querySelectorAll('button[popovertarget]').forEach(btn => {
-      // Toggle aria-expanded when clicked
-      btn.addEventListener('click', () => {
-        const isOpen = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!isOpen));
-      });
-  
-      // Keep in sync if a popover polyfill fires a native toggle event
-      btn.addEventListener('toggle', e => {
-        btn.setAttribute('aria-expanded', e.newState === 'open');
-      });
-    });
-  </script>
 </html>

@@ -1,108 +1,143 @@
 ---
-import { Icon } from 'astro-icon/components';
-import type { HTMLAttributes } from 'astro/types';
+import Button, { type PureButtonProps } from "@components/Button.astro";
+// Dropdown.astro (id is the trigger id)
+import type { HTMLAttributes } from "astro/types";
+import dropdownScript from "../scripts/dropdown.ts?url";
 
-interface Props extends HTMLAttributes<"dialog"> {
-  id: string;
-  labelledBy?: string;
-  icon?: string;
-  theme?: "outlined" | "tonal" | "filled" | "elevated";
-  classes?: string;
-}
+type Props = HTMLAttributes<"div"> & {
+	/** Trigger id (so Tooltip can target it directly) */
+	id: string;
 
-const {
-  id,
-  labelledBy,
-  theme,
-  classes = '',
-  ...rest
-} = Astro.props;
+	buttonProps?: PureButtonProps;
+	closeOnSelect?: boolean;
+	classes?: string;
+};
+
+const { id, classes, buttonProps, closeOnSelect = true, ...rest } = Astro.props as Props;
+
+// Now: id === trigger id
+const triggerId = id;
+
+// Derive the menu id from trigger id (unique & predictable)
+const menuId = `${id}--menu`;
+
+// CSS Anchor (unique per instance)
+const triggerAnchor = `--${id}--trigger`;
+
+const ariaLabel = buttonProps?.["aria-label"] ?? (buttonProps?.text ? undefined : "Open menu");
+
+const mergedTriggerProps: PureButtonProps = {
+	type: "button",
+	"aria-haspopup": "menu",
+	"aria-controls": menuId,
+	...(ariaLabel ? { "aria-label": ariaLabel } : {}),
+	...(buttonProps ?? {}),
+	// MUST be in the spread so it lands on the real <button>/<a>
+	"data-dropdown-trigger": "",
+};
 ---
 
-<style>
-  /* Popover Base */
-  [popover] {
-    box-shadow: var(--shadow-md);
-    border-radius: var(--radius-md);
-    margin-block: 0;
-    margin-inline: 0;
-    overflow: visible;
-    padding: 0;
-    min-width: 150px;
-    position: absolute;
-    inset: auto;
-  }
+<style define:vars={{ triggerAnchor }}>
+@layer components {
+	.dropdown-trigger {
+		anchor-name: var(--triggerAnchor);
+		width: fit-content;
+	}
 
-  /* Popover Style */
-  .popover-inner {
-    /* Triangle dimension */
-    --base: 1.5em; /* triangle base */
-    --height: .75em; /* triangle height */
-    --position: 50%; /* triangle position [0%:left | 50%:center | 100%:right] */
-    /* Container */
-    --radius: var(--radius-md); /* radius */
-    --background: var(--color-surface-1); /* background color */
+	.dropdown-menu {
+		--d: var(--spacing-xs);
 
-    border: 1px solid var(--background);
-    background: var(--background);
-    padding-block: var(--spacing-3xs);
-    padding-inline: var(--spacing-3xs);
-    text-align: center;
-    border-radius: min(var(--radius),var(--position) - var(--base)/2) min(var(--radius),100% - var(--position) - var(--base)/2) var(--radius) var(--radius)/var(--radius);
-    /* clip-path: polygon(0 0,0 100%,100% 100%,100% 0, min(100%,var(--position) + var(--base)/2) 0,
-      var(--position) calc(-1*var(--height)),
-      max(0%, var(--position) - var(--base)/2) 0);
-    
-    border-image: conic-gradient(var(--background) 0 0) fill 0/
-      0 calc(100% - var(--position) - var(--base)/2) var(--radius) calc(var(--position) - var(--base)/2)/
-      var(--height) 0 0 0;  */
-}
+		position: absolute;
+		overflow: visible;
+		inset: auto;
+		padding-inline: 1ex;
+		padding-block: 1ex;
+		z-index: var(--z);
 
-/* Transition */
-[popover] {
-  --duration: 1s;
-  --timing-function: var(--ease-spring-2);
+		position-anchor: var(--triggerAnchor);
+		position-area: bottom span-left;
+		position-try: flip-block;
 
-  transition: 
-    display var(--duration) var(--timing-function),
-    transform var(--duration) var(--timing-function),
-    opacity var(--duration) var(--timing-function);
-  transition-behavior: allow-discrete; /* [!] Be sure to write this after the transition */
-}
+		top: calc(var(--d));
+		margin-bottom: var(--d);
+		margin-inline: calc(var(--d) / 2);
 
-/* Ending | Off Stage (for exiting) */
-[popover] {
-  transform: scale(0.9);
-  opacity: 0;
-}
+		justify-self: anchor-center;
+		align-self: normal;
 
-/* On Stage */
-[popover]:popover-open {
-  transform: translateY(1rem) scale(1);
-  opacity: 1;
-}
+		border-radius: var(--radius-md);
+		background: light-dark(
+			oklch(from var(--color-surface-1-light) calc(l + 0.2) calc(c + 0) h),
+			oklch(from var(--color-surface-1-dark) calc(l + 0.03) calc(c + 0) h)
+		);
+		box-shadow: var(--shadow-md);
+	}
 
-/* Starting | Off Stage (for entering) */
-@starting-style {
-  [popover]:popover-open {
-    transform: translateY(3rem);
-    opacity: 0;
-  }
+	/* Transition */
+	.dropdown-menu[popover] {
+		--duration: 1s;
+		--timing-function: var(--ease-spring-2);
+
+		transition:
+			display var(--duration) var(--timing-function),
+			transform var(--duration) var(--timing-function),
+			opacity var(--duration) var(--timing-function);
+		transition-behavior: allow-discrete;
+	}
+
+	.dropdown-menu[popover] {
+		transform: scale(0.9);
+		opacity: 0;
+	}
+
+	.dropdown-menu[popover]:popover-open {
+		transform: translateY(0) scale(1);
+		opacity: 1;
+	}
+
+	@starting-style {
+		.dropdown-menu[popover]:popover-open {
+			transform: translateY(3rem);
+			opacity: 0;
+		}
+	}
+
+	.dropdown-menu[popover]:popover-open:focus-visible {
+		outline-offset: 1px;
+	}
 }
 </style>
 
-<!-- [2] The popover container -->
+<div
+	class:list={["dropdown w-fit h-fit", classes]}
+	style={`--triggerAnchor: ${triggerAnchor}`}
+	data-dropdown-root
+	data-close-on-select={closeOnSelect ? "true" : "false"}
+	{...rest}
+>
+	<Button
+		id={triggerId}
+		classes="dropdown-trigger"
+		popovertarget={menuId}
+		popovertargetaction="toggle"
+		aria-expanded="false"
+		data-dropdown-anchor={triggerAnchor}
+		{...mergedTriggerProps}
+	>
+		<slot name="trigger" />
+	</Button>
 
-  <dialog
-    popover="auto"
-    id={id}
-    role="menu"
-    aria-labelledby={labelledBy}
-    class:list={[theme, classes]}
-    {...rest}
-    tabindex="-1"
-  >
-  <div class="popover-inner">
-    <slot />
-  </div>
-  </dialog> 
+	<ul
+		id={menuId}
+		class="dropdown-menu list-none"
+		data-dropdown-menu
+		popover="auto"
+		role="menu"
+		aria-labelledby={triggerId}
+		tabindex="-1"
+	>
+		<slot />
+	</ul>
+</div>
+
+<script type="module" src={dropdownScript}></script>

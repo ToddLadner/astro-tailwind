@@ -1,74 +1,102 @@
 ---
-import Layout from '@layouts/Layout.astro';
+import Layout from "@layouts/Layout.astro";
 
-const { 
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest 
+const {
+	title = "Components | Astro Tailwind",
+	description = "Astro component and design-system playground",
+	...rest
 } = Astro.props;
 ---
 
 <Layout {title} {description}>
-	<main class="bg-surface-2">
+	<main class="bg-main-surface">
 		<article class="px-max py-xl stack-xl">
 			<h1 class="text-3xl">Brand identity</h1>
-      <p class="text-md leading-lg mt-sm">This color scheme and font represents your brand.</p>
-			
-	    <h2 class="text-md">Theme colors</h2>
-	    <ul role="list" class="flex mt-sm gap-xs scroll-x-overflow" style="--overflow-space: 0;">
-        <li>
-          <span class="swatch bg-pink-bright"></span>
-          <code>--color-pink-bright</code>
-        </li>
-        <li>
-          <span class="swatch bg-cyan-5"></span>
-          <code>--color-cyan-5</code>
-        </li>
-        <li>
-          <span class="swatch bg-indigo-3"></span>
-          <code>--color-indigo-3</code>
-        </li>
-      </ul>
+			<p class="text-md leading-lg mt-sm">This color scheme and font represents your brand.</p>
 
-	    <h2 class="text-md">Grayscale</h2>
-      <ul role="list" class="flex gap-xs mt-sm">
-        <li>
-          <span class="swatch bg-surface-1"></span>
-          <code>--color-surface-1</code>
-        </li>
-        <li>
-          <span class="swatch bg-surface-2"></span>
-          <code>--color-surface-2</code>
-        </li>
-        <li>
-          <span class="swatch bg-surface-3"></span>
-          <code>--color-surface-3</code>
-        </li>
-        <li>
-          <span class="swatch bg-surface-4"></span>
-          <code>--color-surface-4</code>
-        </li>
-      </ul>
+			<h2 class="text-md text-text">Theme colors</h2>
+			<ul role="list" class="flex mt-sm gap-xs scroll-x-overflow" style="--overflow-space: 0;">
+				<li>
+					<span class="swatch bg-brand"></span>
+					<code>--color-brand</code>
+				</li>
+				<li>
+					<span class="swatch bg-brand-alpha-1"></span>
+					<code>--color-brand-alpha-1</code>
+				</li>
+				<li>
+					<span class="swatch bg-brand-alpha-2"></span>
+					<code>--color-brand-alpha-2</code>
+				</li>
+				<li>
+					<span class="swatch bg-brand-alpha-3"></span>
+					<code>--color-brand-alpha-3</code>
+				</li>
+			</ul>
 
-	    <h2 class="text-md">Text</h2>
-      <ul role="list" class="flex gap-xs mt-sm">
-        <li>
-          <span class="swatch bg-text-1"></span>
-          <code>--color-text-1</code>
-        </li>
-        <li>
-          <span class="swatch bg-text-2"></span>
-          <code>--color-text-2</code>
-        </li>
-				 <li>
-          <span class="swatch bg-text-1-reverse"></span>
-          <code>--color-text-1-reverse</code>
-        </li>
-        <li>
-          <span class="swatch bg-text-2-reverse"></span>
-          <code>--color-text-2-reverse</code>
-        </li>
-      </ul>
+			<h2 class="text-md">Surfaces</h2>
+			<ul role="list" class="flex gap-xs mt-sm">
+				<li>
+					<span class="swatch bg-surface-1"></span>
+					<code>--color-surface-1</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-2"></span>
+					<code>--color-surface-2</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-3"></span>
+					<code>--color-surface-3</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-4"></span>
+					<code>--color-surface-4</code>
+				</li>
+			</ul>
+
+			<h2 class="text-md">Surfaces Alpha</h2>
+			<ul role="list" class="flex gap-xs mt-sm">
+				<li>
+					<span class="swatch bg-surface-alpha-1 border-2 border-surface-2"></span>
+					<code>--color-surface-alpha-1</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-alpha-2 border-2 border-surface-2"></span>
+					<code>--color-surface-alpha-2</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-alpha-3 border-2 border-surface-2"></span>
+					<code>--color-surface-alpha-3</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-alpha-4 border-2 border-surface-2"></span>
+					<code>--color-surface-alpha-4</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-alpha-5 border-2 border-surface-2"></span>
+					<code>--color-surface-alpha-5</code>
+				</li>
+			</ul>
+
+			<h2 class="text-md">Text</h2>
+			<ul role="list" class="flex gap-xs mt-sm">
+				<li>
+					<span class="swatch bg-strong"></span>
+					<code>--color-strong</code>
+				</li>
+				<li>
+					<span class="swatch bg-weak"></span>
+					<code>--color-weak</code>
+				</li>
+				<li>
+					<span class="swatch bg-strong-inverse"></span>
+					<code>--color-strong-reverse</code>
+				</li>
+				<li>
+					<span class="swatch bg-weak-inverse"></span>
+					<code>--color-weak-reverse</code>
+				</li>
+			</ul>
 
 			<h2 class="text-md">Alert Colors</h2>
 			<ul role="list" class="flex gap-xs mt-sm">
@@ -97,159 +125,165 @@ const {
 						<span>var(--color-surface-2)</span>
 						<div style="background-color: var(--color-surface-3)">
 							<span>var(--color-surface-3)</span>
-							<div style="background-color: var(--color-surface-4)">
-								<span>var(--color-surface-4)</span>
-							</div>
+							<div style="background-color: var(--color-surface-4)"><span>var(--color-surface-4)</span></div>
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<h2 class="text-md">Shadows</h2>
+			<ul role="list" class="flex gap-xs mt-sm">
+				<li>
+					<span class="swatch bg-surface-1 shadow-sm"></span>
+					<code>--shadow-sm</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-1 shadow-md"></span>
+					<code>--shadow-md</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-1 shadow-lg"></span>
+					<code>--shadow-lg</code>
+				</li>
+				<li>
+					<span class="swatch bg-surface-1 shadow-xl"></span>
+					<code>--shadow-xl</code>
+				</li>
+			</ul>
 
 			<hgroup>
 				<h2>Fonts in use</h2>
 				<p>These fonts have been crafted specifically for the brand</p>
 			</hgroup>
 
-		<p class="text-3xl">
-			Aa
-		</p>
-		<p class="font-name mt-xs">Roboto Flex 400</p>
-		<p class="mt-md grid-ram [--grid-col:18] [--col-min:2ch] [--col-max:2ch] gap-[1ch]"> 
-<!-- <p class="grid-ram gap-sm" style="--grid-col: 18; --col-min: 2ch; --col-max: 2ch"> -->
-			<span>A</span><span>B</span><span>C</span><span>D</span>
-			<span>E</span><span>F</span><span>G</span><span>H</span>
-			<span>I</span><span>J</span><span>K</span><span>L</span>
-			<span>M</span><span>N</span><span>O</span><span>P</span>
-			<span>Q</span><span>R</span><span>S</span><span>T</span>
-			<span>U</span><span>V</span><span>W</span><span>X</span>
-			<span>Y</span><span>Z</span><span>a</span><span>b</span>
-			<span>c</span><span>d</span><span>e</span><span>f</span>
-			<span>g</span><span>h</span><span>i</span><span>j</span>
-			<span>k</span><span>l</span><span>m</span><span>n</span>
-			<span>o</span><span>p</span><span>q</span><span>r</span>
-			<span>s</span><span>t</span><span>u</span><span>v</span>
-			<span>w</span><span>x</span><span>y</span><span>z</span>
-			<span>1</span><span>2</span><span>3</span><span>4</span>
-			<span>5</span><span>6</span><span>7</span><span>8</span>
-			<span>9</span><span>0</span><span>+</span><span>=</span>
-			<span>!</span><span>@</span><span>#</span><span>%</span>
-			<span>$</span><span>%</span><span>^</span><span>&amp;</span>
-		</p>
+			<p class="text-3xl">Aa</p>
+			<p class="font-name mt-xs">Roboto Flex 400</p>
+			<p class="mt-md grid-ram [--grid-col:18] [--col-min:2ch] [--col-max:2ch] gap-[1ch]">
+				<!-- <p class="grid-ram gap-sm" style="--grid-col: 18; --col-min: 2ch; --col-max: 2ch"> -->
+				<span>A</span><span>B</span><span>C</span><span>D</span>
+				<span>E</span><span>F</span><span>G</span><span>H</span>
+				<span>I</span><span>J</span><span>K</span><span>L</span>
+				<span>M</span><span>N</span><span>O</span><span>P</span>
+				<span>Q</span><span>R</span><span>S</span><span>T</span>
+				<span>U</span><span>V</span><span>W</span><span>X</span>
+				<span>Y</span><span>Z</span><span>a</span><span>b</span>
+				<span>c</span><span>d</span><span>e</span><span>f</span>
+				<span>g</span><span>h</span><span>i</span><span>j</span>
+				<span>k</span><span>l</span><span>m</span><span>n</span>
+				<span>o</span><span>p</span><span>q</span><span>r</span>
+				<span>s</span><span>t</span><span>u</span><span>v</span>
+				<span>w</span><span>x</span><span>y</span><span>z</span>
+				<span>1</span><span>2</span><span>3</span><span>4</span>
+				<span>5</span><span>6</span><span>7</span><span>8</span>
+				<span>9</span><span>0</span><span>+</span><span>=</span>
+				<span>!</span><span>@</span><span>#</span><span>%</span>
+				<span>$</span><span>%</span><span>^</span><span>&amp;</span>
+			</p>
 
-		<p class="text-3xl bold">
-			Aa
-		</p>
-		<p class="font-name font-bold mt-xs">Roboto Flex 900</p>
-		<p class="mt-md grid-ram font-bold" style="--grid-col:18; --col-min: 2ch; --col-max: 3ch">
-			<span>A</span><span>B</span><span>C</span><span>D</span>
-			<span>E</span><span>F</span><span>G</span><span>H</span>
-			<span>I</span><span>J</span><span>K</span><span>L</span>
-			<span>M</span><span>N</span><span>O</span><span>P</span>
-			<span>Q</span><span>R</span><span>S</span><span>T</span>
-			<span>U</span><span>V</span><span>W</span><span>X</span>
-			<span>Y</span><span>Z</span><span>a</span><span>b</span>
-			<span>c</span><span>d</span><span>e</span><span>f</span>
-			<span>g</span><span>h</span><span>i</span><span>j</span>
-			<span>k</span><span>l</span><span>m</span><span>n</span>
-			<span>o</span><span>p</span><span>q</span><span>r</span>
-			<span>s</span><span>t</span><span>u</span><span>v</span>
-			<span>w</span><span>x</span><span>y</span><span>z</span>
-			<span>1</span><span>2</span><span>3</span><span>4</span>
-			<span>5</span><span>6</span><span>7</span><span>8</span>
-			<span>9</span><span>0</span><span>+</span><span>=</span>
-			<span>!</span><span>@</span><span>#</span><span>%</span>
-			<span>$</span><span>%</span><span>^</span><span>&amp;</span>
-		</p>
+			<p class="text-3xl bold">Aa</p>
+			<p class="font-name font-bold mt-xs">Roboto Flex 900</p>
+			<p class="mt-md grid-ram font-bold" style="--grid-col:18; --col-min: 2ch; --col-max: 3ch">
+				<span>A</span><span>B</span><span>C</span><span>D</span>
+				<span>E</span><span>F</span><span>G</span><span>H</span>
+				<span>I</span><span>J</span><span>K</span><span>L</span>
+				<span>M</span><span>N</span><span>O</span><span>P</span>
+				<span>Q</span><span>R</span><span>S</span><span>T</span>
+				<span>U</span><span>V</span><span>W</span><span>X</span>
+				<span>Y</span><span>Z</span><span>a</span><span>b</span>
+				<span>c</span><span>d</span><span>e</span><span>f</span>
+				<span>g</span><span>h</span><span>i</span><span>j</span>
+				<span>k</span><span>l</span><span>m</span><span>n</span>
+				<span>o</span><span>p</span><span>q</span><span>r</span>
+				<span>s</span><span>t</span><span>u</span><span>v</span>
+				<span>w</span><span>x</span><span>y</span><span>z</span>
+				<span>1</span><span>2</span><span>3</span><span>4</span>
+				<span>5</span><span>6</span><span>7</span><span>8</span>
+				<span>9</span><span>0</span><span>+</span><span>=</span>
+				<span>!</span><span>@</span><span>#</span><span>%</span>
+				<span>$</span><span>%</span><span>^</span><span>&amp;</span>
+			</p>
 
-		<code>--text-4xl</code>
-		<h1 class="text-4xl mt-sm">Display Whereas a common understanding of these rights and freedoms is</h1>
-		
-		<code>--text-3xl</code>
-		<h1 class="text-3xl mt-sm">Display Whereas a common understanding of these rights and freedoms is</h1>
-		
-		<code>--text-2xl</code>
-		<h1 class="text-2xl mt-sm">
-			No one shall be held in slavery or servitude; slavery and the slave
-			trade shall be prohibited in all their forms.
-		</h1>
-		
-		<code>--text-xl</code>
-		<h2 class="text-xl mt-sm">
-			Everyone has the right to an effective remedy by the competent
-			national tribunals for acts violating the fundamental rights granted
-			him by the constitution or by law.
-		</h2>
-		
-		<code>--text-md</code>
-		<h3 class="text-md mt-sm">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-			eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-			minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-			aliquip ex ea commodo consequat.
-		</h3>
-		
-		<code>--text-sm</code>
-		<p class="text-sm measure-lg mt-sm">
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-			dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-			proident, sunt in culpa qui officia deserunt mollit anim id est
-			laborum.
-		</p>
-		
-		<code>--text-xs</code>
-		<p class="text-xs measure-lg mt-sm">
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-			dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-			proident, sunt in culpa qui officia deserunt mollit anim id est
-			laborum.
-		</p>
+			<code>--text-4xl</code>
+			<h1 class="text-4xl mt-sm">Display Whereas a common understanding of these rights and freedoms is</h1>
+
+			<code>--text-3xl</code>
+			<h1 class="text-3xl mt-sm">Display Whereas a common understanding of these rights and freedoms is</h1>
+
+			<code>--text-2xl</code>
+			<h1 class="text-2xl mt-sm">
+				No one shall be held in slavery or servitude; slavery and the slave trade shall be prohibited in all their
+				forms.
+			</h1>
+
+			<code>--text-xl</code>
+			<h2 class="text-xl mt-sm">
+				Everyone has the right to an effective remedy by the competent national tribunals for acts violating the
+				fundamental rights granted him by the constitution or by law.
+			</h2>
+
+			<code>--text-md</code>
+			<h3 class="text-md mt-sm">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+				magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat.
+			</h3>
+
+			<code>--text-sm</code>
+			<p class="text-sm measure-lg mt-sm">
+				Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+				sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+
+			<code>--text-xs</code>
+			<p class="text-xs measure-lg mt-sm">
+				Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+				sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
 		</article>
-  </main>
+	</main>
 </Layout>
 
 <style>
-	code {
-		display: inline-block;
-		background-color: light-dark(var(--color-surface-1), var(--color-surface-4));
-		border: 1px solid var(--color-surface-3);
-		padding: var(--spacing-3xs) var(--spacing-2xs);
-		border-radius: var(--radius-md);
-		font-size: .75em;
-		width: fit-content;
-		line-height: var(--leading-3xs);
-	}
+code {
+	display: inline-block;
+	background-color: light-dark(var(--color-surface-1), var(--color-surface-2));
+	border: 1px solid var(--color-surface-3);
+	padding: var(--spacing-3xs) var(--spacing-2xs);
+	border-radius: var(--radius-md);
+	font-size: 0.75em;
+	width: fit-content;
+	line-height: var(--leading-3xs);
+}
 
-	.swatch {
-		padding: var(--spacing-md) var(--spacing-sm); 
-		width: 12.5rem;
-		height: auto;
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-md);
-		border: 1px solid var(--surface-2);
-	}
-	
-	li { 
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-xs);
-	}
+.swatch {
+	padding: var(--spacing-md) var(--spacing-sm);
+	width: 12.5rem;
+	height: auto;
+	border-radius: var(--radius-md);
+}
 
-	.nested-palette { 
-		max-width: 55%;
-		background-color: var(--color-surface-0); 
-		border-radius: var(--radius-md);
-	}
-	.nested-palette div {
-		padding: var(--spacing-xs);
-		margin: var(--spacing-sm);
-		border-radius: var(--radius-md);
-	}
-	
-	.prop {
-		background-color: var(--color-surface-2);
-		border: 1px solid var(--color-surface-3);
-		padding: var(--spacing-3xs);
-		border-radius: var(--radius-md);
-		display: inline-flex;
-	}
-	</style>
+li {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+}
+
+.nested-palette {
+	max-width: 55%;
+	background-color: var(--color-surface-0);
+	border-radius: var(--radius-md);
+}
+.nested-palette div {
+	padding: var(--spacing-xs);
+	margin: var(--spacing-sm);
+	border-radius: var(--radius-md);
+}
+
+.prop {
+	background-color: var(--color-surface-2);
+	border: 1px solid var(--color-surface-3);
+	padding: var(--spacing-3xs);
+	border-radius: var(--radius-md);
+	display: inline-flex;
+}
+</style>

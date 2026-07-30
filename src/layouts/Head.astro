@@ -4,34 +4,41 @@ import "@styles/main.css";
 ---
 
 <head>
-   <!-- [1] Popover polyfill: adds popovertarget/togglePopover, toggle event, etc. -->
-   <script type="module">
-    import 'https://unpkg.com/@oddbird/popover-polyfill/dist/popover.iife.min.js';
-  </script>
+	<!-- [1] Popover polyfill: adds popovertarget/togglePopover, toggle event, etc. -->
+	<script type="module">
+	import "https://unpkg.com/@oddbird/popover-polyfill/dist/popover.iife.min.js";
+	</script>
 
-  <!-- [2] CSS Anchor Positioning polyfill -->
-  <script type="module">
-    if (!('anchorName' in document.documentElement.style)) {
-      import('https://unpkg.com/@oddbird/css-anchor-positioning');
-    }
-  </script>
-  
-  <!-- [3] Theme -->
-  <script is:inline>
-    (function() {
-      const stored  = localStorage.theme;
-      const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme   = stored || (prefers ? 'dark' : 'light');
-      document.documentElement.setAttribute('color-scheme', theme);
-    })();
-  </script>
+	<!-- [2] CSS Anchor Positioning polyfill -->
+	<script type="module">
+	if (!("anchorName" in document.documentElement.style)) {
+		import("https://unpkg.com/@oddbird/css-anchor-positioning");
+	}
+	</script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <!-- <link rel="sitemap" href="/sitemap-index.xml" /> -->
-  <meta name="generator" content={Astro.generator} />
-  <meta name="description" content={description} />
-  
-  <title>{title}</title>
+	<!-- [3] Theme -->
+	<script is:inline>
+	(() => {
+		const stored = localStorage.theme;
+		const preference = stored === "light" || stored === "dark" ? stored : "system";
+		const resolved =
+			preference === "system"
+				? window.matchMedia("(prefers-color-scheme: dark)").matches
+					? "dark"
+					: "light"
+				: preference;
+
+		document.documentElement.dataset.themePreference = preference;
+		document.documentElement.setAttribute("color-scheme", resolved);
+	})();
+	</script>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+	<!-- <link rel="sitemap" href="/sitemap-index.xml" /> -->
+	<meta name="generator" content={Astro.generator}>
+	<meta name="description" content={description}>
+
+	<title>{title}</title>
 </head>

@@ -1,0 +1,34 @@
+---
+import Head from "@layouts/Head.astro";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"html"> {
+	title: string;
+	description: string;
+}
+
+const { title = "Messaging Prototype", description = "Messaging interface prototype", ...rest } = Astro.props;
+const enableFigmaCapture = import.meta.env.DEV && import.meta.env.ENABLE_FIGMA_CAPTURE === "true";
+---
+
+<style>
+:root {
+	--sidebar-min: 240px;
+	--sidebar-max: 280px;
+	--list-min: 320px;
+	--list-max: 600px;
+}
+.grid {
+	display: grid;
+	grid-template-columns: 220px minmax(150px, 25%) 1fr;
+	grid-template-rows: auto 1fr;
+}
+</style>
+
+<html lang="en" {...rest}>
+	<Head {title} {description} />
+	{enableFigmaCapture && <script is:inline src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>}
+	<body id="app">
+		<slot />
+	</body>
+</html>

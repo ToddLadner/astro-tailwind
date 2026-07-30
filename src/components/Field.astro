@@ -1,111 +1,224 @@
 ---
-import { Icon } from 'astro-icon/components';
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
 
-type Element = 'input' | 'textarea' | 'select';
+type Element = "input" | "textarea" | "select";
 
-interface Props extends HTMLAttributes<any> {
-  as?: Element;
-  id?: string;
-  uid?: string;
-  label?: string;
-  icon?: string;
-  error?: string;
-  classes?: string;
-  options?: { value: string; label: string }[];
-}
+type SharedProps = {
+	as?: Element;
+	id?: string;
+	uid?: string;
+	label?: string;
+	icon?: string;
+	error?: string;
+	supportingText?: string;
+	warning?: string;
+	validationMessage?: boolean;
+	classes?: string;
+	required?: boolean;
+};
+
+type InputProps = HTMLAttributes<"input"> & SharedProps & { as?: "input"; options?: never };
+type TextareaProps = HTMLAttributes<"textarea"> & SharedProps & { as: "textarea"; options?: never };
+type SelectProps = HTMLAttributes<"select"> &
+	SharedProps & { as: "select"; options?: { value: string; label: string }[] };
+
+type Props = InputProps | TextareaProps | SelectProps;
+
+const props = Astro.props as Props & {
+	"aria-describedby"?: string;
+	"aria-invalid"?: string | boolean;
+};
 
 const {
-  as = 'input',
-  id: propId,
-  uid,
-  label,
-  icon,
-  error,
-  classes = '',
-  options = [],
-  ...rest
-} = Astro.props;
+	as = "input",
+	id: propId,
+	uid,
+	label,
+	icon,
+	error,
+	supportingText,
+	warning,
+	validationMessage = false,
+	classes = "",
+	required,
+	options = [],
+	"aria-describedby": ariaDescribedByProp,
+	"aria-invalid": ariaInvalidProp,
+	...rest
+} = props;
 
-// now choose the ID in priority order:
-const id = propId ?? uid ?? `field-${Math.random().toString(36).slice(2,8)}`;
+// Generate ID with secure random fallback
+const id =
+	propId ??
+	uid ??
+	`field-${crypto.getRandomValues(new Uint8Array(4)).reduce((s, b) => s + b.toString(16).padStart(2, "0"), "")}`;
+
+// Determine aria attributes
+const describedBy =
+	[
+		ariaDescribedByProp,
+		supportingText ? `${id}-supporting` : undefined,
+		warning ? `${id}-warning` : undefined,
+		error ? `${id}-error` : undefined,
+		validationMessage ? `${id}-validation` : undefined,
+	]
+		.filter(Boolean)
+		.join(" ") || undefined;
+const ariaInvalid = ariaInvalidProp ?? (error ? "true" : undefined);
+
+// Normalize required behavior:
+// - required present (or required={true}) => required
+// - required omitted or required={false} => optional
+const isRequired = required === true;
+const isOptional = !isRequired;
 ---
+
 <style>
-  /* [1] Field */
-  .field {
-    background-color: var(--color-surface-0);
-    max-width: var(--measure-sm);
-    padding: var(--spacing-2xs);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-inset-lg);
-    border: 1px solid var(--color-surface-3);
+/* [1] Field group */
+.field-group {
+	max-width: var(--measure-sm);
+}
 
-    &:focus-within {
-      border: 1px solid var(--color-brand);
-      box-shadow: 0px 0px 10px 4px oklch(from var(--color-brand) l c h / 23%);
+/* [2] Wrapped label and control */
+.field {
+	background-color: var(--color-surface-1);
+	padding: var(--spacing-2xs) var(--spacing-2xs);
+	border-radius: var(--radius-md);
+	border: 2px solid var(--color-surface-3);
+	transition:
+		border-color 0.2s,
+		box-shadow 0.2s;
 
-      .label {
-        color: var(--color-brand);
-      }
-    }
-  }
-  
-  /* [2] Label */
-  .label {}
-  
-  /* [3] Input */
-  .control {
-    background-color: transparent;
-    width: 100%;
-    font-size: var(--text-md);
-    
-    &:focus { outline: none; }
-  }
-  input::placeholder {
-    color: var(--color-surface-4);
-  }
-  
-  /* [4] Validation */
-  label:has(input:user-valid) {
-    color: var(--color-green-7);
-    border: 1px solid var(--color-green-4);
-    line-height: inherit;
-  }
-  label:has(input:user-invalid) {
-    color: var(--color-red-7);
-    border: 1px solid var(--color-red-7);
-    line-height: inherit;
-  }
-  /* */
-  textarea { resize: vertical; }
-  /* * { border: 1px solid red; } */
+	&:focus-within {
+		border: 2px solid var(--color-brand);
+		box-shadow: 0px 0px 10px 4px oklch(from var(--color-brand) l c h / 23%);
+	}
+
+	.label {
+		font-size: var(--text-sm);
+	}
+
+	.label-icon {
+		display: inline-flex;
+	}
+
+	.optional {
+		color: var(--color-weak);
+		font-weight: normal;
+	}
+
+	/* [3] Input, Textarea, Select */
+	.control {
+		background-color: transparent;
+		width: 100%;
+		font-size: var(--text-md);
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	&:has(.control:disabled) {
+		opacity: 0.65;
+	}
+}
+
+:is(input, textarea, select)::placeholder {
+	color: var(--color-surface-4);
+}
+
+/* [4] Validation */
+.field:has(.control:user-invalid),
+.field:has(.control[aria-invalid="true"]),
+.field:has(.control.is-invalid-field) {
+	border-color: var(--color-danger);
+}
+
+/* [5] Messages */
+.field-message {
+	color: var(--color-weak);
+	font-size: var(--text-xs);
+}
+
+.warning-message {
+	color: var(--color-warning);
+}
+
+.error-message {
+	color: var(--color-danger);
+}
+
+.validation-message:empty {
+	display: none;
+}
 </style>
 
-<label for={id} class="field grid gap-3xs" class:list={[classes]}>
-  {label && (
-    <span class="label flex items-center gap-xs">
-      {icon && <Icon name={icon} />}
-      <span class="text-xs ">{label}</span>
+<div class="field-group grid gap-2xs">
+	<label for={id} class="field grid gap-2xs" class:list={[classes]}>
+		{label && (
+	    <span class="label flex items-center gap-xs">
+	      {icon && <span class="label-icon" aria-hidden="true"><Icon name={icon} /></span>}
+	      {label}
+				{isOptional && <span class="optional">(optional)</span>}
+	    </span>
+	  )}
+
+		{as === 'input' && (
+	    <input
+	      id={id}
+	      class="control"
+	      aria-describedby={describedBy}
+	      aria-invalid={ariaInvalid}
+	      {...(isRequired ? { required: true } : {})}
+	      {...rest}
+	    />
+	  )}
+
+		{as === 'textarea' && (
+	    <textarea
+	      id={id}
+	      class="control resize-y"
+	      aria-describedby={describedBy}
+	      aria-invalid={ariaInvalid}
+	      {...(isRequired ? { required: true } : {})}
+	      {...rest}
+	    />
+	  )}
+
+		{as === 'select' && (
+	    <select
+	      id={id}
+	      class="control"
+	      aria-describedby={describedBy}
+	      aria-invalid={ariaInvalid}
+	      {...(isRequired ? { required: true } : {})}
+	      {...rest}
+	    >
+	      {options.map(o => <option value={o.value}>{o.label}</option>)}
+	    </select>
+	  )}
+	</label>
+
+	{supportingText && (
+    <span id={`${id}-supporting`} class="field-message supporting-text">
+      {supportingText}
     </span>
   )}
 
-  {as === 'input' && (
-    <input id={id} class="control" {...rest} />
+	{warning && (
+    <span id={`${id}-warning`} class="field-message warning-message">
+      <strong>Warning:</strong> {warning}
+    </span>
   )}
 
-  {as === 'textarea' && (
-    <textarea id={id} class="control resize-y" {...rest} />
-  )}
-
-  {as === 'select' && (
-    <select id={id} class="control" {...rest}>
-      {options.map(o => <option value={o.value}>{o.label}</option>)}
-    </select>
-  )}
-
-  {error && (
-    <span id={`${id}-error`} class="mt-xs text-xs text-red-6">
+	{error && (
+    <span id={`${id}-error`} class="field-message error-message">
       {error}
     </span>
   )}
-</label>
+
+	{validationMessage && (
+    <span id={`${id}-validation`} class="field-message error-message validation-message" aria-live="polite"></span>
+  )}
+</div>

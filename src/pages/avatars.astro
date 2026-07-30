@@ -1,51 +1,22 @@
 ---
-import Avatar from '@components/Avatar.astro';
-import Layout from '../layouts/Layout.astro';
+import Avatar from "@components/Avatar.astro";
+import altUserAvatar from "@images/elp.jpg";
 
-import userAvatar from '@images/killer-mike.jpg';
-import altUserAvatar from '@images/elp.jpg';
+import userAvatar from "@images/killer-mike.jpg";
+import Layout from "../layouts/Layout.astro";
 
-const { 
-	title = "My Astro Blog",
-	description = "My musings about the Astro framework",
-	...rest 
-} = Astro.props;
+const { title = "Avatars | Astro Tailwind", description = "Avatar component examples", ...rest } = Astro.props;
 ---
 
 <Layout {title} {description}>
 	<main class="bg-surface-2">
-    <article class="px-max py-2xl stack-md">
-      <h1>Avatars</h1>
-      <Avatar 
-        src={userAvatar} 
-        label="User Avatar" 
-        size="xl" 
-        badge="success" 
-      />
-      <Avatar 
-        src={userAvatar} 
-        label="User Avatar" 
-        size="lg" 
-        badge="success" 
-      />
-      <Avatar 
-        src={userAvatar} 
-        label="User Avatar" 
-        size="md" 
-        badge="success" 
-      />
-      <Avatar 
-        src={userAvatar} 
-        label="User Avatar"
-        size="sm" 
-        badge="success" 
-      />
-      <Avatar 
-        src={userAvatar} 
-        label="User Avatar" 
-        size="xs" 
-        badge="success" 
-      />
-    </article>
-  </main>
+		<article class="px-max py-2xl stack-md">
+			<h1>Avatars</h1>
+			<Avatar src={userAvatar} label="User Avatar" size="xl" badge="success" />
+			<Avatar src={altUserAvatar} label="User Avatar" size="lg" badge="success" />
+			<Avatar src={userAvatar} label="User Avatar" size="md" badge="success" />
+			<Avatar src={altUserAvatar} label="User Avatar" size="sm" badge="success" />
+			<Avatar src={userAvatar} label="User Avatar" size="xs" badge="success" />
+		</article>
+	</main>
 </Layout>

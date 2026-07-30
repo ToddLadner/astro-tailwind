@@ -1,380 +1,398 @@
 ---
-import { Icon } from 'astro-icon/components';
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
 
-interface Props extends HTMLAttributes<"button"> {
-  type?: "button" | "submit" | "reset";
-  theme?: "outlined" | "tonal" | "filled" | "custom";
-  size?: "sm" | "lg";
-  elevated?: boolean;
-  shape?: "square" | "circle" | "pill";
-  variant?: "icon-button";
-  text?: string;
-  icon?: string;
-  classes?: string;
-}
+type BaseProps = {
+	theme?: "outlined" | "tonal" | "filled" | "custom";
+	size?: "sm" | "lg";
+	elevated?: "shadow-xs" | "shadow-sm" | "shadow-md" | "shadow-lg" | "shadow-xl" | "shadow-2xl";
+	shape?: "square" | "circle" | "pill" | "squircle" | "superellipse";
+	variant?: "icon-button" | "bare";
+	text?: string;
+	icon?: string;
+	classes?: string;
+	disabled?: boolean;
+	"aria-label"?: string;
+};
 
-const { 
-  type = "button", 
-  theme,
-  size,
-  elevated,
-  variant, 
-  shape,
-  text, 
-  icon,
-  classes, 
-  ...rest 
-  } = Astro.props;
+type AnchorProps = BaseProps &
+	Omit<HTMLAttributes<"a">, "href"> & {
+		href: string;
+	};
+
+type ButtonProps = BaseProps &
+	Omit<HTMLAttributes<"button">, "type"> & {
+		href?: undefined;
+		type?: "button" | "submit" | "reset";
+	};
+
+type Props = ButtonProps | AnchorProps;
+
+const {
+	type = "button",
+	theme,
+	size,
+	elevated,
+	variant,
+	shape,
+	text,
+	icon,
+	classes,
+	href,
+	disabled = false,
+	"aria-label": ariaLabel,
+	...rest
+} = Astro.props as Props;
+
+const isLink = "href" in (Astro.props as Props) && !!href;
+const safeHref = disabled ? undefined : href;
+
+const classList = ["button", size, theme, shape, elevated, variant, classes];
+
+// Export Props type for use in other components
+export type PureButtonProps = ButtonProps;
 ---
 
-<style is:global>
-  @layer components {
-    /* General Button Styles */
-    :is(.button, [type=button], [type=submit], [type=reset]) {
-      /* Props */
-      --bg-color: transparent;
-      --border-color: transparent;
-      --border-radius: var(--radius-md);
-      --font-size: initial;
-      --min-height: 2.375rem;
-      --text-color: light-dark(var(--color-purple-7), var(--color-purple-3));
-      --button-ripple-duration: 0.5s;
-      --button-ripple-size: 100%;
+<style>
+@layer components {
+	/* General Button Styles */
+	:is(.button, [type="button"], [type="submit"], [type="reset"]) {
+		/* Design tokens / props */
+		--bg-color: transparent;
+		--border-color: transparent;
+		--border-width: 2px;
+		--border-radius: var(--radius-md);
+		--font-size: initial;
+		--min-height: auto;
+		--text-color: var(--color-brand);
+		--button-ripple-duration: 0.5s;
+		--button-ripple-size: 100%;
+		--icon-size: 1cap;
 
-      /* General Button Styles */
-      align-items: center;
-      background: var(--bg-color) var(--ripple, none);
-      border-radius: var(--border-radius);
-      border: 1px solid var(--border-color);
-      color: var(--text-color);
-      display: inline-flex;
-      font-size: var(--font-size);
-      font-weight: 600;
-      gap: 1ex;
-      justify-content: center;
-      min-block-size: var(--min-height);
-      padding-block: 0.5ex;
-      padding-inline: 1.5ex;
-      text-align: center;
-      text-decoration: none;
-      user-select: none;
+		/* Re-usable disabled colors (variants can override) */
+		--disabled-bg: color-mix(in oklch, var(--color-strong) 8%, var(--color-surface-3));
+		--disabled-text: color-mix(in oklch, var(--color-strong) 70%, var(--color-surface-3));
 
-      /* Default Disabled Button Styles */
-      &[disabled] {
-        cursor: not-allowed;
-        opacity: 0.64;
-      }
+		/* Base button */
+		min-block-size: var(--min-height);
+		padding-block: 1.5ex;
+		padding-inline: 2ex;
 
-      /* Color & Ripple Effect | Motion OK  */
-      @media (prefers-reduced-motion: no-preference) {
-        transition:
-          background-color 0.2s var(--ease-out-3),
-          box-shadow 0.2s var(--ease-out-3),
-          border-color 0.2s var(--ease-out-3),
-          color 0.2s var(--ease-out-3),
-          outline-offset 0.05s var(--ease-1);
-          background-position: center;
+		font-size: var(--font-size);
+		font-weight: 600;
+		color: var(--text-color);
+		text-align: center;
 
-        /* Hover and Active Effects */
-        &:not([disabled]) {
-          &:not(:active):hover {
-            --ripple: radial-gradient(circle, transparent 1%, var(--bg-color) 1%) center/15000%;
-            transition: background var(--button-ripple-duration);
-          }
+		background: var(--bg-color) var(--ripple, none);
+		border-radius: var(--border-radius);
+		border: var(--border-width) solid var(--border-color);
+		display: inline-block;
 
-          &:hover:active {
-            background-size: var(--button-ripple-size);
-            transition: background 0s;
-          }
-        }
-      }
+		text-decoration: none;
+		user-select: none;
 
-      /* Hover State */
-      &:not([disabled]) {
-        &:not(:active):hover {
-          --bg-color: light-dark(
-            oklch(from var(--color-brand) l 0.01 h / 15%),
-            oklch(from var(--color-brand) l 0.01 h / 10%)
-          );
-        }
-        
-        /* Pressed State */
-        &:hover:active {
-          --bg-color: light-dark(
-            oklch(from var(--color-brand) l 0.06 h / 30%),
-            oklch(from var(--color-brand) l 0.06 h / 40%)
-          );
-        }
-      }
+		/* Disabled: shared behavior */
+		&:is([disabled], [aria-disabled="true"]) {
+			cursor: not-allowed;
+			opacity: 0.64;
+		}
 
-      /* Disabled Text Color */
-      &[disabled] {
-        --text-color: color-mix(
-          in oklch,
-          var(--color-text-2) 90%,
-          var(--color-surface-1)
-        );
-      }
+		/* Non-disabled: shared behavior */
+		&:where(:not([disabled], [aria-disabled="true"])) {
+			cursor: pointer;
+		}
 
-      /* Button with Icon & Text */
-      &:not(.icon-button) {
-        [data-icon] {
-          max-block-size: 0.7lh;
-          color: currentColor;
-        }
-      }
+		/* Motion-OK: color & ripple */
+		@media (prefers-reduced-motion: no-preference) {
+			transition:
+				background-color 0.2s var(--ease-out-3),
+				box-shadow 0.2s var(--ease-out-3),
+				border-color 0.2s var(--ease-out-3),
+				color 0.2s var(--ease-out-3),
+				outline-offset 0.05s var(--ease-1);
+			background-position: center;
 
-      /* Button Size Variations */
-      &.sm {
-        --min-height: 1.875rem;
-        padding-block: 0;
-        padding-inline: 1ex;
-      }
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover (ripple in) */
+				&:hover {
+					--ripple: radial-gradient(circle, transparent 1%, var(--bg-color) 1%) center / 15000%;
+					transition: background var(--button-ripple-duration);
+				}
 
-      &.lg {
-        --min-height: 2.875rem;
-        padding-inline: 4ex;
-      }
+				/* Active (ripple out) */
+				&:active {
+					background-size: var(--button-ripple-size);
+					transition: background 0s;
+					position: relative;
+					top: 1px;
+				}
+			}
+		}
 
-      /* Icon Button | Remove padding for better Icon placement */
-      &.icon-button { 
-        padding: 0;
-        aspect-ratio: var(--aspect-square);
-        
-        [data-icon] {
-          max-block-size: 1lh;
-        }
-      }
+		/* Motion-reduced: keep states but kill fancy ripple */
+		@media (prefers-reduced-motion: reduce) {
+			transition: none;
+			background-position: center;
 
-      /* Button Variants */
-      &.outlined {
-        --bg-color: var(--color-surface-1);
-        --border-color: var(--color-brand);
-        --text-color: var(--color-brand);
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				&:hover,
+				&:active {
+					--ripple: none;
+				}
+			}
+		}
 
-        /* Hover State */
-        &:not([disabled]) {
-          &:not(:active):hover {
-            --bg-color: var(--color-brand);
-            --border-color: var(--color-brand);
-            --text-color: var(--color-gray-0);
-          }
-          /* Pressed State */
-          &:active {
-            --bg-color: light-dark(
-              oklch(from var(--color-brand)  calc(l + .1) c h / 100%),
-              oklch(from var(--color-brand) calc(l - .1) c h / 100%)
-            );
-            --border-color: light-dark(
-              oklch(from var(--color-brand)  calc(l + .1) c h / 100%),
-              oklch(from var(--color-brand) calc(l - .1) c h / 100%)
-            );
-            --text-color: var(--color-gray-0);
-          }
-        }
+		/* Brand-based default hover / active backgrounds */
+		&:where(:not([disabled], [aria-disabled="true"])) {
+			/* Hover (not pressed) */
+			&:hover:not(:active) {
+				--bg-color: light-dark(
+					oklch(from var(--color-brand) l 0.01 h / 15%),
+					oklch(from var(--color-brand) l 0.01 h / 10%)
+				);
+			}
 
-        /* Disabled Outlined Button */
-        &[disabled] {
-          --bg-color: transparent;
-          --border-color: color-mix(
-            in oklch,
-            var(--color-text-1) 50%,
-            var(--color-purple-1)
-          );
-          --text-color: color-mix(
-            in oklch,
-            var(--color-text-1) 70%,
-            var(--color-surface-1)
-          );
-        }
-      }
+			/* Pressed */
+			&:active {
+				--bg-color: light-dark(
+					oklch(from var(--color-brand) l 0.06 h / 20%),
+					oklch(from var(--color-brand) l 0.06 h / 10%)
+				);
+			}
+		}
 
-      &.tonal {
-        --bg-color: light-dark(
-            oklch(from var(--color-brand) 80% .12 h / 100%),
-            oklch(from var(--color-brand) l c h / 100%)
-          );
-        --text-color: var(--color-purple-13);
-        
-        /* Hover State */
-        &:not([disabled]) {
-          &:not(:active):hover {
-            --bg-color: light-dark(
-              oklch(from var(--color-brand) 85% .12 h / 100%),
-              oklch(from var(--color-brand) 65% c h / 100%)
-            );
-            --border-color:light-dark(
-              oklch(from var(--color-brand) 85% .12 h / 100%),
-              oklch(from var(--color-brand) 65% c h / 100%)
-            );
-          }
-          
-          /* Pressed State */
-          &:active {
-            --bg-color: light-dark(
-              oklch(from var(--color-brand) 90% .12 h / 100%),
-              oklch(from var(--color-brand) 70% c h / 100%)
-            );
-            --border-color:light-dark(
-              oklch(from var(--color-brand) 90% .12 h / 100%),
-              oklch(from var(--color-brand) 70% c h / 100%)
-            );
-          }
-        }
+		/* Disabled text color (base) */
+		&:is([disabled], [aria-disabled="true"]) {
+			--text-color: color-mix(in oklch, var(--color-weak) 90%, var(--color-surface-1));
+		}
 
-        /* Disabled Tonal Button */
-        &[disabled] {
-          --bg-color: color-mix(
-            in oklch,
-            var(--color-text-1) 8%,
-            var(--color-surface-3)
-          );
-          --text-color: color-mix(
-            in oklch,
-            var(--color-text-1) 70%,
-            var(--color-surface-3)
-          );
-        }
-      }
+		/* Button with icon + text */
+		&:not(.icon-button) {
+			[data-icon] {
+				max-block-size: var(--icon-size);
+				max-inline-size: var(--icon-size);
+				color: currentColor;
+				margin-inline-end: 1ex;
+			}
+		}
 
-      &.filled {
-        --bg-color: var(--color-purple-8);
-        --text-color: var(--color-gray-1);
+		/* Size variants */
+		&.sm {
+			font-size: var(--text-xs);
+		}
+		&.lg {
+			font-size: var(--text-lg);
+		}
 
-        &:not([disabled]) {
-          &:not(:active):hover {
-            --bg-color: var(--color-purple-10);
-            --border-color: var(--color-purple-10);
-          }
+		/* Icon button variant */
+		&.icon-button {
+			padding: 1.35ex;
+			aspect-ratio: var(--aspect-square);
+			display: inline-flex;
+		}
 
-          &:active {
-            --bg-color: var(--color-purple-9);
-            --border-color: var(--color-purple-9);
-          }
-        }
+		/* =========================
+        VARIANTS
+        ========================= */
 
-        /* Disabled Filled Button */
-        &[disabled] {
-          --bg-color: color-mix(
-            in oklch,
-            var(--color-text-2) 20%,
-            var(--color-surface-2)
-          );
-          --text-color: color-mix(
-            in oklch,
-            var(--color-text-4) 70%,
-            var(--color-surface-2)
-          );
-        }
-      }
+		/* OUTLINED */
+		&.outlined {
+			--bg-color: var(--color-surface-a04);
+			--border-color: var(--color-brand);
+			--text-color: var(--color-brand);
 
-      &.custom {
-        --bg-color: light-dark(
-          color-mix(in oklab, var(--color-brand) 20%, var(--color-gray-1)),
-          color-mix(in oklab, var(--color-brand) 10%, var(--color-gray-10))
-        );
-        --ripple-color: light-dark(
-          color-mix(in oklch, var(--color-gray-1) 80%, var(--color-purple-15)),
-          color-mix(in oklch, var(--color-gray-13) 80%, var(--color-purple-1))
-        );
-        --text-color: light-dark(var(--color-purple-9), var(--color-purple-2));
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover */
+				&:hover {
+					--bg-color: var(--color-brand-7);
+					--border-color: var(--color-brand-7);
+					--text-color: var(--color-strong-dark);
+				}
 
+				/* Active (pressed) */
+				&:active {
+					--bg-color: light-dark(
+						oklch(from var(--color-brand) calc(l + 0.1) c h / 100%),
+						oklch(from var(--color-brand) calc(l - 0.1) c h / 100%)
+					);
+					--border-color: light-dark(
+						oklch(from var(--color-brand) calc(l + 0.1) c h / 100%),
+						oklch(from var(--color-brand) calc(l - 0.1) c h / 100%)
+					);
+					--text-color: var(--color-gray-0);
+				}
+			}
 
-        /* Hover & Pressed background‑color change  */
-        &:not([disabled]) {
-          &:not(:active):hover {
-            --ripple: radial-gradient(
-              circle,
-              transparent 1%,
-              var(--ripple-color) 1%
-            )
-            center/15000%;
-            --bg-color: light-dark(
-              color-mix(in oklch, var(--color-gray-2) 93%, var(--color-purple-8)),
-              color-mix(in oklch, var(--color-gray-13) 93%, var(--color-purple-8))
-            );
-          }
+			/* Outlined – disabled colors */
+			&:is([disabled], [aria-disabled="true"]) {
+				--bg-color: transparent;
+				--border-color: color-mix(in oklch, var(--color-strong) 50%, var(--color-purple-1));
+				--text-color: color-mix(in oklch, var(--color-strong) 70%, var(--color-surface-1));
+			}
+		}
 
-          &:hover:active {
-            --bg-color: light-dark(
-              color-mix(in oklch, var(--color-gray-2) 91%, var(--color-purple-8)),
-              color-mix(in oklch, var(--color-gray-13) 91%, var(--color-purple-8))
-            );
-          }
-        }
+		/* TONAL */
+		&.tonal {
+			--bg-color: light-dark(
+				oklch(from var(--color-brand) 80% 0.12 h / 100%),
+				oklch(from var(--color-brand) l c h / 100%)
+			);
+			--text-color: var(--color-purple-13);
 
-        /* Disabled Elevated Button */
-        &[disabled] {
-          --bg-color: color-mix(
-            in oklch,
-            var(--text-color-2) 8%,
-            var(--surface-elevated)
-          );
-          --text-color: color-mix(
-            in oklch,
-            var(--text-color-2) 70%,
-            var(--surface-elevated)
-          );
-        }
-      }
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover */
+				&:hover {
+					--bg-color: light-dark(
+						oklch(from var(--color-brand) 85% 0.12 h / 100%),
+						oklch(from var(--color-brand) 65% c h / 100%)
+					);
+					--border-color: light-dark(
+						oklch(from var(--color-brand) 85% 0.12 h / 100%),
+						oklch(from var(--color-brand) 65% c h / 100%)
+					);
+				}
 
-      /* Box Shadow */
-      &.elevated {
-        box-shadow:
-          0px 3px 1px -2px oklch(0 0 0 / 20%),
-          0px 2px 2px 0px oklch(0 0 0 / 14%),
-          0px 1px 5px 0px oklch(0 0 0 / 12%);
-      }
+				/* Active */
+				&:active {
+					--bg-color: light-dark(
+						oklch(from var(--color-brand) 90% 0.12 h / 100%),
+						oklch(from var(--color-brand) 70% c h / 100%)
+					);
+					--border-color: light-dark(
+						oklch(from var(--color-brand) 90% 0.12 h / 100%),
+						oklch(from var(--color-brand) 70% c h / 100%)
+					);
+				}
+			}
 
-      &.ellipse { aspect-ratio: var(--aspect-square) }
-    }
+			/* Tonal – disabled */
+			&:is([disabled], [aria-disabled="true"]) {
+				--bg-color: var(--disabled-bg);
+				--text-color: var(--disabled-text);
+			}
+		}
 
-    /* File Input Styles */
-    input[type="file"] {
-      align-self: flex-start;
-      border-radius: var(--radius-2);
-      border: var(--border-size-1) solid var(--surface-filled);
-      box-shadow: var(--inner-shadow-4);
-      color: var(--text-color-2-contrast);
-      cursor: initial;
-      max-inline-size: 100%;
-      padding: 0;
-    }
+		/* FILLED */
+		&.filled {
+			--bg-color: var(--color-brand);
+			--text-color: var(--color-gray-1);
 
-    /* File Input Button Styling */
-    input[type="file"]::-webkit-file-upload-button,
-    input[type="file"]::file-selector-button {
-      cursor: pointer;
-      margin-inline-end: var(--size-relative-6);
-    }
-  }
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover */
+				&:hover {
+					--bg-color: var(--color-brand-7);
+					--border-color: var(--color-brand-7);
+				}
 
-  .spring {
-      transition: 
-        transform 1s var(--ease-spring-5),
-        box-shadow 1s var(--ease-spring-5),
-        outline-offset 145ms var(--ease-4);
-        
-        &:active {
-        transform: scale(.9);
-      }
-    }
+				/* Active */
+				&:active {
+					--bg-color: var(--color-brand-9);
+					--border-color: var(--color-brand-9);
+				}
+			}
+
+			/* Filled – disabled */
+			&:is([disabled], [aria-disabled="true"]) {
+				--bg-color: color-mix(in oklch, var(--color-weak) 20%, var(--color-surface-2));
+				--text-color: color-mix(in oklch, var(--color-weak) 85%, var(--color-surface-2));
+			}
+		}
+
+		/* CUSTOM */
+		&.custom {
+			--bg-color: light-dark(
+				color-mix(in oklab, var(--color-brand) 20%, var(--color-gray-1)),
+				color-mix(in oklab, var(--color-brand) 10%, var(--color-gray-10))
+			);
+			--ripple-color: light-dark(
+				color-mix(in oklch, var(--color-gray-1) 80%, var(--color-purple-15)),
+				color-mix(in oklch, var(--color-gray-13) 80%, var(--color-purple-1))
+			);
+			--text-color: light-dark(var(--color-purple-9), var(--color-purple-2));
+
+			&:where(:not([disabled], [aria-disabled="true"])) {
+				/* Hover */
+				&:hover {
+					--ripple: radial-gradient(circle, transparent 1%, var(--ripple-color) 1%) center / 15000%;
+
+					--bg-color: light-dark(
+						color-mix(in oklch, var(--color-gray-2) 93%, var(--color-purple-8)),
+						color-mix(in oklch, var(--color-gray-13) 93%, var(--color-purple-8))
+					);
+				}
+
+				/* Active */
+				&:active {
+					--bg-color: light-dark(
+						color-mix(in oklch, var(--color-gray-2) 91%, var(--color-purple-8)),
+						color-mix(in oklch, var(--color-gray-13) 91%, var(--color-purple-8))
+					);
+				}
+			}
+
+			/* Custom – disabled */
+			&:is([disabled], [aria-disabled="true"]) {
+				--bg-color: var(--disabled-bg);
+				--text-color: var(--disabled-text);
+			}
+		}
+
+		/* Bare */
+		&.bare {
+			--bg-color: transparent;
+			display: grid;
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+/* Spring interaction helper */
+.spring {
+	transition:
+		transform 1s var(--ease-spring-5),
+		box-shadow 1s var(--ease-spring-5),
+		outline-offset 145ms var(--ease-4);
+
+	&:active {
+		transform: scale(0.9);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.spring {
+		transition: none;
+
+		&:active {
+			transform: none;
+		}
+	}
+}
 </style>
 
-<button 
-  {type} 
-  class:list={[
-    size, 
-    theme, 
-    shape === 'circle' && 'ellipse',
-    elevated && 'elevated', 
-    variant,
-    classes
-    ]} 
-  {...rest}
->
-  { icon && <Icon name={icon} /> }
-  <slot/>
-  {text}
-</button>
+{isLink ? (
+  <a
+    href={safeHref}
+    aria-disabled={disabled ? "true" : undefined}
+    tabindex={disabled ? -1 : undefined}
+    aria-label={ariaLabel}
+    class:list={classList}
+    {...rest}
+  >
+    { icon && <Icon name={icon} data-icon /> }
+    <slot />
+    {text}
+  </a>
+) : (
+  <button
+    type={type as "button" | "submit" | "reset"}
+    aria-label={ariaLabel}
+    class:list={classList}
+    disabled={disabled}
+    {...rest}
+  >
+    { icon && <Icon name={icon} data-icon /> }
+    <slot />
+    {text}
+  </button>
+)}
