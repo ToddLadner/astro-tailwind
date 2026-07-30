@@ -107,6 +107,13 @@ test("next approval cannot bypass a pending remote transmission", () => {
 	assert.equal(approved.phaseIndex, 3);
 });
 
+test("revision can reject a pending remote transmission", () => {
+	const state = { approvals: {}, phaseIndex: 0, status: "awaiting-remote-approval" };
+	const revised = transition(state, "revise");
+	assert.equal(revised.status, "ready");
+	assert.deepEqual(revised.approvals, {});
+});
+
 test("escalation combines score, repair, risk, and supervisor gates", () => {
 	const result = assessEscalation({
 		phase: { id: "architecture", supervisorGate: true },
@@ -117,6 +124,25 @@ test("escalation combines score, repair, risk, and supervisor gates", () => {
 	});
 	assert.equal(result.required, true);
 	assert.equal(result.reasons.length, 5);
+});
+
+test("escalation normalizes fractional confidence scores", () => {
+	const highConfidence = assessEscalation({
+		phase: { id: "discovery", supervisorGate: false },
+		profile,
+		request: "Document components",
+		result: { confidence: 0.95, requestedEscalation: false },
+	});
+	assert.equal(highConfidence.required, false);
+
+	const lowConfidence = assessEscalation({
+		phase: { id: "discovery", supervisorGate: false },
+		profile,
+		request: "Document components",
+		result: { confidence: 0.7, requestedEscalation: false },
+	});
+	assert.equal(lowConfidence.required, true);
+	assert.deepEqual(lowConfidence.reasons, ["score 70 is below 90"]);
 });
 
 test("remote call budgets are hard limits", () => {

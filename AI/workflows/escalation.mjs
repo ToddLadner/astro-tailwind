@@ -3,7 +3,8 @@ const highRiskPattern =
 
 export function assessEscalation({ phase, profile, request, result, validationFailures = 0 }) {
 	const reasons = [];
-	const score = result.score ?? result.confidence ?? 0;
+	const reportedScore = result.score ?? result.confidence ?? 0;
+	const score = reportedScore > 0 && reportedScore <= 1 ? reportedScore * 100 : reportedScore;
 	if (score < profile.scoreThreshold) reasons.push(`score ${score} is below ${profile.scoreThreshold}`);
 	if (result.requestedEscalation) reasons.push("provider requested escalation");
 	if (validationFailures >= profile.maxLocalRepairAttempts) reasons.push("local repair limit reached");
