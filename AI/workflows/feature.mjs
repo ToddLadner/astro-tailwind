@@ -318,6 +318,7 @@ async function main() {
 		const phase = currentPhase(state);
 		if (!state.phaseData?.[phase.id]?.localResult) throw new Error("Run the local phase before requesting Claude");
 		assertCallBudget(state, profile, profile.independentReviewer);
+		const mode = args[0] === "repair" ? "repair" : "review";
 		const context = await createContextBundle({
 			maxBytes: profile.maxRemoteContextBytes,
 			phase,
@@ -328,14 +329,18 @@ async function main() {
 		state.pendingEscalation = {
 			bundle: context.bundle,
 			manifest: context.manifest,
-			mode: "review",
+			mode,
 			provider: profile.independentReviewer,
-			reasons: ["user requested independent frontier review"],
+			reasons: [
+				mode === "repair" ? "user requested independent frontier repair" : "user requested independent frontier review",
+			],
 		};
 		state.status = "awaiting-remote-approval";
-		event(state, "independent-review-requested", { provider: profile.independentReviewer });
+		event(state, mode === "repair" ? "independent-repair-requested" : "independent-review-requested", {
+			provider: profile.independentReviewer,
+		});
 		await persist(runDirectory, state);
-		console.log(`Claude review bundle prepared: ${join(context.bundle, "manifest.json")}`);
+		console.log(`Claude ${mode} bundle prepared: ${join(context.bundle, "manifest.json")}`);
 		console.log("Inspect it, then run: npm run ai:feature -- approve-remote");
 		return;
 	}
