@@ -97,6 +97,7 @@ const { doc } = Astro.props;
 	font-size: var(--text-sm);
 	line-height: 1.35;
 	text-decoration: none;
+	padding-block: var(--spacing-3xs);
 }
 
 .section-index a:hover,
@@ -110,6 +111,7 @@ const { doc } = Astro.props;
 .section-index a:target-current {
 	color: currentColor;
 	font-weight: 600;
+	background-color: var(--color-surface-3);
 }
 
 .section-index a[aria-current="location"] {
