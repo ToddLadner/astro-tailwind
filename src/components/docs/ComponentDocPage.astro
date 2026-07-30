@@ -10,48 +10,61 @@ interface Props {
 const { doc } = Astro.props;
 ---
 
-<article class="component-doc px-max py-2xl stack-xl">
-	<header class="stack-sm">
-		<p class="eyebrow">Component</p>
-		<h1>{doc.name}</h1>
-		<p class="text-md leading-lg">{doc.summary}</p>
-	</header>
+<article class="component-doc px-max py-2xl">
+	<div class="doc-content stack-xl">
+		<header id="overview" class="stack-sm">
+			<p class="eyebrow">Component</p>
+			<h1>{doc.name}</h1>
+			<p class="text-md leading-lg">{doc.summary}</p>
+		</header>
 
-	<nav class="section-index stack-xs" aria-label={`${doc.name} documentation`}>
-		<h2 class="text-md">On this page</h2>
-		<ul role="list">
-			{doc.groups.map((group) => <li><a href={`#${group.id}`}>{group.title}</a></li>)}
-			{doc.accessibility.length > 0 && <li><a href="#accessibility">Accessibility</a></li>}
-			{doc.responsive.length > 0 && <li><a href="#responsive-behavior">Responsive behavior</a></li>}
-		</ul>
-	</nav>
-
-	<section class="stack-sm" aria-labelledby="import-heading">
-		<h2 id="import-heading">Import</h2>
-		<CopyCode code={doc.importStatement} id={`${doc.slug}-import`} />
-	</section>
-
-	<slot />
-
-	{doc.accessibility.length > 0 && (
-		<section id="accessibility" class="stack-md" aria-labelledby="accessibility-heading">
-			<h2 id="accessibility-heading">Accessibility</h2>
-			<DocNotes notes={doc.accessibility} />
+		<section id="import" class="stack-sm" aria-labelledby="import-heading">
+			<h2 id="import-heading">Import</h2>
+			<CopyCode code={doc.importStatement} id={`${doc.slug}-import`} />
 		</section>
-	)}
 
-	{doc.responsive.length > 0 && (
-		<section id="responsive-behavior" class="stack-md" aria-labelledby="responsive-heading">
-			<h2 id="responsive-heading">Responsive behavior</h2>
-			<DocNotes notes={doc.responsive} />
-		</section>
-	)}
+		<slot />
+
+		{doc.accessibility.length > 0 && (
+			<section id="accessibility" class="stack-md" aria-labelledby="accessibility-heading">
+				<h2 id="accessibility-heading">Accessibility</h2>
+				<DocNotes notes={doc.accessibility} />
+			</section>
+		)}
+
+		{doc.responsive.length > 0 && (
+			<section id="responsive-behavior" class="stack-md" aria-labelledby="responsive-heading">
+				<h2 id="responsive-heading">Responsive behavior</h2>
+				<DocNotes notes={doc.responsive} />
+			</section>
+		)}
+	</div>
+
+	<aside class="toc-rail">
+		<nav class="section-index" aria-label={`${doc.name} documentation`}>
+			<h2>On this page</h2>
+			<ul role="list">
+				<li><a href="#overview">Overview</a></li>
+				<li><a href="#import">Import</a></li>
+				{doc.groups.map((group) => <li><a href={`#${group.id}`}>{group.title}</a></li>)}
+				{doc.accessibility.length > 0 && <li><a href="#accessibility">Accessibility</a></li>}
+				{doc.responsive.length > 0 && <li><a href="#responsive-behavior">Responsive behavior</a></li>}
+			</ul>
+		</nav>
+	</aside>
 </article>
 
 <style>
 .component-doc {
-	max-inline-size: 96rem;
+	display: grid;
+	max-inline-size: 90rem;
 	margin-inline: auto;
+	gap: var(--spacing-xl);
+	align-items: start;
+}
+
+.doc-content {
+	min-inline-size: 0;
 }
 
 .eyebrow {
@@ -62,18 +75,151 @@ const { doc } = Astro.props;
 }
 
 .section-index {
-	padding: var(--spacing-md);
-	background: var(--color-surface-1);
-	border: 1px solid var(--color-surface-3);
-	border-radius: var(--radius-md);
+	padding-block: var(--spacing-sm);
+	border-block: 1px solid var(--color-surface-3);
+	/* biome-ignore lint/correctness/noUnknownProperty: CSS Overflow Level 5 progressive enhancement. */
+	scroll-target-group: auto;
+}
+
+.section-index h2 {
+	margin-block-end: var(--spacing-sm);
+	font-size: var(--text-md);
 }
 
 .section-index ul {
 	display: grid;
-	gap: var(--spacing-xs);
+	gap: 0.45rem;
 }
 
 .section-index a {
-	display: inline-block;
+	display: block;
+	color: var(--color-weak);
+	font-size: var(--text-sm);
+	line-height: 1.35;
+	text-decoration: none;
+}
+
+.section-index a:hover,
+.section-index a:focus-visible {
+	color: currentColor;
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+/* biome-ignore lint/correctness/noUnknownPseudoClass: CSS Overflow Level 5 progressive enhancement. */
+.section-index a:target-current {
+	color: currentColor;
+	font-weight: 600;
+}
+
+.section-index a[aria-current="location"] {
+	color: currentColor;
+	font-weight: 600;
+}
+
+@media (min-width: 64rem) {
+	.component-doc {
+		grid-template-columns: minmax(0, 1fr) 16rem;
+	}
+
+	.toc-rail {
+		grid-column: 2;
+		grid-row: 1;
+		align-self: stretch;
+		border-inline-start: 1px solid var(--color-surface-3);
+	}
+
+	.section-index {
+		position: sticky;
+		inset-block-start: var(--spacing-md);
+		max-block-size: calc(100vh - (var(--spacing-md) * 2));
+		padding: 0 0 0 var(--spacing-md);
+		overflow-y: auto;
+		border: 0;
+	}
 }
 </style>
+
+<style is:global>
+.component-doc .doc-content [data-current] {
+	background-color: var(--color-surface-alpha-4);
+	border-radius: var(--radius-md);
+	box-shadow: 0 0 0 var(--spacing-xs) var(--color-surface-alpha-4);
+}
+</style>
+
+<script>
+let disposeToc: (() => void) | undefined;
+
+function initializeToc() {
+	disposeToc?.();
+
+	const toc = document.querySelector<HTMLElement>(".component-doc .section-index");
+	if (!toc) return;
+
+	const links = [...toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+	const sections = links
+		.map((link) => {
+			const id = link.hash.slice(1);
+			const section = document.getElementById(id);
+			return section ? { id, link, section } : null;
+		})
+		.filter((item): item is NonNullable<typeof item> => item !== null);
+
+	if (sections.length === 0) return;
+
+	const setActive = (id: string) => {
+		for (const item of sections) {
+			if (item.id === id) {
+				item.link.setAttribute("aria-current", "location");
+				item.section.setAttribute("data-current", "");
+			} else {
+				item.link.removeAttribute("aria-current");
+				item.section.removeAttribute("data-current");
+			}
+		}
+	};
+
+	const updateActive = () => {
+		const atPageEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+		if (atPageEnd) {
+			setActive(sections.at(-1)?.id ?? sections[0].id);
+			return;
+		}
+
+		const marker = Math.min(window.innerHeight * 0.2, 180);
+		const current = sections.reduce((active, item) => {
+			return item.section.getBoundingClientRect().top <= marker ? item : active;
+		}, sections[0]);
+		setActive(current.id);
+	};
+
+	let frame = 0;
+	const requestUpdate = () => {
+		cancelAnimationFrame(frame);
+		frame = requestAnimationFrame(updateActive);
+	};
+
+	const observer = new IntersectionObserver(requestUpdate, {
+		rootMargin: "-20% 0px -70% 0px",
+	});
+	for (const item of sections) observer.observe(item.section);
+
+	window.addEventListener("hashchange", requestUpdate);
+	window.addEventListener("resize", requestUpdate);
+	window.addEventListener("scroll", requestUpdate, { passive: true });
+	requestUpdate();
+
+	disposeToc = () => {
+		cancelAnimationFrame(frame);
+		observer.disconnect();
+		window.removeEventListener("hashchange", requestUpdate);
+		window.removeEventListener("resize", requestUpdate);
+		window.removeEventListener("scroll", requestUpdate);
+	};
+}
+
+initializeToc();
+document.addEventListener("astro:page-load", initializeToc);
+document.addEventListener("astro:before-swap", () => disposeToc?.());
+</script>

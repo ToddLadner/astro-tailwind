@@ -28,6 +28,15 @@ function extractJson(value) {
 	return JSON.parse(candidate);
 }
 
+export function normalizeResultScores(result) {
+	const normalized = { ...result };
+	for (const key of ["confidence", "score"]) {
+		const value = normalized[key];
+		if (typeof value === "number" && value > 0 && value <= 1) normalized[key] = value * 100;
+	}
+	return normalized;
+}
+
 function mockResult(phase) {
 	if (phase.id === "review" || phase.id === "final-review") {
 		return { decision: "pass", findings: [], reason: "Deterministic mock review passed.", score: 96 };
@@ -72,7 +81,7 @@ export async function runProvider({
 	writable = false,
 }) {
 	if (mock) {
-		return { code: 0, durationMs: 1, provider, result: mockResult(phase), usage: null };
+		return { code: 0, durationMs: 1, provider, result: normalizeResultScores(mockResult(phase)), usage: null };
 	}
 	if (provider === "lmstudio" || provider === "ollama") {
 		model = await resolveLocalModel(provider, model);
@@ -96,7 +105,7 @@ export async function runProvider({
 		const run = await runCommand("claude", args, { cwd, input: prompt });
 		if (run.code !== 0) throw new Error(run.stderr || run.stdout);
 		const envelope = JSON.parse(run.stdout);
-		const result = envelope.structured_output ?? extractJson(envelope.result);
+		const result = normalizeResultScores(envelope.structured_output ?? extractJson(envelope.result));
 		return { ...run, model, provider, result, usage: envelope.usage ?? null };
 	}
 	const args = [
@@ -118,7 +127,7 @@ export async function runProvider({
 	if (model) args.push("--model", model);
 	const run = await runCommand("codex", args, { cwd, input: prompt });
 	if (run.code !== 0) throw new Error(run.stderr || run.stdout);
-	const result = extractJson(await readFile(output, "utf8"));
+	const result = normalizeResultScores(extractJson(await readFile(output, "utf8")));
 	await writeFile(output, JSON.stringify(result, null, 2));
 	return { ...run, model, provider, result, usage: null };
 }

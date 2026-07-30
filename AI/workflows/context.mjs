@@ -47,7 +47,7 @@ export async function createContextBundle({ maxBytes, phase, root, runDirectory,
 	} catch {
 		// The first phase may not have a ledger yet.
 	}
-	for (const artifact of ["implementation.patch", "validation.json"]) {
+	for (const artifact of ["implementation.patch", "validation.json", "browser-validation.json"]) {
 		try {
 			const source = join(runDirectory, "artifacts", artifact);
 			const size = (await stat(source)).size;

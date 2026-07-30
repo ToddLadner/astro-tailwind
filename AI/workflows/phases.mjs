@@ -18,7 +18,7 @@ export function currentPhase(state) {
 export function transition(state, action) {
 	if (action === "stop") return { ...state, status: "stopped" };
 	if (action === "revise") {
-		if (!["awaiting-approval", "awaiting-remote-approval", "blocked"].includes(state.status)) {
+		if (!["ready", "awaiting-approval", "awaiting-remote-approval", "blocked"].includes(state.status)) {
 			throw new Error(`Cannot revise while status is ${state.status}`);
 		}
 		return { ...state, status: "ready" };

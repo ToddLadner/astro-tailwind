@@ -6,7 +6,7 @@
 	"independentReviewer": "claude",
 	"scoreThreshold": 90,
 	"maxLocalRepairAttempts": 2,
-	"maxCodexCalls": 2,
+	"maxCodexCalls": 4,
 	"maxClaudeCalls": 1,
 	"maxRemoteContextBytes": 50000,
 	"requireApprovalBeforeRemote": true,

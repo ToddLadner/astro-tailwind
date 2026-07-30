@@ -9,7 +9,7 @@ interface Props {
 const { example } = Astro.props;
 ---
 
-<article class="component-example stack-sm" aria-labelledby={`${example.id}-heading`}>
+<article id={example.id} class="component-example stack-sm" aria-labelledby={`${example.id}-heading`}>
 	<header class="stack-2xs">
 		<h3 id={`${example.id}-heading`} class="text-md">{example.title}</h3>
 		{example.description && <p class="text-sm">{example.description}</p>}

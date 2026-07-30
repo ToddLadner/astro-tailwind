@@ -12,7 +12,7 @@ import {
 import { createContextBundle } from "../AI/workflows/context.mjs";
 import { promptFor } from "../AI/workflows/feature.mjs";
 import { phases, transition } from "../AI/workflows/phases.mjs";
-import { runCommand, runProvider } from "../AI/workflows/providers.mjs";
+import { normalizeResultScores, runCommand, runProvider } from "../AI/workflows/providers.mjs";
 import { createState, loadActive, saveState } from "../AI/workflows/state.mjs";
 import { collectDiff, ensureWorktreeDependencies } from "../AI/workflows/validation.mjs";
 
@@ -139,6 +139,12 @@ test("revision can reject a pending remote transmission", () => {
 	assert.deepEqual(revised.approvals, {});
 });
 
+test("revision can replace a local result before a supervisor gate", () => {
+	const state = { approvals: {}, phaseIndex: 3, status: "ready" };
+	const revised = transition(state, "revise");
+	assert.equal(revised.status, "ready");
+});
+
 test("escalation combines score, repair, risk, and supervisor gates", () => {
 	const result = assessEscalation({
 		phase: { id: "architecture", supervisorGate: true },
@@ -195,6 +201,11 @@ test("mock providers return structured phase and review results without model ca
 	});
 	assert.equal(review.result.decision, "pass");
 	assert.equal(review.result.score, 96);
+});
+
+test("provider results normalize fractional confidence and review scores", () => {
+	assert.deepEqual(normalizeResultScores({ confidence: 0.95, score: 1 }), { confidence: 95, score: 100 });
+	assert.deepEqual(normalizeResultScores({ confidence: 95, score: 82 }), { confidence: 95, score: 82 });
 });
 
 test("remote context bundles obey their byte limit", async () => {
