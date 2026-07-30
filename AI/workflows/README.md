@@ -35,6 +35,9 @@ npm run ai:feature -- apply
 
 Use `discard` to remove the implementation worktree without applying its patch.
 
+If a provider exits or stalls after completing implementation edits, use `capture` from the `ready` implementation
+state to save and validate the existing worktree without another model call.
+
 Use `resume` after an interrupted provider call. Use `request-claude` after a local result when an independent
 frontier opinion is valuable. Use `request-claude repair` when Claude should replace a failed phase result rather
 than review it. Both commands stop for remote-bundle approval before calling Claude.

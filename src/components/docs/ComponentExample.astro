@@ -1,0 +1,42 @@
+---
+import type { DocExample } from "../../docs/types";
+import CopyCode from "./CopyCode.astro";
+
+interface Props {
+	example: DocExample<unknown>;
+}
+
+const { example } = Astro.props;
+---
+
+<article class="component-example stack-sm" aria-labelledby={`${example.id}-heading`}>
+	<header class="stack-2xs">
+		<h3 id={`${example.id}-heading`} class="text-md">{example.title}</h3>
+		{example.description && <p class="text-sm">{example.description}</p>}
+	</header>
+	<div class="preview-tray" aria-label={example.previewLabel ?? `${example.title} preview`}>
+		<slot name="preview" />
+	</div>
+	<CopyCode code={example.source} id={example.id} />
+</article>
+
+<style>
+.component-example {
+	min-inline-size: 0;
+	padding: var(--spacing-md);
+	background: var(--color-surface-1);
+	border: 1px solid var(--color-surface-3);
+	border-radius: var(--radius-md);
+}
+
+.preview-tray {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	min-block-size: 6rem;
+	padding: var(--spacing-md);
+	overflow: hidden;
+	background: var(--color-surface-2);
+	border-radius: var(--radius-sm);
+}
+</style>

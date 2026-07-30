@@ -37,13 +37,30 @@ function providerFor(profile, phase) {
 }
 
 function approvedPhaseContext(state) {
-	const approved = phases.flatMap((approvedPhase) => {
-		if (!state.approvals[approvedPhase.id]) return [];
-		const data = state.phaseData?.[approvedPhase.id];
-		const result = data?.supervisorResult ?? data?.localResult;
-		return result ? [{ phase: approvedPhase.id, result }] : [];
-	});
-	return approved.length ? JSON.stringify(approved, null, 2) : "(none)";
+	const latestApproved = phases.toReversed().find((phase) => state.approvals[phase.id]);
+	if (!latestApproved) return "(none)";
+	const latestData = state.phaseData?.[latestApproved.id];
+	const latestResult = latestData?.supervisorResult ?? latestData?.localResult;
+	const validationData = phases
+		.toReversed()
+		.map((phase) => ({ phase, data: state.phaseData?.[phase.id] }))
+		.find(({ phase, data }) => state.approvals[phase.id] && data?.validation);
+	const context = {
+		phase: latestApproved.id,
+		summary: latestResult?.summary ?? latestResult?.reason ?? "",
+		...(validationData
+			? {
+					validation: {
+						passed: validationData.data.validation.passed,
+						results: validationData.data.validation.results?.map((item) => ({
+							command: item.command,
+							exitCode: item.exitCode,
+						})),
+					},
+				}
+			: {}),
+	};
+	return JSON.stringify(context, null, 2);
 }
 
 function latestRevisionNote(state, phase) {
@@ -385,6 +402,47 @@ async function main() {
 		event(updated, command, { note: args.join(" ") || undefined });
 		await persist(runDirectory, updated);
 		return printStatus(updated, runDirectory, profile);
+	}
+	if (command === "capture") {
+		const phase = currentPhase(state);
+		if (!phase?.implementation || !state.worktree) {
+			throw new Error("Capture is only available for an implementation phase with an existing worktree");
+		}
+		if (state.status !== "ready") {
+			throw new Error(`Cannot capture implementation while status is ${state.status}`);
+		}
+		await ensureWorktreeDependencies(root, state.worktree.path);
+		const patchPath = join(runDirectory, "artifacts", "implementation.patch");
+		const diff = await savePatch(state.worktree.path, patchPath);
+		if (!diff.diff.trim()) throw new Error("Implementation worktree has no file changes to capture");
+		const validation = await validateWorktree(state.worktree.path, profile.validationCommands);
+		await writeFile(join(runDirectory, "artifacts", "validation.json"), JSON.stringify(validation, null, 2));
+		state.phaseData[phase.id] = {
+			completed: true,
+			diff,
+			durationMs: 0,
+			localResult: {
+				claims: ["Captured the existing implementation worktree after an interrupted provider call."],
+				confidence: validation.passed ? 95 : 60,
+				decisions: [],
+				evidence: validation.results.map((result) => `${result.command}: exit ${result.exitCode}`),
+				openQuestions: [],
+				requestedEscalation: !validation.passed,
+				risks: validation.passed ? [] : ["One or more validation commands failed."],
+				status: validation.passed ? "complete" : "blocked",
+				summary: "Existing implementation changes were captured and validated deterministically.",
+			},
+			model: null,
+			provider: "recovery",
+			validation,
+		};
+		state.pendingEscalation = validation.passed
+			? null
+			: { mode: "review", reasons: ["captured implementation validation failed"] };
+		state.status = validation.passed ? "awaiting-approval" : "awaiting-remote-approval";
+		event(state, "implementation-captured", { validationPassed: validation.passed });
+		await persist(runDirectory, state);
+		return printStatus(state, runDirectory, profile);
 	}
 	if (command === "diff") {
 		if (!state.worktree) throw new Error("No implementation worktree exists");

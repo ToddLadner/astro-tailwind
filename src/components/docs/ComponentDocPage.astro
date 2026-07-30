@@ -1,0 +1,79 @@
+---
+import type { ComponentDoc } from "../../docs/types";
+import CopyCode from "./CopyCode.astro";
+import DocNotes from "./DocNotes.astro";
+
+interface Props {
+	doc: ComponentDoc<unknown>;
+}
+
+const { doc } = Astro.props;
+---
+
+<article class="component-doc px-max py-2xl stack-xl">
+	<header class="stack-sm">
+		<p class="eyebrow">Component</p>
+		<h1>{doc.name}</h1>
+		<p class="text-md leading-lg">{doc.summary}</p>
+	</header>
+
+	<nav class="section-index stack-xs" aria-label={`${doc.name} documentation`}>
+		<h2 class="text-md">On this page</h2>
+		<ul role="list">
+			{doc.groups.map((group) => <li><a href={`#${group.id}`}>{group.title}</a></li>)}
+			{doc.accessibility.length > 0 && <li><a href="#accessibility">Accessibility</a></li>}
+			{doc.responsive.length > 0 && <li><a href="#responsive-behavior">Responsive behavior</a></li>}
+		</ul>
+	</nav>
+
+	<section class="stack-sm" aria-labelledby="import-heading">
+		<h2 id="import-heading">Import</h2>
+		<CopyCode code={doc.importStatement} id={`${doc.slug}-import`} />
+	</section>
+
+	<slot />
+
+	{doc.accessibility.length > 0 && (
+		<section id="accessibility" class="stack-md" aria-labelledby="accessibility-heading">
+			<h2 id="accessibility-heading">Accessibility</h2>
+			<DocNotes notes={doc.accessibility} />
+		</section>
+	)}
+
+	{doc.responsive.length > 0 && (
+		<section id="responsive-behavior" class="stack-md" aria-labelledby="responsive-heading">
+			<h2 id="responsive-heading">Responsive behavior</h2>
+			<DocNotes notes={doc.responsive} />
+		</section>
+	)}
+</article>
+
+<style>
+.component-doc {
+	max-inline-size: 96rem;
+	margin-inline: auto;
+}
+
+.eyebrow {
+	color: var(--color-weak);
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.section-index {
+	padding: var(--spacing-md);
+	background: var(--color-surface-1);
+	border: 1px solid var(--color-surface-3);
+	border-radius: var(--radius-md);
+}
+
+.section-index ul {
+	display: grid;
+	gap: var(--spacing-xs);
+}
+
+.section-index a {
+	display: inline-block;
+}
+</style>

@@ -1,0 +1,108 @@
+---
+interface Props {
+	code: string;
+	id: string;
+}
+
+const { code, id } = Astro.props;
+const codeId = `code-${id}`;
+const statusId = `copy-status-${id}`;
+---
+
+<div class="code-block" data-code-block>
+	<pre tabindex="0"><code id={codeId}>{code}</code></pre>
+	<button type="button" class="copy-button" data-copy-code data-copy-label="Copy" aria-describedby={statusId} hidden>
+		Copy
+	</button>
+	<span id={statusId} class="copy-status" data-copy-status aria-live="polite"></span>
+</div>
+
+<script>
+const resetTimers = new WeakMap<Element, number>();
+
+document.querySelectorAll<HTMLElement>("[data-copy-code]").forEach((button) => {
+	button.hidden = false;
+});
+
+document.addEventListener("click", async (event) => {
+	const target = event.target;
+	if (!(target instanceof Element)) return;
+	const button = target.closest<HTMLButtonElement>("[data-copy-code]");
+	if (!button) return;
+
+	const block = button.closest<HTMLElement>("[data-code-block]");
+	const code = block?.querySelector("code")?.textContent;
+	const status = block?.querySelector<HTMLElement>("[data-copy-status]");
+	if (!code || !status) return;
+
+	const defaultLabel = button.dataset.copyLabel ?? "Copy";
+	const previousTimer = resetTimers.get(button);
+	if (previousTimer) window.clearTimeout(previousTimer);
+
+	try {
+		await navigator.clipboard.writeText(code);
+		button.textContent = "Copied";
+		status.textContent = "Code copied to clipboard.";
+	} catch {
+		button.textContent = "Copy failed";
+		status.textContent = "Copy failed. Select the code and copy it manually.";
+	}
+
+	const timer = window.setTimeout(() => {
+		button.textContent = defaultLabel;
+		status.textContent = "";
+		resetTimers.delete(button);
+	}, 2400);
+	resetTimers.set(button, timer);
+});
+</script>
+
+<style>
+.code-block {
+	position: relative;
+	min-inline-size: 0;
+}
+
+pre {
+	max-inline-size: 100%;
+	margin: 0;
+	padding: var(--spacing-md);
+	padding-block-start: var(--spacing-xl);
+	overflow-x: auto;
+	color: var(--color-strong);
+	background: var(--color-surface-3);
+	border-radius: var(--radius-sm);
+}
+
+.copy-button {
+	position: absolute;
+	inset-block-start: var(--spacing-xs);
+	inset-inline-end: var(--spacing-xs);
+	padding: var(--spacing-2xs) var(--spacing-xs);
+	color: var(--color-brand);
+	background: var(--color-surface-1);
+	border: 1px solid currentColor;
+	border-radius: var(--radius-sm);
+	cursor: pointer;
+}
+
+.copy-button:focus-visible {
+	outline: 2px solid var(--color-brand);
+	outline-offset: 2px;
+}
+
+.copy-status {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+@media (forced-colors: active) {
+	.copy-button {
+		border-color: ButtonText;
+	}
+}
+</style>

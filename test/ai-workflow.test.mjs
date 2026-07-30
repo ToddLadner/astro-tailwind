@@ -65,6 +65,31 @@ test("phase prompts include approved results, revision notes, and strict boundar
 	assert.match(prompt, /Return ONLY one JSON object/);
 });
 
+test("phase prompts compact approved results to avoid context growth", () => {
+	const state = {
+		approvals: { discovery: true },
+		events: [],
+		phaseData: {
+			discovery: {
+				localResult: {
+					claims: ["large claim that should not be forwarded"],
+					decisions: ["Keep the approved boundary."],
+					evidence: ["large evidence that should not be forwarded"],
+					openQuestions: [],
+					risks: [],
+					summary: "Concise approved result.",
+				},
+			},
+		},
+		request: "Add documentation",
+	};
+	const prompt = promptFor(state, phases[1]);
+	assert.match(prompt, /Concise approved result/);
+	assert.doesNotMatch(prompt, /Keep the approved boundary/);
+	assert.doesNotMatch(prompt, /large claim that should not be forwarded/);
+	assert.doesNotMatch(prompt, /large evidence that should not be forwarded/);
+});
+
 test("quality gate detects copied phase output and counts local attempts", () => {
 	const copied = { claims: ["same"], decisions: [], evidence: [], openQuestions: [], risks: [], summary: "same" };
 	const state = {

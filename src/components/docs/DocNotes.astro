@@ -1,0 +1,32 @@
+---
+import type { NoteRecord } from "../../docs/types";
+
+interface Props {
+	notes: readonly NoteRecord[];
+}
+
+const { notes } = Astro.props;
+---
+
+<ul class="notes-grid" role="list">
+	{notes.map((note) => (
+		<li class="stack-2xs">
+			<h3 class="text-md">{note.title}</h3>
+			<p class="text-sm">{note.body}</p>
+		</li>
+	))}
+</ul>
+
+<style>
+.notes-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+	gap: var(--spacing-md);
+}
+
+.notes-grid li {
+	padding: var(--spacing-md);
+	background: var(--color-surface-1);
+	border-radius: var(--radius-md);
+}
+</style>
