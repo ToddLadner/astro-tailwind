@@ -226,16 +226,24 @@ async function executeNext(runDirectory, state, profile) {
 	state.status = "working";
 	event(state, "phase-started", { provider, supervisor: needsSupervisor });
 	await persist(runDirectory, state);
-	const run = await runProvider({
-		cwd,
-		mock: state.mock,
-		outputDirectory: join(runDirectory, "artifacts"),
-		phase,
-		prompt: promptFor(state, phase, localArtifact, supervisorMode),
-		provider,
-		schemaPath,
-		writable,
-	});
+	let run;
+	try {
+		run = await runProvider({
+			cwd,
+			mock: state.mock,
+			outputDirectory: join(runDirectory, "artifacts"),
+			phase,
+			prompt: promptFor(state, phase, localArtifact, supervisorMode),
+			provider,
+			schemaPath,
+			writable,
+		});
+	} catch (error) {
+		state.status = "blocked";
+		event(state, "provider-failed", { message: error.message, provider });
+		await persist(runDirectory, state);
+		throw error;
+	}
 	if (needsSupervisor && !profile.retainRemoteBundles) {
 		await rm(cwd, { force: true, recursive: true });
 	}

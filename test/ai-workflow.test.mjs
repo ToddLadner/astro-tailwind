@@ -12,7 +12,7 @@ import {
 import { createContextBundle } from "../AI/workflows/context.mjs";
 import { promptFor } from "../AI/workflows/feature.mjs";
 import { phases, transition } from "../AI/workflows/phases.mjs";
-import { normalizeResultScores, runCommand, runProvider } from "../AI/workflows/providers.mjs";
+import { normalizeResultScores, runCommand, runProvider, structuredResultErrors } from "../AI/workflows/providers.mjs";
 import { createState, loadActive, saveState } from "../AI/workflows/state.mjs";
 import { collectDiff, ensureWorktreeDependencies } from "../AI/workflows/validation.mjs";
 
@@ -176,6 +176,24 @@ test("escalation normalizes fractional confidence scores", () => {
 	assert.deepEqual(lowConfidence.reasons, ["score 70 is below 90"]);
 });
 
+test("escalation distinguishes a missing score from a real zero", () => {
+	const missingScore = assessEscalation({
+		phase: { id: "implementation", supervisorGate: false },
+		profile,
+		request: "Update a component",
+		result: { type: "function" },
+	});
+	assert.deepEqual(missingScore.reasons, ["provider result omitted a numeric score or confidence"]);
+
+	const zeroScore = assessEscalation({
+		phase: { id: "implementation", supervisorGate: false },
+		profile,
+		request: "Update a component",
+		result: { confidence: 0 },
+	});
+	assert.deepEqual(zeroScore.reasons, ["score 0 is below 90"]);
+});
+
 test("remote call budgets are hard limits", () => {
 	assert.throws(() => assertCallBudget({ callCounts: { codex: 2 } }, profile, "codex"), /Codex call budget exhausted/);
 });
@@ -206,6 +224,34 @@ test("mock providers return structured phase and review results without model ca
 test("provider results normalize fractional confidence and review scores", () => {
 	assert.deepEqual(normalizeResultScores({ confidence: 0.95, score: 1 }), { confidence: 95, score: 100 });
 	assert.deepEqual(normalizeResultScores({ confidence: 95, score: 82 }), { confidence: 95, score: 82 });
+});
+
+test("provider result validation rejects tool calls and malformed phase fields", async () => {
+	const schema = JSON.parse(
+		await readFile(join(process.cwd(), "AI", "config", "schemas", "phase-result.schema.json"), "utf8"),
+	);
+	const toolCallErrors = structuredResultErrors(
+		{ function: { name: "exec_command" }, id: "call_123", type: "function" },
+		schema,
+	);
+	assert.ok(toolCallErrors.some((error) => error.includes('missing required field "confidence"')));
+	assert.ok(toolCallErrors.some((error) => error.includes('unexpected field "function"')));
+
+	const malformedErrors = structuredResultErrors(
+		{
+			claims: ["claim"],
+			confidence: 95,
+			decisions: [],
+			evidence: [42],
+			openQuestions: [],
+			requestedEscalation: false,
+			risks: [],
+			status: "complete",
+			summary: "done",
+		},
+		schema,
+	);
+	assert.deepEqual(malformedErrors, ['field "evidence" item 0 must be string']);
 });
 
 test("remote context bundles obey their byte limit", async () => {

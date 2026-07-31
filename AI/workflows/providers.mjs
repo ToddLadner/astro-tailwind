@@ -37,6 +37,59 @@ export function normalizeResultScores(result) {
 	return normalized;
 }
 
+function valueMatchesType(value, type) {
+	if (type === "array") return Array.isArray(value);
+	if (type === "number") return typeof value === "number" && Number.isFinite(value);
+	if (type === "object") return value !== null && typeof value === "object" && !Array.isArray(value);
+	return typeof value === type;
+}
+
+export function structuredResultErrors(result, schema) {
+	if (result === null || typeof result !== "object" || Array.isArray(result)) {
+		return ["result must be an object"];
+	}
+	const errors = [];
+	for (const key of schema.required ?? []) {
+		if (!(key in result)) errors.push(`missing required field "${key}"`);
+	}
+	if (schema.additionalProperties === false) {
+		for (const key of Object.keys(result)) {
+			if (!(key in (schema.properties ?? {}))) errors.push(`unexpected field "${key}"`);
+		}
+	}
+	for (const [key, definition] of Object.entries(schema.properties ?? {})) {
+		if (!(key in result)) continue;
+		const value = result[key];
+		if (definition.type && !valueMatchesType(value, definition.type)) {
+			errors.push(`field "${key}" must be ${definition.type}`);
+			continue;
+		}
+		if (definition.enum && !definition.enum.includes(value)) {
+			errors.push(`field "${key}" must be one of ${definition.enum.join(", ")}`);
+		}
+		if (typeof value === "number" && definition.minimum !== undefined && value < definition.minimum) {
+			errors.push(`field "${key}" must be at least ${definition.minimum}`);
+		}
+		if (typeof value === "number" && definition.maximum !== undefined && value > definition.maximum) {
+			errors.push(`field "${key}" must be at most ${definition.maximum}`);
+		}
+		if (Array.isArray(value) && definition.items?.type) {
+			const invalidIndex = value.findIndex((item) => !valueMatchesType(item, definition.items.type));
+			if (invalidIndex >= 0) errors.push(`field "${key}" item ${invalidIndex} must be ${definition.items.type}`);
+		}
+	}
+	return errors;
+}
+
+function assertStructuredResult(result, schema, provider, phase) {
+	const errors = structuredResultErrors(result, schema);
+	if (errors.length) {
+		throw new Error(
+			`${provider} returned an invalid structured result for ${phase.id}: ${errors.slice(0, 5).join("; ")}`,
+		);
+	}
+}
+
 function mockResult(phase) {
 	if (phase.id === "review" || phase.id === "final-review") {
 		return { decision: "pass", findings: [], reason: "Deterministic mock review passed.", score: 96 };
@@ -87,8 +140,8 @@ export async function runProvider({
 		model = await resolveLocalModel(provider, model);
 	}
 	const output = join(outputDirectory, `.ai-${phase.id}-output.json`);
+	const schema = JSON.parse(await readFile(schemaPath, "utf8"));
 	if (provider === "claude") {
-		const schema = await readFile(schemaPath, "utf8");
 		const args = [
 			"-p",
 			"--output-format",
@@ -97,7 +150,7 @@ export async function runProvider({
 			"--permission-mode",
 			"dontAsk",
 			"--json-schema",
-			schema,
+			JSON.stringify(schema),
 			"--allowedTools",
 			writable ? "Read,Grep,Glob,Edit,Write,Bash" : "Read,Grep,Glob",
 		];
@@ -106,6 +159,7 @@ export async function runProvider({
 		if (run.code !== 0) throw new Error(run.stderr || run.stdout);
 		const envelope = JSON.parse(run.stdout);
 		const result = normalizeResultScores(envelope.structured_output ?? extractJson(envelope.result));
+		assertStructuredResult(result, schema, provider, phase);
 		return { ...run, model, provider, result, usage: envelope.usage ?? null };
 	}
 	const args = [
@@ -128,6 +182,7 @@ export async function runProvider({
 	const run = await runCommand("codex", args, { cwd, input: prompt });
 	if (run.code !== 0) throw new Error(run.stderr || run.stdout);
 	const result = normalizeResultScores(extractJson(await readFile(output, "utf8")));
+	assertStructuredResult(result, schema, provider, phase);
 	await writeFile(output, JSON.stringify(result, null, 2));
 	return { ...run, model, provider, result, usage: null };
 }

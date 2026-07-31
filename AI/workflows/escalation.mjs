@@ -3,9 +3,13 @@ const highRiskPattern =
 
 export function assessEscalation({ phase, profile, request, result, validationFailures = 0 }) {
 	const reasons = [];
-	const reportedScore = result.score ?? result.confidence ?? 0;
-	const score = reportedScore > 0 && reportedScore <= 1 ? reportedScore * 100 : reportedScore;
-	if (score < profile.scoreThreshold) reasons.push(`score ${score} is below ${profile.scoreThreshold}`);
+	const reportedScore = result.score ?? result.confidence;
+	if (typeof reportedScore !== "number" || !Number.isFinite(reportedScore)) {
+		reasons.push("provider result omitted a numeric score or confidence");
+	} else {
+		const score = reportedScore > 0 && reportedScore <= 1 ? reportedScore * 100 : reportedScore;
+		if (score < profile.scoreThreshold) reasons.push(`score ${score} is below ${profile.scoreThreshold}`);
+	}
 	if (result.requestedEscalation) reasons.push("provider requested escalation");
 	if (validationFailures >= profile.maxLocalRepairAttempts) reasons.push("local repair limit reached");
 	if (highRiskPattern.test(request)) reasons.push("high-risk subject detected");
