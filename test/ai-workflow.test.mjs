@@ -10,11 +10,11 @@ import {
 	localPhaseAttempts,
 } from "../AI/workflows/escalation.mjs";
 import { createContextBundle } from "../AI/workflows/context.mjs";
-import { promptFor } from "../AI/workflows/feature.mjs";
+import { promptFor, retryBackupOnlyImplementation, retryRevertedImplementation } from "../AI/workflows/feature.mjs";
 import { phases, transition } from "../AI/workflows/phases.mjs";
 import { normalizeResultScores, runCommand, runProvider, structuredResultErrors } from "../AI/workflows/providers.mjs";
 import { createState, loadActive, saveState } from "../AI/workflows/state.mjs";
-import { collectDiff, ensureWorktreeDependencies } from "../AI/workflows/validation.mjs";
+import { collectDiff, ensureWorktreeDependencies, meaningfulImplementationPaths } from "../AI/workflows/validation.mjs";
 
 const profile = {
 	maxClaudeCalls: 1,
@@ -63,6 +63,8 @@ test("phase prompts include approved results, revision notes, and strict boundar
 	assert.match(prompt, /Return an ordered plan/);
 	assert.match(prompt, /do not claim that implementation has occurred/);
 	assert.match(prompt, /Return ONLY one JSON object/);
+	assert.match(prompt, /Every item in claims, evidence, decisions, openQuestions, and risks must be a JSON string/);
+	assert.match(prompt, /Do not create backup, temporary, \.bak/);
 });
 
 test("phase prompts compact approved results to avoid context growth", () => {
@@ -102,6 +104,26 @@ test("quality gate detects copied phase output and counts local attempts", () =>
 	};
 	assert.equal(findCopiedApprovedPhase(state, phases[1], copied), "discovery");
 	assert.equal(localPhaseAttempts(state, phases[1]), 2);
+});
+
+test("quality gate does not compare review output with phase output", () => {
+	const state = {
+		approvals: { architecture: true },
+		phaseData: {
+			architecture: {
+				localResult: { claims: [], decisions: [], evidence: [], openQuestions: [], risks: [], summary: "" },
+			},
+		},
+	};
+	const review = { decision: "revise", findings: ["Validation failed"], reason: "Broken build", score: 7 };
+	assert.equal(
+		findCopiedApprovedPhase(
+			state,
+			phases.find((phase) => phase.id === "review"),
+			review,
+		),
+		null,
+	);
 });
 
 test("repair supervisor prompts replace bad phase output using the phase schema", () => {
@@ -155,6 +177,7 @@ test("escalation combines score, repair, risk, and supervisor gates", () => {
 	});
 	assert.equal(result.required, true);
 	assert.equal(result.reasons.length, 5);
+	assert.ok(result.reasons.includes("validation failed"));
 });
 
 test("escalation normalizes fractional confidence scores", () => {
@@ -289,6 +312,52 @@ test("implementation patches include newly created files", async () => {
 	} finally {
 		await rm(directory, { force: true, recursive: true });
 	}
+});
+
+test("implementation quality ignores backup-only changes", () => {
+	assert.deepEqual(meaningfulImplementationPaths(" A src/components/Button.astro.bak\n?? node_modules\n"), []);
+	assert.deepEqual(meaningfulImplementationPaths("?? src/components/Button.astro~\n"), []);
+	assert.deepEqual(meaningfulImplementationPaths(" M src/components/Button.astro\n"), ["src/components/Button.astro"]);
+	assert.deepEqual(meaningfulImplementationPaths("R  src/old.astro -> src/new.astro\n A notes.tmp\n"), [
+		"src/new.astro",
+	]);
+});
+
+test("stopped workflows can safely retry a backup-only implementation", () => {
+	const state = {
+		approvals: { implementation: true, planning: true, "remote:review": true },
+		pendingEscalation: { reasons: ["score 0 is below 90"] },
+		phaseData: {
+			implementation: { diff: { diff: "backup patch", status: " A src/Button.astro.bak\n" } },
+			review: { localResult: { score: 0 } },
+		},
+		phaseIndex: phases.findIndex((phase) => phase.id === "review"),
+		status: "stopped",
+	};
+	retryBackupOnlyImplementation(state);
+	assert.equal(phases[state.phaseIndex].id, "implementation");
+	assert.equal(state.status, "ready");
+	assert.equal(state.pendingEscalation, null);
+	assert.equal(state.approvals.planning, true);
+	assert.equal(state.approvals.implementation, undefined);
+	assert.equal(state.approvals["remote:review"], undefined);
+	assert.equal(state.phaseData.implementation, undefined);
+	assert.equal(state.phaseData.review, undefined);
+});
+
+test("stopped workflows cannot automatically rewind a meaningful implementation", () => {
+	const state = {
+		approvals: { implementation: true },
+		phaseData: {
+			implementation: { diff: { diff: "real patch", status: " M src/components/Button.astro\n" } },
+		},
+		phaseIndex: phases.findIndex((phase) => phase.id === "review"),
+		status: "stopped",
+	};
+	assert.throws(() => retryBackupOnlyImplementation(state), /contains meaningful changes/);
+	retryRevertedImplementation(state);
+	assert.equal(phases[state.phaseIndex].id, "implementation");
+	assert.equal(state.status, "ready");
 });
 
 test("implementation worktrees reuse installed dependencies", async () => {

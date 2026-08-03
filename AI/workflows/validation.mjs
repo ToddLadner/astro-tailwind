@@ -49,6 +49,16 @@ export async function collectDiff(worktree) {
 	return { diff: diff.stdout, status: status.stdout };
 }
 
+export function meaningfulImplementationPaths(status) {
+	return status
+		.split("\n")
+		.map((line) => line.slice(3).trim())
+		.filter(Boolean)
+		.map((path) => path.split(" -> ").at(-1))
+		.filter((path) => path !== "node_modules" && !path.startsWith("node_modules/"))
+		.filter((path) => !/(?:\.bak|\.orig|\.rej|\.tmp|~)$/i.test(path));
+}
+
 export async function validateWorktree(worktree, commands) {
 	const results = [];
 	for (const command of commands) {

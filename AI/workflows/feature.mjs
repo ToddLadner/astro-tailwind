@@ -12,6 +12,7 @@ import {
 	collectDiff,
 	createImplementationWorktree,
 	ensureWorktreeDependencies,
+	meaningfulImplementationPaths,
 	removeImplementationWorktree,
 	savePatch,
 	validateWorktree,
@@ -78,9 +79,11 @@ export function promptFor(state, phase, localArtifact = "", supervisorMode = "")
 	const outputContract = reviewOutput
 		? `Return ONLY one JSON object with this exact shape:
 {"score":0,"decision":"pass","findings":[],"reason":""}
-decision must be pass, revise, or escalate.`
+decision must be pass, revise, or escalate. Every findings item must be a JSON string.`
 		: `Return ONLY one JSON object with this exact shape:
 {"status":"complete","confidence":0,"claims":[],"evidence":[],"decisions":[],"openQuestions":[],"risks":[],"requestedEscalation":false,"summary":""}
+Every item in claims, evidence, decisions, openQuestions, and risks must be a JSON string, not an object.
+Do not create backup, temporary, .bak, .orig, .rej, or editor-swap files.
 Do not wrap the JSON in Markdown fences and do not include text before or after it.`;
 	const repairInstruction =
 		supervisorMode === "repair"
@@ -108,6 +111,41 @@ Supervisor artifact to review, when present:
 ${localArtifact || "(none)"}
 
 ${outputContract}`;
+}
+
+function assertCanRetryImplementation(state) {
+	const implementationIndex = phases.findIndex((phase) => phase.implementation);
+	if (state.status !== "stopped" || state.phaseIndex <= implementationIndex) {
+		throw new Error("Retry implementation is only available for a stopped workflow after implementation");
+	}
+	return implementationIndex;
+}
+
+function rewindImplementation(state, implementationIndex) {
+	const clearedPhases = new Set(phases.slice(implementationIndex).map((phase) => phase.id));
+	for (const phaseId of clearedPhases) delete state.phaseData?.[phaseId];
+	for (const approval of Object.keys(state.approvals ?? {})) {
+		if (clearedPhases.has(approval.replace(/^remote:/, ""))) delete state.approvals[approval];
+	}
+	state.pendingEscalation = null;
+	state.phaseIndex = implementationIndex;
+	state.status = "ready";
+	state.worktree = null;
+	return state;
+}
+
+export function retryBackupOnlyImplementation(state) {
+	const implementationIndex = assertCanRetryImplementation(state);
+	const implementationDiff = state.phaseData?.implementation?.diff;
+	if (!implementationDiff?.diff?.trim()) throw new Error("No prior implementation patch is available to inspect");
+	if (meaningfulImplementationPaths(implementationDiff.status).length > 0) {
+		throw new Error("The applied implementation contains meaningful changes and cannot be rewound automatically");
+	}
+	return rewindImplementation(state, implementationIndex);
+}
+
+export function retryRevertedImplementation(state) {
+	return rewindImplementation(state, assertCanRetryImplementation(state));
 }
 
 function ledger(state) {
@@ -268,7 +306,11 @@ async function executeNext(runDirectory, state, profile) {
 		await writeFile(join(runDirectory, "artifacts", "validation.json"), JSON.stringify(phaseData.validation, null, 2));
 	}
 	state.phaseData[phase.id] = phaseData;
-	if (phase.implementation && !state.mock && !phaseData.diff.diff.trim()) {
+	if (
+		phase.implementation &&
+		!state.mock &&
+		(!phaseData.diff.diff.trim() || meaningfulImplementationPaths(phaseData.diff.status).length === 0)
+	) {
 		delete state.phaseData[phase.id];
 		state.pendingEscalation = null;
 		state.status = "ready";
@@ -277,7 +319,7 @@ async function executeNext(runDirectory, state, profile) {
 			reason: "empty implementation patch",
 		});
 		await persist(runDirectory, state);
-		console.log("Implementation produced no file changes and was rejected. Run next to retry locally.");
+		console.log("Implementation produced no meaningful file changes and was rejected. Run next to retry locally.");
 		return;
 	}
 	const copiedPhase = needsSupervisor ? null : findCopiedApprovedPhase(state, phase, run.result);
@@ -329,6 +371,23 @@ async function main() {
 	const profile = await loadProfile();
 	const { runDirectory, state } = await loadActive(runsDirectory);
 	if (command === "status") return printStatus(state, runDirectory, profile);
+	if (command === "retry-implementation") {
+		retryBackupOnlyImplementation(state);
+		event(state, "returned-to-implementation", { reason: "prior patch contained only backup or temporary files" });
+		await persist(runDirectory, state);
+		return printStatus(state, runDirectory, profile);
+	}
+	if (command === "retry-reverted-implementation") {
+		const patchPath = join(runDirectory, "artifacts", "implementation.patch");
+		const check = await runCommand("git", ["apply", "--check", patchPath], { cwd: root });
+		if (check.code !== 0) {
+			throw new Error("The prior implementation patch has not been cleanly reversed from the main worktree");
+		}
+		retryRevertedImplementation(state);
+		event(state, "returned-to-implementation", { reason: "failed implementation patch was reversed" });
+		await persist(runDirectory, state);
+		return printStatus(state, runDirectory, profile);
+	}
 	if (command === "next") return executeNext(runDirectory, state, profile);
 	if (command === "resume") {
 		if (!["working", "blocked", "stopped"].includes(state.status)) {
@@ -423,6 +482,9 @@ async function main() {
 		const patchPath = join(runDirectory, "artifacts", "implementation.patch");
 		const diff = await savePatch(state.worktree.path, patchPath);
 		if (!diff.diff.trim()) throw new Error("Implementation worktree has no file changes to capture");
+		if (meaningfulImplementationPaths(diff.status).length === 0) {
+			throw new Error("Implementation worktree contains only backup or temporary files");
+		}
 		const validation = await validateWorktree(state.worktree.path, profile.validationCommands);
 		await writeFile(join(runDirectory, "artifacts", "validation.json"), JSON.stringify(validation, null, 2));
 		state.phaseData[phase.id] = {
@@ -467,6 +529,9 @@ async function main() {
 	}
 	if (command === "apply") {
 		if (!state.approvals.implementation) throw new Error("Approve implementation before applying its patch");
+		if (state.phaseData?.implementation?.validation?.passed !== true) {
+			throw new Error("Cannot apply an implementation whose validation did not pass");
+		}
 		await applyPatch(root, join(runDirectory, "artifacts", "implementation.patch"));
 		await removeImplementationWorktree(root, state.worktree);
 		state.worktree = null;

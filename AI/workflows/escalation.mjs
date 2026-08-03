@@ -11,7 +11,7 @@ export function assessEscalation({ phase, profile, request, result, validationFa
 		if (score < profile.scoreThreshold) reasons.push(`score ${score} is below ${profile.scoreThreshold}`);
 	}
 	if (result.requestedEscalation) reasons.push("provider requested escalation");
-	if (validationFailures >= profile.maxLocalRepairAttempts) reasons.push("local repair limit reached");
+	if (validationFailures > 0) reasons.push("validation failed");
 	if (highRiskPattern.test(request)) reasons.push("high-risk subject detected");
 	if (phase.supervisorGate) reasons.push(`configured supervisor gate: ${phase.id}`);
 	return { required: reasons.length > 0, reasons };
@@ -19,7 +19,17 @@ export function assessEscalation({ phase, profile, request, result, validationFa
 
 function resultFingerprint(result) {
 	if (!result) return "";
+	if ("decision" in result || "findings" in result || "reason" in result || "score" in result) {
+		return JSON.stringify({
+			kind: "review",
+			decision: result.decision ?? "",
+			findings: result.findings ?? [],
+			reason: result.reason ?? "",
+			score: result.score ?? null,
+		});
+	}
 	return JSON.stringify({
+		kind: "phase",
 		claims: result.claims ?? [],
 		decisions: result.decisions ?? [],
 		evidence: result.evidence ?? [],
