@@ -44,7 +44,7 @@ const {
 	...rest
 } = Astro.props as Props;
 
-const isLink = "href" in (Astro.props as Props) && !!href;
+const isLink = typeof href === "string";
 const safeHref = disabled ? undefined : href;
 
 const classList = ["button", size, theme, shape, elevated, variant, classes];
@@ -63,31 +63,39 @@ export type PureButtonProps = ButtonProps;
 		--border-color: transparent;
 		--border-width: 2px;
 		--border-radius: var(--radius-md);
-		--font-size: initial;
-		--min-height: auto;
+		--button-block-size: 2.75rem;
+		--button-gap: var(--spacing-3xs);
+		--button-padding-block: var(--spacing-3xs);
+		--button-padding-inline: var(--spacing-2xs);
 		--text-color: var(--color-brand);
-		--button-ripple-duration: 0.5s;
+		--button-ripple-duration: var(--duration-gentle-2);
 		--button-ripple-size: 100%;
-		--icon-size: 1cap;
+		--icon-size: 1em;
 
 		/* Re-usable disabled colors (variants can override) */
 		--disabled-bg: color-mix(in oklch, var(--color-strong) 8%, var(--color-surface-3));
 		--disabled-text: color-mix(in oklch, var(--color-strong) 70%, var(--color-surface-3));
 
 		/* Base button */
-		min-block-size: var(--min-height);
-		padding-block: 1.5ex;
-		padding-inline: 2ex;
+		min-block-size: var(--button-block-size);
+		min-inline-size: var(--button-block-size);
+		padding-block: var(--button-padding-block);
+		padding-inline: var(--button-padding-inline);
 
-		font-size: var(--font-size);
+		font-size: inherit;
 		font-weight: 600;
+		line-height: var(--leading-xs);
 		color: var(--text-color);
 		text-align: center;
 
 		background: var(--bg-color) var(--ripple, none);
 		border-radius: var(--border-radius);
 		border: var(--border-width) solid var(--border-color);
-		display: inline-block;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--button-gap);
+		vertical-align: middle;
 
 		text-decoration: none;
 		user-select: none;
@@ -103,14 +111,19 @@ export type PureButtonProps = ButtonProps;
 			cursor: pointer;
 		}
 
+		&:focus-visible {
+			outline: var(--border-width) solid var(--color-brand-bright);
+			outline-offset: var(--spacing-3xs);
+		}
+
 		/* Motion-OK: color & ripple */
 		@media (prefers-reduced-motion: no-preference) {
 			transition:
-				background-color 0.2s var(--ease-out-3),
-				box-shadow 0.2s var(--ease-out-3),
-				border-color 0.2s var(--ease-out-3),
-				color 0.2s var(--ease-out-3),
-				outline-offset 0.05s var(--ease-1);
+				background-color var(--duration-quick-2) var(--ease-out-3),
+				box-shadow var(--duration-quick-2) var(--ease-out-3),
+				border-color var(--duration-quick-2) var(--ease-out-3),
+				color var(--duration-quick-2) var(--ease-out-3),
+				outline-offset var(--duration-quick-1) var(--ease-1);
 			background-position: center;
 
 			&:where(:not([disabled], [aria-disabled="true"])) {
@@ -170,26 +183,37 @@ export type PureButtonProps = ButtonProps;
 		/* Button with icon + text */
 		&:not(.icon-button) {
 			[data-icon] {
-				max-block-size: var(--icon-size);
-				max-inline-size: var(--icon-size);
+				block-size: var(--icon-size);
+				inline-size: var(--icon-size);
+				flex: none;
 				color: currentColor;
-				margin-inline-end: 1ex;
 			}
 		}
 
 		/* Size variants */
 		&.sm {
-			font-size: var(--text-xs);
+			--button-padding-inline: var(--spacing-3xs);
 		}
 		&.lg {
-			font-size: var(--text-lg);
+			--button-block-size: 3rem;
+			--button-padding-inline: var(--spacing-xs);
 		}
 
 		/* Icon button variant */
 		&.icon-button {
-			padding: 1.35ex;
+			inline-size: var(--button-block-size);
+			padding: var(--button-padding-block);
 			aspect-ratio: var(--aspect-square);
-			display: inline-flex;
+
+			[data-icon] {
+				block-size: var(--icon-size);
+				inline-size: var(--icon-size);
+			}
+		}
+
+		/* The global elevation scale starts at sm; keep the public xs option useful. */
+		&.shadow-xs {
+			box-shadow: 0 1px 2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%));
 		}
 
 		/* =========================
@@ -341,11 +365,23 @@ export type PureButtonProps = ButtonProps;
 		/* Bare */
 		&.bare {
 			--bg-color: transparent;
+			min-block-size: 0;
+			min-inline-size: 0;
+			inline-size: auto;
 			display: grid;
 			margin: 0;
 			padding: 0;
 		}
 	}
+}
+
+/* Scoped component styles can load before the global layer-order declaration. */
+:is(.button.sm) {
+	font-size: var(--text-xs);
+}
+
+:is(.button.lg) {
+	font-size: var(--text-lg);
 }
 
 /* Spring interaction helper */
@@ -373,12 +409,13 @@ export type PureButtonProps = ButtonProps;
 
 {isLink ? (
   <a
+    {...rest}
     href={safeHref}
     aria-disabled={disabled ? "true" : undefined}
     tabindex={disabled ? -1 : undefined}
+    inert={disabled ? true : undefined}
     aria-label={ariaLabel}
     class:list={classList}
-    {...rest}
   >
     { icon && <Icon name={icon} data-icon /> }
     <slot />
@@ -386,11 +423,11 @@ export type PureButtonProps = ButtonProps;
   </a>
 ) : (
   <button
+    {...rest}
     type={type as "button" | "submit" | "reset"}
     aria-label={ariaLabel}
     class:list={classList}
     disabled={disabled}
-    {...rest}
   >
     { icon && <Icon name={icon} data-icon /> }
     <slot />
