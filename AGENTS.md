@@ -4,11 +4,11 @@ This repository is an Astro 5 component and design-system playground built with 
 
 ## Start Here
 
-- Read `AI/projects/astro-tailwind/project.md` for scope and maturity.
-- Read `AI/projects/astro-tailwind/stack.md` and `architecture.md` before proposing implementation changes.
-- Read `AI/projects/astro-tailwind/design-system.md` for CSS and token conventions.
+- Read `docs/ai/project.md` for scope and maturity.
+- Read `docs/ai/stack.md` and `docs/ai/architecture.md` before proposing implementation changes.
+- Read `docs/ai/design-system.md` for CSS and token conventions.
 - Treat `.continue/rules/` as the project-specific rule source for Continue.
-- Use the reusable roles, workflow rules, and templates under `AI/` when they match the task.
+- Use AI Workbench for task preparation, routing, budgets, and independent validation.
 
 ## Required Validation
 
@@ -19,7 +19,7 @@ Use the narrowest applicable command:
 - `npm run build` for an Astro production build.
 
 The test, lint, and build baselines were all passing when last verified on 2026-07-27. Check
-`AI/projects/astro-tailwind/known-issues.md` before treating a failure as pre-existing, and report every new
+`docs/ai/known-issues.md` before treating a failure as pre-existing, and report every new
 failure accurately.
 
 Use `npm run lint:fix` only when formatting or lint fixes are part of the requested edit.

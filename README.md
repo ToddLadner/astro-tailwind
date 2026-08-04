@@ -29,7 +29,7 @@ npm run build
 ```
 
 Use `npm run lint:fix` when you intentionally want Biome to rewrite files.
-The repository currently has pre-existing Biome and production-build failures; see `AI/projects/astro-tailwind/known-issues.md`.
+The repository's verified baseline and known limitations are recorded in `docs/ai/known-issues.md`.
 
 ## Project Structure
 
@@ -45,9 +45,11 @@ src/
 
 Tailwind is configured in `src/css/main.css` with the Tailwind 4 `@theme` directive. Global styles enter through `src/layouts/Head.astro`.
 
-## AI Workspace
+## AI Workbench
 
-Repository-specific agent guidance starts in `AGENTS.md`. Reusable roles and templates live under `AI/`, project context lives in `AI/projects/astro-tailwind/`, and Continue-specific prompts and rules live under `.continue/`.
+Repository-specific agent guidance starts in `AGENTS.md`, with durable project context under `docs/ai/`. Continue retains project-specific autocomplete rules under `.continue/rules/`.
+
+Task preparation, routing, budgets, validation, and failure evidence are owned by the external AI Workbench control repository. This application does not contain provider orchestration or model-specific workflow code.
 
 ## Deployment
 

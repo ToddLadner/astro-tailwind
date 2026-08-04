@@ -7,7 +7,7 @@ description: Rules for preserving and extending the existing design system.
 
 # Design System Standards
 
-- Read `AI/projects/astro-tailwind/design-system.md` before changing theme tokens or shared component styling.
+- Read `docs/ai/design-system.md` before changing theme tokens or shared component styling.
 - Reuse existing components, primitives, tokens, and variants before creating new ones.
 - Do not introduce a new visual pattern when an established pattern already solves the problem.
 - Preserve component consistency across states, sizes, breakpoints, and platforms.

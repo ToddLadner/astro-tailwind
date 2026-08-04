@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify AI workspace
-        run: npm run verify:ai
-
       - name: Run tests
         run: npm test
 
